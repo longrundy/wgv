@@ -96,7 +96,7 @@ a{color:inherit}
 
 /* ---------- queue ---------- */
 .queue{border-right:1px solid #dde3ec;display:flex;flex-direction:column;min-width:0;background:#eef2f8;overflow:hidden}
-.queue-head{padding:20px 26px 16px;flex:none;position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dde3ec}
+.queue-head{padding:20px 26px 16px;flex:none;position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dde3ec;min-height:82px;box-sizing:border-box}
 .queue-title{font-size:22px;font-weight:600;margin:0}
 .queue-sub{font-size:13px;color:var(--muted);margin:5px 0 0}
 .queue-sub a{color:var(--red-dark);font-weight:500;text-decoration:none}
@@ -146,7 +146,7 @@ a{color:inherit}
 
 /* ---------- detail ---------- */
 .detail{background:#fff;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.detail-head{position:sticky;top:0;z-index:5;background:#fff;padding:20px 26px 16px;border-bottom:1px solid #dde3ec}
+.detail-head{position:sticky;top:0;z-index:5;background:#fff;padding:20px 26px 16px;border-bottom:1px solid #dde3ec;min-height:82px;box-sizing:border-box}
 .detail-head.has-open{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .head-open{flex:none;width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid #dde3ec;color:#17325a;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;margin-top:2px}
 .head-open:active{background:#e9eef6}
@@ -392,7 +392,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
   {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", d:{sub:"Upcoming team events", rich:"<p>Check back for upcoming employee appreciation events.</p>"}}
 ]},
 
-requests:{title:"Requests / forms", sub:"Pick a form to fill out", items:[
+requests:{title:"Requests / Forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
   {t:"Employee golf", m:"Request a staff tee time, space available.", s:"Form", c:"f-flat", a:"", d:{sub:"Request a staff tee time, space available.", url:"https://docs.google.com/forms/d/e/1FAIpQLSc9NC2Zcv6jSzQfiQPCCmzHdtKdrUXR7cbrQ02unje38yOsGA/viewform"}},
   {t:"Cart repair", m:"Report a cart that needs service.", s:"Form", c:"f-flat", a:"", d:{sub:"Report a cart that needs service.", url:"https://docs.google.com/forms/d/e/1FAIpQLSfJ3Cx2xfNzlN8wM8Fww4cvheBcjyLRNUa7NcBa8_MtPQd2BA/viewform"}},
@@ -782,14 +782,14 @@ function detail(i){
   if(i.linkOnly){
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div>`+
+      `<div class="detail-sub">${d.sub||"&nbsp;"}</div>`+`</div>`+
       `<div class="detail-body"><a class="btn-small" href="${d.url}" target="_blank" rel="noopener">Open <span aria-hidden="true">&#8599;</span></a></div>`;
     return;
   }
   if(d.rich){
     el("#detail").innerHTML =
       `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div>`+
+      `<div class="detail-sub">${d.sub||"&nbsp;"}</div>`+`</div>`+
       `<div class="detail-body"><article class="rich">${d.rich}</article></div>`;
     return;
   }
@@ -804,7 +804,7 @@ function detail(i){
       const img="https://drive.google.com/thumbnail?id="+m[1]+"&sz=w1600";
       el("#detail").innerHTML=
         `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
-        (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div><a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
+        `<div class="detail-sub">${d.sub||"&nbsp;"}</div>`+`</div><a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
         `<div class="detail-body"><div class="doc-card"><img src="${img}" alt="${i.t}" onerror="this.parentNode.innerHTML='<div class=\\'doc-fallback\\'>Preview unavailable. Use the button in the corner to open it.</div>'"></div></div>`;
       return;
     }
@@ -812,11 +812,11 @@ function detail(i){
     let src = d.url.indexOf("?")>-1 ? d.url+"&embedded=true" : d.url+"?embedded=true";
     el("#detail").innerHTML=
       `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
-      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div><a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
+      `<div class="detail-sub">${d.sub||"&nbsp;"}</div>`+`</div><a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
       `<div class="detail-body"><div class="embed-card is-form"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div></div>`;
     return;
   }
-    let html=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||""}</div></div><div class="detail-body"><div class="card">`;
+    let html=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||"&nbsp;"}</div></div><div class="detail-body"><div class="card">`;
   if(d.stats) html+=`<div class="stats">${d.stats.map(s=>`<div class="stat"><div class="stat-k">${s[0]}</div><div class="stat-v"${s[3]?' style="color:var(--red-dark)"':""}>${s[1]}${s[2]?` <small>${s[2]}</small>`:""}</div></div>`).join("")}</div>`;
   if(d.kv||d.note||d.folds){
     html+=`<div class="rows">`;
@@ -951,7 +951,7 @@ async function renderPolicyEditor(i){
 
 function renderTurfDetail(){
   const it=S.turfsaver.items[0];
-  el("#detail").innerHTML=`<div class="detail-head"><div class="detail-title">${it.t}</div><div class="detail-sub">${it.d.sub||""}</div></div><div class="detail-body"><article class="rich">${it.d.rich}</article></div>`;
+  el("#detail").innerHTML=`<div class="detail-head"><div class="detail-title">${it.t}</div><div class="detail-sub">${it.d.sub||"&nbsp;"}</div></div><div class="detail-body"><article class="rich">${it.d.rich}</article></div>`;
 }
 function loadCart(){
   if(cartLoaded) return; cartLoaded=true;
@@ -998,8 +998,9 @@ let CONTENT={};   // key -> full row
 function contentTypeToItem(row){
   const type=(row.type||"text").trim().toLowerCase();
   const base={ t:row.title||row.key, m:"", s:"", c:"f-flat", a:"", contentKey:row.key };
-  if(type==="link") return Object.assign(base,{ linkOnly:true, d:{ sub:"", url:(row.link||"").trim() } });
-  if(type==="form"||type==="pdf") return Object.assign(base,{ d:{ sub:"", url:(row.link||"").trim() } });
+  if(type==="link") return Object.assign(base,{ linkOnly:true, d:{ sub:"Open this resource in a new tab.", url:(row.link||"").trim() } });
+  if(type==="form") return Object.assign(base,{ d:{ sub:"Fill out and submit this form.", url:(row.link||"").trim() } });
+  if(type==="pdf") return Object.assign(base,{ d:{ sub:"View or download the document.", url:(row.link||"").trim() } });
   return Object.assign(base,{ d:{ sub:"", rich:policyTextToHtml(row.body||"") } });  // text default
 }
 
