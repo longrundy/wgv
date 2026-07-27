@@ -917,46 +917,32 @@ function markTurf(on){ const l=document.getElementById("turfLink"); if(l) l.clas
 function isPolicyItem(i){ return i && /tee sheet policy/i.test(i.t||""); }
 
 async function renderPolicyEditor(i){
-  el("#detail").innerHTML=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">Manager editing — changes save to the sheet</div></div><div class="detail-body"><div class="edit-status" id="pStatus">Loading current policy…</div><div id="pRows"></div></div>`;
+  el("#detail").innerHTML=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">Manager editing — changes save to the sheet</div></div><div class="detail-body"><div class="edit-status" id="pStatus">Loading current policy…</div><div id="pEdit"></div></div>`;
   let data;
-  try{ data=await backendGet({action:"policy"}); }
+  try{ data=await backendGet({action:"policy_text"}); }
   catch(e){ el("#pStatus").textContent="Couldn't reach the backend. Try again."; return; }
   if(!data||!data.ok){ el("#pStatus").textContent="Backend error: "+((data&&data.error)||"unknown"); return; }
   el("#pStatus").textContent="";
-  const rows=data.rows||[];
-  el("#pRows").innerHTML=rows.map(r=>{
-    const label=(r.style==="h4")?"Heading":(r.style==="bullet")?"Bullet":(r.style==="lede")?"Intro":"Paragraph";
-    const text=r.style==="h4"?r.section:r.content;
-    return `<div class="editable" style="padding:10px 0;border-bottom:1px solid #eef0f4" data-row="${r.row}" data-style="${r.style}">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.4px;margin-bottom:4px">${label.toUpperCase()}</div>
-      <div class="p-view" style="font-size:14px;line-height:1.6;color:#2c2c2a">${(text||"").replace(/</g,"&lt;")}</div>
-      <button class="edit-pencil" style="position:static;margin-top:6px" title="Edit">&#9998;</button>
-    </div>`;
-  }).join("");
-
-  el("#pRows").querySelectorAll(".editable").forEach(node=>{
-    node.querySelector(".edit-pencil").addEventListener("click",()=>{
-      if(node.querySelector(".edit-area")) return;
-      const view=node.querySelector(".p-view");
-      const cur=view.textContent;
-      const style=node.dataset.style;
-      const wrap=document.createElement("div");
-      wrap.innerHTML=`<textarea class="edit-area">${cur.replace(/</g,"&lt;")}</textarea>
-        <div class="edit-bar"><button class="edit-save">Save</button><button class="edit-cancel">Cancel</button></div>
-        <div class="edit-status"></div>`;
-      view.style.display="none"; node.querySelector(".edit-pencil").style.display="none";
-      node.appendChild(wrap);
-      const ta=wrap.querySelector(".edit-area"); ta.focus();
-      wrap.querySelector(".edit-cancel").addEventListener("click",()=>{ view.style.display=""; node.querySelector(".edit-pencil").style.display=""; wrap.remove(); });
-      wrap.querySelector(".edit-save").addEventListener("click",async ()=>{
-        const st=wrap.querySelector(".edit-status"); st.textContent="Saving…";
-        try{
-          const res=await backendGet({action:"policy_edit", row:node.dataset.row, content:ta.value});
-          if(res&&res.ok){ view.textContent=ta.value; st.textContent="Saved."; setTimeout(()=>{ view.style.display=""; node.querySelector(".edit-pencil").style.display=""; wrap.remove(); },600); }
-          else{ st.textContent="Error: "+((res&&res.error)||"unknown"); }
-        }catch(e){ st.textContent="Couldn't save — network."; }
-      });
-    });
+  const cur=data.text||"";
+  el("#pEdit").innerHTML=
+    `<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Edit the policy below. Blank line = new paragraph. A line in ALL CAPS or ending with a colon becomes a heading. Start a line with "- " for a bullet.</div>`+
+    `<textarea class="edit-area" id="pText" style="min-height:340px">${cur.replace(/</g,"&lt;")}</textarea>`+
+    `<div class="edit-bar"><button class="edit-save" id="pSave">Save to sheet</button><button class="edit-cancel" id="pCancel">Cancel</button></div>`+
+    `<div class="edit-status" id="pSaveStatus"></div>`;
+  el("#pCancel").addEventListener("click",()=>{ setEditMode(false); });
+  el("#pSave").addEventListener("click",async ()=>{
+    const st=el("#pSaveStatus"); st.textContent="Saving…";
+    const val=el("#pText").value;
+    try{
+      const res=await backendGet({action:"policy_text_save", content:val});
+      if(res&&res.ok){
+        st.textContent="Saved. The portal will show it on next load.";
+        // update the in-memory policy so it shows immediately here too
+        S.__policyRich=policyTextToHtml(val);
+        const item=S.announce.items.find(x=>isPolicyItem(x));
+        if(item) item.d.rich=S.__policyRich;
+      } else { st.textContent="Error: "+((res&&res.error)||"unknown"); }
+    }catch(e){ st.textContent="Couldn't save — network."; }
   });
 }
 
