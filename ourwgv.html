@@ -91,7 +91,7 @@ a{color:inherit}
 
 /* live cart card on announcements */
 
-.cartcard{margin:18px 22px 4px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
+.cartcard{margin:18px 22px 22px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
 .cartcard h3{margin:0;background:var(--navy);color:#fff;font-size:12px;letter-spacing:.7px;padding:11px 16px;font-weight:600;display:flex;align-items:center;gap:8px}
 .cart-body{padding:0}
 .cart-loading{color:var(--muted);font-size:13px;padding:14px 16px}
@@ -119,10 +119,7 @@ a{color:inherit}
 .row[aria-current="true"]{background:#faeceb;border-left-color:var(--red)}
 .row[aria-current="true"] .row-title{color:#17325a}
 .row[aria-current="true"] .row-meta{color:#8a8a84}
-.row[aria-current="true"] .row-icon{background:#f3d6d4;color:var(--red-dark)}
-.row[aria-current="true"] .chev-r{color:var(--red)}
-.row-icon{width:30px;height:30px;border-radius:8px;background:#e3e8f0;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex:none}
+.row[aria-current="true"] .row[aria-current="true"] .chev-r{color:var(--red)}
 .row-main{flex:1;min-width:0}
 .row-title{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 .row-meta{font-size:12px;color:var(--muted);margin-top:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -713,7 +710,6 @@ function render(){
 
   el("#list").innerHTML=items.map((i,n)=>`
     <button class="row" data-idx="${n}" aria-current="${n===state.idx}">
-      <span class="row-icon">${(i.m.match(/\bKB\b/)?"KB":i.m.match(/\bSS\b/)?"SS":"WGV")}</span>
       <span class="row-main"><span class="row-title">${i.t}</span><span class="row-meta">${i.m}</span></span>
       <span class="row-side"><span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span></span>
       <span class="chev-r">&#8250;</span>
