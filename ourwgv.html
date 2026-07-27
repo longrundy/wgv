@@ -356,18 +356,13 @@ document.getElementById("pw").addEventListener("keydown",function(e){ if(e.key==
 const GROUPS = [
   {label:"", items:[
     {id:"announce", label:"Announcements", dot:"#f0b53c"},
-    {id:"requests", label:"Requests / forms", dot:"#c8161d"}
+    {id:"requests", label:"Requests / Forms", dot:"#c8161d"},
+    {id:"recognition", label:"Recognition", dot:"#c8161d"}
   ]},
   {label:"Schedule", items:[
     {id:"schedule", label:"Work schedule",  dot:"#b4b2a9"},
     {id:"teesheet", label:"Tee sheet",      dot:"#b4b2a9"},
     {id:"hours",    label:"Hours of operation", dot:"#b4b2a9"}
-  ]},
-  {label:"Recognition", items:[
-    {id:"bdays",    label:"Birthdays & anniversaries", dot:"#b4b2a9"},
-    {id:"eotm",     label:"Employee of the month",     dot:"#b4b2a9"},
-    {id:"events",   label:"Appreciation events",       dot:"#b4b2a9"},
-    {id:"faces",    label:"Faces of WGV",              dot:"#b4b2a9"}
   ]},
   {label:"Resources", items:[
     {id:"handbook", label:"Handbook & policies", dot:"#b4b2a9"},
@@ -389,6 +384,14 @@ const MGMT = GROUPS[GROUPS.length-1].items.map(i=>i.id);
 /* ---- content ---- */
 const link = (t,m,url,blurb) => ({t, m, s:"Open", c:"f-flat", a:"", d:{sub:blurb, url}});
 const S = {
+recognition:{title:"Recognition", sub:"Team news and milestones", items:[
+  {t:"Birthdays", m:"", s:"", c:"f-flat", a:"", recogKey:"bday", d:{sub:"This month", rich:""}},
+  {t:"Anniversaries", m:"", s:"", c:"f-flat", a:"", recogKey:"anniv", d:{sub:"This month", rich:""}},
+  {t:"Employee of the month", m:"", s:"", c:"f-flat", a:"", recogKey:"eotm", d:{sub:"Recent winners", rich:""}},
+  {t:"Faces of WGV", m:"", s:"", c:"f-flat", a:"", d:{sub:"Get featured on the recognition board", url:"https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform"}},
+  {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", d:{sub:"Upcoming team events", rich:"<p>Check back for upcoming employee appreciation events.</p>"}}
+]},
+
 requests:{title:"Requests / forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
   {t:"Employee golf", m:"Request a staff tee time, space available.", s:"Form", c:"f-flat", a:"", d:{sub:"Request a staff tee time, space available.", url:"https://docs.google.com/forms/d/e/1FAIpQLSc9NC2Zcv6jSzQfiQPCCmzHdtKdrUXR7cbrQ02unje38yOsGA/viewform"}},
@@ -1031,19 +1034,13 @@ function applyContent(rows){
     S.announce.items = anns.map(contentTypeToItem).concat(extras);
   }
 
-  // --- Recognition mappings to existing sections ---
-  // Employee of the month
-  if(recog["eotm"] && S.eotm){
-    S.eotm.items=[{ t:recog["eotm"].title||"Employee of the month", m:"", s:"", c:"f-flat", a:"",
-                    d:{ sub:S.eotm.sub||"", rich:policyTextToHtml(recog["eotm"].body||"") } }];
-  }
-  // Birthdays & anniversaries (combine bday + anniv into that section's detail)
-  if((recog["bday"]||recog["anniv"]) && S.bdays){
-    const parts=[];
-    if(recog["bday"]) parts.push(recog["bday"].body||"");
-    if(recog["anniv"]) parts.push(recog["anniv"].body||"");
-    S.bdays.items=[{ t:"Birthdays & anniversaries", m:"", s:"", c:"f-flat", a:"",
-                     d:{ sub:S.bdays.sub||"", rich:policyTextToHtml(parts.join("\n\n")) } }];
+  // --- Recognition list items filled by recogKey from Content ---
+  if(S.recognition){
+    S.recognition.items.forEach(it=>{
+      if(!it.recogKey) return;
+      const c=recog[it.recogKey];
+      if(c){ if(c.title) it.t=c.title; it.d.rich=policyTextToHtml(c.body||""); }
+    });
   }
 
   // TurfSaver content (if present as a Content row) powers the cart detail
