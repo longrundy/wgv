@@ -149,7 +149,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 4 &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 5 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -272,7 +272,7 @@ const store = {
   set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
 };
 
-async function tryUnlock(){ try{ await _tryUnlock(); }catch(err){ document.getElementById("pwMsg").textContent = "Error: "+err.message; } }
+async function tryUnlock(){ try{ await _tryUnlock(); }catch(err){ var m=document.getElementById("pwMsg"); m.style.color="#f4a3a3"; m.textContent = "Error: "+(err&&err.message?err.message:err); } }
 async function _tryUnlock(){
   const v = document.getElementById("pw").value.replace(/\s+/g,"");
   const msg = document.getElementById("pwMsg");
@@ -293,8 +293,17 @@ async function _tryUnlock(){
     document.getElementById("pw").value = "";
   }
 }
-document.getElementById("pwGo").addEventListener("click", tryUnlock);
-document.getElementById("pw").addEventListener("keydown", e=>{ if(e.key==="Enter") tryUnlock(); });
+function _click(){
+  var m=document.getElementById("pwMsg");
+  m.style.color="#9fb4d4";
+  m.textContent="Checking… (build 4)";
+  Promise.resolve().then(tryUnlock).catch(function(err){
+    m.style.color="#f4a3a3";
+    m.textContent="Error: "+(err&&err.message?err.message:err);
+  });
+}
+document.getElementById("pwGo").addEventListener("click", _click);
+document.getElementById("pw").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); _click(); } });
 
 /* =====================================================================
    NAVIGATION
