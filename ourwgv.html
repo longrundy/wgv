@@ -157,16 +157,12 @@ a{color:inherit}
 .btn-primary:active{background:var(--red-dark)}
 .btn-ghost{background:#fff;color:var(--ink);border:1px solid #dde3ec;font-weight:500}
 .empty{padding:36px 22px;color:var(--muted);font-size:14px}
-.detail.is-embed{padding:0;display:flex;flex-direction:column}
-.embed-bar{display:flex;align-items:flex-start;gap:12px;padding:18px 22px 14px}
-.embed-titles{flex:1;min-width:0}
-.embed-title{font-size:19px;font-weight:600;color:#17325a;line-height:1.25}
-.embed-sub{font-size:13px;color:#6a7a90;margin-top:4px;line-height:1.45}
-.embed-open{flex:none;width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid #dde3ec;color:#17325a;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none}
-.embed-open:active{background:#eef2f8}
-.embed-stage{flex:1;min-height:0;background:#fff;border-top:1px solid #dde3ec}
-.embed-stage iframe{width:100%;height:100%;border:0;display:block;background:#fff}
-@media (max-width:820px){ .detail.is-embed{position:fixed;inset:54px 0 0 0} .embed-stage iframe{min-height:calc(100dvh - 130px)} }
+.embed-card{max-width:600px;margin:6px auto 0;background:#fff;border:1px solid #dde3ec;border-radius:14px;overflow:hidden}
+.embed-card iframe{width:100%;border:0;display:block;background:#fff}
+.embed-card.is-form iframe{height:72vh;min-height:560px}
+.embed-card.is-pdf iframe{height:0;aspect-ratio:8.5/11;min-height:600px}
+@media (max-width:820px){ .embed-card{max-width:none} .embed-card.is-form iframe{height:calc(100dvh - 220px)} .embed-card.is-pdf iframe{aspect-ratio:auto;height:calc(100dvh - 220px)} }
+
 
 
 
@@ -740,15 +736,14 @@ function detail(i){
     let src=d.url;
     if(isFormItem){ src = d.url.indexOf("?")>-1 ? d.url+"&embedded=true" : d.url+"?embedded=true"; }
     else { const m=d.url.match(/drive\.google\.com\/file\/d\/([^/]+)/); if(m) src="https://drive.google.com/file/d/"+m[1]+"/preview"; }
-    el("#detail").classList.add("is-embed");
     el("#detail").innerHTML=
-      `<div class="embed-bar"><div class="embed-titles"><div class="embed-title">${i.t}</div>`+
-      (d.sub?`<div class="embed-sub">${d.sub}</div>`:"")+`</div>`+
-      `<a class="embed-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab">&#8599;</a></div>`+
-      `<div class="embed-stage"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div>`;
+      `<div class="detail-title">${i.t}</div>`+
+      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+
+      `<div class="embed-card ${isFormItem?"is-form":"is-pdf"}">`+
+      `<iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div>`+
+      `<div class="actions" style="max-width:600px;margin:12px auto 0"><a class="btn btn-ghost" href="${d.url}" target="_blank" rel="noopener">Open in new tab</a></div>`;
     return;
   }
-  el("#detail").classList.remove("is-embed");
   let html=`<div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||""}</div><div class="card">`;
   if(d.stats) html+=`<div class="stats">${d.stats.map(s=>`<div class="stat"><div class="stat-k">${s[0]}</div><div class="stat-v"${s[3]?' style="color:var(--red-dark)"':""}>${s[1]}${s[2]?` <small>${s[2]}</small>`:""}</div></div>`).join("")}</div>`;
   if(d.kv||d.note||d.folds){
@@ -762,7 +757,6 @@ function detail(i){
   if(acts.length) html+=`<div class="actions">${acts.map(a=>a[0]==="Open"&&!d.url?`<button class="btn btn-ghost" disabled style="opacity:.55">Link not set</button>`:`<a class="btn btn-${a[1]}" href="${d.url||"#"}" target="_blank" rel="noopener">${a[0]}</a>`).join("")}</div>`;
   html+=`</div>`;
   const detailEl=el("#detail");
-  detailEl.classList.toggle("is-embed", !!embedItem);
   detailEl.innerHTML=html;
   document.querySelectorAll(".fold").forEach(f=>f.addEventListener("click",()=>{
     const b=document.querySelector('[data-body="'+f.dataset.fold+'"]'); const o=b.hidden; b.hidden=!o; f.setAttribute("aria-expanded",String(o));
