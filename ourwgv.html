@@ -917,9 +917,67 @@ function loadCart(){
     .catch(e=>{ document.getElementById("cartBody").innerHTML='<div class="cart-err">Couldn\'t reach the cart-rule sheet ('+e.message+'). <a href="'+CART_CSV+'" target="_blank" rel="noopener">Open source sheet</a>.</div>'; });
 }
 
+
+/* ---- live content from the manager workbook ---- */
+const SHEET_PUB="https://docs.google.com/spreadsheets/d/e/2PACX-1vTBBK7rG2L3JQzI_3ntsTPvSJf8Jxeg3mNaf-dwtvmrEMUk5EgE4rmqKX3Mzs3GpcLNqXqpSGYDjnek/pub";
+function sheetCsvUrl(name){ return SHEET_PUB+"?output=csv&sheet="+encodeURIComponent(name); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function buildPolicyRich(rows){
+  // rows: [Section, Style, Content] with header row 0
+  let out="";
+  for(let i=1;i<rows.length;i++){
+    const style=(rows[i][1]||"").trim().toLowerCase();
+    const content=(rows[i][2]||"").trim();
+    const section=(rows[i][0]||"").trim();
+    if(style==="h4"){ out+="<h4>"+esc(section||content)+"</h4>"; continue; }
+    if(!content) continue;
+    if(style==="lede") out+='<p class="lede">'+esc(content)+"</p>";
+    else if(style==="bullet") out+="<liTMP>"+esc(content)+"</liTMP>";
+    else out+="<p>"+esc(content)+"</p>";
+  }
+  // group consecutive bullets into <ul>
+  out=out.replace(/(<liTMP>.*?<\/liTMP>)+/g, m=>"<ul>"+m.replace(/liTMP/g,"li")+"</ul>");
+  out=out.replace(/liTMP/g,"li");
+  return out;
+}
+
+function applyAnnouncements(rows){
+  // header: Title, Type, Body / Description, Link, Show
+  const items=[];
+  for(let i=1;i<rows.length;i++){
+    const [title,type,body,link,show]=rows[i];
+    if(!title) continue;
+    if((show||"").trim().toLowerCase()==="no") continue;
+    const t=(type||"").trim().toLowerCase();
+    if(t==="doc" || (link||"").indexOf("Tee Sheet Policy")>-1 || title.toLowerCase().indexOf("tee sheet policy")>-1){
+      // policy item — rich content filled in later from the policy tab
+      items.push({t:title.trim(), m:"", s:"", c:"f-flat", a:"", d:{sub:(body||"").trim(), rich:S.__policyRich||""}});
+    } else if(t==="link"){
+      items.push({t:title.trim(), m:"", s:"", c:"f-flat", a:"", linkOnly:true, d:{sub:(body||"").trim(), url:(link||"").trim()}});
+    } else {
+      items.push({t:title.trim(), m:"", s:"", c:"f-flat", a:"", d:{sub:(body||"").trim(), url:(link||"").trim()}});
+    }
+  }
+  if(items.length){ S.announce.items=items; }
+}
+
+function loadLiveContent(){
+  // Tee Sheet Policy first (so the announce item can embed its rich content)
+  fetch(sheetCsvUrl("Tee Sheet Policy"),{cache:"no-store"}).then(r=>r.text()).then(t=>{
+    S.__policyRich=buildPolicyRich(parseCSV(t));
+  }).catch(()=>{}).finally(()=>{
+    fetch(sheetCsvUrl("Announcements"),{cache:"no-store"}).then(r=>r.text()).then(t=>{
+      applyAnnouncements(parseCSV(t));
+      if(state.view==="announce") render();
+    }).catch(()=>{});
+  });
+}
+
 buildNav();
 if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
+loadLiveContent();
 </script>
 </body>
 </html>
