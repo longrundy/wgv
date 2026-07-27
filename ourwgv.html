@@ -786,52 +786,50 @@ function statusWord(rule){
   return "Open";
 }
 function renderCart(rows){
-  // Flatten to a clean list of non-empty cell strings in reading order.
   const cells=[];
   rows.forEach(r=>r.forEach(c=>{ const v=(c||"").trim(); if(v) cells.push(v); }));
-  // Walk the list: a course name starts a block; next cell is the rule; an "Updated" cell (with its time) follows.
-  function isCourse(s){ const l=s.toLowerCase(); return l.indexOf("king")>-1&&l.indexOf("bear")>-1 || l.indexOf("slammer")>-1&&l.indexOf("squire")>-1; }
-  function courseLabel(s){ const l=s.toLowerCase(); return l.indexOf("king")>-1?"KING & BEAR":"SLAMMER & SQUIRE"; }
+  const isCourse=s=>{const l=s.toLowerCase();return (l.indexOf("king")>-1&&l.indexOf("bear")>-1)||(l.indexOf("slammer")>-1&&l.indexOf("squire")>-1);};
+  const label=s=>{const l=s.toLowerCase();return l.indexOf("king")>-1?"KING & BEAR":"SLAMMER & SQUIRE";};
+  const isStatusWord=s=>/^(open|closed|caution|path only|cart path only)$/i.test(s.trim());
+  const isUpdatedLabel=s=>/^updated/i.test(s.trim());
+  const isTime=s=>/\b(am|pm)\b/i.test(s)||/\d{1,2}\/\d{1,2}/.test(s);
+  const isLearn=s=>/learn about/i.test(s);
   const blocks=[];
   for(let i=0;i<cells.length;i++){
-    if(isCourse(cells[i])){
-      const name=courseLabel(cells[i]);
-      let rule="", time="";
-      // rule = next non-course, non-updated cell
-      let j=i+1;
-      while(j<cells.length && (isCourse(cells[j]) || /^updated/i.test(cells[j]))) j++;
-      if(j<cells.length && !isCourse(cells[j]) && !/learn about/i.test(cells[j])){ rule=cells[j]; }
-      // time = scan forward a few cells for one containing AM/PM or a date, before the next course
-      for(let k=i+1;k<cells.length && !isCourse(cells[k]);k++){
-        if(/\b(am|pm)\b/i.test(cells[k]) || /\d{1,2}\/\d{1,2}/.test(cells[k])){
-          time=cells[k].replace(/updated as of:?/i,"").trim(); break;
-        }
-      }
-      blocks.push({name,rule,time});
+    if(!isCourse(cells[i])) continue;
+    const b={name:label(cells[i]),status:"",rule:"",time:""};
+    let j=i+1;
+    while(j<cells.length && !isCourse(cells[j])){
+      const c=cells[j];
+      if(isLearn(c)){ j++; continue; }
+      if(isStatusWord(c) && !b.status){ b.status=c; }
+      else if(isUpdatedLabel(c)){ /* label only */ }
+      else if(isTime(c) && !b.time){ b.time=c.replace(/updated as of:?/i,"").trim(); }
+      else if(!b.rule){ b.rule=c; }
+      j++;
     }
+    blocks.push(b); i=j-1;
   }
   if(!blocks.length){
-    document.getElementById("cartBody").innerHTML=
-      '<div class="cart-err"><b>Mapping needed.</b> First cells received:<br><code>'+cells.slice(0,10).join("<br>")+'</code></div>';
+    document.getElementById("cartBody").innerHTML='<div class="cart-err"><b>Mapping needed.</b> First cells:<br><code>'+cells.slice(0,12).join("<br>")+'</code></div>';
     return;
   }
-  function statusClass(rule){ const r=(rule||"").toLowerCase();
-    if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "cc-closed";
-    if(r.indexOf("path only")>-1||r.indexOf("caution")>-1||r.indexOf("90")>-1) return "cc-caution";
-    return "cc-open"; }
-  function statusWord(rule){ const r=(rule||"").toLowerCase();
-    if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "Closed";
-    if(r.indexOf("path only")>-1||r.indexOf("caution")>-1) return "Caution";
-    return "Open"; }
-  function card(b){
-    const cls=statusClass(b.rule), word=statusWord(b.rule);
-    return '<div class="cart-course '+cls+'">'+
-      '<div class="cc-top"><span class="cc-name">'+b.name+'</span><span class="cc-pill">'+word+'</span></div>'+
-      '<div class="cc-rule">'+(b.rule||"—")+'</div>'+
-      (b.time?'<div class="cc-time"><i>&#128337;</i> Updated '+b.time+'</div>':'')+'</div>';
+  function meta(b){
+    const s=((b.status||"")+" "+(b.rule||"")).toLowerCase();
+    if(s.indexOf("clos")>-1||s.indexOf("maintenance")>-1) return {word:"CLOSED",dot:"#c8161d",pillBg:"#c8161d",pillFg:"#fff",rowBg:"#fcf1f1"};
+    if(s.indexOf("path only")>-1||s.indexOf("caution")>-1) return {word:"CAUTION",dot:"#ba7517",pillBg:"#fbeed4",pillFg:"#8a5a12",rowBg:"#fdf9f0"};
+    return {word:"OPEN",dot:"#378add",pillBg:"#e6f1fb",pillFg:"#185fa5",rowBg:"#fff"};
+  }
+  function row(b,last){
+    const m=meta(b);
+    return '<div class="cart-row" style="background:'+m.rowBg+(last?"":";border-bottom:1px solid #eef0f4")+'">'+
+      '<span class="cart-dot" style="background:'+m.dot+'"></span>'+
+      '<div class="cart-mid"><div class="cart-course-name">'+b.name+'</div><div class="cart-rule-txt">'+(b.rule||b.status||"—")+'</div></div>'+
+      '<div class="cart-right"><span class="cart-pill" style="background:'+m.pillBg+';color:'+m.pillFg+'">'+m.word+'</span>'+
+      (b.time?'<div class="cart-time">'+b.time+'</div>':'')+'</div></div>';
   }
   document.getElementById("cartBody").innerHTML=
-    '<div class="cart-grid">'+blocks.map(card).join("")+'</div>'+
+    '<div class="cart-rows">'+blocks.map((b,i)=>row(b,i===blocks.length-1)).join("")+'</div>'+
     '<div class="cart-learn"><a href="'+CART_LEARN+'" target="_blank" rel="noopener">Learn about TurfSaver entry-exit &rsaquo;</a></div>';
 }
 function loadCart(){
