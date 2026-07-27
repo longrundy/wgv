@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WGV Staff Portal</title>
+<style>
+:root{
+  --navy:#17325a; --navy-2:#22406c; --navy-3:#0f2544; --navy-line:#3a5a8a;
+  --red:#c8161d; --red-dark:#a32d2d; --red-tint:#fbeceb; --red-wash:#fbf6f6;
+  --ink:#17325a; --muted:#8a8a84; --line:#e5e2da; --line-soft:#f0eee8;
+  --amber:#ba7517; --green:#639922;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink); background:#fff; font-size:14px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:4px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.app{display:grid;grid-template-columns:236px minmax(0,1fr) 340px;height:100vh}
+
+/* ---------- left rail ---------- */
+.rail{background:var(--navy);color:#fff;padding:18px 14px;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.brand-name{font-size:19px;font-weight:600;letter-spacing:1.5px;line-height:1}
+.brand-sub{font-size:10px;color:#9fb4d4;letter-spacing:.7px;margin-top:3px}
+.rail-select{background:var(--navy-2);border-radius:7px;padding:9px 11px;font-size:13px;
+  display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px}
+.rail-stamp{background:var(--navy-2);border-radius:7px;padding:9px 11px;font-size:12px;color:#dbe5f2}
+.rail-count{font-size:10px;color:#9fb4d4;letter-spacing:.8px;text-align:center;margin:8px 0 16px}
+.nav-group{font-size:10px;letter-spacing:.8px;color:#7f97bd;padding:0 8px;margin:16px 0 6px}
+.nav-item{display:flex;align-items:center;gap:9px;width:100%;padding:9px 9px;border-radius:7px;
+  font-size:13px;border-left:3px solid transparent}
+.nav-item:hover{background:var(--navy-2)}
+.nav-item[aria-current="true"]{background:var(--navy-3);border-left-color:var(--red)}
+.dot{width:7px;height:7px;border-radius:50%;flex:none}
+.nav-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-count{font-size:12px;color:#9fb4d4}
+.nav-item[aria-current="true"] .nav-count{color:#fff}
+.rail-search{margin-top:18px}
+.rail-search input{width:100%;background:var(--navy-2);border:0;border-radius:7px;padding:9px 11px;
+  color:#fff;font:inherit;font-size:13px}
+.rail-search input::placeholder{color:#9fb4d4}
+.rail-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--navy-line);font-size:12px;color:#c7d5e8}
+.rail-foot a{color:#fff;text-decoration:none;border-bottom:1px solid var(--navy-line)}
+.rail-foot .txt-mgr{display:block;font-weight:600;color:#fff;margin-bottom:2px}
+
+/* ---------- middle queue ---------- */
+.queue{border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#fff}
+.queue-head{padding:20px 22px 0;flex:none}
+.queue-title{font-size:21px;font-weight:600;margin:0}
+.queue-sub{font-size:13px;color:var(--muted);margin:4px 0 0}
+.tabs{display:flex;gap:22px;margin-top:16px;border-bottom:1px solid var(--line)}
+.tab{padding:0 0 10px;font-size:13px;color:var(--muted);border-bottom:2px solid transparent}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
+.tab span{color:var(--muted);margin-left:5px}
+.list{overflow-y:auto;flex:1}
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:13px 22px;
+  border-bottom:1px solid var(--line-soft);border-left:3px solid transparent}
+.row:hover{background:#fafaf7}
+.row[aria-current="true"]{background:var(--red-wash);border-left-color:var(--red)}
+.row-icon{width:26px;height:26px;border-radius:6px;background:#f4f2ec;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex:none}
+.row-main{flex:1;min-width:0}
+.row-title{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.row-side{text-align:right;flex:none}
+.row-flag{font-size:13px;font-weight:600}
+.row-age{font-size:11px;color:var(--muted);margin-top:2px}
+.f-urgent{color:var(--red)} .f-high{color:var(--amber)} .f-low{color:var(--green)} .f-flat{color:var(--muted)}
+.empty{padding:40px 22px;color:var(--muted);font-size:13px}
+
+/* ---------- right detail ---------- */
+.detail{background:var(--red-tint);padding:20px;overflow-y:auto}
+.detail-title{font-size:19px;font-weight:600;margin:0}
+.detail-id{font-size:14px;color:var(--red-dark);font-weight:500;margin-left:6px}
+.detail-sub{font-size:12px;color:#7a4b4b;margin:5px 0 16px;line-height:1.5}
+.card{background:#fff;border-radius:12px;padding:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--red-wash);border-radius:8px;padding:10px 11px}
+.stat-k{font-size:10px;letter-spacing:.6px;color:var(--muted)}
+.stat-v{font-size:19px;font-weight:600;margin-top:3px}
+.stat-v small{font-size:11px;font-weight:400;color:var(--muted)}
+.rows{margin-top:14px;font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.kv-k{color:var(--muted);flex:none}
+.kv-v{text-align:right}
+.pill{background:var(--red-tint);color:var(--red-dark);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:500}
+.pill-ok{background:#eaf3de;color:#3b6d11}
+.note{padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.note .kv-k{display:block;margin-bottom:3px}
+.fold{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 0;
+  border-bottom:1px solid var(--line-soft);font-size:13px}
+.fold-tag{font-size:11px;color:var(--muted)}
+.fold-body{font-size:12px;color:var(--muted);padding:0 0 10px;border-bottom:1px solid var(--line-soft);line-height:1.6}
+.actions{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;text-align:center;padding:9px 10px;border-radius:8px;font-size:13px;font-weight:500}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-dark)}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid #eddad9}
+.btn-ghost:hover{background:var(--red-wash)}
+
+/* ---------- board view (staff hub) ---------- */
+.board{padding:18px 22px 30px;overflow-y:auto}
+.panel{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.panel h3{margin:0 0 10px;font-size:15px;font-weight:600}
+.panel p{margin:0 0 6px;font-size:13px;line-height:1.6}
+.name-list{font-size:13px;line-height:1.9;color:#3f3f3b}
+.name-list b{color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--red-wash);color:var(--red-dark);border-radius:6px;padding:4px 10px;font-size:12px}
+.chip-navy{background:#eef2f8;color:var(--navy)}
+
+@media (max-width:1080px){
+  .app{grid-template-columns:200px minmax(0,1fr) 300px}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;height:auto}
+  .rail{position:sticky;top:0;z-index:2}
+  .queue{border-right:0;border-bottom:1px solid var(--line)}
+  .list{max-height:none}
+}
+</style>
+</head>
+<body>
+<h1 class="sr-only">World Golf Village staff portal</h1>
+<div class="app">
+
+  <!-- LEFT RAIL -->
+  <nav class="rail" aria-label="Sections">
+    <div class="brand">
+      <svg width="26" height="32" viewBox="0 0 22 26" aria-hidden="true">
+        <path d="M11 1 L20 4.4 L11 7.8 Z" fill="#c8161d"/>
+        <rect x="10.2" y="1" width="1.6" height="23" fill="#c8161d"/>
+        <ellipse cx="11" cy="24.6" rx="3.4" ry="1.5" fill="#c8161d"/>
+      </svg>
+      <div>
+        <div class="brand-name">WGV</div>
+        <div class="brand-sub">STAFF PORTAL</div>
+      </div>
+    </div>
+
+    <button class="rail-select">Management view <span aria-hidden="true">▾</span></button>
+    <div class="rail-stamp">Mon 7-27-26 · 7:12 AM</div>
+    <div class="rail-count" id="railCount">36 OPEN ITEMS · KB + SS</div>
+
+    <div class="nav-group">REQUESTS</div>
+    <div id="navRequests"></div>
+    <div class="nav-group">REFERENCE</div>
+    <div id="navReference"></div>
+
+    <div class="rail-search">
+      <label class="sr-only" for="q">Search</label>
+      <input id="q" type="search" placeholder="Search requests or staff…">
+    </div>
+
+    <div class="rail-foot">
+      <span class="txt-mgr">Text the manager</span>
+      <a href="tel:9046647304">(904) 664-7304</a><br>
+      <span style="display:block;margin-top:8px">Golf shops<br>
+        KB <a href="tel:9049406201">(904) 940-6201</a><br>
+        SS <a href="tel:9049406116">(904) 940-6116</a>
+      </span>
+    </div>
+  </nav>
+
+  <!-- MIDDLE QUEUE -->
+  <main class="queue">
+    <div class="queue-head">
+      <h2 class="queue-title" id="queueTitle">Cart repair</h2>
+      <p class="queue-sub" id="queueSub">Submitted by staff at both courses</p>
+      <div class="tabs" role="tablist" id="tabs">
+        <button class="tab" role="tab" aria-selected="true" data-tab="open">Open <span id="cOpen">4</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="closed">Closed <span id="cClosed">27</span></button>
+      </div>
+    </div>
+    <div class="list" id="list" role="listbox" aria-label="Requests"></div>
+    <div class="board" id="board" hidden></div>
+  </main>
+
+  <!-- RIGHT DETAIL -->
+  <aside class="detail" id="detail" aria-label="Details"></aside>
+</div>
+
+<script>
+const NAV = [
+  {id:"timeoff",  label:"Time off requests", dot:"#e2564f", title:"Time off requests", sub:"Approve or decline crew requests"},
+  {id:"maint",    label:"Maintenance",       dot:"#f0b53c", title:"Maintenance",       sub:"Course and clubhouse work orders"},
+  {id:"cart",     label:"Cart repair",       dot:"#c8161d", title:"Cart repair",       sub:"Submitted by staff at both courses"},
+  {id:"it",       label:"IT requests",       dot:"#5dcaa5", title:"IT requests",       sub:"Hardware, logins, POS and network"},
+  {id:"golf",     label:"Employee golf",     dot:"#85b7eb", title:"Employee golf requests", sub:"Tee time requests from staff"},
+  {id:"aceonly",  label:"Hole-in-one",       dot:"#b4b2a9", title:"Hole-in-one reports", sub:"Verify and post to the board"}
+];
+const REF = [
+  {id:"hub",      label:"Staff hub",     dot:"#b4b2a9"},
+  {id:"contacts", label:"Hours & contacts", dot:"#b4b2a9"}
+];
+
+const DATA = {
+  cart:{open:[
+    {id:"418",t:"Cart 42 — brake fade",who:"Jairo Duitama",site:"KB",flag:"Urgent",cls:"f-urgent",age:"2d open",
+     sub:"Brake fade on cart path — King & Bear barn [7-25-26]",
+     stats:[["PRIORITY","Urgent","",1],["DAYS OPEN","2","of 5 SLA"],["CART HOURS","812",""],["LAST SERVICE","6.2w",""]],
+     kv:[["Status","In shop","pill"],["Assigned","Todd Klimchak"],["Reported","7/25/26"]],
+     note:"Pulled from rotation. Pads ordered, ETA Tuesday.",
+     folds:[["Shop notes","2 on file","Brake shoes replaced 2/14/26. Same cart flagged for pedal travel in May — check linkage while it's on the lift."],["Repair history","9 records","3 brake, 2 battery, 4 cosmetic since 2023."]]},
+    {id:"417",t:"Cart 17 — battery not holding",who:"Hal Hall",site:"SS",flag:"High",cls:"f-high",age:"1d open",
+     sub:"Battery drops below half after 9 holes — Slammer & Squire [7-26-26]",
+     stats:[["PRIORITY","High",""],["DAYS OPEN","1","of 5 SLA"],["CART HOURS","1,240",""],["LAST SERVICE","3.1w",""]],
+     kv:[["Status","Awaiting parts","pill"],["Assigned","Joe Schell"],["Reported","7/26/26"]],
+     note:"Load test scheduled Wednesday. Backup cart assigned to the route.",
+     folds:[["Shop notes","1 on file","Pack is original to the cart — likely end of life rather than a charger fault."],["Repair history","4 records","2 battery, 1 controller, 1 tire."]]},
+    {id:"415",t:"Cart 08 — torn seat",who:"Reagan Davis",site:"KB",flag:"Low",cls:"f-low",age:"4d open",
+     sub:"Seat back split along the seam — King & Bear [7-23-26]",
+     stats:[["PRIORITY","Low",""],["DAYS OPEN","4","of 10 SLA"],["CART HOURS","604",""],["LAST SERVICE","11w",""]],
+     kv:[["Status","Scheduled","pill"],["Assigned","Nick Joseph"],["Reported","7/23/26"]],
+     note:"Cosmetic only. Cart stays in rotation until the upholstery run.",
+     folds:[["Shop notes","none","No prior notes on this cart."],["Repair history","2 records","1 tire, 1 windshield."]]},
+    {id:"412",t:"Cart 31 — GPS screen dark",who:"Eric Nicholas",site:"SS",flag:"Low",cls:"f-low",age:"6d open",
+     sub:"Screen will not wake after charge — Slammer & Squire [7-21-26]",
+     stats:[["PRIORITY","Low",""],["DAYS OPEN","6","of 10 SLA"],["CART HOURS","933",""],["LAST SERVICE","1.4w",""]],
+     kv:[["Status","With vendor","pill"],["Assigned","Pace Anderson"],["Reported","7/21/26"]],
+     note:"Vendor ticket open. Cart usable without GPS in the meantime.",
+     folds:[["Shop notes","1 on file","Second GPS fault this season — ask vendor about the harness."],["Repair history","6 records","2 GPS, 3 brake, 1 battery."]]}
+  ],closed:[
+    {id:"409",t:"Cart 26 — flat rear tire",who:"AJ Johnson",site:"KB",flag:"Closed",cls:"f-flat",age:"closed 7/20",
+     sub:"Rear tire replaced and balanced — King & Bear [7-19-26]",
+     stats:[["PRIORITY","Low",""],["DAYS OPEN","1",""],["CART HOURS","715",""],["LAST SERVICE","1.1w",""]],
+     kv:[["Status","Closed","ok"],["Closed by","Todd Klimchak"],["Reported","7/19/26"]],
+     note:"Back in rotation same day.",folds:[["Shop notes","none","—"],["Repair history","3 records","2 tire, 1 brake."]]}
+  ]},
+
+  timeoff:{open:[
+    {id:"TO-88",t:"Charles Johnson — Aug 3 to Aug 7",who:"Charles Johnson",site:"Agronomy",flag:"Pending",cls:"f-high",age:"submitted 7/24",
+     sub:"5 days requested — agronomy crew, King & Bear",
+     stats:[["DAYS REQUESTED","5",""],["PTO BALANCE","62","hrs"],["CREW OUT","2","that week"],["NOTICE GIVEN","10","days"]],
+     kv:[["Status","Awaiting approval","pill"],["Approver","Johnathan Englen"],["Coverage","Not yet assigned"]],
+     note:"Overlaps with the Aug 12 appreciation event setup. Confirm mow schedule first.",
+     folds:[["Prior requests","4 this year","All approved. No callouts in the last 12 months."],["Blackout dates","2 nearby","Aug 12 KB appreciation, Aug 19 SS appreciation."]]},
+    {id:"TO-87",t:"Mellinda Smith — Aug 14",who:"Mellinda Smith",site:"Golf shop",flag:"Pending",cls:"f-high",age:"submitted 7/23",
+     sub:"Single day — golf shop, Slammer & Squire",
+     stats:[["DAYS REQUESTED","1",""],["PTO BALANCE","31","hrs"],["CREW OUT","0","that day"],["NOTICE GIVEN","22","days"]],
+     kv:[["Status","Awaiting approval","pill"],["Approver","Gabriela Ruse"],["Coverage","Jean Charles"]],
+     note:"Coverage already confirmed with Jean.",
+     folds:[["Prior requests","2 this year","Both approved."],["Blackout dates","none","Clear week."]]},
+    {id:"TO-85",t:"Tiago Joaquim — Sep 1 to Sep 3",who:"Tiago Joaquim",site:"Agronomy",flag:"Pending",cls:"f-low",age:"submitted 7/18",
+     sub:"3 days requested — agronomy crew, Slammer & Squire",
+     stats:[["DAYS REQUESTED","3",""],["PTO BALANCE","48","hrs"],["CREW OUT","1","that week"],["NOTICE GIVEN","45","days"]],
+     kv:[["Status","Awaiting approval","pill"],["Approver","Johnathan Englen"],["Coverage","Pace Anderson"]],
+     note:"Labor Day week — verify aerification schedule before approving.",
+     folds:[["Prior requests","3 this year","All approved."],["Blackout dates","none",""]]}
+  ],closed:[]},
+
+  maint:{open:[
+    {id:"M-231",t:"Irrigation head 14 fairway",who:"Johnathan Englen",site:"KB",flag:"Urgent",cls:"f-urgent",age:"1d open",
+     sub:"Head stuck open, standing water in the landing zone [7-26-26]",
+     stats:[["PRIORITY","Urgent",""],["DAYS OPEN","1","of 2 SLA"],["ZONE","14",""],["REPEAT","2nd","this season"]],
+     kv:[["Status","Crew dispatched","pill"],["Assigned","Jairo Duitama"],["Reported","7/26/26"]],
+     note:"Zone shut off at the controller until the head is swapped.",
+     folds:[["Site notes","1 on file","Same head replaced in April — check the lateral for a crack."],["History","5 records","Irrigation faults on 12, 14, 15 since spring."]]},
+    {id:"M-229",t:"Clubhouse AC — pro shop side",who:"Shana Alexander",site:"SS",flag:"High",cls:"f-high",age:"3d open",
+     sub:"Not cooling below 78 during afternoons [7-24-26]",
+     stats:[["PRIORITY","High",""],["DAYS OPEN","3","of 5 SLA"],["ZONE","Pro shop",""],["REPEAT","1st",""]],
+     kv:[["Status","Vendor scheduled","pill"],["Assigned","Facilities"],["Reported","7/24/26"]],
+     note:"Vendor confirmed for Wednesday morning before open.",
+     folds:[["Site notes","none","—"],["History","2 records","Filter change 5/26, coil clean 3/26."]]}
+  ],closed:[]},
+
+  it:{open:[
+    {id:"IT-64",t:"POS terminal 2 dropping offline",who:"Jean Charles",site:"KB golf shop",flag:"High",cls:"f-high",age:"2d open",
+     sub:"Terminal loses connection during morning rush [7-25-26]",
+     stats:[["PRIORITY","High",""],["DAYS OPEN","2","of 3 SLA"],["USERS","4","affected"],["REPEAT","3rd","this month"]],
+     kv:[["Status","In progress","pill"],["Assigned","IT vendor"],["Reported","7/25/26"]],
+     note:"Switch port swapped Friday, issue returned. Cable run is the next suspect.",
+     folds:[["Ticket notes","2 on file","Terminal firmware is current. Network drop tested clean at the panel."],["History","4 records","All network related."]]},
+    {id:"IT-63",t:"New hire login — Joseph O'Donnell",who:"Gabriela Ruse",site:"SS",flag:"Low",cls:"f-low",age:"5d open",
+     sub:"Email, tee sheet and time clock access [7-22-26]",
+     stats:[["PRIORITY","Low",""],["DAYS OPEN","5","of 7 SLA"],["USERS","1",""],["REPEAT","1st",""]],
+     kv:[["Status","Awaiting manager sign-off","pill"],["Assigned","IT vendor"],["Reported","7/22/26"]],
+     note:"Tee sheet access needs the new per-user login, not the shared account.",
+     folds:[["Ticket notes","1 on file","Hold shared credentials until all staff are migrated."],["History","none","New employee."]]}
+  ],closed:[]},
+
+  golf:{open:[
+    {id:"G-142",t:"Nick Joseph — Sat 8/1, 2 players",who:"Nick Joseph",site:"KB",flag:"Pending",cls:"f-high",age:"submitted 7/26",
+     sub:"Requesting an afternoon time after 2:00 PM",
+     stats:[["PLAYERS","2",""],["REQUESTED","Sat","8/1"],["WINDOW","2:00","PM+"],["ROUNDS YTD","6",""]],
+     kv:[["Status","Awaiting shop","pill"],["Course","King & Bear"],["Submitted","7/26/26"]],
+     note:"Outing on the books until 1:30. Afternoon should open up.",
+     folds:[["Policy","employee golf","Tee times released 48 hours out, space available."],["History","6 rounds","No no-shows."]]},
+    {id:"G-141",t:"Joe Schell — Sun 8/2, 4 players",who:"Joe Schell",site:"SS",flag:"Pending",cls:"f-low",age:"submitted 7/25",
+     sub:"Requesting a morning time with three guests",
+     stats:[["PLAYERS","4",""],["REQUESTED","Sun","8/2"],["WINDOW","AM",""],["ROUNDS YTD","11",""]],
+     kv:[["Status","Awaiting shop","pill"],["Course","Slammer & Squire"],["Submitted","7/25/26"]],
+     note:"Guest rate applies to three of the four.",
+     folds:[["Policy","guest play","Two guest maximum on weekend mornings — confirm with the shop."],["History","11 rounds","Two guest rounds in June."]]}
+  ],closed:[]},
+
+  aceonly:{open:[
+    {id:"A-07",t:"Hole 8, Slammer & Squire — 7/24",who:"Reported by Hal Hall",site:"SS",flag:"Verify",cls:"f-high",age:"3d open",
+     sub:"Guest ace on hole 8, 147 yards, 8-iron",
+     stats:[["HOLE","8",""],["YARDAGE","147",""],["WITNESSES","3",""],["POSTED","No",""]],
+     kv:[["Status","Awaiting verification","pill"],["Course","Slammer & Squire"],["Date","7/24/26"]],
+     note:"Scorecard collected. Needs a photo before it goes on the board.",
+     folds:[["Verification","2 of 3 steps","Scorecard signed, witnesses named, photo outstanding."],["Board","2026","4 aces posted this year."]]}
+  ],closed:[]}
+};
+
+const el = s => document.querySelector(s);
+const state = {view:"cart", tab:"open", item:null};
+
+function navButton(n){
+  return `<button class="nav-item" data-view="${n.id}" aria-current="false">
+    <span class="dot" style="background:${n.dot}"></span>
+    <span class="nav-label">${n.label}</span>
+    <span class="nav-count">${countOf(n.id)}</span></button>`;
+}
+function countOf(id){ return DATA[id] ? DATA[id].open.length : ""; }
+
+el("#navRequests").innerHTML = NAV.map(navButton).join("");
+el("#navReference").innerHTML = REF.map(navButton).join("");
+el("#railCount").textContent =
+  NAV.reduce((s,n)=> s + (DATA[n.id] ? DATA[n.id].open.length : 0), 0) + " OPEN ITEMS · KB + SS";
+
+document.querySelectorAll(".nav-item").forEach(b=>{
+  b.addEventListener("click", ()=>{ state.view=b.dataset.view; state.tab="open"; state.item=null; render(); });
+});
+el("#tabs").addEventListener("click", e=>{
+  const t = e.target.closest(".tab"); if(!t) return;
+  state.tab = t.dataset.tab; state.item = null; render();
+});
+
+function render(){
+  document.querySelectorAll(".nav-item").forEach(b=>
+    b.setAttribute("aria-current", String(b.dataset.view === state.view)));
+
+  if(state.view === "hub" || state.view === "contacts"){ renderBoard(); return; }
+  el("#board").hidden = true; el("#list").hidden = false;
+  el("#tabs").hidden = false;
+
+  const meta = NAV.find(n=>n.id===state.view);
+  el("#queueTitle").textContent = meta.title;
+  el("#queueSub").textContent = meta.sub;
+  const d = DATA[state.view];
+  el("#cOpen").textContent = d.open.length;
+  el("#cClosed").textContent = d.closed.length;
+  document.querySelectorAll(".tab").forEach(t=>
+    t.setAttribute("aria-selected", String(t.dataset.tab === state.tab)));
+
+  const items = d[state.tab];
+  if(!items.length){
+    el("#list").innerHTML = `<div class="empty">Nothing here right now. Closed items land here once a request is marked complete.</div>`;
+    el("#detail").innerHTML = ""; return;
+  }
+  if(!state.item || !items.find(i=>i.id===state.item)) state.item = items[0].id;
+
+  el("#list").innerHTML = items.map(i=>`
+    <button class="row" data-id="${i.id}" aria-current="${i.id===state.item}">
+      <span class="row-icon">${i.site}</span>
+      <span class="row-main">
+        <span class="row-title">${i.t}</span>
+        <span class="row-meta">#${i.id} · ${i.who}</span>
+      </span>
+      <span class="row-side">
+        <span class="row-flag ${i.cls}">${i.flag}</span>
+        <span class="row-age">${i.age}</span>
+      </span>
+    </button>`).join("");
+
+  document.querySelectorAll(".row").forEach(r=>
+    r.addEventListener("click", ()=>{ state.item = r.dataset.id; render(); }));
+
+  renderDetail(items.find(i=>i.id===state.item));
+}
+
+function renderDetail(i){
+  el("#detail").innerHTML = `
+    <div class="detail-title">${i.t}<span class="detail-id">#${i.id}</span></div>
+    <div class="detail-sub">${i.sub}</div>
+    <div class="card">
+      <div class="stats">
+        ${i.stats.map(s=>`<div class="stat"><div class="stat-k">${s[0]}</div>
+          <div class="stat-v" ${s[3]?'style="color:var(--red-dark)"':""}>${s[1]} ${s[2]?`<small>${s[2]}</small>`:""}</div></div>`).join("")}
+      </div>
+      <div class="rows">
+        ${i.kv.map(k=>`<div class="kv"><span class="kv-k">${k[0]}</span>
+          <span class="kv-v">${k[2]?`<span class="pill ${k[2]==="ok"?"pill-ok":""}">${k[1]}</span>`:k[1]}</span></div>`).join("")}
+        <div class="note"><span class="kv-k">Notes</span>${i.note}</div>
+        ${i.folds.map((f,n)=>`
+          <button class="fold" data-fold="${n}" aria-expanded="false">
+            <span>› ${f[0]}</span><span class="fold-tag">${f[1]}</span></button>
+          <div class="fold-body" data-body="${n}" hidden>${f[2]}</div>`).join("")}
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary">Update status</button>
+        <button class="btn btn-ghost">Reassign</button>
+      </div>
+    </div>`;
+  document.querySelectorAll(".fold").forEach(f=>f.addEventListener("click",()=>{
+    const body = document.querySelector(`[data-body="${f.dataset.fold}"]`);
+    const open = body.hidden;
+    body.hidden = !open;
+    f.setAttribute("aria-expanded", String(open));
+    f.firstElementChild.textContent = (open?"⌄ ":"› ") + f.firstElementChild.textContent.slice(2);
+  }));
+}
+
+function renderBoard(){
+  el("#list").hidden = true; el("#tabs").hidden = true; el("#board").hidden = false;
+  const hub = state.view === "hub";
+  el("#queueTitle").textContent = hub ? "Staff hub" : "Hours & contacts";
+  el("#queueSub").textContent = hub ? "Birthdays, anniversaries and appreciation events"
+                                    : "Who to call, and when each course is open";
+
+  el("#board").innerHTML = hub ? `
+    <div class="panel">
+      <h3>July birthdays</h3>
+      <div class="name-list"><b>Todd Klimchak</b> 7/11 · <b>Jairo Duitama</b> 7/18 · <b>Tiago Joaquim</b> 7/20 ·
+      <b>Charles Johnson</b> 7/22 · <b>Mellinda Smith</b> 7/22</div>
+    </div>
+    <div class="panel">
+      <h3>July anniversaries</h3>
+      <div class="name-list"><b>Shana Alexander</b> 13 yrs · <b>Hal Hall</b> 11 yrs · <b>Jean Charles</b> 10 yrs ·
+      <b>Reagan Davis</b> 6 yrs · <b>Joe Schell</b> 6 yrs · <b>Pace Anderson</b> 1 yr · <b>AJ Johnson</b> 1 yr ·
+      <b>Nick Joseph</b> 1 yr · <b>Eric Nicholas</b> 1 yr · <b>Joseph O'Donnell</b> 1 yr</div>
+    </div>
+    <div class="panel">
+      <h3>Employee of the month</h3>
+      <p>2026 winners — Johnathan Englen (January, agronomy) · Gabriela Ruse (February, golf shop)</p>
+      <p style="color:var(--muted)">Nominations for August close on the 25th.</p>
+    </div>
+    <div class="panel">
+      <h3>2026 appreciation events</h3>
+      <div class="chips">
+        <span class="chip">Aug 12 · KB</span><span class="chip">Aug 19 · SS</span>
+        <span class="chip">Oct 14 · KB</span><span class="chip">Oct 21 · SS</span>
+        <span class="chip chip-navy">Dec 14 · Holiday party</span>
+      </div>
+      <p style="margin-top:10px;color:var(--muted)">Past events: Feb 11 KB, Feb 18 SS, Apr 15 KB, Apr 22 SS, Jun 10 KB, Jun 17 SS</p>
+    </div>` : `
+    <div class="panel">
+      <h3>Text the manager</h3>
+      <p>(904) 664-7304 — the only number you need for management. Questions, comments and feedback.</p>
+    </div>
+    <div class="panel">
+      <h3>Golf shops</h3>
+      <p>King &amp; Bear — (904) 940-6201</p>
+      <p>Slammer &amp; Squire — (904) 940-6116</p>
+    </div>
+    <div class="panel">
+      <h3>Hours of operation</h3>
+      <p>Golf shops — 7:00 AM to 6:00 PM daily</p>
+      <p>Maintenance barn — 5:30 AM to 2:30 PM</p>
+      <p>Cart barn — 6:00 AM to dusk</p>
+    </div>
+    <div class="panel">
+      <h3>Weather stations</h3>
+      <p>King &amp; Bear station · Slammer &amp; Squire station</p>
+    </div>`;
+
+  el("#detail").innerHTML = `
+    <div class="detail-title">Quick reference</div>
+    <div class="detail-sub">Pinned for every shift</div>
+    <div class="card">
+      <div class="rows">
+        <div class="kv"><span class="kv-k">Manager text line</span><span class="kv-v">(904) 664-7304</span></div>
+        <div class="kv"><span class="kv-k">KB golf shop</span><span class="kv-v">(904) 940-6201</span></div>
+        <div class="kv"><span class="kv-k">SS golf shop</span><span class="kv-v">(904) 940-6116</span></div>
+        <div class="kv"><span class="kv-k">Tee sheet</span><span class="kv-v"><span class="pill">Sign in with your work email</span></span></div>
+        <div class="note"><span class="kv-k">Notes</span>Shared tee sheet logins are being retired. Ask IT for your own access before your next shift.</div>
+      </div>
+      <div class="actions"><button class="btn btn-primary">Open tee sheet</button></div>
+    </div>`;
+}
+
+el("#q").addEventListener("input", e=>{
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll(".row").forEach(r=>{
+    r.style.display = r.textContent.toLowerCase().includes(term) ? "" : "none";
+  });
+});
+
+render();
+</script>
+</body>
+</html>
