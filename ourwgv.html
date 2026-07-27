@@ -1014,7 +1014,7 @@ function applyContent(rows){
   const ki=gi("key"),ti=gi("title"),bi=gi("body"),tyi=gi("type"),li=gi("link"),si=gi("section");
   if(ki<0||ti<0) return;
   CONTENT={};
-  const anns=[]; const recog={};
+  const anns=[]; const recog={}; const reqs=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i]||[];
     const key=(r[ki]||"").trim(); if(!key) continue;
@@ -1022,8 +1022,10 @@ function applyContent(rows){
     const row={ key, title:(r[ti]||"").trim(), body:(bi>=0?r[bi]:"")||"",
                 type:(tyi>=0?r[tyi]:"")||"text", link:(li>=0?r[li]:"")||"", section };
     CONTENT[key]=row;
-    if(section.toLowerCase()==="announcements") anns.push(row);
-    else if(section.toLowerCase()==="recognition") recog[key]=row;
+    const secl=section.toLowerCase();
+    if(secl==="announcements") anns.push(row);
+    else if(secl==="recognition") recog[key]=row;
+    else if(secl==="requests / forms" || secl==="requests" || secl==="requests/forms") reqs.push(row);
   }
 
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
@@ -1041,6 +1043,11 @@ function applyContent(rows){
       const c=recog[it.recogKey];
       if(c){ if(c.title) it.t=c.title; it.d.rich=policyTextToHtml(c.body||""); }
     });
+  }
+
+  // --- Requests / Forms list from Content ---
+  if(reqs.length && S.requests){
+    S.requests.items = reqs.map(contentTypeToItem);
   }
 
   // TurfSaver content (if present as a Content row) powers the cart detail
