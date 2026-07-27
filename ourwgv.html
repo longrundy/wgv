@@ -1008,24 +1008,44 @@ const GID_ANN="482646119", GID_POLICY="886204585";
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 function buildPolicyRich(rows){
-  const hdr=(rows[0]||[]).map(x=>(x||"").trim().toLowerCase());
-  if(hdr.indexOf("style")<0 || hdr.indexOf("content")<0){ return ""; }
-  // rows: [Section, Style, Content] with header row 0
-  let out="";
-  for(let i=1;i<rows.length;i++){
-    const style=(rows[i][1]||"").trim().toLowerCase();
-    const content=(rows[i][2]||"").trim();
-    const section=(rows[i][0]||"").trim();
-    if(style==="h4"){ out+="<h4>"+esc(section||content)+"</h4>"; continue; }
-    if(!content) continue;
-    if(style==="lede") out+='<p class="lede">'+esc(content)+"</p>";
-    else if(style==="bullet") out+="<liTMP>"+esc(content)+"</liTMP>";
-    else out+="<p>"+esc(content)+"</p>";
+  // New format: entire policy lives in one cell (A1). rows[0][0] holds it.
+  // Fallback: if it looks like the old 3-column layout, handle that too.
+  let text="";
+  if(rows && rows.length){
+    // find the first non-empty cell anywhere (A1, or A2 if a header slipped in)
+    for(let r=0;r<rows.length && !text;r++){
+      for(let c=0;c<(rows[r]||[]).length && !text;c++){
+        const v=(rows[r][c]||"").trim();
+        if(v && v.toLowerCase()!=="section" && v.toLowerCase()!=="style" && v.toLowerCase()!=="content") text=rows[r][c];
+      }
+    }
   }
-  // group consecutive bullets into <ul>
-  out=out.replace(/(<liTMP>.*?<\/liTMP>)+/g, m=>"<ul>"+m.replace(/liTMP/g,"li")+"</ul>");
-  out=out.replace(/liTMP/g,"li");
-  return out;
+  if(!text) return "";
+  return policyTextToHtml(text);
+}
+
+function esc2(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function policyTextToHtml(text){
+  // Split into lines; blank line = paragraph break.
+  const lines=String(text).replace(/\r/g,"").split("\n");
+  let html="", bullets=[];
+  function flushBullets(){ if(bullets.length){ html+="<ul>"+bullets.map(b=>"<li>"+esc2(b)+"</li>").join("")+"</ul>"; bullets=[]; } }
+  let para=[];
+  function flushPara(){ if(para.length){ html+="<p>"+esc2(para.join(" "))+"</p>"; para=[]; } }
+  for(let raw of lines){
+    const line=raw.trim();
+    if(!line){ flushPara(); flushBullets(); continue; }
+    // bullet
+    if(/^[-•]\s+/.test(line)){ flushPara(); bullets.push(line.replace(/^[-•]\s+/,"")); continue; }
+    // heading: ALL CAPS (with some length) or ends with a colon and is short
+    const isCaps = line.length>2 && line===line.toUpperCase() && /[A-Z]/.test(line);
+    const isColonHead = /:$/.test(line) && line.length<=60 && line.split(" ").length<=8;
+    if(isCaps || isColonHead){ flushPara(); flushBullets(); html+="<h4>"+esc2(line.replace(/:$/,""))+"</h4>"; continue; }
+    para.push(line);
+  }
+  flushPara(); flushBullets();
+  return html;
 }
 
 function applyAnnouncements(rows){
