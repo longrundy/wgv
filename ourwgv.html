@@ -1118,8 +1118,9 @@ function applyContent(rows){
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
   if(anns.length){
     const contentTitles=anns.map(a=>(a.title||"").toLowerCase().trim());
-    const extras=builtinAnnounceExtras().filter(x=>contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
-        && !/verification of employment/i.test(x.t||""));  // verification now comes from Content
+    const extras=builtinAnnounceExtras().filter(x=>x.langs  // Troon values / mission & vision are always pinned
+        || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
+        && !/verification of employment/i.test(x.t||"")));  // verification now comes from Content
     S.announce.items = anns.map(contentTypeToItem).concat(extras);
   }
 
@@ -1146,7 +1147,7 @@ function applyContent(rows){
 function snapshotBuiltinAnnounce(){
   if(S.__announceBuiltin) return;
   // keep only items that are forms/links (have d.url) — those aren't in Content
-  S.__announceBuiltin=(S.announce.items||[]).filter(x=>x.d&&x.d.url);
+  S.__announceBuiltin=(S.announce.items||[]).filter(x=>x.langs||(x.d&&x.d.url));
 }
 function loadContentTab(){
   snapshotBuiltinAnnounce();
