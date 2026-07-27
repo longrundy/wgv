@@ -84,14 +84,14 @@ a{color:inherit}
 
 /* ---------- queue ---------- */
 .queue{border-right:1px solid #dde3ec;display:flex;flex-direction:column;min-width:0;background:#f4f6fa;overflow:hidden}
-.queue-head{padding:22px 22px 0;flex:none}
+.queue-head{padding:20px 26px 16px;flex:none;position:sticky;top:0;z-index:5;background:#f4f6fa;border-bottom:1px solid #e3e8f0}
 .queue-title{font-size:22px;font-weight:600;margin:0}
-.queue-sub{font-size:14px;color:var(--muted);margin:5px 0 0}
+.queue-sub{font-size:13px;color:var(--muted);margin:5px 0 0}
 .queue-sub a{color:var(--red-dark);font-weight:500;text-decoration:none}
 
 /* live cart card on announcements */
 
-.cartcard{margin:18px 22px 22px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
+.cartcard{margin:18px 26px 22px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
 .cartcard h3{margin:0;background:var(--navy);color:#fff;font-size:12px;letter-spacing:.7px;padding:11px 16px;font-weight:600;display:flex;align-items:center;gap:8px}
 .cart-body{padding:0}
 .cart-loading{color:var(--muted);font-size:13px;padding:14px 16px}
@@ -115,7 +115,7 @@ a{color:inherit}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
 .tab span{color:var(--muted);margin-left:5px}
 .list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.row{display:flex;align-items:center;gap:12px;width:100%;padding:15px 22px;
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:15px 26px;
   border-bottom:1px solid #e3e8f0;border-left:3px solid transparent}
 .row:active{background:#e9eef6}
 .row[aria-current="true"]{background:#faeceb;border-left-color:var(--red)}
@@ -132,10 +132,12 @@ a{color:inherit}
 .chev-r{color:var(--muted);font-size:18px;display:none}
 
 /* ---------- detail ---------- */
-.detail{background:#eef2f8;padding:24px 26px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.detail > *{max-width:560px}
-.detail-title{font-size:20px;font-weight:600;margin:0;color:#17325a}
-.detail-sub{font-size:13px;color:#6a7a90;margin:6px 0 16px;line-height:1.5}
+.detail{background:#eef2f8;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.detail-head{position:sticky;top:0;z-index:5;background:#eef2f8;padding:20px 26px 16px;border-bottom:1px solid #dde3ec}
+.detail-body{padding:16px 26px 26px}
+.detail-body > *{max-width:600px;margin-left:auto;margin-right:auto}
+.detail-title{font-size:22px;font-weight:600;margin:0;color:#17325a}
+.detail-sub{font-size:13px;color:#6a7a90;margin:5px 0 0;line-height:1.5}
 .card{background:#fff;border-radius:14px;padding:16px;border:1px solid #dde3ec}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{background:#f4f6fa;border-radius:10px;padding:11px 13px}
@@ -749,9 +751,9 @@ function detail(i){
   const d=i.d||{};
   if(d.rich){
     el("#detail").innerHTML =
-      `<div class="detail-title">${i.t}</div>`+
-      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+
-      `<article class="rich">${d.rich}</article>`;
+      `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div>`+
+      `<div class="detail-body"><article class="rich">${d.rich}</article></div>`;
     return;
   }
   const isFormItem = d.url && d.url.indexOf("docs.google.com/forms")>-1;
@@ -764,22 +766,22 @@ function detail(i){
       // Render the PDF's first page as a clean image (no viewer chrome / black bg).
       const img="https://drive.google.com/thumbnail?id="+m[1]+"&sz=w1600";
       el("#detail").innerHTML=
-        `<div class="detail-title">${i.t}</div>`+
-        (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+
-        `<div class="doc-card"><img src="${img}" alt="${i.t}" onerror="this.parentNode.innerHTML='<div class=\\'doc-fallback\\'>Preview unavailable. Use the button below to open it.</div>'"></div>`+
-        `<div class="actions" style="max-width:600px;margin:14px auto 0"><a class="btn btn-primary" href="${d.url}" target="_blank" rel="noopener">Open full document</a></div>`;
+        `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+        (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div>`+
+        `<div class="detail-body"><div class="doc-card"><img src="${img}" alt="${i.t}" onerror="this.parentNode.innerHTML='<div class=\\'doc-fallback\\'>Preview unavailable. Use the button below to open it.</div>'"></div>`+
+        `<div class="actions" style="max-width:600px;margin:14px auto 0"><a class="btn btn-primary" href="${d.url}" target="_blank" rel="noopener">Open full document</a></div></div>`;
       return;
     }
     // Forms: interactive, must stay an embed.
     let src = d.url.indexOf("?")>-1 ? d.url+"&embedded=true" : d.url+"?embedded=true";
     el("#detail").innerHTML=
-      `<div class="detail-title">${i.t}</div>`+
-      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+
-      `<div class="embed-card is-form"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div>`+
-      `<div class="actions" style="max-width:600px;margin:12px auto 0"><a class="btn btn-ghost" href="${d.url}" target="_blank" rel="noopener">Open form in new tab</a></div>`;
+      `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+      (d.sub?`<div class="detail-sub">${d.sub}</div>`:"")+`</div>`+
+      `<div class="detail-body"><div class="embed-card is-form"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div>`+
+      `<div class="actions" style="max-width:600px;margin:12px auto 0"><a class="btn btn-ghost" href="${d.url}" target="_blank" rel="noopener">Open form in new tab</a></div></div>`;
     return;
   }
-    let html=`<div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||""}</div><div class="card">`;
+    let html=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||""}</div></div><div class="detail-body"><div class="card">`;
   if(d.stats) html+=`<div class="stats">${d.stats.map(s=>`<div class="stat"><div class="stat-k">${s[0]}</div><div class="stat-v"${s[3]?' style="color:var(--red-dark)"':""}>${s[1]}${s[2]?` <small>${s[2]}</small>`:""}</div></div>`).join("")}</div>`;
   if(d.kv||d.note||d.folds){
     html+=`<div class="rows">`;
@@ -881,7 +883,7 @@ function goTurf(e){ if(e) e.preventDefault(); state.turf=true; renderTurfDetail(
 function markTurf(on){ const l=document.getElementById("turfLink"); if(l) l.classList.toggle("is-active", !!on); }
 function renderTurfDetail(){
   const it=S.turfsaver.items[0];
-  el("#detail").innerHTML=`<div class="detail-title">${it.t}</div><div class="detail-sub">${it.d.sub||""}</div><article class="rich">${it.d.rich}</article>`;
+  el("#detail").innerHTML=`<div class="detail-head"><div class="detail-title">${it.t}</div><div class="detail-sub">${it.d.sub||""}</div></div><div class="detail-body"><article class="rich">${it.d.rich}</article></div>`;
 }
 function loadCart(){
   if(cartLoaded) return; cartLoaded=true;
