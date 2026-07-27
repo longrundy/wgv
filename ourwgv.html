@@ -988,48 +988,77 @@ function backendGet(params){
 }
 
 
-/* ---- Content tab (key / title / body) — editable prose docs ---- */
+/* ---- Content tab drives Announcements + Recognition (Type + Section) ---- */
 const GID_CONTENT="1092396491";
-let CONTENT={};   // key -> {title, body}
+let CONTENT={};   // key -> full row
+
+function contentTypeToItem(row){
+  const type=(row.type||"text").trim().toLowerCase();
+  const base={ t:row.title||row.key, m:"", s:"", c:"f-flat", a:"", contentKey:row.key };
+  if(type==="link") return Object.assign(base,{ linkOnly:true, d:{ sub:"", url:(row.link||"").trim() } });
+  if(type==="form"||type==="pdf") return Object.assign(base,{ d:{ sub:"", url:(row.link||"").trim() } });
+  return Object.assign(base,{ d:{ sub:"", rich:policyTextToHtml(row.body||"") } });  // text default
+}
+
+// Built-in announcement items that are NOT in the Content tab (forms/links kept in code).
+function builtinAnnounceExtras(){
+  return (S.__announceBuiltin||[]).slice();
+}
 
 function applyContent(rows){
-  // header: Key, Title, Body
   const hdr=(rows[0]||[]).map(x=>(x||"").trim().toLowerCase());
-  const ki=hdr.indexOf("key"), ti=hdr.indexOf("title"), bi=hdr.indexOf("body");
-  if(ki<0||bi<0) return;
+  const gi=n=>hdr.indexOf(n);
+  const ki=gi("key"),ti=gi("title"),bi=gi("body"),tyi=gi("type"),li=gi("link"),si=gi("section");
+  if(ki<0||ti<0) return;
   CONTENT={};
+  const anns=[]; const recog={};
   for(let i=1;i<rows.length;i++){
-    const key=(rows[i][ki]||"").trim();
-    if(!key) continue;
-    CONTENT[key]={ title:(rows[i][ti]||"").trim(), body:(rows[i][bi]||"").trim() };
+    const r=rows[i]||[];
+    const key=(r[ki]||"").trim(); if(!key) continue;
+    const section=(si>=0?(r[si]||""):"").trim(); if(!section) continue; // skips note row
+    const row={ key, title:(r[ti]||"").trim(), body:(bi>=0?r[bi]:"")||"",
+                type:(tyi>=0?r[tyi]:"")||"text", link:(li>=0?r[li]:"")||"", section };
+    CONTENT[key]=row;
+    if(section.toLowerCase()==="announcements") anns.push(row);
+    else if(section.toLowerCase()==="recognition") recog[key]=row;
   }
-  wireContentIntoItems();
+
+  // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
+  if(anns.length){
+    const contentTitles=anns.map(a=>(a.title||"").toLowerCase().trim());
+    const extras=builtinAnnounceExtras().filter(x=>contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
+        && !/verification of employment/i.test(x.t||""));  // verification now comes from Content
+    S.announce.items = anns.map(contentTypeToItem).concat(extras);
+  }
+
+  // --- Recognition mappings to existing sections ---
+  // Employee of the month
+  if(recog["eotm"] && S.eotm){
+    S.eotm.items=[{ t:recog["eotm"].title||"Employee of the month", m:"", s:"", c:"f-flat", a:"",
+                    d:{ sub:S.eotm.sub||"", rich:policyTextToHtml(recog["eotm"].body||"") } }];
+  }
+  // Birthdays & anniversaries (combine bday + anniv into that section's detail)
+  if((recog["bday"]||recog["anniv"]) && S.bdays){
+    const parts=[];
+    if(recog["bday"]) parts.push(recog["bday"].body||"");
+    if(recog["anniv"]) parts.push(recog["anniv"].body||"");
+    S.bdays.items=[{ t:"Birthdays & anniversaries", m:"", s:"", c:"f-flat", a:"",
+                     d:{ sub:S.bdays.sub||"", rich:policyTextToHtml(parts.join("\n\n")) } }];
+  }
+
+  // TurfSaver content (if present as a Content row) powers the cart detail
+  if(CONTENT["turfsaver"]) S.__policyRich=policyTextToHtml(CONTENT["turfsaver"].body||"");
+
+  render();
 }
 
-// Map a Content key to the portal item that should display it.
-const CONTENT_MAP={
-  "verification":{ where:"announce", match:/verification of employment/i }
-  // add more here as keys are confirmed: tee_sheet_policy, turfsaver, eotm
-};
-
-function wireContentIntoItems(){
-  Object.keys(CONTENT_MAP).forEach(key=>{
-    const c=CONTENT[key]; if(!c) return;
-    const m=CONTENT_MAP[key];
-    if(m.where==="announce"){
-      const it=(S.announce.items||[]).find(x=>m.match.test(x.t||""));
-      if(it){
-        if(c.title) it.t=c.title;
-        it.linkOnly=false;
-        it.contentKey=key;
-        it.d={ sub:it.d&&it.d.sub||"", rich:policyTextToHtml(c.body) };
-      }
-    }
-  });
-  if(state.view==="announce") render();
+function snapshotBuiltinAnnounce(){
+  if(S.__announceBuiltin) return;
+  // keep only items that are forms/links (have d.url) — those aren't in Content
+  S.__announceBuiltin=(S.announce.items||[]).filter(x=>x.d&&x.d.url);
 }
-
 function loadContentTab(){
+  snapshotBuiltinAnnounce();
   fetch(SHEET_PUB+"?output=csv&gid="+GID_CONTENT+"&single=true",{cache:"no-store"})
     .then(r=>r.text()).then(t=>applyContent(parseCSV(t))).catch(()=>{});
 }
@@ -1145,7 +1174,6 @@ function setEditMode(on){
 buildNav();
 if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
-loadLiveContent();
 loadContentTab();
 </script>
 </body>
