@@ -920,10 +920,13 @@ function loadCart(){
 
 /* ---- live content from the manager workbook ---- */
 const SHEET_PUB="https://docs.google.com/spreadsheets/d/e/2PACX-1vTBBK7rG2L3JQzI_3ntsTPvSJf8Jxeg3mNaf-dwtvmrEMUk5EgE4rmqKX3Mzs3GpcLNqXqpSGYDjnek/pub";
-function sheetCsvUrl(name){ return SHEET_PUB+"?output=csv&sheet="+encodeURIComponent(name); }
+function sheetCsvUrl(gid){ return SHEET_PUB+"?output=csv&gid="+gid+"&single=true"; }
+const GID_ANN="482646119", GID_POLICY="886204585";
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 function buildPolicyRich(rows){
+  const hdr=(rows[0]||[]).map(x=>(x||"").trim().toLowerCase());
+  if(hdr.indexOf("style")<0 || hdr.indexOf("content")<0){ return ""; }
   // rows: [Section, Style, Content] with header row 0
   let out="";
   for(let i=1;i<rows.length;i++){
@@ -943,6 +946,9 @@ function buildPolicyRich(rows){
 }
 
 function applyAnnouncements(rows){
+  // Guard: only proceed if the header row is actually the Announcements header.
+  const hdr=(rows[0]||[]).map(x=>(x||"").trim().toLowerCase());
+  if(hdr.indexOf("title")<0 || hdr.indexOf("type")<0){ return; }
   // header: Title, Type, Body / Description, Link, Show
   const items=[];
   for(let i=1;i<rows.length;i++){
@@ -964,10 +970,10 @@ function applyAnnouncements(rows){
 
 function loadLiveContent(){
   // Tee Sheet Policy first (so the announce item can embed its rich content)
-  fetch(sheetCsvUrl("Tee Sheet Policy"),{cache:"no-store"}).then(r=>r.text()).then(t=>{
-    S.__policyRich=buildPolicyRich(parseCSV(t));
+  fetch(sheetCsvUrl(GID_POLICY),{cache:"no-store"}).then(r=>r.text()).then(t=>{
+    const pr=buildPolicyRich(parseCSV(t)); if(pr) S.__policyRich=pr;
   }).catch(()=>{}).finally(()=>{
-    fetch(sheetCsvUrl("Announcements"),{cache:"no-store"}).then(r=>r.text()).then(t=>{
+    fetch(sheetCsvUrl(GID_ANN),{cache:"no-store"}).then(r=>r.text()).then(t=>{
       applyAnnouncements(parseCSV(t));
       if(state.view==="announce") render();
     }).catch(()=>{});
