@@ -143,6 +143,20 @@ a{color:inherit}
 .f-urgent{color:var(--red)} .f-high{color:var(--amber)} .f-low{color:var(--green)} .f-flat{color:var(--muted)}
 .chev-r{color:var(--muted);font-size:18px;display:none}
 .row-openpill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#185fa5;background:#e6f1fb;border:1px solid #c3ddf4;padding:5px 12px;border-radius:20px}
+.row-langs{display:inline-flex;gap:6px;align-items:center}
+.lang-pill{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:#185fa5;background:#e6f1fb;border:1px solid #c3ddf4;padding:5px 11px;border-radius:20px;white-space:nowrap;cursor:pointer}
+.lang-pill:active{background:#d3e6f7}
+.lang-pill[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+@media (max-width:420px){ .lang-pill{padding:5px 9px;font-size:11px} }
+.lang-switch{display:flex;gap:8px;margin:0 0 14px}
+.lang-switch button{flex:1;max-width:150px;padding:10px;border-radius:10px;font-size:13px;font-weight:600;border:1px solid #c3ddf4;background:#e6f1fb;color:#185fa5}
+.lang-switch button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.img-card{max-width:600px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden}
+.img-card img{width:100%;height:auto;display:block;border-radius:8px;cursor:zoom-in}
+.img-hint{font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0}
+#lightbox{position:fixed;inset:0;z-index:200;background:rgba(12,20,34,.94);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px}
+#lightbox .lb-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:22px;line-height:1;border:0;display:flex;align-items:center;justify-content:center}
 
 /* ---------- detail ---------- */
 .detail{background:#fff;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -382,6 +396,13 @@ const GROUPS = [
 const MGMT = GROUPS[GROUPS.length-1].items.map(i=>i.id);
 
 /* ---- content ---- */
+const TROON_IMG = {
+  valuesEn:"troon-values-en.jpg",
+  valuesEs:"troon-values-es.jpg",
+  missionEn:"troon-mission-vision-en.jpg",
+  missionEs:"troon-mission-vision-es.jpg",
+};
+
 const link = (t,m,url,blurb) => ({t, m, s:"Open", c:"f-flat", a:"", d:{sub:blurb, url}});
 const S = {
 recognition:{title:"Recognition", sub:"Team news and milestones", items:[
@@ -414,10 +435,18 @@ announce:{title:"Announcements", sub:"What's new this week", items:[
       note:"Use this instead of asking the front desk. Lenders and landlords can be pointed straight at it."}},
   {t:"Tee sheet policy update", m:"", s:"", c:"f-flat", a:"",
    d:{sub:"Changes to how staff book and view tee times.", rich:`<p class="lede"><b>WGV Employee Play Policy Update</b> · 1/1/25</p><h4>2025 WGV employee golf procedures</h4><p>The goal of WGV management is that all employees have access to both Slammer &amp; Squire and King &amp; Bear golf courses to play in low-demand times, which does affect revenue to either course. In no way is this a guaranteed benefit of employment, but it is more of a perk of being a WGV employee. Our employee golf policies must coincide logically with our stewardship of the property and revenue responsibility to our ownership.</p><ul><li>All tee time requests must be reserved through our employee website ourWGV.org with no exceptions.</li><li>Employee tee times will not be reserved by another staff member in person, by email, or by phone.</li><li>Responses for tee time requests from the professional golf staff will be in the form of emails, texts, and phone calls.</li><li>All employee tee time day and time restrictions will be lifted. Employees can request tee times for any day or time.</li><li>Any request for more than one tee time must be approved by the Director of Golf.</li><li>All employees must always accompany their guests when on property. You may just ride along with guests and not play, but you cannot exceed more than two carts in a group. This would limit you to three guests per tee time. We will announce that when it happens.</li><li>Employees may not be part of Member play groups. Playing with a member is allowed, but being a regular in a member group could be conceived by other members as more than a perk of being an employee.</li></ul><h4>Submitting a request</h4><ul><li>Log on to ourWGV.org</li><li>Code: 0121</li><li>Click Helpful Forms &amp; Info</li><li>Click Employee Golf Request</li><li>Fill out designated information blanks</li><li>Click Submit</li><li>The professional golf staff will answer the request as soon as possible.</li><li>Employees can book tee times seven days out. The golf professional staff reserves the right to delay booking your request closer to your requested time on busy days.</li></ul><h4>Viewing the tee sheet</h4><ul><li>Log on to ourWGV.org</li><li>Click Tee Sheet &amp; Calendar</li><li>Click the link to view the tee sheet</li><li>Username: <b>ourwgv98</b></li><li>Password: <b>ArnieJack98</b></li><li>Viewing the tee sheet before you submit an employee's tee time request will expedite the whole reservation process. Employees will be able to avoid asking for times already sold and avoid busy times.</li></ul><h4>Employee guests</h4><p>WGV management encourages all employees to invite friends and family to enjoy the golf courses together. WGV extends free green fees to all employees' guests and requires only that guests pay a $35++ cart fee when riding. Employee guests could be subject to additional fees if more than one guest is brought per employee.</p>`}},
-  {t:"Recent member emails", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
+  {t:"Recent Member Emails", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
    d:{sub:"Recent emails sent to members — shared so staff stay aware of what members are hearing.", url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
-  {t:"2025 year in review", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
-   d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}}
+  {t:"2025 Year in Review", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
+   d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}},
+  {t:"Troon Values", m:"", s:"", c:"f-flat", a:"",
+   langs:{sub:"The eight values Troon is built on.",
+          en:{label:"English", img:"valuesEn", alt:"Troon values — English"},
+          es:{label:"Espa\u00f1ol", img:"valuesEs", alt:"Valores de Troon — Espa\u00f1ol"}}},
+  {t:"Troon Mission and Vision", m:"", s:"", c:"f-flat", a:"",
+   langs:{sub:"What we deliver and where we are headed.",
+          en:{label:"English", img:"missionEn", alt:"Troon mission and vision — English"},
+          es:{label:"Espa\u00f1ol", img:"missionEs", alt:"Misi\u00f3n y visi\u00f3n de Troon — Espa\u00f1ol"}}}
 ]},
 
 
@@ -700,7 +729,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -758,11 +787,12 @@ function render(){
   el("#list").innerHTML=items.map((i,n)=>`
     <button class="row" data-idx="${n}" aria-current="${n===state.idx}">
       <span class="row-main"><span class="row-title">${i.t}</span>${i.m?`<span class="row-meta">${i.m}</span>`:""}</span>
-      <span class="row-side">${i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
-      ${i.linkOnly?"":`<span class="chev-r">&#8250;</span>`}
+      <span class="row-side">${i.langs?`<span class="row-langs">${["en","es"].map(k=>`<span class="lang-pill" data-lang="${k}" role="button" tabindex="0" aria-pressed="${n===state.idx&&state.lang===k}">${i.langs[k].label}</span>`).join("")}</span>`:i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
+      ${i.linkOnly||i.langs?"":`<span class="chev-r">&#8250;</span>`}
     </button>`).join("");
   document.querySelectorAll(".row").forEach(r=>r.addEventListener("click",(ev)=>{
     if(ev.target.closest(".row-openpill")) return; // pill handles its own click
+    if(ev.target.closest(".lang-pill")) return;    // language pills handle their own click
     state.idx=+r.dataset.idx; state.turf=false; markTurf(false); detail(items[state.idx]);
     document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current",String(+x.dataset.idx===state.idx)));
     if(isMobile()) document.body.classList.add("show-detail");
@@ -772,6 +802,21 @@ function render(){
     const it=items[+pill.closest(".row").dataset.idx];
     window.open(it.d.url,"_blank","noopener");
   }));
+  document.querySelectorAll(".lang-pill").forEach(pill=>{
+    const pick=(ev)=>{
+      ev.stopPropagation(); ev.preventDefault();
+      state.idx=+pill.closest(".row").dataset.idx;
+      state.lang=pill.dataset.lang;
+      state.turf=false; markTurf(false);
+      detail(items[state.idx]);
+      document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current",String(+x.dataset.idx===state.idx)));
+      document.querySelectorAll(".lang-pill").forEach(p=>p.setAttribute("aria-pressed",
+        String(+p.closest(".row").dataset.idx===state.idx && p.dataset.lang===state.lang)));
+      if(isMobile()) document.body.classList.add("show-detail");
+    };
+    pill.addEventListener("click",pick);
+    pill.addEventListener("keydown",(e)=>{ if(e.key==="Enter"||e.key===" ") pick(e); });
+  });
   if(state.view==="announce" && state.turf){ renderTurfDetail(); markTurf(true); document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current","false")); }
   else detail(items[state.idx]);
 }
@@ -779,6 +824,7 @@ function render(){
 function detail(i){
   const d=i.d||{};
   if(editMode && isPolicyItem(i)){ renderPolicyEditor(i); return; }
+  if(i.langs){ detailLang(i); return; }
   if(i.linkOnly){
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
@@ -834,6 +880,46 @@ function detail(i){
     const b=document.querySelector('[data-body="'+f.dataset.fold+'"]'); const o=b.hidden; b.hidden=!o; f.setAttribute("aria-expanded",String(o));
   }));
 }
+
+
+/* ---------- bilingual image items (Troon values / mission & vision) ---------- */
+function detailLang(i){
+  const L=i.langs;
+  const k=(state.lang==="es")?"es":"en";
+  const pane=L[k];
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${L.sub||"&nbsp;"}</div></div>`+
+    `<div class="detail-body">`+
+      `<div class="lang-switch">${["en","es"].map(x=>`<button type="button" data-pick="${x}" aria-pressed="${x===k}">${L[x].label}</button>`).join("")}</div>`+
+      `<div class="img-card"><img src="${TROON_IMG[pane.img]}" alt="${pane.alt}"></div>`+
+      `<p class="img-hint">Tap the image to view it full screen.</p>`+
+    `</div>`;
+  el("#detail").querySelectorAll("[data-pick]").forEach(b=>b.addEventListener("click",()=>{
+    state.lang=b.dataset.pick;
+    detail(i);
+    document.querySelectorAll(".lang-pill").forEach(p=>p.setAttribute("aria-pressed",
+      String(+p.closest(".row").dataset.idx===state.idx && p.dataset.lang===state.lang)));
+  }));
+  const img=el("#detail").querySelector(".img-card img");
+  if(img) img.addEventListener("click",()=>openLightbox(img.src,img.alt));
+}
+
+function openLightbox(src,alt){
+  closeLightbox();
+  const box=document.createElement("div");
+  box.id="lightbox";
+  box.innerHTML=`<button class="lb-close" type="button" aria-label="Close">&times;</button><img src="${src}" alt="${alt||""}">`;
+  box.addEventListener("click",closeLightbox);
+  document.body.appendChild(box);
+  document.addEventListener("keydown",lbKey);
+}
+function closeLightbox(){
+  const b=document.getElementById("lightbox");
+  if(b) b.remove();
+  document.removeEventListener("keydown",lbKey);
+}
+function lbKey(e){ if(e.key==="Escape") closeLightbox(); }
 
 
 /* mobile chrome */
