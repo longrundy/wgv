@@ -83,10 +83,26 @@ a{color:inherit}
 .queue-sub a{color:var(--red-dark);font-weight:500;text-decoration:none}
 
 /* live cart card on announcements */
+
 .cartcard{margin:18px 22px 4px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.cartcard h3{margin:0;background:var(--navy);color:#fff;font-size:13px;letter-spacing:.6px;padding:12px 16px;font-weight:600;display:flex;align-items:center;gap:8px}
-.cartcard .frame-wrap{padding:6px 10px 10px}
-.cartcard iframe{width:100%;border:0;display:block}
+.cartcard h3{margin:0;background:var(--navy);color:#fff;font-size:12px;letter-spacing:.7px;padding:11px 16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cart-body{padding:14px 16px}
+.cart-loading{color:var(--muted);font-size:13px;padding:6px 0}
+.cart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:820px){ .cart-grid{grid-template-columns:1fr} }
+.cart-course{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.cart-course .cc-name{font-size:11px;letter-spacing:.6px;color:var(--muted);font-weight:600;margin-bottom:7px}
+.cart-course .cc-rule{font-size:15px;font-weight:600;line-height:1.35;color:var(--ink);margin-bottom:8px}
+.cart-course .cc-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.cc-open{background:#eaf3de;color:#3b6d11}
+.cc-closed{background:var(--red-tint);color:var(--red-dark)}
+.cc-caution{background:#fbf0da;color:#8a5a12}
+.cart-course .cc-time{font-size:11px;color:var(--muted);margin-top:8px}
+.cart-course .cc-time.stale{color:var(--amber);font-weight:500}
+.cart-err{font-size:12px;color:var(--muted);line-height:1.6}
+.cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all}
+.cart-learn{margin-top:10px;font-size:12px}
+.cart-learn a{color:var(--red-dark);text-decoration:none;font-weight:500}
 
 .tabs{display:flex;gap:22px;margin-top:16px;border-bottom:1px solid var(--line);padding:0 22px}
 .tab{padding:0 0 12px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
@@ -136,6 +152,10 @@ a{color:inherit}
 .btn-primary:active{background:var(--red-dark)}
 .btn-ghost{background:#fff;color:var(--ink);border:1px solid #eddad9}
 .empty{padding:36px 22px;color:var(--muted);font-size:14px}
+.form-embed{margin-top:6px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.form-embed iframe{width:100%;height:70vh;min-height:520px;border:0;display:block}
+@media (max-width:820px){ .form-embed iframe{height:calc(100dvh - 220px);min-height:420px} }
+
 
 /* ---------- scrim for mobile drawer ---------- */
 .scrim{display:none;position:fixed;inset:0;background:rgba(9,20,40,.55);z-index:45}
@@ -162,9 +182,6 @@ a{color:inherit}
   .cartcard{margin:16px 16px 4px}
   .queue-head,.tabs{padding-left:16px;padding-right:16px}
   .row{padding-left:16px;padding-right:16px}
-}
-@media (min-width:821px){
-  .grp-body{display:block!important}
 }
 </style>
 </head>
@@ -217,11 +234,8 @@ a{color:inherit}
       <p class="queue-sub" id="queueSub"></p>
     </div>
     <div class="cartcard" id="cartcard" hidden>
-      <h3><span class="dot" style="background:var(--red)"></span> Today's cart rule &mdash; live</h3>
-      <div class="frame-wrap">
-        <iframe id="cartFrame" title="Today's cart rule" height="220" loading="lazy"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWHwxyYwSBpwwF12kcfOcqX5-w2ePSmlKNOyethXluJH63to6Sq-Og7sBrxMyUbbbM5Nj9-Sc48aN/pubhtml?gid=1748206187&single=true&widget=false&chrome=false"></iframe>
-      </div>
+      <h3><span class="dot" style="background:#7dd3b0"></span> Today's cart rule &middot; live</h3>
+      <div class="cart-body" id="cartBody"><div class="cart-loading">Loading today's cart rule…</div></div>
     </div>
     <div class="tabs" role="tablist" id="tabs" hidden>
       <button class="tab" role="tab" data-tab="open" aria-selected="true">Open <span id="cOpen"></span></button>
@@ -687,7 +701,7 @@ function render(){
   el("#queueTitle").textContent=sec.title;
   el("#barTitle").textContent=sec.title;
   el("#queueSub").innerHTML=sec.sub+(sec.form?' &middot; <a href="'+sec.form+'">submit new</a>':"");
-  el("#cartcard").hidden = state.view!=="announce";
+  el("#cartcard").hidden = state.view!=="announce"; if(state.view==="announce") loadCart();
   el("#tabs").hidden=!sec.tabs;
   if(sec.tabs){ el("#cOpen").textContent=sec.items.length; el("#cClosed").textContent=0; }
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.tab===state.tab)));
@@ -722,8 +736,15 @@ function detail(i){
     if(d.folds) html+=d.folds.map((f,n)=>`<button class="fold" data-fold="${n}" aria-expanded="false"><span>&rsaquo; ${f[0]}</span><span class="fold-tag">${f[1]}</span></button><div class="fold-body" data-body="${n}" hidden>${f[2]}</div>`).join("");
     html+=`</div>`;
   }
-  const acts=d.actions||(d.url!==undefined?[["Open","primary"]]:[]);
-  if(acts.length) html+=`<div class="actions">${acts.map(a=>a[0]==="Open"&&!d.url?`<button class="btn btn-ghost" disabled style="opacity:.55">Link not set</button>`:`<a class="btn btn-${a[1]}" href="${d.url||"#"}" target="_blank" rel="noopener">${a[0]}</a>`).join("")}</div>`;
+  const isForm = d.url && d.url.indexOf("docs.google.com/forms")>-1;
+  if(isForm){
+    const embed = d.url.indexOf("?")>-1 ? d.url+"&embedded=true" : d.url+"?embedded=true";
+    html+=`<div class="form-embed"><iframe src="${embed}" title="${i.t}" loading="lazy">Loading form…</iframe></div>
+      <div class="actions"><a class="btn btn-ghost" href="${d.url}" target="_blank" rel="noopener">Open form in new tab</a></div>`;
+  } else {
+    const acts=d.actions||(d.url!==undefined?[["Open","primary"]]:[]);
+    if(acts.length) html+=`<div class="actions">${acts.map(a=>a[0]==="Open"&&!d.url?`<button class="btn btn-ghost" disabled style="opacity:.55">Link not set</button>`:`<a class="btn btn-${a[1]}" href="${d.url||"#"}" target="_blank" rel="noopener">${a[0]}</a>`).join("")}</div>`;
+  }
   html+=`</div>`;
   el("#detail").innerHTML=html;
   document.querySelectorAll(".fold").forEach(f=>f.addEventListener("click",()=>{
@@ -737,6 +758,79 @@ el("#tabs").addEventListener("click",e=>{const t=e.target.closest(".tab");if(!t)
 el("#hamb").addEventListener("click",()=>document.body.classList.add("nav-open"));
 el("#scrim").addEventListener("click",()=>document.body.classList.remove("nav-open"));
 el("#back").addEventListener("click",()=>document.body.classList.remove("show-detail"));
+
+
+/* ---- live cart rule from published Google Sheet ---- */
+const CART_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWHwxyYwSBpwwF12kcfOcqX5-w2ePSmlKNOyethXluJH63to6Sq-Og7sBrxMyUbbbM5Nj9-Sc48aN/pub?gid=1748206187&single=true&output=csv";
+const CART_LEARN="https://drive.google.com/drive/folders/1mmCMyX33_KqjDammtClstDU8nwryOgQu";
+let cartLoaded=false;
+function parseCSV(text){
+  const rows=[]; let row=[],cur="",q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else { if(c==='"')q=true; else if(c===','){row.push(cur);cur="";} else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur="";} else if(c!=='\r')cur+=c; }
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  return rows.filter(r=>r.some(c=>c.trim()!==""));
+}
+function statusClass(rule){
+  const r=(rule||"").toLowerCase();
+  if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "cc-closed";
+  if(r.indexOf("path only")>-1||r.indexOf("caution")>-1||r.indexOf("90")>-1) return "cc-caution";
+  return "cc-open";
+}
+function statusWord(rule){
+  const r=(rule||"").toLowerCase();
+  if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "Closed";
+  if(r.indexOf("path only")>-1||r.indexOf("caution")>-1) return "Caution";
+  return "Open";
+}
+function renderCart(rows){
+  // Heuristic: find two data rows containing a course name and a rule.
+  // We look for cells mentioning King/Bear and Slammer/Squire anywhere.
+  const flat=rows.map(r=>r.map(c=>c.trim()));
+  function findCourse(kw){
+    for(const r of flat){
+      const idx=r.findIndex(c=>kw.some(k=>c.toLowerCase().indexOf(k)>-1));
+      if(idx>-1){
+        // rule = the longest other cell in the row; time = cell containing AM/PM or a date
+        const others=r.filter((c,i)=>i!==idx && c);
+        let rule="",time="";
+        others.forEach(c=>{
+          if(/\b(am|pm)\b/i.test(c)||/\d{1,2}\/\d{1,2}/.test(c)) time=c.replace(/updated as of:?/i,"").trim();
+          else if(c.length>rule.length) rule=c;
+        });
+        return {rule,time};
+      }
+    }
+    return null;
+  }
+  const kb=findCourse(["king","bear"]);
+  const ss=findCourse(["slammer","squire"]);
+  if(!kb&&!ss){
+    document.getElementById("cartBody").innerHTML=
+      '<div class="cart-err">Couldn\'t read the cart-rule sheet automatically. Here are the first rows so we can map it:<br><code>'+
+      flat.slice(0,6).map(r=>r.join(" | ")).join("<br>")+'</code></div>';
+    return;
+  }
+  function card(name,d){
+    if(!d) return "";
+    const cls=statusClass(d.rule), word=statusWord(d.rule);
+    const stale=d.time && !/7\/2[0-9]|today/i.test(d.time) ? "" : ""; // time freshness left neutral
+    return '<div class="cart-course"><div class="cc-name">'+name+'</div>'+
+      '<div class="cc-rule">'+(d.rule||"—")+'</div>'+
+      '<span class="cc-status '+cls+'"><span style="width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7"></span>'+word+'</span>'+
+      (d.time?'<div class="cc-time">Updated '+d.time+'</div>':'')+'</div>';
+  }
+  document.getElementById("cartBody").innerHTML=
+    '<div class="cart-grid">'+card("KING & BEAR",kb)+card("SLAMMER & SQUIRE",ss)+'</div>'+
+    '<div class="cart-learn"><a href="'+CART_LEARN+'" target="_blank" rel="noopener">Learn about TurfSaver entry-exit &rsaquo;</a></div>';
+}
+function loadCart(){
+  if(cartLoaded) return; cartLoaded=true;
+  fetch(CART_CSV).then(r=>r.text()).then(t=>renderCart(parseCSV(t)))
+    .catch(e=>{ document.getElementById("cartBody").innerHTML='<div class="cart-err">Cart rule is temporarily unavailable. <a href="'+CART_CSV+'" target="_blank" rel="noopener">Open the source sheet</a>.</div>'; });
+}
 
 buildNav();
 if(store.get("wgv_ok")==="1") openApp();
