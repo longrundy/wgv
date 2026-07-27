@@ -222,16 +222,58 @@ const STAFF_HASH   = "5d1b67c4f5ebfbc63dd15285fa79e490cbc37c4c479a44f8e6646e0f7d
 const LEGACY_HASH  = "3d08cb19a032bb9c48274a0307d566ed06d8cf55b6d170ae3abd223559ae849c";
 const MANAGER_HASH = "2f8ba8690e49bdccd7b4a4a49999c534d6d2957044a0015930c45b8b06e60ae5";
 
+
+function _sha256(ascii){
+  function rr(n,x){return (x>>>n)|(x<<(32-n));}
+  var m=Math,K=[],H=[],p=0,i=0,W=[],b,ab,c,d,e,f,g,hh,j,s0,s1,ch,maj,t1,t2;
+  var pr=function(n){var f=m.pow(n,.5);return (f-(f|0))*0x100000000|0;};
+  var primes=(function(){var a=[],n=2;while(a.length<64){var ip=1;for(var k=2;k*k<=n;k++)if(n%k===0){ip=0;break;}if(ip)a.push(n);n++;}return a;})();
+  for(i=0;i<8;i++)H[i]=pr(primes[i]);
+  for(i=0;i<64;i++)K[i]=(function(n){var f=m.pow(n,1/3);return (f-(f|0))*0x100000000|0;})(primes[i]);
+  var words=[],asciiBitLength=ascii.length*8;
+  for(i=0;i<ascii.length;i++)words[i>>2]|=ascii.charCodeAt(i)<<((3-i%4)*8);
+  words[ascii.length>>2]|=0x80<<((3-ascii.length%4)*8);
+  words[((ascii.length+8>>6)+1<<4)-1]=asciiBitLength;
+  for(j=0;j<words.length;j+=16){
+    ab=H.slice(0);
+    for(i=0;i<64;i++){
+      if(i<16)W[i]=words[j+i]|0;
+      else{
+        var w15=W[i-15],w2=W[i-2];
+        s0=(rr(7,w15)^rr(18,w15)^(w15>>>3));
+        s1=(rr(17,w2)^rr(19,w2)^(w2>>>10));
+        W[i]=(W[i-16]+s0+W[i-7]+s1)|0;
+      }
+      s1=(rr(6,ab[4])^rr(11,ab[4])^rr(25,ab[4]));
+      ch=(ab[4]&ab[5])^(~ab[4]&ab[6]);
+      t1=(ab[7]+s1+ch+K[i]+W[i])|0;
+      s0=(rr(2,ab[0])^rr(13,ab[0])^rr(22,ab[0]));
+      maj=(ab[0]&ab[1])^(ab[0]&ab[2])^(ab[1]&ab[2]);
+      t2=(s0+maj)|0;
+      ab=[(t1+t2)|0,ab[0],ab[1],ab[2],(ab[3]+t1)|0,ab[4],ab[5],ab[6]];
+    }
+    for(i=0;i<8;i++)H[i]=(H[i]+ab[i])|0;
+  }
+  var out="";for(i=0;i<8;i++)for(var k=3;k>=0;k--)out+=((H[i]>>>(k*8))&255).toString(16).padStart(2,"0");
+  return out;
+}
+
 async function sha(t){
-  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
-  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+  try{
+    if(window.crypto && crypto.subtle){
+      const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+      return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+    }
+  }catch(e){}
+  return _sha256(t);
 }
 const store = {
   get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
   set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
 };
 
-async function tryUnlock(){
+async function tryUnlock(){ try{ await _tryUnlock(); }catch(err){ document.getElementById("pwMsg").textContent = "Error: "+err.message; } }
+async function _tryUnlock(){
   const v = document.getElementById("pw").value.replace(/\s+/g,"");
   const msg = document.getElementById("pwMsg");
   if(v.startsWith("hash:")){
