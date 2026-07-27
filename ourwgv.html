@@ -149,7 +149,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 7 &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 8 diag &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -288,11 +288,32 @@ function _tryUnlock(){
 function _click(){
   var m=document.getElementById("pwMsg");
   m.style.color="#9fb4d4";
-  m.textContent="Checking…";
-  setTimeout(function(){
-    try{ tryUnlock(); }
-    catch(err){ m.style.color="#f4a3a3"; m.textContent="Error: "+(err&&err.message?err.message:err); }
-  }, 20);
+  try{
+    m.textContent="1: read";
+    var v=document.getElementById("pw").value.replace(/\s+/g,"");
+    m.textContent="2: len="+v.length;
+    var typeofSha=typeof sha;
+    m.textContent="3: sha is "+typeofSha;
+    if(typeofSha!=="function"){ m.style.color="#f4a3a3"; m.textContent="STOP: sha undefined"; return; }
+    var hv=sha(v);
+    m.textContent="4: hash "+hv.slice(0,8);
+    if(hv===STAFF_HASH){
+      m.textContent="5: match — opening";
+      try{ store.set("wgv_ok","1"); }catch(e){}
+      document.getElementById("gate").hidden=true;
+      document.getElementById("app").hidden=false;
+      m.textContent="6: gate hidden";
+      render();
+      m.textContent="7: rendered";
+    } else if(typeof LEGACY_HASH!=="undefined" && hv===LEGACY_HASH){
+      m.style.color="#f4a3a3"; m.textContent="old password / old file";
+    } else {
+      m.style.color="#f4a3a3"; m.textContent="wrong: got "+hv.slice(0,8)+" want "+STAFF_HASH.slice(0,8);
+    }
+  }catch(err){
+    m.style.color="#f4a3a3";
+    m.textContent="ERR: "+(err&&err.message?err.message:err);
+  }
 }
 document.getElementById("pwGo").addEventListener("click", _click);
 document.getElementById("pw").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); _click(); } });
