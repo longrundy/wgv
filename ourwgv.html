@@ -397,9 +397,9 @@ announce:{title:"Announcements", sub:"What's new this week", items:[
   {t:"Tee sheet policy update", m:"Posted 6/28 · golf ops", s:"", c:"f-flat", a:"",
    d:{sub:"Changes to how staff book and view tee times.", rich:`<p class="lede"><b>WGV Employee Play Policy Update</b> · 1/1/25</p><h4>2025 WGV employee golf procedures</h4><p>The goal of WGV management is that all employees have access to both Slammer &amp; Squire and King &amp; Bear golf courses to play in low-demand times, which does affect revenue to either course. In no way is this a guaranteed benefit of employment, but it is more of a perk of being a WGV employee. Our employee golf policies must coincide logically with our stewardship of the property and revenue responsibility to our ownership.</p><ul><li>All tee time requests must be reserved through our employee website ourWGV.org with no exceptions.</li><li>Employee tee times will not be reserved by another staff member in person, by email, or by phone.</li><li>Responses for tee time requests from the professional golf staff will be in the form of emails, texts, and phone calls.</li><li>All employee tee time day and time restrictions will be lifted. Employees can request tee times for any day or time.</li><li>Any request for more than one tee time must be approved by the Director of Golf.</li><li>All employees must always accompany their guests when on property. You may just ride along with guests and not play, but you cannot exceed more than two carts in a group. This would limit you to three guests per tee time. We will announce that when it happens.</li><li>Employees may not be part of Member play groups. Playing with a member is allowed, but being a regular in a member group could be conceived by other members as more than a perk of being an employee.</li></ul><h4>Submitting a request</h4><ul><li>Log on to ourWGV.org</li><li>Code: 0121</li><li>Click Helpful Forms &amp; Info</li><li>Click Employee Golf Request</li><li>Fill out designated information blanks</li><li>Click Submit</li><li>The professional golf staff will answer the request as soon as possible.</li><li>Employees can book tee times seven days out. The golf professional staff reserves the right to delay booking your request closer to your requested time on busy days.</li></ul><h4>Viewing the tee sheet</h4><ul><li>Log on to ourWGV.org</li><li>Click Tee Sheet &amp; Calendar</li><li>Click the link to view the tee sheet</li><li>Username: <b>ourwgv98</b></li><li>Password: <b>ArnieJack98</b></li><li>Viewing the tee sheet before you submit an employee's tee time request will expedite the whole reservation process. Employees will be able to avoid asking for times already sold and avoid busy times.</li></ul><h4>Employee guests</h4><p>WGV management encourages all employees to invite friends and family to enjoy the golf courses together. WGV extends free green fees to all employees' guests and requires only that guests pay a $35++ cart fee when riding. Employee guests could be subject to additional fees if more than one guest is brought per employee.</p>`}},
   {t:"Recent emails", m:"Property-wide notices", s:"", c:"f-flat", a:"", linkOnly:true,
-   d:{url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
+   d:{sub:"Archive of the emails sent to all staff.", url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
   {t:"2025 year in review", m:"Posted 1/10", s:"", c:"f-flat", a:"", linkOnly:true,
-   d:{url:"https://heyzine.com/flip-book/b4e3ef7109.html"}}
+   d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}}
 ]},
 
 
@@ -743,12 +743,16 @@ function render(){
       <span class="row-side">${i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
       ${i.linkOnly?"":`<span class="chev-r">&#8250;</span>`}
     </button>`).join("");
-  document.querySelectorAll(".row").forEach(r=>r.addEventListener("click",()=>{
-    const it=items[+r.dataset.idx];
-    if(it.linkOnly){ window.open(it.d.url,"_blank","noopener"); return; }
+  document.querySelectorAll(".row").forEach(r=>r.addEventListener("click",(ev)=>{
+    if(ev.target.closest(".row-openpill")) return; // pill handles its own click
     state.idx=+r.dataset.idx; state.turf=false; markTurf(false); detail(items[state.idx]);
     document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current",String(+x.dataset.idx===state.idx)));
     if(isMobile()) document.body.classList.add("show-detail");
+  }));
+  document.querySelectorAll(".row-openpill").forEach(pill=>pill.addEventListener("click",(ev)=>{
+    ev.stopPropagation();
+    const it=items[+pill.closest(".row").dataset.idx];
+    window.open(it.d.url,"_blank","noopener");
   }));
   if(state.view==="announce" && state.turf){ renderTurfDetail(); markTurf(true); document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current","false")); }
   else detail(items[state.idx]);
