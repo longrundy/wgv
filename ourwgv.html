@@ -105,8 +105,9 @@ a{color:inherit}
 .cart-time{font-size:10px;color:var(--muted);margin-top:4px}
 .cart-err{font-size:12px;color:var(--muted);line-height:1.6;padding:14px 16px}
 .cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all;display:inline-block}
-.cart-learn{padding:11px 16px 13px;font-size:12px;border-top:1px solid #eef0f4}
-.cart-learn a{color:var(--red-dark);text-decoration:none;font-weight:500}
+.cart-learn{padding:12px 16px 14px;border-top:1px solid #eef0f4}
+.cart-learn a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#185fa5;background:#e6f1fb;border:1px solid #c3ddf4;padding:7px 13px;border-radius:20px;text-decoration:none}
+.cart-learn a:active{background:#d3e6f7}
 
 .tabs{display:flex;gap:22px;margin-top:16px;border-bottom:1px solid var(--line);padding:0 22px}
 .tab{padding:0 0 12px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
@@ -384,8 +385,6 @@ announce:{title:"Announcements", sub:"What's new this week", items:[
   {t:"Verification of employment assistance", m:"Posted 7/15 · all staff", s:"New", c:"f-urgent", a:"open",
    d:{sub:"New process for employment and income verification requests.", url:"https://drive.google.com/file/d/1m_9xDyIc3HWMCHeQ6fncSdrjx0HcmZEr/view",
       note:"Use this instead of asking the front desk. Lenders and landlords can be pointed straight at it."}},
-  {t:"Employee of the month — Johnathan Englen", m:"Posted 7/1 · agronomy", s:"", c:"f-flat", a:"",
-   d:{sub:"January winner, agronomy.", url:"https://us3.campaign-archive.com/?u=2cb7bff60b827c567c5977318&id=a92e802c88"}},
   {t:"Tee sheet policy update", m:"Posted 6/28 · golf ops", s:"", c:"f-flat", a:"",
    d:{sub:"Changes to how staff book and view tee times.", url:"https://drive.google.com/file/d/1c9RZCvkNo1G1BRUM29X6v4A_CB7v5dkG/view",
       note:"Shared logins are being replaced with per-person access. Ask IT for yours before your next shift."}},
@@ -675,7 +674,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -714,7 +713,7 @@ function go(view){
     if(sha(p.trim())!==MANAGER_HASH){ alert("That password isn't right."); return; }
     state.mgrOk=true;
   }
-  state.view=view; state.idx=0; render();
+  state.view=view; state.idx=0; if(view==="announce") state.turf=true; render();
   document.body.classList.remove("nav-open");
 }
 
@@ -737,11 +736,12 @@ function render(){
       <span class="chev-r">&#8250;</span>
     </button>`).join("");
   document.querySelectorAll(".row").forEach(r=>r.addEventListener("click",()=>{
-    state.idx=+r.dataset.idx; detail(items[state.idx]);
+    state.idx=+r.dataset.idx; state.turf=false; detail(items[state.idx]);
     document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current",String(+x.dataset.idx===state.idx)));
     if(isMobile()) document.body.classList.add("show-detail");
   }));
-  detail(items[state.idx]);
+  if(state.view==="announce" && state.turf){ renderTurfDetail(); document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current","false")); }
+  else detail(items[state.idx]);
 }
 
 function detail(i){
@@ -876,7 +876,11 @@ function renderCart(rows){
     '<div class="cart-rows">'+blocks.map((b,i)=>row(b,i===blocks.length-1)).join("")+'</div>'+
     '<div class="cart-learn"><a href="#" onclick="goTurf(event)">Learn about TurfSaver entry-exit &rsaquo;</a></div>';
 }
-function goTurf(e){ if(e) e.preventDefault(); state.view="turfsaver"; state.idx=0; render(); if(isMobile()) document.body.classList.add("show-detail"); }
+function goTurf(e){ if(e) e.preventDefault(); state.turf=true; renderTurfDetail(); if(isMobile()) document.body.classList.add("show-detail"); }
+function renderTurfDetail(){
+  const it=S.turfsaver.items[0];
+  el("#detail").innerHTML=`<div class="detail-title">${it.t}</div><div class="detail-sub">${it.d.sub||""}</div><article class="rich">${it.d.rich}</article>`;
+}
 function loadCart(){
   if(cartLoaded) return; cartLoaded=true;
   fetch(CART_CSV,{cache:"no-store"})
