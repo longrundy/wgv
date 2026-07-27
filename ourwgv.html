@@ -150,7 +150,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 9 &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 10 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -376,20 +376,20 @@ const S = {
 
 announce:{title:"Announcements", sub:"What's new this week", items:[
   {t:"Faces of WGV questionnaire", m:"Posted 7/20 · all staff", s:"New", c:"f-urgent", a:"open",
-   d:{sub:"Tell us about yourself for the Faces of WGV board.", url:"",
+   d:{sub:"Tell us about yourself for the Faces of WGV board.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform",
       note:"Takes about five minutes. Everyone who submits gets featured on the recognition board through the year."}},
   {t:"Verification of employment assistance", m:"Posted 7/15 · all staff", s:"New", c:"f-urgent", a:"open",
-   d:{sub:"New process for employment and income verification requests.", url:"",
+   d:{sub:"New process for employment and income verification requests.", url:"https://drive.google.com/file/d/1m_9xDyIc3HWMCHeQ6fncSdrjx0HcmZEr/view",
       note:"Use this instead of asking the front desk. Lenders and landlords can be pointed straight at it."}},
   {t:"Employee of the month — Johnathan Englen", m:"Posted 7/1 · agronomy", s:"", c:"f-flat", a:"",
-   d:{sub:"January winner, agronomy.", url:""}},
+   d:{sub:"January winner, agronomy.", url:"https://us3.campaign-archive.com/?u=2cb7bff60b827c567c5977318&id=a92e802c88"}},
   {t:"Tee sheet policy update", m:"Posted 6/28 · golf ops", s:"", c:"f-flat", a:"",
-   d:{sub:"Changes to how staff book and view tee times.", url:"",
+   d:{sub:"Changes to how staff book and view tee times.", url:"https://drive.google.com/file/d/1c9RZCvkNo1G1BRUM29X6v4A_CB7v5dkG/view",
       note:"Shared logins are being replaced with per-person access. Ask IT for yours before your next shift."}},
   {t:"Recent emails", m:"Property-wide notices", s:"", c:"f-flat", a:"",
-   d:{sub:"Archive of the emails sent to all staff.", url:""}},
+   d:{sub:"Archive of the emails sent to all staff.", url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
   {t:"2025 year in review", m:"Posted 1/10", s:"", c:"f-flat", a:"",
-   d:{sub:"How the property finished the year.", url:""}}
+   d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}}
 ]},
 
 cartrule:{title:"Today's cart rule", sub:"Posted each morning by the agronomy team", items:[
@@ -407,7 +407,7 @@ cartrule:{title:"Today's cart rule", sub:"Posted each morning by the agronomy te
 ]},
 
 /* ---------- request queues ---------- */
-timeoff:{title:"Time off requests", sub:"Submitted through the request form", tabs:true, items:[
+timeoff:{title:"Time off requests", sub:"Submitted through the request form", form:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform", tabs:true, items:[
   {t:"Charles Johnson — Aug 3 to Aug 7", m:"#TO-88 · agronomy · KB", s:"Pending", c:"f-high", a:"submitted 7/24",
    d:{sub:"5 days requested — agronomy crew, King & Bear",
       stats:[["DAYS REQUESTED","5",""],["PTO BALANCE","62","hrs"],["CREW OUT","2","that week"],["NOTICE","10","days"]],
@@ -429,7 +429,7 @@ timeoff:{title:"Time off requests", sub:"Submitted through the request form", ta
       actions:[["Approve","primary"],["Decline","ghost"]]}}
 ]},
 
-golf:{title:"Employee golf requests", sub:"Staff tee times, space available", tabs:true, items:[
+golf:{title:"Employee golf requests", sub:"Staff tee times, space available", form:"https://docs.google.com/forms/d/e/1FAIpQLSc9NC2Zcv6jSzQfiQPCCmzHdtKdrUXR7cbrQ02unje38yOsGA/viewform", tabs:true, items:[
   {t:"Nick Joseph — Sat 8/1, 2 players", m:"#G-142 · King & Bear", s:"Pending", c:"f-high", a:"submitted 7/26",
    d:{sub:"Requesting an afternoon time after 2:00 PM",
       stats:[["PLAYERS","2",""],["DATE","Sat","8/1"],["WINDOW","2 PM","or later"],["ROUNDS YTD","6",""]],
@@ -444,7 +444,7 @@ golf:{title:"Employee golf requests", sub:"Staff tee times, space available", ta
       actions:[["Confirm time","primary"],["Decline","ghost"]]}}
 ]},
 
-cart:{title:"Cart repair", sub:"Submitted by staff at both courses", tabs:true, items:[
+cart:{title:"Cart repair", sub:"Submitted by staff at both courses", form:"https://docs.google.com/forms/d/e/1FAIpQLSfJ3Cx2xfNzlN8wM8Fww4cvheBcjyLRNUa7NcBa8_MtPQd2BA/viewform", tabs:true, items:[
   {t:"Cart 42 — brake fade", m:"#418 · KB · Jairo Duitama", s:"Urgent", c:"f-urgent", a:"2d open",
    d:{sub:"Brake fade on the cart path — King & Bear barn [7-25-26]",
       stats:[["PRIORITY","Urgent","",1],["DAYS OPEN","2","of 5 SLA"],["CART HOURS","812",""],["LAST SERVICE","6.2w",""]],
@@ -473,7 +473,7 @@ cart:{title:"Cart repair", sub:"Submitted by staff at both courses", tabs:true, 
       actions:[["Update status","primary"],["Reassign","ghost"]]}}
 ]},
 
-maint:{title:"Maintenance requests", sub:"Course and clubhouse work orders", tabs:true, items:[
+maint:{title:"Maintenance requests", sub:"Course and clubhouse work orders", form:"https://docs.google.com/forms/d/e/1FAIpQLSeC1rlpLjqDgOnIGlG4qLnbtrzEKfD-rM18tZfqdmo2pytYyg/viewform", tabs:true, items:[
   {t:"Irrigation head 14 fairway", m:"#M-231 · KB · Johnathan Englen", s:"Urgent", c:"f-urgent", a:"1d open",
    d:{sub:"Head stuck open, standing water in the landing zone [7-26-26]",
       stats:[["PRIORITY","Urgent","",1],["DAYS OPEN","1","of 2 SLA"],["ZONE","14",""],["REPEAT","2nd","this season"]],
@@ -489,7 +489,7 @@ maint:{title:"Maintenance requests", sub:"Course and clubhouse work orders", tab
       actions:[["Update status","primary"],["Reassign","ghost"]]}}
 ]},
 
-it:{title:"IT requests", sub:"Hardware, logins, POS and network", tabs:true, items:[
+it:{title:"IT requests", sub:"Hardware, logins, POS and network", form:"https://docs.google.com/forms/d/e/1FAIpQLSfpzgeVYNrDBZkb4S6RLcOBY0In2FVyFV-Lqvwch5IAoZ-16w/viewform", tabs:true, items:[
   {t:"POS terminal 2 dropping offline", m:"#IT-64 · KB golf shop · Jean Charles", s:"High", c:"f-high", a:"2d open",
    d:{sub:"Loses connection during the morning rush [7-25-26]",
       stats:[["PRIORITY","High",""],["DAYS OPEN","2","of 3 SLA"],["USERS","4","affected"],["REPEAT","3rd","this month"]],
@@ -504,7 +504,7 @@ it:{title:"IT requests", sub:"Hardware, logins, POS and network", tabs:true, ite
       actions:[["Update status","primary"],["Reassign","ghost"]]}}
 ]},
 
-ace:{title:"Hole-in-one reports", sub:"Verify, then post to the board", tabs:true, items:[
+ace:{title:"Hole-in-one reports", sub:"Verify, then post to the board", form:"https://docs.google.com/forms/d/e/1FAIpQLSc9oWQ8KmUTfkkspT3L6NiF-g1NtSqgpb8v_rz7KDgCZNOEUw/viewform", tabs:true, items:[
   {t:"Hole 8, Slammer & Squire — 7/24", m:"#A-07 · reported by Hal Hall", s:"Verify", c:"f-high", a:"3d open",
    d:{sub:"Guest ace on hole 8, 147 yards, 8-iron",
       stats:[["HOLE","8",""],["YARDAGE","147",""],["WITNESSES","3",""],["POSTED","No",""]],
@@ -516,7 +516,7 @@ ace:{title:"Hole-in-one reports", sub:"Verify, then post to the board", tabs:tru
 
 callout:{title:"Shift callouts", sub:"Call out of a shift, or see who's out", tabs:true, items:[
   {t:"Submit a shift callout", m:"Form · use as early as you can", s:"Open", c:"f-flat", a:"",
-   d:{sub:"Tell your supervisor you can't make a shift.", url:"",
+   d:{sub:"Tell your supervisor you can't make a shift.", url:"https://docs.google.com/forms/d/e/1FAIpQLSdfFWt9pYxaV6ETKQkWN_nQBPEciS_B8T6Sc2zjMHAG5C11kw/viewform",
       note:"Submit the form and text the manager line as well if the shift starts within four hours."}},
   {t:"AJ Johnson — 7/26 morning", m:"Agronomy · KB", s:"Covered", c:"f-low", a:"yesterday",
    d:{sub:"Called out of the 5:30 AM shift, covered by Pace Anderson.",
@@ -525,23 +525,23 @@ callout:{title:"Shift callouts", sub:"Call out of a shift, or see who's out", ta
 
 /* ---------- schedule ---------- */
 schedule:{title:"Work schedule & calendar", sub:"By department", items:[
-  link("Work schedules & calendar","Current and upcoming weeks","","The posted schedule for every department."),
-  link("Request time off","Form","","Goes to the time off queue for your supervisor."),
-  link("Shift callout form","Form","","Use as early as you can, then text the manager line.")
+  link("Work schedules & calendar","Current and upcoming weeks","https://tockify.com/2courses/monthly","The posted schedule for every department."),
+  link("Request time off","Form","https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform","Goes to the time off queue for your supervisor."),
+  link("Shift callout form","Form","https://docs.google.com/forms/d/e/1FAIpQLSdfFWt9pYxaV6ETKQkWN_nQBPEciS_B8T6Sc2zjMHAG5C11kw/viewform","Use as early as you can, then text the manager line.")
 ]},
 
 teesheet:{title:"Tee sheet", sub:"View and book staff times", items:[
   {t:"View golf tee sheet", m:"Opens in a new tab", s:"Open", c:"f-flat", a:"",
-   d:{sub:"Find it under my account, top right corner.", url:"",
+   d:{sub:"Find it under my account, top right corner.", url:"https://wgvviewonly.ezlinksgolf.com/index.html#/login",
       note:"Sign in with your own account. Shared credentials are being retired — ask IT if you don't have yours yet.",
       folds:[["Policy update","tee sheet","How staff book and view times, and what's changing."]]}},
   {t:"Employee golf request", m:"Form", s:"Open", c:"f-flat", a:"",
-   d:{sub:"Request a staff tee time, space available.", url:""}}
+   d:{sub:"Request a staff tee time, space available.", url:"https://docs.google.com/forms/d/e/1FAIpQLSc9NC2Zcv6jSzQfiQPCCmzHdtKdrUXR7cbrQ02unje38yOsGA/viewform"}}
 ]},
 
 hours:{title:"Hours of operation", sub:"By location", items:[
   {t:"King & Bear golf shop", m:"(904) 940-6201", s:"", c:"f-flat", a:"",
-   d:{sub:"King & Bear clubhouse",
+   d:{url:"https://www.golfwgv.com/hours-of-operation", sub:"King & Bear clubhouse",
       stats:[["OPENS","7:00","AM"],["CLOSES","6:00","PM"],["DAYS","7","per week"],["PHONE","6201","ext"]],
       kv:[["Phone","(904) 940-6201"],["Weather station","King & Bear"]]}},
   {t:"Slammer & Squire golf shop", m:"(904) 940-6116", s:"", c:"f-flat", a:"",
@@ -579,8 +579,8 @@ eotm:{title:"Employee of the month", sub:"2026 winners", items:[
   {t:"Eric Nicholas", m:"March · golf operations", s:"", c:"f-flat", a:"", d:{sub:"March 2026", kv:[["Department","Golf operations"]]}},
   {t:"Robin Andreu", m:"April · agronomy", s:"", c:"f-flat", a:"", d:{sub:"April 2026", kv:[["Department","Agronomy"]]}},
   {t:"Nick Ivey", m:"May · golf shop", s:"", c:"f-flat", a:"", d:{sub:"May 2026", kv:[["Department","Golf shop"]]}},
-  link("Recognize or nominate someone","Form","","Nominations for the next month close on the 25th."),
-  link("Past winners","Archive","","Winners from previous years.")
+  link("Recognize or nominate someone","Form","https://docs.google.com/forms/d/e/1FAIpQLSfOcm802gkJ-Y0GIniF3RezW0o8KY5O4vNxOBDE0W1O607X0w/viewform","Nominations for the next month close on the 25th."),
+  link("Past winners","Archive","https://sites.google.com/view/ourwgv/past-winners","Winners from previous years.")
 ]},
 
 events:{title:"Appreciation events", sub:"2026 schedule", items:[
@@ -589,40 +589,40 @@ events:{title:"Appreciation events", sub:"2026 schedule", items:[
   {t:"Oct 14 — King & Bear", m:"Upcoming", s:"", c:"f-flat", a:"", d:{sub:"Employee appreciation, King & Bear", kv:[["Date","Oct 14"],["Course","King & Bear"]]}},
   {t:"Oct 21 — Slammer & Squire", m:"Upcoming", s:"", c:"f-flat", a:"", d:{sub:"Employee appreciation, Slammer & Squire", kv:[["Date","Oct 21"],["Course","Slammer & Squire"]]}},
   {t:"Dec 14 — Holiday party", m:"Upcoming", s:"", c:"f-flat", a:"", d:{sub:"Property holiday party", kv:[["Date","Dec 14"]]}},
-  link("Appreciation pics & vids","Photo archive","","Photos and video from past events."),
+  link("Appreciation pics & vids","Photo archive","https://sites.google.com/view/ourwgv/pics-vids","Photos and video from past events."),
   {t:"Past 2026 events", m:"Feb 11 KB · Feb 18 SS · Apr 15 KB · Apr 22 SS · Jun 10 KB · Jun 17 SS", s:"", c:"f-flat", a:"",
    d:{sub:"Already held this year", kv:[["Held","6 events"],["Remaining","5 events"]]}}
 ]},
 
 faces:{title:"Faces of WGV", sub:"Get to know the crew", items:[
-  link("Faces of WGV questionnaire","Form · five minutes","","Fill this out to be featured on the board."),
+  link("Faces of WGV questionnaire","Form · five minutes","https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform","Fill this out to be featured on the board."),
   link("Meet the team","Board","","Everyone who has been featured so far.")
 ]},
 
 /* ---------- resources ---------- */
 handbook:{title:"Handbook & policies", sub:"How we do things here", items:[
-  link("Employee handbook — English","PDF","","The full handbook."),
-  link("Employee handbook — Spanish","PDF","","Manual del empleado."),
-  link("WGV standards","Reference","","Property standards for both courses."),
-  link("Employee parking maps","Map","","Where to park at each clubhouse.")
+  link("Employee handbook — English","PDF","https://drive.google.com/file/d/1wk1Og9gYW4oXT66_BJYmS4-opIivtXEJ/view","The full handbook."),
+  link("Employee handbook — Spanish","PDF","https://drive.google.com/file/d/1AdzFTwQ4n65AQ8pX7Tng26B-Ca8sH_sb/view","Manual del empleado."),
+  link("WGV standards","Reference","https://sites.google.com/view/ourwgv/standards","Property standards for both courses."),
+  link("Employee parking maps","Map","https://drive.google.com/file/d/1HTpDli-Pt-zkgX6y0PP3WWhrx1If0Ne8/view","Where to park at each clubhouse.")
 ]},
 
 pay:{title:"Pay & benefits", sub:"Pay, retirement and perks", items:[
-  link("UKG Pro mobile app","Time clock & pay stubs","","Punch in, view pay stubs and request time off from your phone."),
-  link("Empower 401k flyer","PDF","","Retirement plan overview and enrollment."),
-  link("Verification of employment assistance","New process","","For lenders and landlords who need to verify your employment."),
-  link("Associate dining perks","Benefit","","Discounts at property dining outlets."),
-  link("Troon CARES","Benefit","","Emergency assistance fund for Troon associates."),
+  link("UKG Pro mobile app","Time clock & pay stubs","https://drive.google.com/file/d/1ev-MIT-I-rct3ejSiamYZB0oQWyPSqtq/view","Punch in, view pay stubs and request time off from your phone."),
+  link("Empower 401k flyer","PDF","https://drive.google.com/file/d/1CEtYBV7qyrCcQEe9yqXTsil40pdJfiN4/view","Retirement plan overview and enrollment."),
+  link("Verification of employment assistance","New process","https://drive.google.com/file/d/1m_9xDyIc3HWMCHeQ6fncSdrjx0HcmZEr/view","For lenders and landlords who need to verify your employment."),
+  link("Associate dining perks","Benefit","https://drive.google.com/file/d/14-FqbJsdSTVcBBMAdhz3LfmYHhdRmvhk/view","Discounts at property dining outlets."),
+  link("Troon CARES","Benefit","https://drive.google.com/file/d/1aOfYws7NSD7i9vrfCVAHAeFaA1lOIq32/view","Emergency assistance fund for Troon associates."),
   link("Employee assistance program","Benefit","","Confidential counseling and support services."),
-  link("EAP program information","PDF","","What the assistance program covers and how to use it.")
+  link("EAP program information","PDF","https://drive.google.com/file/d/1iGTthGkhPsQMmxJAVa38cL5R7YIu-Smq/view","What the assistance program covers and how to use it.")
 ]},
 
 safety:{title:"Safety & injuries", sub:"If something happens on property", items:[
   {t:"How to report an injury", m:"Read this first", s:"Steps", c:"f-urgent", a:"",
-   d:{sub:"What to do, in order, if you or a guest is hurt.", url:"",
+   d:{sub:"What to do, in order, if you or a guest is hurt.", url:"https://drive.google.com/file/d/1zjb_zs4JH6S2SWvsrGcjmUN5ec92tamE/view",
       note:"1. Get help first. 2. Tell your supervisor immediately. 3. Text the manager line. 4. File the incident report the same day.",
       folds:[["Why same day","reporting window","Late reports can affect a workers' comp claim."]]}},
-  link("WGV employee incident reports","Form","","File the report after telling your supervisor.")
+  link("WGV employee incident reports","Form","https://drive.google.com/drive/folders/1kS3z-EkRqfr6tsUAtyn2VLHEtewVWXWL","File the report after telling your supervisor.")
 ]},
 
 contacts:{title:"Contacts & weather", sub:"Numbers and course conditions", items:[
@@ -634,15 +634,15 @@ contacts:{title:"Contacts & weather", sub:"Numbers and course conditions", items
    d:{sub:"King & Bear", kv:[["Number","(904) 940-6201"],["Hours","7:00 AM – 6:00 PM"]]}},
   {t:"Slammer & Squire golf shop", m:"(904) 940-6116", s:"Call", c:"f-flat", a:"",
    d:{sub:"Slammer & Squire", kv:[["Number","(904) 940-6116"],["Hours","7:00 AM – 6:00 PM"]]}},
-  link("Club contacts","Directory","","Department contacts across the property."),
-  link("KB weather station","Live conditions","","Current conditions at King & Bear."),
-  link("SS weather station","Live conditions","","Current conditions at Slammer & Squire.")
+  link("Club contacts","Directory","https://www.golfwgv.com/about/personnel","Department contacts across the property."),
+  link("KB weather station","Live conditions","https://tempestwx.com/station/187086/","Current conditions at King & Bear."),
+  link("SS weather station","Live conditions","https://tempestwx.com/station/187191/","Current conditions at Slammer & Squire.")
 ]},
 
 troon:{title:"Troon", sub:"Company resources", items:[
-  link("Troon mission, vision and values","Reference","","What the company stands for."),
-  link("Troon careers","Job board","","Openings across Troon properties."),
-  link("2025 year in review","Recap","","How the property finished last year.")
+  link("Troon mission, vision and values","Reference","https://drive.google.com/drive/folders/1mmCMyX33_KqjDammtClstDU8nwryOgQu","What the company stands for."),
+  link("Troon careers","Job board","https://troon.com/about/career-opportunities","Openings across Troon properties."),
+  link("2025 year in review","Recap","https://heyzine.com/flip-book/b4e3ef7109.html","How the property finished last year.")
 ]},
 
 /* ---------- management ---------- */
@@ -721,7 +721,7 @@ function render(){
     b.setAttribute("aria-current", String(b.dataset.view === state.view)));
 
   el("#queueTitle").textContent = sec.title;
-  el("#queueSub").textContent = sec.sub;
+  el("#queueSub").innerHTML = sec.sub + (sec.form ? ' · <a href="'+sec.form+'" style="color:var(--red-dark)">submit new</a>' : "");
   el("#tabs").hidden = !sec.tabs;
   if(sec.tabs){
     el("#cOpen").textContent = sec.items.length;
