@@ -1013,8 +1013,12 @@ function buildPolicyRich(rows){
 function esc2(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 function policyTextToHtml(text){
-  // Split into lines; blank line = paragraph break.
-  const lines=String(text).replace(/\r/g,"").split("\n");
+  let t=String(text).replace(/\r/g,"");
+  // Break mid-line bullets: a " -" that begins a new item (dash + space + capital, or dash right
+  // after sentence punctuation) becomes its own line. Won't touch "50-100" (no space before dash).
+  t=t.replace(/\s+-\s*(?=[A-Z])/g, "\n- ");
+  // Also handle a dash at the very start after other text with no space marker already newline.
+  const lines=t.split("\n");
   let html="", bullets=[];
   function flushBullets(){ if(bullets.length){ html+="<ul>"+bullets.map(b=>"<li>"+esc2(b)+"</li>").join("")+"</ul>"; bullets=[]; } }
   let para=[];
