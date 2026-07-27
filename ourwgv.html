@@ -98,13 +98,13 @@ a{color:inherit}
 .cart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:820px){ .cart-grid{grid-template-columns:1fr} }
 .cart-course{border-radius:12px;padding:14px 15px;border:1px solid var(--line);position:relative}
-.cart-course.cc-open{background:#f2f8ec;border-color:#d3e6b8}
+.cart-course.cc-open{background:#e9f2fb;border-color:#c3ddf4}
 .cart-course.cc-closed{background:var(--red-tint);border-color:#f0c9c9}
 .cart-course.cc-caution{background:#fdf4e3;border-color:#f0dcae}
 .cc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .cc-name{font-size:12px;letter-spacing:.5px;color:var(--ink);font-weight:700}
 .cc-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
-.cc-open .cc-pill{background:#3b6d11;color:#fff}
+.cc-open .cc-pill{background:#185fa5;color:#fff}
 .cc-closed .cc-pill{background:var(--red-dark);color:#fff}
 .cc-caution .cc-pill{background:#8a5a12;color:#fff}
 .cc-rule{font-size:15px;font-weight:600;line-height:1.35;color:var(--ink)}
@@ -123,7 +123,7 @@ a{color:inherit}
 .row{display:flex;align-items:center;gap:12px;width:100%;padding:15px 22px;
   border-bottom:1px solid var(--line-soft);border-left:3px solid transparent}
 .row:active{background:#fafaf7}
-.row[aria-current="true"]{background:var(--red-wash);border-left-color:var(--red)}
+.row[aria-current="true"]{background:var(--red-tint);border-left-color:var(--red-tint)}
 .row-icon{width:30px;height:30px;border-radius:8px;background:#f4f2ec;color:var(--muted);
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex:none}
 .row-main{flex:1;min-width:0}
@@ -247,10 +247,6 @@ a{color:inherit}
     <div class="cartcard" id="cartcard" hidden>
       <h3><span class="dot" style="background:#7dd3b0"></span> Today's cart rule &middot; live</h3>
       <div class="cart-body" id="cartBody"><div class="cart-loading">Loading today's cart rule…</div></div>
-    </div>
-    <div class="tabs" role="tablist" id="tabs" hidden>
-      <button class="tab" role="tab" data-tab="open" aria-selected="true">Open <span id="cOpen"></span></button>
-      <button class="tab" role="tab" data-tab="closed" aria-selected="false">Closed <span id="cClosed"></span></button>
     </div>
     <div class="list" id="list" role="listbox" aria-label="Items"></div>
   </main>
@@ -713,9 +709,6 @@ function render(){
   el("#barTitle").textContent=sec.title;
   el("#queueSub").innerHTML=sec.sub+(sec.form?' &middot; <a href="'+sec.form+'">submit new</a>':"");
   el("#cartcard").hidden = state.view!=="announce"; if(state.view==="announce") loadCart();
-  el("#tabs").hidden=!sec.tabs;
-  if(sec.tabs){ el("#cOpen").textContent=sec.items.length; el("#cClosed").textContent=0; }
-  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.tab===state.tab)));
 
   const items=sec.items;
   if(!items.length){ el("#list").innerHTML='<div class="empty">Nothing here right now.</div>'; el("#detail").innerHTML=""; return; }
@@ -763,7 +756,6 @@ function detail(i){
   }));
 }
 
-el("#tabs").addEventListener("click",e=>{const t=e.target.closest(".tab");if(!t)return;state.tab=t.dataset.tab;render();});
 
 /* mobile chrome */
 el("#hamb").addEventListener("click",()=>document.body.classList.add("nav-open"));
