@@ -149,7 +149,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 6 &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 7 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -258,35 +258,27 @@ function _sha256(ascii){
   return out;
 }
 
-async function sha(t){
-  try{
-    if(window.crypto && crypto.subtle){
-      const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
-      return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
-    }
-  }catch(e){}
-  return _sha256(t);
-}
+function sha(t){ return _sha256(t); }
 const store = {
   get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
   set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
 };
 
-async function tryUnlock(){ try{ await _tryUnlock(); }catch(err){ var m=document.getElementById("pwMsg"); m.style.color="#f4a3a3"; m.textContent = "Error: "+(err&&err.message?err.message:err); } }
-async function _tryUnlock(){
+function tryUnlock(){ try{ _tryUnlock(); }catch(err){ var m=document.getElementById("pwMsg"); m.style.color="#f4a3a3"; m.textContent = "Error: "+(err&&err.message?err.message:err); } }
+function _tryUnlock(){
   const v = document.getElementById("pw").value.replace(/\s+/g,"");
   const msg = document.getElementById("pwMsg");
   if(v.startsWith("hash:")){
-    document.getElementById("pwHash").textContent = await sha(v.slice(5));
+    document.getElementById("pwHash").textContent = sha(v.slice(5));
     msg.textContent = "Copy the hash below into the file.";
     return;
   }
-  if(await sha(v) === STAFF_HASH){
+  if(sha(v) === STAFF_HASH){
     store.set("wgv_ok","1");
     document.getElementById("gate").hidden = true;
     document.getElementById("app").hidden = false;
     render();
-  } else if(await sha(v) === LEGACY_HASH){
+  } else if(sha(v) === LEGACY_HASH){
     msg.textContent = "Old password. This page is running the old file — upload the new one.";
   } else {
     msg.textContent = "That password isn't right. Ask your manager.";
@@ -297,10 +289,10 @@ function _click(){
   var m=document.getElementById("pwMsg");
   m.style.color="#9fb4d4";
   m.textContent="Checking…";
-  Promise.resolve().then(tryUnlock).catch(function(err){
-    m.style.color="#f4a3a3";
-    m.textContent="Error: "+(err&&err.message?err.message:err);
-  });
+  setTimeout(function(){
+    try{ tryUnlock(); }
+    catch(err){ m.style.color="#f4a3a3"; m.textContent="Error: "+(err&&err.message?err.message:err); }
+  }, 20);
 }
 document.getElementById("pwGo").addEventListener("click", _click);
 document.getElementById("pw").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); _click(); } });
@@ -694,7 +686,7 @@ async function go(view){
   if(MGMT.includes(view) && !state.mgrOk){
     const p = prompt("Management area — enter the manager password.");
     if(p === null) return;
-    if(await sha(p.trim()) !== MANAGER_HASH){ alert("That password isn't right."); return; }
+    if(sha(p.trim()) !== MANAGER_HASH){ alert("That password isn't right."); return; }
     state.mgrOk = true;
   }
   state.view = view; state.idx = 0; el("#q").value = ""; render();
