@@ -149,7 +149,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 5 &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 6 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -296,7 +296,7 @@ async function _tryUnlock(){
 function _click(){
   var m=document.getElementById("pwMsg");
   m.style.color="#9fb4d4";
-  m.textContent="Checking… (build 4)";
+  m.textContent="Checking…";
   Promise.resolve().then(tryUnlock).catch(function(err){
     m.style.color="#f4a3a3";
     m.textContent="Error: "+(err&&err.message?err.message:err);
