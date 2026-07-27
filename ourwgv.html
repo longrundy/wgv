@@ -52,28 +52,31 @@ a{color:inherit}
 .rail{background:var(--navy);color:#fff;padding:22px 16px;overflow-y:auto}
 .brand{display:flex;justify-content:center;margin-bottom:20px}
 .brand img{width:104px;height:auto}
-.grp{margin-bottom:2px}
-.grp-head{display:flex;align-items:center;gap:11px;width:100%;padding:12px 12px;border-radius:9px;
-  font-size:15px;color:#fff;font-weight:500;border-left:3px solid transparent}
+.grp{margin-bottom:6px}
+.grp-head{display:flex;align-items:center;gap:11px;width:100%;padding:13px 12px;border-radius:10px;
+  font-size:15px;color:#fff;font-weight:600;border-left:3px solid transparent;letter-spacing:.2px}
 .grp-head:active{background:var(--navy-2)}
 .grp-head[aria-expanded="true"]{background:var(--navy-3);border-left-color:var(--red)}
 .grp-head .g-dot{width:8px;height:8px;border-radius:50%;flex:none;background:#c8161d}
 .grp-head .g-label{flex:1}
-.grp-head .chev{transition:transform .18s;font-size:13px;color:#9fb4d4}
+.grp-head .chev{transition:transform .18s;font-size:12px;color:#9fb4d4}
 .grp-head[aria-expanded="false"] .chev{transform:rotate(-90deg)}
-.grp-body{padding-left:6px}
-.grp-body{overflow:hidden}
+.grp-body{padding:4px 0 6px 0;margin-left:15px;border-left:1px solid var(--navy-line)}
 .grp-body[hidden]{display:none}
-.nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:12px 12px;border-radius:9px;
-  font-size:15px;border-left:3px solid transparent}
+.grp-body .nav-item{padding:9px 12px;font-size:13.5px;color:#c7d5e8;border-radius:0 8px 8px 0;border-left:2px solid transparent;margin-left:-1px}
+.grp-body .nav-item:active{background:var(--navy-2)}
+.grp-body .nav-item[aria-current="true"]{background:var(--navy-3);color:#fff;border-left-color:var(--red)}
+.grp-body .nav-item .dot{width:6px;height:6px}
+.nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:13px 12px;border-radius:10px;
+  font-size:15px;border-left:3px solid transparent;font-weight:600}
 .nav-item:active{background:var(--navy-2)}
 .nav-item[aria-current="true"]{background:var(--navy-3);border-left-color:var(--red)}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .nav-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.nav-count{font-size:13px;color:#9fb4d4}
+.nav-count{font-size:12px;color:#9fb4d4;font-weight:400}
 .nav-item[aria-current="true"] .nav-count{color:#fff}
-.solo{margin-bottom:8px}
-.mgmt-sep{border-top:1px solid var(--navy-line);margin:12px 0 4px}
+.solo{margin-bottom:6px}
+.mgmt-sep{border-top:1px solid var(--navy-line);margin:12px 0 6px}
 .lock{font-size:12px}
 .rail-foot{margin-top:22px;padding-top:16px;border-top:1px solid var(--navy-line);font-size:13px;color:#c7d5e8;line-height:1.8}
 .rail-foot a{color:#fff}
@@ -94,18 +97,22 @@ a{color:inherit}
 .cart-loading{color:var(--muted);font-size:13px;padding:6px 0}
 .cart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:820px){ .cart-grid{grid-template-columns:1fr} }
-.cart-course{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.cart-course .cc-name{font-size:11px;letter-spacing:.6px;color:var(--muted);font-weight:600;margin-bottom:7px}
-.cart-course .cc-rule{font-size:15px;font-weight:600;line-height:1.35;color:var(--ink);margin-bottom:8px}
-.cart-course .cc-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
-.cc-open{background:#eaf3de;color:#3b6d11}
-.cc-closed{background:var(--red-tint);color:var(--red-dark)}
-.cc-caution{background:#fbf0da;color:#8a5a12}
-.cart-course .cc-time{font-size:11px;color:var(--muted);margin-top:8px}
-.cart-course .cc-time.stale{color:var(--amber);font-weight:500}
+.cart-course{border-radius:12px;padding:14px 15px;border:1px solid var(--line);position:relative}
+.cart-course.cc-open{background:#f2f8ec;border-color:#d3e6b8}
+.cart-course.cc-closed{background:var(--red-tint);border-color:#f0c9c9}
+.cart-course.cc-caution{background:#fdf4e3;border-color:#f0dcae}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.cc-name{font-size:12px;letter-spacing:.5px;color:var(--ink);font-weight:700}
+.cc-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.cc-open .cc-pill{background:#3b6d11;color:#fff}
+.cc-closed .cc-pill{background:var(--red-dark);color:#fff}
+.cc-caution .cc-pill{background:#8a5a12;color:#fff}
+.cc-rule{font-size:15px;font-weight:600;line-height:1.35;color:var(--ink)}
+.cc-time{font-size:11px;color:var(--muted);margin-top:9px;display:flex;align-items:center;gap:5px}
+.cc-time i{font-style:normal}
 .cart-err{font-size:12px;color:var(--muted);line-height:1.6}
-.cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all}
-.cart-learn{margin-top:10px;font-size:12px}
+.cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all;display:inline-block}
+.cart-learn{margin-top:12px;font-size:12px}
 .cart-learn a{color:var(--red-dark);text-decoration:none;font-weight:500}
 
 .tabs{display:flex;gap:22px;margin-top:16px;border-bottom:1px solid var(--line);padding:0 22px}
@@ -790,45 +797,52 @@ function statusWord(rule){
   return "Open";
 }
 function renderCart(rows){
-  // Heuristic: find two data rows containing a course name and a rule.
-  // We look for cells mentioning King/Bear and Slammer/Squire anywhere.
-  const flat=rows.map(r=>r.map(c=>c.trim()));
-  function findCourse(kw){
-    for(const r of flat){
-      const idx=r.findIndex(c=>kw.some(k=>c.toLowerCase().indexOf(k)>-1));
-      if(idx>-1){
-        // rule = the longest other cell in the row; time = cell containing AM/PM or a date
-        const others=r.filter((c,i)=>i!==idx && c);
-        let rule="",time="";
-        others.forEach(c=>{
-          if(/\b(am|pm)\b/i.test(c)||/\d{1,2}\/\d{1,2}/.test(c)) time=c.replace(/updated as of:?/i,"").trim();
-          else if(c.length>rule.length) rule=c;
-        });
-        return {rule,time};
+  // Flatten to a clean list of non-empty cell strings in reading order.
+  const cells=[];
+  rows.forEach(r=>r.forEach(c=>{ const v=(c||"").trim(); if(v) cells.push(v); }));
+  // Walk the list: a course name starts a block; next cell is the rule; an "Updated" cell (with its time) follows.
+  function isCourse(s){ const l=s.toLowerCase(); return l.indexOf("king")>-1&&l.indexOf("bear")>-1 || l.indexOf("slammer")>-1&&l.indexOf("squire")>-1; }
+  function courseLabel(s){ const l=s.toLowerCase(); return l.indexOf("king")>-1?"KING & BEAR":"SLAMMER & SQUIRE"; }
+  const blocks=[];
+  for(let i=0;i<cells.length;i++){
+    if(isCourse(cells[i])){
+      const name=courseLabel(cells[i]);
+      let rule="", time="";
+      // rule = next non-course, non-updated cell
+      let j=i+1;
+      while(j<cells.length && (isCourse(cells[j]) || /^updated/i.test(cells[j]))) j++;
+      if(j<cells.length && !isCourse(cells[j]) && !/learn about/i.test(cells[j])){ rule=cells[j]; }
+      // time = scan forward a few cells for one containing AM/PM or a date, before the next course
+      for(let k=i+1;k<cells.length && !isCourse(cells[k]);k++){
+        if(/\b(am|pm)\b/i.test(cells[k]) || /\d{1,2}\/\d{1,2}/.test(cells[k])){
+          time=cells[k].replace(/updated as of:?/i,"").trim(); break;
+        }
       }
+      blocks.push({name,rule,time});
     }
-    return null;
   }
-  const kb=findCourse(["king","bear"]);
-  const ss=findCourse(["slammer","squire"]);
-  const gotData = (kb&&kb.rule) || (ss&&ss.rule);
-  if(!gotData){
+  if(!blocks.length){
     document.getElementById("cartBody").innerHTML=
-      '<div class="cart-err"><b>Mapping needed.</b> The sheet loaded but I couldn\'t match the columns. First rows received:<br><code>'+
-      flat.slice(0,8).map(r=>r.join(" | ")).join("<br>")+'</code><br>Send this to set the mapping.</div>';
+      '<div class="cart-err"><b>Mapping needed.</b> First cells received:<br><code>'+cells.slice(0,10).join("<br>")+'</code></div>';
     return;
   }
-  function card(name,d){
-    if(!d) return "";
-    const cls=statusClass(d.rule), word=statusWord(d.rule);
-    const stale=d.time && !/7\/2[0-9]|today/i.test(d.time) ? "" : ""; // time freshness left neutral
-    return '<div class="cart-course"><div class="cc-name">'+name+'</div>'+
-      '<div class="cc-rule">'+(d.rule||"—")+'</div>'+
-      '<span class="cc-status '+cls+'"><span style="width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7"></span>'+word+'</span>'+
-      (d.time?'<div class="cc-time">Updated '+d.time+'</div>':'')+'</div>';
+  function statusClass(rule){ const r=(rule||"").toLowerCase();
+    if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "cc-closed";
+    if(r.indexOf("path only")>-1||r.indexOf("caution")>-1||r.indexOf("90")>-1) return "cc-caution";
+    return "cc-open"; }
+  function statusWord(rule){ const r=(rule||"").toLowerCase();
+    if(r.indexOf("clos")>-1||r.indexOf("maintenance")>-1) return "Closed";
+    if(r.indexOf("path only")>-1||r.indexOf("caution")>-1) return "Caution";
+    return "Open"; }
+  function card(b){
+    const cls=statusClass(b.rule), word=statusWord(b.rule);
+    return '<div class="cart-course '+cls+'">'+
+      '<div class="cc-top"><span class="cc-name">'+b.name+'</span><span class="cc-pill">'+word+'</span></div>'+
+      '<div class="cc-rule">'+(b.rule||"—")+'</div>'+
+      (b.time?'<div class="cc-time"><i>&#128337;</i> Updated '+b.time+'</div>':'')+'</div>';
   }
   document.getElementById("cartBody").innerHTML=
-    '<div class="cart-grid">'+card("KING & BEAR",kb)+card("SLAMMER & SQUIRE",ss)+'</div>'+
+    '<div class="cart-grid">'+blocks.map(card).join("")+'</div>'+
     '<div class="cart-learn"><a href="'+CART_LEARN+'" target="_blank" rel="noopener">Learn about TurfSaver entry-exit &rsaquo;</a></div>';
 }
 function loadCart(){
