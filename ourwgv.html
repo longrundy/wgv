@@ -149,6 +149,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 3 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -218,6 +219,7 @@ a{color:inherit}
    press enter. The page prints the new hash — paste it in below.
    ===================================================================== */
 const STAFF_HASH   = "5d1b67c4f5ebfbc63dd15285fa79e490cbc37c4c479a44f8e6646e0f7d65b5da";
+const LEGACY_HASH  = "3d08cb19a032bb9c48274a0307d566ed06d8cf55b6d170ae3abd223559ae849c";
 const MANAGER_HASH = "2f8ba8690e49bdccd7b4a4a49999c534d6d2957044a0015930c45b8b06e60ae5";
 
 async function sha(t){
@@ -230,7 +232,7 @@ const store = {
 };
 
 async function tryUnlock(){
-  const v = document.getElementById("pw").value.trim();
+  const v = document.getElementById("pw").value.replace(/\s+/g,"");
   const msg = document.getElementById("pwMsg");
   if(v.startsWith("hash:")){
     document.getElementById("pwHash").textContent = await sha(v.slice(5));
@@ -242,6 +244,8 @@ async function tryUnlock(){
     document.getElementById("gate").hidden = true;
     document.getElementById("app").hidden = false;
     render();
+  } else if(await sha(v) === LEGACY_HASH){
+    msg.textContent = "Old password. This page is running the old file — upload the new one.";
   } else {
     msg.textContent = "That password isn't right. Ask your manager.";
     document.getElementById("pw").value = "";
