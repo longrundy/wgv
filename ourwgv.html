@@ -115,7 +115,7 @@ a{color:inherit}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
 .tab span{color:var(--muted);margin-left:5px}
 .list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.row{display:flex;align-items:center;gap:12px;width:100%;padding:15px 26px;
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:16px 26px;
   border-bottom:1px solid #e3e8f0;border-left:3px solid transparent}
 .row:active{background:#e4eaf3}
 .row[aria-current="true"]{background:#faeceb;border-left-color:var(--red)}
@@ -390,17 +390,17 @@ turfsaver:{title:"TurfSaver entry-exit system", sub:"New cart traffic system · 
 
 
 announce:{title:"Announcements", sub:"What's new this week", items:[
-  {t:"Faces of WGV questionnaire", m:"Posted 7/20 · all staff", s:"New", c:"f-urgent", a:"open",
+  {t:"Faces of WGV questionnaire", m:"", s:"", c:"f-flat", a:"",
    d:{sub:"Tell us about yourself for the Faces of WGV board.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform",
       note:"Takes about five minutes. Everyone who submits gets featured on the recognition board through the year."}},
-  {t:"Verification of employment assistance", m:"Posted 7/15 · all staff", s:"New", c:"f-urgent", a:"open",
+  {t:"Verification of employment assistance", m:"", s:"", c:"f-flat", a:"",
    d:{sub:"New process for employment and income verification requests.", url:"https://drive.google.com/file/d/1m_9xDyIc3HWMCHeQ6fncSdrjx0HcmZEr/view",
       note:"Use this instead of asking the front desk. Lenders and landlords can be pointed straight at it."}},
-  {t:"Tee sheet policy update", m:"Posted 6/28 · golf ops", s:"", c:"f-flat", a:"",
+  {t:"Tee sheet policy update", m:"", s:"", c:"f-flat", a:"",
    d:{sub:"Changes to how staff book and view tee times.", rich:`<p class="lede"><b>WGV Employee Play Policy Update</b> · 1/1/25</p><h4>2025 WGV employee golf procedures</h4><p>The goal of WGV management is that all employees have access to both Slammer &amp; Squire and King &amp; Bear golf courses to play in low-demand times, which does affect revenue to either course. In no way is this a guaranteed benefit of employment, but it is more of a perk of being a WGV employee. Our employee golf policies must coincide logically with our stewardship of the property and revenue responsibility to our ownership.</p><ul><li>All tee time requests must be reserved through our employee website ourWGV.org with no exceptions.</li><li>Employee tee times will not be reserved by another staff member in person, by email, or by phone.</li><li>Responses for tee time requests from the professional golf staff will be in the form of emails, texts, and phone calls.</li><li>All employee tee time day and time restrictions will be lifted. Employees can request tee times for any day or time.</li><li>Any request for more than one tee time must be approved by the Director of Golf.</li><li>All employees must always accompany their guests when on property. You may just ride along with guests and not play, but you cannot exceed more than two carts in a group. This would limit you to three guests per tee time. We will announce that when it happens.</li><li>Employees may not be part of Member play groups. Playing with a member is allowed, but being a regular in a member group could be conceived by other members as more than a perk of being an employee.</li></ul><h4>Submitting a request</h4><ul><li>Log on to ourWGV.org</li><li>Code: 0121</li><li>Click Helpful Forms &amp; Info</li><li>Click Employee Golf Request</li><li>Fill out designated information blanks</li><li>Click Submit</li><li>The professional golf staff will answer the request as soon as possible.</li><li>Employees can book tee times seven days out. The golf professional staff reserves the right to delay booking your request closer to your requested time on busy days.</li></ul><h4>Viewing the tee sheet</h4><ul><li>Log on to ourWGV.org</li><li>Click Tee Sheet &amp; Calendar</li><li>Click the link to view the tee sheet</li><li>Username: <b>ourwgv98</b></li><li>Password: <b>ArnieJack98</b></li><li>Viewing the tee sheet before you submit an employee's tee time request will expedite the whole reservation process. Employees will be able to avoid asking for times already sold and avoid busy times.</li></ul><h4>Employee guests</h4><p>WGV management encourages all employees to invite friends and family to enjoy the golf courses together. WGV extends free green fees to all employees' guests and requires only that guests pay a $35++ cart fee when riding. Employee guests could be subject to additional fees if more than one guest is brought per employee.</p>`}},
-  {t:"Recent member emails", m:"Member communications", s:"", c:"f-flat", a:"", linkOnly:true,
+  {t:"Recent member emails", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
    d:{sub:"Recent emails sent to members — shared so staff stay aware of what members are hearing.", url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
-  {t:"2025 year in review", m:"Posted 1/10", s:"", c:"f-flat", a:"", linkOnly:true,
+  {t:"2025 year in review", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
    d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}}
 ]},
 
@@ -741,7 +741,7 @@ function render(){
 
   el("#list").innerHTML=items.map((i,n)=>`
     <button class="row" data-idx="${n}" aria-current="${n===state.idx}">
-      <span class="row-main"><span class="row-title">${i.t}</span><span class="row-meta">${i.m}</span></span>
+      <span class="row-main"><span class="row-title">${i.t}</span>${i.m?`<span class="row-meta">${i.m}</span>`:""}</span>
       <span class="row-side">${i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
       ${i.linkOnly?"":`<span class="chev-r">&#8250;</span>`}
     </button>`).join("");
