@@ -987,6 +987,53 @@ function backendGet(params){
   });
 }
 
+
+/* ---- Content tab (key / title / body) — editable prose docs ---- */
+const GID_CONTENT="1092396491";
+let CONTENT={};   // key -> {title, body}
+
+function applyContent(rows){
+  // header: Key, Title, Body
+  const hdr=(rows[0]||[]).map(x=>(x||"").trim().toLowerCase());
+  const ki=hdr.indexOf("key"), ti=hdr.indexOf("title"), bi=hdr.indexOf("body");
+  if(ki<0||bi<0) return;
+  CONTENT={};
+  for(let i=1;i<rows.length;i++){
+    const key=(rows[i][ki]||"").trim();
+    if(!key) continue;
+    CONTENT[key]={ title:(rows[i][ti]||"").trim(), body:(rows[i][bi]||"").trim() };
+  }
+  wireContentIntoItems();
+}
+
+// Map a Content key to the portal item that should display it.
+const CONTENT_MAP={
+  "verification":{ where:"announce", match:/verification of employment/i }
+  // add more here as keys are confirmed: tee_sheet_policy, turfsaver, eotm
+};
+
+function wireContentIntoItems(){
+  Object.keys(CONTENT_MAP).forEach(key=>{
+    const c=CONTENT[key]; if(!c) return;
+    const m=CONTENT_MAP[key];
+    if(m.where==="announce"){
+      const it=(S.announce.items||[]).find(x=>m.match.test(x.t||""));
+      if(it){
+        if(c.title) it.t=c.title;
+        it.linkOnly=false;
+        it.contentKey=key;
+        it.d={ sub:it.d&&it.d.sub||"", rich:policyTextToHtml(c.body) };
+      }
+    }
+  });
+  if(state.view==="announce") render();
+}
+
+function loadContentTab(){
+  fetch(SHEET_PUB+"?output=csv&gid="+GID_CONTENT+"&single=true",{cache:"no-store"})
+    .then(r=>r.text()).then(t=>applyContent(parseCSV(t))).catch(()=>{});
+}
+
 /* ---- live content from the manager workbook ---- */
 const SHEET_PUB="https://docs.google.com/spreadsheets/d/e/2PACX-1vTBBK7rG2L3JQzI_3ntsTPvSJf8Jxeg3mNaf-dwtvmrEMUk5EgE4rmqKX3Mzs3GpcLNqXqpSGYDjnek/pub";
 function sheetCsvUrl(gid){ return SHEET_PUB+"?output=csv&gid="+gid+"&single=true"; }
@@ -1099,6 +1146,7 @@ buildNav();
 if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
 loadLiveContent();
+loadContentTab();
 </script>
 </body>
 </html>
