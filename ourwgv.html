@@ -21,6 +21,7 @@ a{color:inherit}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- gate ---------- */
+.gate[hidden]{display:none!important}
 .gate{position:fixed;inset:0;background:var(--navy);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px}
 .gate-box{width:100%;max-width:320px;text-align:center}
 .gate img{width:120px;margin-bottom:22px}
@@ -149,7 +150,7 @@ a{color:inherit}
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
     <button id="pwGo">Sign in</button>
     <div class="gate-msg" id="pwMsg"></div>
-    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 8 diag &middot; 7-27-26</div>
+    <div style="font-size:11px;color:#7f97bd;margin-top:14px">build 9 &middot; 7-27-26</div>
     <div class="gate-hash" id="pwHash"></div>
   </div>
 </div>
@@ -289,22 +290,23 @@ function _click(){
   var m=document.getElementById("pwMsg");
   m.style.color="#9fb4d4";
   try{
-    m.textContent="1: read";
+    m.textContent="Checking…";
     var v=document.getElementById("pw").value.replace(/\s+/g,"");
-    m.textContent="2: len="+v.length;
+    
     var typeofSha=typeof sha;
-    m.textContent="3: sha is "+typeofSha;
+    
     if(typeofSha!=="function"){ m.style.color="#f4a3a3"; m.textContent="STOP: sha undefined"; return; }
     var hv=sha(v);
-    m.textContent="4: hash "+hv.slice(0,8);
+    
     if(hv===STAFF_HASH){
-      m.textContent="5: match — opening";
+      
       try{ store.set("wgv_ok","1"); }catch(e){}
+      document.getElementById("gate").style.display="none";
       document.getElementById("gate").hidden=true;
       document.getElementById("app").hidden=false;
-      m.textContent="6: gate hidden";
+      
       render();
-      m.textContent="7: rendered";
+      m.textContent="";
     } else if(typeof LEGACY_HASH!=="undefined" && hv===LEGACY_HASH){
       m.style.color="#f4a3a3"; m.textContent="old password / old file";
     } else {
@@ -803,7 +805,7 @@ el("#viewToggle").addEventListener("click", ()=>{
 
 buildNav();
 if(store.get("wgv_ok") === "1"){
-  el("#gate").hidden = true; el("#app").hidden = false; render();
+  el("#gate").style.display="none"; el("#gate").hidden = true; el("#app").hidden = false; render();
 } else {
   document.getElementById("pw").focus();
 }
