@@ -438,6 +438,14 @@ function calendarItem(title){
            '<script data-cfasync="false" data-tockify-script="embed" src="https://public.tockify.com/browser/embed.js"><\/script>'}};
 }
 
+/* View the Tee Sheet — EZLinks, embedded. Login pages very often refuse to be
+   framed, so the fallback link underneath matters more here than elsewhere. */
+function teeSheetItem(title){
+  return {t:title||"View the Tee Sheet", m:"", s:"", c:"f-flat", a:"",
+    embedTabs:{sub:"Sign in with your own account — find it under My Account, top right.",
+      tabs:[["View the Tee Sheet","https://wgvviewonly.ezlinksgolf.com/index.html#/login"]]}};
+}
+
 /* Hours of Operation — opens the public course site in a new tab.
    (golfwgv.com refuses to be framed, so this one can't be an embed.) */
 function hoursItem(){
@@ -1333,7 +1341,10 @@ function applyContent(rows){
 
   // --- Requests / Forms list from Content ---
   if(reqs.length && S.requests){
-    S.requests.items = reqs.map(contentTypeToItem);
+    // The tee sheet row keeps its position in the sheet but renders as an
+    // embed instead of a plain link.
+    const isTee = t=>/^\s*view\s+the\s+tee\s+sheet\s*$/i.test(t||"");
+    S.requests.items = reqs.map(r=>isTee(r.title) ? teeSheetItem((r.title||"").trim()) : contentTypeToItem(r));
   }
 
   // --- Resources list from Content ---
