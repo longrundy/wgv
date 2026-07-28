@@ -233,14 +233,14 @@ a{color:inherit}
 .sv-chart{width:100%;height:196px;display:block;overflow:visible;margin-top:4px}
 .sv-legend{display:flex;gap:16px;font-size:12px;color:var(--muted);padding:2px 0 12px}
 .sv-key{display:inline-block;width:22px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
-.sv-tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 4px}
+.sv-tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px auto 4px}
 .sv-tile{border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff}
 .sv-n{font-size:23px;font-weight:700;letter-spacing:-.02em}
 .sv-l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-top:3px}
-.sv-h{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:24px 0 9px}
+.sv-h{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:24px auto 9px}
 .sv-mix{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .sv-mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
-.sv-note{font-size:12px;color:var(--muted);margin:7px 0 0}
+.sv-note{font-size:12px;color:var(--muted);margin:7px auto 0}
 .sv-cat{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden;background:#fff}
 .sv-cat>button{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;background:none;border:0;cursor:pointer;text-align:left;font-family:inherit;font-size:15px;color:var(--ink)}
 .sv-cn{flex:1;font-weight:600}
@@ -1316,9 +1316,12 @@ function detailSurveys(i){
       `<h3 class="sv-h">Who is answering</h3>`+
       `<div class="sv-mix">`+mixRow.map(([k,col])=>{
         const p=parseFloat(D.mix[k][c])||0;
-        return `<span style="width:${p}%;background:${col}">${p>=12?k.charAt(0)+" "+p+"%":""}</span>`;
+        // Promoter and Passive both start with P, so spell the word out when
+        // the band is wide enough and fall back to the bare number when it isn't.
+        const lbl = p>=22 ? k+"s "+p+"%" : p>=9 ? p+"%" : "";
+        return `<span style="width:${p}%;background:${col}" title="${k}: ${p}%">${lbl}</span>`;
       }).join("")+`</div>`+
-      `<p class="sv-note">Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
+      `<p class="sv-note">Promoters, passives, then detractors. Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
       `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>${cats}`+
       `<p class="sv-foot">Scores are 0&ndash;100 satisfaction indexes; net promoter runs &minus;100 to +100. `+
       `The grey marker on each bar is the Troon average for that question.</p>`+
