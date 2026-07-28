@@ -217,9 +217,15 @@ a{color:inherit}
 
 .embed-card iframe{width:100%;border:0;display:block;background:#fff}
 .embed-card.is-form iframe{height:72vh;min-height:560px}
+.embed-card.is-wx{max-width:none}
+.embed-card.is-wx iframe{height:70vh;min-height:520px}
+.lang-switch.wide button{max-width:230px}
+.embed-note{margin:12px auto 0;text-align:center;font-size:12px;color:var(--muted)}
+.embed-note a{color:#185fa5;font-weight:600;text-decoration:none}
 @media (max-width:820px){
   .embed-card{max-width:none}
   .embed-card.is-form iframe{height:calc(100dvh - 220px)}
+  .embed-card.is-wx iframe{height:calc(100dvh - 300px);min-height:420px}
   /* Google Forms should use the full mobile screen: kill the detail padding,
      card margins, and rounded corners so the form runs edge-to-edge. */
   .detail-body.form-body,
@@ -413,12 +419,29 @@ function handbookItem(){
           alt:"Manual del Asociado de Troon 2025 \u2014 Espa\u00f1ol"}}};
 }
 
-/* Weather Stations — pinned to Resources, one Tempest station per course. */
+/* Troon Values / Mission & Vision — bilingual image rows, pinned to the
+   bottom of Resources (they used to live in Announcements). */
+function troonItems(){
+  return [
+  {t:"Troon Values", m:"", s:"", c:"f-flat", a:"",
+   langs:{sub:"The eight values Troon is built on.",
+          en:{label:"English", img:"valuesEn", alt:"Troon values — English"},
+          es:{label:"Espa\u00f1ol", img:"valuesEs", alt:"Valores de Troon — Espa\u00f1ol"}}},
+  {t:"Troon Mission and Vision", m:"", s:"", c:"f-flat", a:"",
+   langs:{sub:"What we deliver and where we are headed.",
+          en:{label:"English", img:"missionEn", alt:"Troon mission and vision — English"},
+          es:{label:"Espa\u00f1ol", img:"missionEs", alt:"Misi\u00f3n y visi\u00f3n de Troon — Espa\u00f1ol"}}}
+  ];
+}
+
+/* Weather Stations — pinned to Resources, one Tempest station per course.
+   Embedded in an iframe; a fallback link shows underneath in case Tempest
+   ever blocks framing. */
 function weatherItem(){
   return {t:"Weather Stations", m:"", s:"", c:"f-flat", a:"", builtinRes:true,
-    multiLink:{sub:"Live conditions from the Tempest station at each course.",
-      links:[["King & Bear","https://tempestwx.com/station/187086/"],
-             ["Slammer & Squire","https://tempestwx.com/station/187191/"]]}};
+    embedTabs:{sub:"Live conditions from the Tempest station at each course.",
+      tabs:[["King & Bear","https://tempestwx.com/station/187086/"],
+            ["Slammer & Squire","https://tempestwx.com/station/187191/"]]}};
 }
 
 const link = (t,m,url,blurb) => ({t, m, s:"Open", c:"f-flat", a:"", d:{sub:blurb, url}});
@@ -431,7 +454,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
   {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", recogKey:"apprevts", d:{sub:"2026 schedule", rich:"<p>Loading the appreciation events schedule…</p>"}}
 ]},
 
-resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem(), weatherItem()]},
+resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem()].concat(troonItems())},
 
 management:{title:"Management", sub:"Management only", items:[]},
 
@@ -449,6 +472,7 @@ turfsaver:{title:"TurfSaver entry-exit system", sub:"New cart traffic system · 
 
 
 announce:{title:"Announcements", sub:"What's new this week", items:[
+  weatherItem(),
   {t:"Faces of WGV questionnaire", m:"", s:"", c:"f-flat", a:"",
    d:{sub:"Tell us about yourself for the Faces of WGV board.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform",
       note:"Takes about five minutes. Everyone who submits gets featured on the recognition board through the year."}},
@@ -461,14 +485,6 @@ announce:{title:"Announcements", sub:"What's new this week", items:[
    d:{sub:"Recent emails sent to members — shared so staff stay aware of what members are hearing.", url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}},
   {t:"2025 Year in Review", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
    d:{sub:"How the property finished the year.", url:"https://heyzine.com/flip-book/b4e3ef7109.html"}},
-  {t:"Troon Values", m:"", s:"", c:"f-flat", a:"",
-   langs:{sub:"The eight values Troon is built on.",
-          en:{label:"English", img:"valuesEn", alt:"Troon values — English"},
-          es:{label:"Espa\u00f1ol", img:"valuesEs", alt:"Valores de Troon — Espa\u00f1ol"}}},
-  {t:"Troon Mission and Vision", m:"", s:"", c:"f-flat", a:"",
-   langs:{sub:"What we deliver and where we are headed.",
-          en:{label:"English", img:"missionEn", alt:"Troon mission and vision — English"},
-          es:{label:"Espa\u00f1ol", img:"missionEs", alt:"Misi\u00f3n y visi\u00f3n de Troon — Espa\u00f1ol"}}},
   {t:"UKG Pro Mobile App", m:"", s:"", c:"f-flat", a:"",
    imgOnly:{sub:"How to download and set up the UKG Pro mobile app.",
             img:"ukgPro", alt:"UKG Pro Mobile App — Get Ready flyer"}}
@@ -754,7 +770,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en"};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -850,7 +866,7 @@ function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
-  if(i.multiLink){ detailMultiLink(i); return; }
+  if(i.embedTabs){ detailEmbedTabs(i); return; }
   if(i.imgOnly){ detailImg(i); return; }
   if(i.linkOnly){
     el("#detail").innerHTML=
@@ -960,15 +976,26 @@ function detailLangDocs(i){
   }));
 }
 
-/* ---------- items with more than one destination (e.g. Weather Stations) ---------- */
-function detailMultiLink(i){
-  const d=i.multiLink||{};
+/* ---------- items with more than one embedded page (e.g. Weather Stations) ---------- */
+function detailEmbedTabs(i){
+  const d=i.embedTabs||{};
+  const tabs=d.tabs||[];
+  if(!tabs.length) return;
+  const n=Math.min(Math.max(state.wx|0,0),tabs.length-1);
+  const cur=tabs[n];
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
-    `<div class="detail-body"><div class="actions">`+
-      (d.links||[]).map(L=>`<a class="btn btn-primary" href="${L[1]}" target="_blank" rel="noopener">${L[0]} <span aria-hidden="true">&#8599;</span></a>`).join("")+
-    `</div></div>`;
+    `<a class="head-open" href="${cur[1]}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
+    `<div class="detail-body">`+
+      `<div class="lang-switch wide">${tabs.map((t,x)=>`<button type="button" data-wx="${x}" aria-pressed="${x===n}">${t[0]}</button>`).join("")}</div>`+
+      `<div class="embed-card is-wx"><iframe src="${cur[1]}" title="${cur[0]}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>`+
+      `<p class="embed-note">Not loading? <a href="${cur[1]}" target="_blank" rel="noopener">Open ${cur[0]} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`+
+    `</div>`;
+  el("#detail").querySelectorAll("[data-wx]").forEach(b=>b.addEventListener("click",()=>{
+    state.wx=+b.dataset.wx;
+    detail(i);
+  }));
 }
 
 /* ---------- single hard-coded image item (e.g. UKG Pro flyer) ---------- */
@@ -1225,10 +1252,12 @@ function applyContent(rows){
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
   if(anns.length){
     const contentTitles=anns.map(a=>(a.title||"").toLowerCase().trim());
-    const extras=builtinAnnounceExtras().filter(x=>x.langs||x.imgOnly  // Troon rows + UKG flyer are always pinned
+    const extras=builtinAnnounceExtras().filter(x=>x.imgOnly  // UKG flyer is always pinned
         || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
         && !/verification of employment/i.test(x.t||"")));  // verification now comes from Content
-    S.announce.items = anns.map(contentTypeToItem).concat(extras);
+    // Weather Stations is hard-coded and always sits at the very top.
+    const annRows = anns.filter(r=>!/^\s*weather\s+stations?\s*$/i.test(r.title||""));
+    S.announce.items = [weatherItem()].concat(annRows.map(contentTypeToItem)).concat(extras);
   }
 
   // --- Recognition list items filled by recogKey from Content ---
@@ -1247,16 +1276,14 @@ function applyContent(rows){
 
   // --- Resources list from Content ---
   if(S.resources){
-    // Handbook is hard-coded and always pinned first; drop a duplicate sheet row if one exists.
-    const fromSheet = res.filter(r=>!/^\s*employee\s+handbook\s*$/i.test(r.title||""));
-    // Weather Stations is hard-coded too, but keeps whatever position the sheet gives it.
-    let sawWeather=false;
-    const mapped = fromSheet.map(r=>{
-      if(/^\s*weather\s+stations?\s*$/i.test(r.title||"")){ sawWeather=true; return weatherItem(); }
-      return contentTypeToItem(r);
-    });
-    if(!sawWeather) mapped.push(weatherItem());
-    S.resources.items = [handbookItem()].concat(mapped);
+    // Handbook pinned first, Troon rows pinned last, sheet rows in between.
+    // Sheet rows that duplicate a hard-coded row are dropped, as is Weather
+    // Stations -- that one now lives at the top of Announcements.
+    const drop = /^\s*(employee\s+handbook|weather\s+stations?|troon\s+values|troon\s+mission\s+and\s+vision)\s*$/i;
+    const fromSheet = res.filter(r=>!drop.test((r.title||"").trim()));
+    S.resources.items = [handbookItem()]
+      .concat(fromSheet.map(contentTypeToItem))
+      .concat(troonItems());
   }
 
   // --- Management list from Content ---
