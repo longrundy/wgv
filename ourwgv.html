@@ -155,6 +155,7 @@ a{color:inherit}
 .lang-switch button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
 .img-card{max-width:600px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden}
 .img-card img{width:100%;height:auto;display:block;border-radius:8px;cursor:zoom-in}
+.img-card.is-tall img{width:auto;max-width:100%;max-height:66vh;margin:0 auto}
 .img-hint{font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0}
 #lightbox{position:fixed;inset:0;z-index:200;background:rgba(12,20,34,.94);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 #lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px}
@@ -426,6 +427,19 @@ function handbookItem(){
           alt:"Manual del Asociado de Troon 2025 \u2014 Espa\u00f1ol"}}};
 }
 
+/* Employee Parking Map — one shaded photo per course, pinned to Resources
+   directly under WGV Standards. Images live beside ourwgv.html in the repo. */
+const PARKING_IMG = {
+  kb:"parking-king-bear.jpg",
+  ss:"parking-slammer-squire.jpg",
+};
+function parkingItem(){
+  return {t:"Employee Parking Map", m:"", s:"", c:"f-flat", a:"",
+    imgTabs:{sub:"Please park in the areas shaded red.",
+      tabs:[["King & Bear", PARKING_IMG.kb, "Employee parking at King & Bear — park in the areas shaded red"],
+            ["Slammer & Squire", PARKING_IMG.ss, "Employee parking at Slammer & Squire — park in the areas shaded red"]]}};
+}
+
 /* Work Schedule & Club Calendar — Tockify "mini" widget. This is a script
    embed rather than a framable URL, so it runs inside a srcdoc iframe: the
    script executes there and gets a fresh document each time the row opens. */
@@ -496,7 +510,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
   {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", recogKey:"apprevts", d:{sub:"2026 schedule", rich:"<p>Loading the appreciation events schedule…</p>"}}
 ]},
 
-resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem()].concat(troonItems())},
+resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem(), parkingItem()].concat(troonItems())},
 
 management:{title:"Management", sub:"Management only", items:[]},
 
@@ -813,7 +827,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -909,6 +923,7 @@ function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
+  if(i.imgTabs){ detailImgTabs(i); return; }
   if(i.embedTabs){ detailEmbedTabs(i); return; }
   if(i.embedHtml){ detailEmbedHtml(i); return; }
   if(i.imgOnly){ detailImg(i); return; }
@@ -1061,6 +1076,30 @@ function detailEmbedHtml(i){
       `<div class="embed-card ${d.card||"is-mini"}"><iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe></div>`+
       (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
     `</div>`;
+}
+
+/* ---------- one image per tab (e.g. Employee Parking Map) ---------- */
+function detailImgTabs(i){
+  const d=i.imgTabs||{};
+  const tabs=d.tabs||[];
+  if(!tabs.length) return;
+  const n=Math.min(Math.max(state.park|0,0),tabs.length-1);
+  const cur=tabs[n];
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
+    `<div class="detail-body">`+
+      `<div class="lang-switch wide">${tabs.map((t,x)=>`<button type="button" data-park="${x}" aria-pressed="${x===n}">${t[0]}</button>`).join("")}</div>`+
+      `<div class="img-card is-tall"><img src="${cur[1]}" alt="${cur[2]||cur[0]}" `+
+        `onerror="this.parentNode.innerHTML='<div class=\'doc-fallback\'>Map image not found. Check that '+this.getAttribute('src')+' sits beside ourwgv.html in the repo.</div>'"></div>`+
+      `<p class="img-hint">Tap the image to view it full screen.</p>`+
+    `</div>`;
+  el("#detail").querySelectorAll("[data-park]").forEach(b=>b.addEventListener("click",()=>{
+    state.park=+b.dataset.park;
+    detail(i);
+  }));
+  const img=el("#detail").querySelector(".img-card img");
+  if(img) img.addEventListener("click",()=>openLightbox(img.src,img.alt));
 }
 
 /* ---------- single hard-coded image item (e.g. UKG Pro flyer) ---------- */
@@ -1352,11 +1391,17 @@ function applyContent(rows){
     // Handbook pinned first, Troon rows pinned last, sheet rows in between.
     // Sheet rows that duplicate a hard-coded row are dropped, as is Weather
     // Stations -- that one now lives at the top of Announcements.
-    const drop = /^\s*(employee\s+handbook|weather\s+stations?|troon\s+values|troon\s+mission\s+and\s+vision)\s*$/i;
+    const drop = /^\s*(employee\s+handbook|employee\s+parking\s+map|weather\s+stations?|troon\s+values|troon\s+mission\s+and\s+vision)\s*$/i;
     const fromSheet = res.filter(r=>!drop.test((r.title||"").trim()));
-    S.resources.items = [handbookItem()]
-      .concat(fromSheet.map(contentTypeToItem))
-      .concat(troonItems());
+    // Parking map sits directly under WGV Standards, or right after the
+    // handbook if that row isn't in the sheet.
+    const mid=[]; let placed=false;
+    fromSheet.forEach(r=>{
+      mid.push(contentTypeToItem(r));
+      if(!placed && /^\s*wgv\s+standards\s*$/i.test((r.title||"").trim())){ mid.push(parkingItem()); placed=true; }
+    });
+    if(!placed) mid.unshift(parkingItem());
+    S.resources.items = [handbookItem()].concat(mid).concat(troonItems());
   }
 
   // --- Management list from Content ---
