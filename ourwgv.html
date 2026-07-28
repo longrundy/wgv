@@ -401,6 +401,7 @@ const TROON_IMG = {
   valuesEs:"troon-values-es.jpg",
   missionEn:"troon-mission-vision-en.jpg",
   missionEs:"troon-mission-vision-es.jpg",
+  ukgPro:"ukg-pro-mobile-app.jpg",
 };
 
 const link = (t,m,url,blurb) => ({t, m, s:"Open", c:"f-flat", a:"", d:{sub:blurb, url}});
@@ -446,7 +447,10 @@ announce:{title:"Announcements", sub:"What's new this week", items:[
   {t:"Troon Mission and Vision", m:"", s:"", c:"f-flat", a:"",
    langs:{sub:"What we deliver and where we are headed.",
           en:{label:"English", img:"missionEn", alt:"Troon mission and vision — English"},
-          es:{label:"Espa\u00f1ol", img:"missionEs", alt:"Misi\u00f3n y visi\u00f3n de Troon — Espa\u00f1ol"}}}
+          es:{label:"Espa\u00f1ol", img:"missionEs", alt:"Misi\u00f3n y visi\u00f3n de Troon — Espa\u00f1ol"}}},
+  {t:"UKG Pro Mobile App", m:"", s:"", c:"f-flat", a:"",
+   imgOnly:{sub:"How to download and set up the UKG Pro mobile app.",
+            img:"ukgPro", alt:"UKG Pro Mobile App — Get Ready flyer"}}
 ]},
 
 
@@ -825,6 +829,7 @@ function detail(i){
   const d=i.d||{};
   if(editMode && isPolicyItem(i)){ renderPolicyEditor(i); return; }
   if(i.langs){ detailLang(i); return; }
+  if(i.imgOnly){ detailImg(i); return; }
   if(i.linkOnly){
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
@@ -901,6 +906,25 @@ function detailLang(i){
     document.querySelectorAll(".lang-pill").forEach(p=>p.setAttribute("aria-pressed",
       String(+p.closest(".row").dataset.idx===state.idx && p.dataset.lang===state.lang)));
   }));
+  const img=el("#detail").querySelector(".img-card img");
+  if(img) img.addEventListener("click",()=>openLightbox(img.src,img.alt));
+}
+
+/* ---------- single hard-coded image item (e.g. UKG Pro flyer) ---------- */
+function detailImg(i){
+  const d=i.imgOnly||{};
+  const head = d.url
+    ? `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
+      `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
+      `<a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`
+    : `<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`;
+  el("#detail").innerHTML=
+    head+
+    `<div class="detail-body">`+
+      `<div class="img-card"><img src="${TROON_IMG[d.img]||d.img}" alt="${d.alt||i.t}"></div>`+
+      `<p class="img-hint">Tap the image to view it full screen.</p>`+
+      (d.url?`<div class="actions"><a class="btn btn-primary" href="${d.url}" target="_blank" rel="noopener">Open</a></div>`:"")+
+    `</div>`;
   const img=el("#detail").querySelector(".img-card img");
   if(img) img.addEventListener("click",()=>openLightbox(img.src,img.alt));
 }
@@ -1118,7 +1142,7 @@ function applyContent(rows){
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
   if(anns.length){
     const contentTitles=anns.map(a=>(a.title||"").toLowerCase().trim());
-    const extras=builtinAnnounceExtras().filter(x=>x.langs  // Troon values / mission & vision are always pinned
+    const extras=builtinAnnounceExtras().filter(x=>x.langs||x.imgOnly  // Troon rows + UKG flyer are always pinned
         || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
         && !/verification of employment/i.test(x.t||"")));  // verification now comes from Content
     S.announce.items = anns.map(contentTypeToItem).concat(extras);
@@ -1147,7 +1171,7 @@ function applyContent(rows){
 function snapshotBuiltinAnnounce(){
   if(S.__announceBuiltin) return;
   // keep only items that are forms/links (have d.url) — those aren't in Content
-  S.__announceBuiltin=(S.announce.items||[]).filter(x=>x.langs||(x.d&&x.d.url));
+  S.__announceBuiltin=(S.announce.items||[]).filter(x=>x.langs||x.imgOnly||(x.d&&x.d.url));
 }
 function loadContentTab(){
   snapshotBuiltinAnnounce();
