@@ -438,41 +438,19 @@ function calendarItem(title){
            '<script data-cfasync="false" data-tockify-script="embed" src="https://public.tockify.com/browser/embed.js"><\/script>'}};
 }
 
-/* Hours of Operation — the public course site, embedded. */
+/* Hours of Operation — opens the public course site in a new tab.
+   (golfwgv.com refuses to be framed, so this one can't be an embed.) */
 function hoursItem(){
-  return {t:"Hours of Operation", m:"", s:"", c:"f-flat", a:"",
-    embedTabs:{sub:"Golf shop hours for both courses.",
-      tabs:[["Hours of Operation","https://www.golfwgv.com/hours-of-operation"]]}};
+  return {t:"Hours of Operation", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
+    d:{sub:"Golf shop hours for both courses.",
+       url:"https://www.golfwgv.com/hours-of-operation"}};
 }
 
-/* Recent Member Emails — Mailchimp's archive generator (folder 97). This
-   returns a bare list with no styling of its own, so it's styled here to match
-   the portal instead of framing Mailchimp's own gray page. */
+/* Recent Member Emails — opens the Mailchimp campaign archive in a new tab. */
 function memberEmailsItem(){
-  const css =
-    'body{padding:2px 2px 8px}'+
-    '.display_archive{list-style:none;margin:0;padding:0}'+
-    '.campaign{margin:0;padding:13px 6px;border-bottom:1px solid #f0eee8;'+
-      'font-size:14px;line-height:1.45;color:#8a8a84}'+
-    '.campaign:last-child{border-bottom:0}'+
-    '.campaign a{color:#17325a;font-weight:600;text-decoration:none}'+
-    '.campaign a:hover{color:#c8161d;text-decoration:underline}'+
-    '.campaign .d{display:block;font-size:12px;color:#8a8a84;margin-bottom:2px;'+
-      'letter-spacing:.02em}';
-  const tidy =
-    'try{document.querySelectorAll(".campaign").forEach(function(li){'+
-      'li.innerHTML=li.innerHTML.replace(/^\\s*([0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{2,4})\\s*-\\s*/,'+
-      '\'<span class="d">$1</span>\');'+
-    '});}catch(e){}';
-  return {t:"Recent Member Emails", m:"", s:"", c:"f-flat", a:"",
-    embedHtml:{sub:"Recent emails sent to members — shared so staff stay aware of what members are hearing.",
-      url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9",
-      openLabel:"the full archive",
-      card:"is-list",
-      css:css,
-      html:'<ul class="display_archive"></ul>'+
-           '<script type="text/javascript" src="https://golfwgv.us3.list-manage.com/generate-js/?u=2cb7bff60b827c567c5977318&show=20&fid=97"><\/script>'+
-           '<script type="text/javascript">'+tidy+'<\/script>'}};
+  return {t:"Recent Member Emails", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
+    d:{sub:"Recent emails sent to members — shared so staff stay aware of what members are hearing.",
+       url:"https://us3.campaign-archive.com/home/?u=2cb7bff60b827c567c5977318&id=e93732c3b9"}};
 }
 
 /* Troon Values / Mission & Vision — bilingual image rows, pinned to the
@@ -1331,18 +1309,17 @@ function applyContent(rows){
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
   if(anns.length){
     const contentTitles=anns.map(a=>(a.title||"").toLowerCase().trim());
-    const extras=builtinAnnounceExtras().filter(x=>x.imgOnly  // UKG flyer is always pinned
+    // These four are hard-coded and always sit at the top, in this order. Any
+    // sheet row or snapshotted builtin with the same title is dropped so they
+    // can't show up a second time further down the list.
+    const annDrop = /^\s*(weather\s+stations?|work\s+schedule.*calendar|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
+    const extras=builtinAnnounceExtras().filter(x=>!annDrop.test((x.t||"").trim())
+        && (x.imgOnly  // UKG flyer is always pinned
         || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
-        && !/verification of employment/i.test(x.t||"")));  // verification now comes from Content
-    // These embedded rows are hard-coded and always sit at the top, in this order.
-    const annDrop = /^\s*(weather\s+stations?|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
+        && !/verification of employment/i.test(x.t||""))));  // verification now comes from Content
     const annRows = anns.filter(r=>!annDrop.test((r.title||"").trim()));
-    // The calendar row keeps whatever position the sheet gives it, but renders
-    // as the embedded Tockify widget instead of a plain link.
-    const isCal = t=>/work\s+schedule.*calendar/i.test(t||"");
-    const mapped = annRows.map(r=>isCal(r.title) ? calendarItem((r.title||"").trim()) : contentTypeToItem(r));
-    S.announce.items = [weatherItem(), hoursItem(), memberEmailsItem()]
-      .concat(mapped).concat(extras);
+    S.announce.items = [weatherItem(), calendarItem(), hoursItem(), memberEmailsItem()]
+      .concat(annRows.map(contentTypeToItem)).concat(extras);
   }
 
   // --- Recognition list items filled by recogKey from Content ---
