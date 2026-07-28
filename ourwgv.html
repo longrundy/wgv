@@ -384,17 +384,11 @@ const GROUPS = [
     {id:"announce", label:"Announcements", dot:"#f0b53c"},
     {id:"requests", label:"Requests / Forms", dot:"#c8161d"},
     {id:"recognition", label:"Recognition", dot:"#c8161d"},
-    {id:"resources", label:"Resources", dot:"#b4b2a9"}
-  ]},
-  {label:"Management", locked:true, items:[
-    {id:"fin",      label:"Financials",           dot:"#c8161d"},
-    {id:"labor",    label:"Labor & payroll",      dot:"#c8161d"},
-    {id:"reports",  label:"Reports & scorecards", dot:"#c8161d"},
-    {id:"roster",   label:"Staff roster",         dot:"#c8161d"},
-    {id:"mgrres",   label:"Manager resources",    dot:"#c8161d"}
+    {id:"resources", label:"Resources", dot:"#b4b2a9"},
+    {id:"management", label:"Management", dot:"#c8161d", locked:true}
   ]}
 ];
-const MGMT = GROUPS[GROUPS.length-1].items.map(i=>i.id);
+const MGMT = ["management"];
 
 /* ---- content ---- */
 const TROON_IMG = {
@@ -416,6 +410,8 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
 ]},
 
 resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[]},
+
+management:{title:"Management", sub:"Management only", items:[]},
 
 requests:{title:"Requests / Forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
@@ -764,7 +760,7 @@ function navItem(i,cls){
   const n=S[i.id]&&S[i.id].tabs?S[i.id].items.length:"";
   return `<button class="nav-item ${cls}" data-view="${i.id}" aria-current="false">
     <span class="dot" style="background:${i.dot}"></span>
-    <span class="nav-label">${i.label}</span>
+    <span class="nav-label">${i.label}${i.locked?' <span class="lock">&#128274;</span>':""}</span>
     <span class="nav-count">${n}</span></button>`;
 }
 
@@ -1151,7 +1147,7 @@ function applyContent(rows){
   const ki=gi("key"),ti=gi("title"),bi=gi("body"),tyi=gi("type"),li=gi("link"),si=gi("section");
   if(ki<0||ti<0) return;
   CONTENT={};
-  const anns=[]; const recog={}; const reqs=[]; const res=[];
+  const anns=[]; const recog={}; const reqs=[]; const res=[]; const mgmt=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i]||[];
     const key=(r[ki]||"").trim(); if(!key) continue;
@@ -1164,6 +1160,7 @@ function applyContent(rows){
     else if(secl==="recognition") recog[key]=row;
     else if(secl==="requests / forms" || secl==="requests" || secl==="requests/forms") reqs.push(row);
     else if(secl==="resources") res.push(row);
+    else if(secl==="management") mgmt.push(row);
   }
 
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
@@ -1192,6 +1189,11 @@ function applyContent(rows){
   // --- Resources list from Content ---
   if(S.resources){
     S.resources.items = res.map(contentTypeToItem);
+  }
+
+  // --- Management list from Content ---
+  if(S.management){
+    S.management.items = mgmt.map(contentTypeToItem);
   }
 
   // TurfSaver content (if present as a Content row) powers the cart detail
