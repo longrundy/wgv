@@ -1074,7 +1074,7 @@ function renderContentEditor(i){
     const st=el("#cStatus"); st.style.color="var(--muted)"; st.textContent="Saving…";
     const val=el("#cText").value;
     try{
-      const res=await backendGet({action:"content_save", key:key, content:val});
+      const res=await backendGet({action:"content_save", ckey:key, content:val});
       if(res && res.ok){
         st.style.color="#3b6d11"; st.textContent="Saved. It will show for everyone on next load.";
         // reflect immediately in memory + this view
