@@ -383,14 +383,8 @@ const GROUPS = [
   {label:"", items:[
     {id:"announce", label:"Announcements", dot:"#f0b53c"},
     {id:"requests", label:"Requests / Forms", dot:"#c8161d"},
-    {id:"recognition", label:"Recognition", dot:"#c8161d"}
-  ]},
-  {label:"Resources", items:[
-    {id:"handbook", label:"Handbook & policies", dot:"#b4b2a9"},
-    {id:"pay",      label:"Pay & benefits",      dot:"#b4b2a9"},
-    {id:"safety",   label:"Safety & injuries",   dot:"#b4b2a9"},
-    {id:"contacts", label:"Contacts & weather",  dot:"#b4b2a9"},
-    {id:"troon",    label:"Troon",               dot:"#b4b2a9"}
+    {id:"recognition", label:"Recognition", dot:"#c8161d"},
+    {id:"resources", label:"Resources", dot:"#b4b2a9"}
   ]},
   {label:"Management", locked:true, items:[
     {id:"fin",      label:"Financials",           dot:"#c8161d"},
@@ -420,6 +414,8 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
   {t:"Faces of WGV", m:"", s:"", c:"f-flat", a:"", d:{sub:"Get featured on the recognition board", url:"https://docs.google.com/forms/d/e/1FAIpQLSeOgSwcfGFkm_Z1GJpjt23wvUkwN-Q2EZ1HEkbR90b9f0GcRA/viewform"}},
   {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", recogKey:"apprevts", d:{sub:"2026 schedule", rich:"<p>Loading the appreciation events schedule…</p>"}}
 ]},
+
+resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[]},
 
 requests:{title:"Requests / Forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
@@ -1155,7 +1151,7 @@ function applyContent(rows){
   const ki=gi("key"),ti=gi("title"),bi=gi("body"),tyi=gi("type"),li=gi("link"),si=gi("section");
   if(ki<0||ti<0) return;
   CONTENT={};
-  const anns=[]; const recog={}; const reqs=[];
+  const anns=[]; const recog={}; const reqs=[]; const res=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i]||[];
     const key=(r[ki]||"").trim(); if(!key) continue;
@@ -1167,6 +1163,7 @@ function applyContent(rows){
     if(secl==="announcements") anns.push(row);
     else if(secl==="recognition") recog[key]=row;
     else if(secl==="requests / forms" || secl==="requests" || secl==="requests/forms") reqs.push(row);
+    else if(secl==="resources") res.push(row);
   }
 
   // --- Announcements list = Content rows (in sheet order) + built-in extras (forms/links) ---
@@ -1190,6 +1187,11 @@ function applyContent(rows){
   // --- Requests / Forms list from Content ---
   if(reqs.length && S.requests){
     S.requests.items = reqs.map(contentTypeToItem);
+  }
+
+  // --- Resources list from Content ---
+  if(S.resources){
+    S.resources.items = res.map(contentTypeToItem);
   }
 
   // TurfSaver content (if present as a Content row) powers the cart detail
