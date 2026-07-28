@@ -219,6 +219,8 @@ a{color:inherit}
 .embed-card.is-form iframe{height:72vh;min-height:560px}
 .embed-card.is-wx{max-width:none}
 .embed-card.is-wx iframe{height:70vh;min-height:520px}
+.embed-card.is-mini{max-width:430px}
+.embed-card.is-mini iframe{height:560px}
 .lang-switch.wide button{max-width:230px}
 .embed-note{margin:12px auto 0;text-align:center;font-size:12px;color:var(--muted)}
 .embed-note a{color:#185fa5;font-weight:600;text-decoration:none}
@@ -226,6 +228,7 @@ a{color:inherit}
   .embed-card{max-width:none}
   .embed-card.is-form iframe{height:calc(100dvh - 220px)}
   .embed-card.is-wx iframe{height:calc(100dvh - 300px);min-height:420px}
+  .embed-card.is-mini iframe{height:520px}
   /* Google Forms should use the full mobile screen: kill the detail padding,
      card margins, and rounded corners so the form runs edge-to-edge. */
   .detail-body.form-body,
@@ -419,11 +422,16 @@ function handbookItem(){
           alt:"Manual del Asociado de Troon 2025 \u2014 Espa\u00f1ol"}}};
 }
 
-/* Work Schedule — Tockify calendar, embedded, pinned to Announcements. */
-function scheduleItem(){
-  return {t:"Work Schedule", m:"", s:"", c:"f-flat", a:"",
-    embedTabs:{sub:"The posted schedule for every department.",
-      tabs:[["Work Schedule","https://tockify.com/2courses/monthly"]]}};
+/* Work Schedule & Club Calendar — Tockify "mini" widget. This is a script
+   embed rather than a framable URL, so it runs inside a srcdoc iframe: the
+   script executes there and gets a fresh document each time the row opens. */
+const TOCKIFY_CAL = "2courses";
+function calendarItem(title){
+  return {t:title||"Work Schedule & Club Calendar", m:"", s:"", c:"f-flat", a:"",
+    embedHtml:{sub:"The posted schedule and club events.",
+      url:"https://tockify.com/"+TOCKIFY_CAL+"/monthly",
+      html:'<div data-tockify-component="mini" data-tockify-calendar="'+TOCKIFY_CAL+'"></div>'+
+           '<script data-cfasync="false" data-tockify-script="embed" src="https://public.tockify.com/browser/embed.js"><\/script>'}};
 }
 
 /* Hours of Operation — the public course site, embedded. */
@@ -494,7 +502,7 @@ turfsaver:{title:"TurfSaver entry-exit system", sub:"New cart traffic system · 
 
 announce:{title:"Announcements", sub:"What's new this week", items:[
   weatherItem(),
-  scheduleItem(),
+  calendarItem(),
   hoursItem(),
   memberEmailsItem(),
   {t:"Faces of WGV questionnaire", m:"", s:"", c:"f-flat", a:"",
@@ -889,6 +897,7 @@ function detail(i){
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
   if(i.embedTabs){ detailEmbedTabs(i); return; }
+  if(i.embedHtml){ detailEmbedHtml(i); return; }
   if(i.imgOnly){ detailImg(i); return; }
   if(i.linkOnly){
     el("#detail").innerHTML=
@@ -1018,6 +1027,26 @@ function detailEmbedTabs(i){
     state.wx=+b.dataset.wx;
     detail(i);
   }));
+}
+
+/* ---------- script-based widgets that can't be framed by URL (e.g. Tockify) ---------- */
+function detailEmbedHtml(i){
+  const d=i.embedHtml||{};
+  const page='<!doctype html><html><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<style>html,body{margin:0;padding:0;background:#fff;'+
+    'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}</style>'+
+    '</head><body>'+(d.html||"")+'</body></html>';
+  const srcdoc=page.replace(/&/g,"&amp;").replace(/"/g,"&quot;");
+  el("#detail").innerHTML=
+    `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
+    (d.url?`<a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a>`:"")+
+    `</div>`+
+    `<div class="detail-body">`+
+      `<div class="embed-card is-mini"><iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe></div>`+
+      (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open the full calendar in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
+    `</div>`;
 }
 
 /* ---------- single hard-coded image item (e.g. UKG Pro flyer) ---------- */
@@ -1277,11 +1306,15 @@ function applyContent(rows){
     const extras=builtinAnnounceExtras().filter(x=>x.imgOnly  // UKG flyer is always pinned
         || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
         && !/verification of employment/i.test(x.t||"")));  // verification now comes from Content
-    // The embedded rows are hard-coded and always sit at the top, in this order.
-    const annDrop = /^\s*(weather\s+stations?|work\s+schedules?(\s*(&|and)\s*calendar)?|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
+    // These embedded rows are hard-coded and always sit at the top, in this order.
+    const annDrop = /^\s*(weather\s+stations?|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
     const annRows = anns.filter(r=>!annDrop.test((r.title||"").trim()));
-    S.announce.items = [weatherItem(), scheduleItem(), hoursItem(), memberEmailsItem()]
-      .concat(annRows.map(contentTypeToItem)).concat(extras);
+    // The calendar row keeps whatever position the sheet gives it, but renders
+    // as the embedded Tockify widget instead of a plain link.
+    const isCal = t=>/work\s+schedule.*calendar/i.test(t||"");
+    const mapped = annRows.map(r=>isCal(r.title) ? calendarItem((r.title||"").trim()) : contentTypeToItem(r));
+    S.announce.items = [weatherItem(), hoursItem(), memberEmailsItem()]
+      .concat(mapped).concat(extras);
   }
 
   // --- Recognition list items filled by recogKey from Content ---
