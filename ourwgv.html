@@ -222,6 +222,51 @@ a{color:inherit}
 .embed-card.is-wx iframe{height:70vh;min-height:520px}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
+/* ---- Customer Surveys ---- */
+.sv-gap{border:1px solid var(--line);border-radius:14px;padding:18px 18px 6px;background:#fff}
+.sv-gaptop{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.sv-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin-bottom:5px}
+.sv-num{font-size:48px;font-weight:700;line-height:1;letter-spacing:-.03em}
+.sv-num small{font-size:19px;font-weight:600}
+.sv-say{font-size:14px;color:var(--muted);max-width:330px;margin:2px 0 0}
+.sv-say b{color:var(--ink);font-weight:600}
+.sv-chart{width:100%;height:196px;display:block;overflow:visible;margin-top:4px}
+.sv-legend{display:flex;gap:16px;font-size:12px;color:var(--muted);padding:2px 0 12px}
+.sv-key{display:inline-block;width:22px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.sv-tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 4px}
+.sv-tile{border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff}
+.sv-n{font-size:23px;font-weight:700;letter-spacing:-.02em}
+.sv-l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-top:3px}
+.sv-h{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:24px 0 9px}
+.sv-mix{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.sv-mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
+.sv-note{font-size:12px;color:var(--muted);margin:7px 0 0}
+.sv-cat{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden;background:#fff}
+.sv-cat>button{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;background:none;border:0;cursor:pointer;text-align:left;font-family:inherit;font-size:15px;color:var(--ink)}
+.sv-cn{flex:1;font-weight:600}
+.sv-cs{font-size:17px;font-weight:700;min-width:32px;text-align:right}
+.sv-chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;min-width:44px;text-align:center}
+.sv-up{background:#eef6e6;color:#3f6a12}
+.sv-dn{background:var(--red-tint);color:#a32d2d}
+.sv-ev{background:var(--line-soft);color:#7a7a72}
+.sv-chev{color:#b9b9b1;font-size:18px;transition:transform .15s}
+.sv-cat.open .sv-chev{transform:rotate(90deg)}
+.sv-qs{display:none;border-top:1px solid var(--line-soft);padding:2px 14px 8px}
+.sv-cat.open .sv-qs{display:block}
+.sv-q{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.sv-q:last-child{border-bottom:0}
+.sv-qt{flex:1;font-size:14px}
+.sv-bar{width:92px;height:6px;border-radius:3px;background:var(--line-soft);position:relative;flex:none}
+.sv-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--navy)}
+.sv-bar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--muted)}
+.sv-qn{font-size:14px;font-weight:700;min-width:25px;text-align:right}
+.sv-foot{font-size:12px;color:var(--muted);margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+@media (max-width:820px){
+  .sv-num{font-size:40px}
+  .sv-tri{grid-template-columns:1fr 1fr}
+  .sv-bar{width:56px}
+  .sv-qt{font-size:13px}
+}
 .embed-card.is-list{max-width:640px}
 .embed-card.is-list iframe{height:70vh;min-height:480px}
 .lang-switch.wide button{max-width:230px}
@@ -530,6 +575,7 @@ turfsaver:{title:"TurfSaver entry-exit system", sub:"New cart traffic system · 
 announce:{title:"Announcements", sub:"What's new this week", items:[
   weatherItem(),
   calendarItem(),
+  surveysItem(),
   hoursItem(),
   memberEmailsItem(),
   {t:"Faces of WGV questionnaire", m:"", s:"", c:"f-flat", a:"",
@@ -827,7 +873,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -923,6 +969,7 @@ function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
+  if(i.surveys){ detailSurveys(i); return; }
   if(i.imgTabs){ detailImgTabs(i); return; }
   if(i.embedTabs){ detailEmbedTabs(i); return; }
   if(i.embedHtml){ detailEmbedHtml(i); return; }
@@ -1076,6 +1123,208 @@ function detailEmbedHtml(i){
       `<div class="embed-card ${d.card||"is-mini"}"><iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe></div>`+
       (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
     `</div>`;
+}
+
+/* ---------- Customer Surveys ----------
+   Data is baked in below so the row works offline and on first paint. If
+   GID_SURVEYS is filled in, the Surveys tab of the manager workbook is fetched
+   on load and replaces it, so the numbers keep themselves current. */
+const GID_SURVEYS = "";
+let SURVEY_DATA = {"months":["Jan","Feb","Mar","Apr","May","Jun"],"collected":{"ss":[67,127,233,313,371,429],"kb":[91,159,270,355,416,478]},"nps":{"ss":[27,36,30,29,33,34],"kb":[27,39,41,44,44,45],"troon":[57,57,55,52,52,51],"varSS":[-30,-21,-25,-23,-19,-17],"varKB":[-30,-18,-14,-8,-8,-6]},"mix":{"Detractor":{"ss":"19%","kb":"15%","troon":"11%"},"Passive":{"ss":"28%","kb":"26%","troon":"24%"},"Promoter":{"ss":"53%","kb":"60%","troon":"65%"}},"cats":[{"name":"The Course","ss":[null,null,83,84,84,84],"kb":[null,null,85,86,86,86],"troon":[null,null,84,83,83,83],"qs":[{"q":"Tee boxes were in excellent condition","ss":[67,70,71,71,72,74],"kb":[76,78,81,82,83,83],"troon":[82,83,81,80,79,79]},{"q":"Fairways were in excellent condition","ss":[77,80,81,80,82,82],"kb":[82,82,84,85,86,86],"troon":[85,85,84,84,82,82]},{"q":"Bunkers were well maintained","ss":[79,81,81,82,82,82],"kb":[76,80,83,84,84,85],"troon":[79,79,78,76,76,76]},{"q":"The greens were smooth and the ball rolled as it should","ss":[79,82,83,82,82,80],"kb":[83,85,85,86,86,86],"troon":[84,84,83,81,81,81]},{"q":"The speed of greens was appropriate","ss":[79,83,84,83,83,81],"kb":[85,85,84,85,85,84],"troon":[84,84,82,82,82,82]},{"q":"The course, as a whole, was well maintained","ss":[79,82,81,82,82,82],"kb":[84,86,86,87,87,87],"troon":[85,85,83,82,82,82]},{"q":"Course signage and instructions were good","ss":[89,90,87,87,87,87],"kb":[85,86,87,88,88,88],"troon":[87,87,87,86,86,86]},{"q":"The game flowed well with limited waiting time","ss":[78,80,77,77,78,79],"kb":[76,80,78,77,79,79],"troon":[82,82,81,80,81,81]},{"q":"Restroom facilities on the course were good","ss":[79,85,84,85,85,85],"kb":[81,85,86,87,87,87],"troon":[86,86,85,84,84,84]},{"q":"The Starter/Course advisor was friendly and helpful","ss":[91,93,91,92,92,92],"kb":[94,95,95,95,95,95],"troon":[93,93,93,93,93,93]},{"q":"The beverage cart service was excellent","ss":[91,90,88,87,85,85],"kb":[91,89,86,86,86,86],"troon":[86,86,86,83,82,82]},{"q":"The course Marshall/Player Assistant was courteous","ss":[84,89,87,88,89,89],"kb":[92,93,92,91,91,91],"troon":[90,90,90,90,89,89]},{"q":"Meeting the on-course staff was a positive experience","ss":[92,93,90,90,90,90],"kb":[93,93,92,92,92,92],"troon":[92,92,92,92,92,91]},{"q":"The golf cart performed well and was easy to use","ss":[83,83,83,84,84,85],"kb":[79,81,84,85,85,84],"troon":[90,90,90,90,90,89]},{"q":"The golf cart was in good condition","ss":[84,84,84,85,84,85],"kb":[81,82,85,86,86,85],"troon":[90,90,90,89,89,89]},{"q":"The golf cart was clean","ss":[91,91,91,91,91,91],"kb":[91,91,91,92,92,92],"troon":[93,93,92,92,92,92]}]},{"name":"The Clubhouse","ss":[null,null,90,89,89,89],"kb":[null,null,92,92,92,92],"troon":[null,null,92,92,92,92],"qs":[{"q":"There was a friendly/welcoming atmosphere in the clubhouse","ss":[88,90,88,87,87,87],"kb":[88,90,91,91,90,90],"troon":[91,91,91,91,91,91]},{"q":"The clubhouse was clean and tidy","ss":[93,94,92,92,91,91],"kb":[92,93,94,94,94,94],"troon":[94,94,94,94,93,93]}]},{"name":"Food & Beverage","ss":[null,null,80,82,81,82],"kb":[null,null,83,84,83,84],"troon":[null,null,85,85,85,85],"qs":[{"q":"How likely is it that you would recommend the restaurant to friends, family or colleagues?","ss":[-8,21,21,25,25,31],"kb":[32,37,39,39,38,37],"troon":[48,48,48,46,44,46]},{"q":"The food & drink quality was excellent","ss":[74,77,78,81,81,82],"kb":[81,83,82,84,83,83],"troon":[85,86,86,86,85,85]},{"q":"The selection of food and beverages was sufficient","ss":[76,76,77,80,78,80],"kb":[83,83,82,83,82,82],"troon":[85,85,85,84,84,84]},{"q":"The operation of, and service in, the restaurant was excellent","ss":[89,86,84,85,84,85],"kb":[90,90,88,87,87,87],"troon":[87,87,87,87,87,87]},{"q":"The prices were reasonable in relation to the selection and quality","ss":[72,81,80,82,81,82],"kb":[79,80,81,82,81,82],"troon":[84,84,83,83,83,83]}]},{"name":"Practice Facilities","ss":[null,null,83,84,84,83],"kb":[null,null,87,88,87,87],"troon":[null,null,84,84,83,83],"qs":[{"q":"Conditions on the driving range were good","ss":[84,83,82,82,82,81],"kb":[85,85,86,86,86,86],"troon":[83,83,81,81,81,80]},{"q":"Chipping and putting practice areas were well maintained","ss":[85,86,85,85,85,85],"kb":[85,88,89,89,88,88],"troon":[88,88,87,86,86,86]}]},{"name":"The Golf Shop","ss":[null,null,88,88,88,88],"kb":[null,null,90,89,89,89],"troon":[null,null,89,89,88,88],"qs":[{"q":"Customer service and attention","ss":[88,90,89,89,89,88],"kb":[92,92,92,92,93,92],"troon":[91,91,91,91,91,91]},{"q":"Selection of goods available","ss":[84,87,87,87,88,87],"kb":[84,87,87,86,85,85],"troon":[87,87,87,86,85,85]}]},{"name":"The Course in General","ss":[null,85,83,84,83,83],"kb":[null,84,85,85,85,85],"troon":[null,86,86,85,85,85],"qs":[{"q":"Staff were friendly and welcoming","ss":[93,94,93,93,93,92],"kb":[93,94,94,94,93,93],"troon":[94,94,94,94,93,93]},{"q":"The team members in the office provided excellent service","ss":[90,92,89,90,90,89],"kb":[87,89,90,90,90,90],"troon":[92,92,92,91,91,91]},{"q":"World Golf Village's website contained the information I needed","ss":[88,91,88,88,87,86],"kb":[84,85,87,87,87,87],"troon":[88,89,89,88,88,88]},{"q":"Players are made to feel welcome when they visit the course","ss":[90,91,89,88,88,88],"kb":[88,90,90,91,90,90],"troon":[91,91,91,91,90,90]},{"q":"Compared to other courses, prices at World Golf Village are reasonable","ss":[64,67,66,66,67,67],"kb":[62,67,69,70,70,70],"troon":[78,77,77,77,77,77]}]},{"name":"Booking Experience","ss":[null,91,89,90,90,90],"kb":[null,89,90,90,90,89],"troon":[null,88,89,89,89,89],"qs":[{"q":"It was easy to make a tee time reservation","ss":[92,91,89,90,90,90],"kb":[90,89,90,90,90,89],"troon":[89,89,89,89,89,89]}]}]};
+
+const SURVEY_CATS = ["The Course","The Clubhouse","Food & Beverage",
+  "Practice Facilities","The Golf Shop","The Course in General","Booking Experience"];
+
+/* Reads the Surveys grid: each month is a five-column block laid out as
+   Var | SS | Troon | KB | Var, so columns are found by the header row rather
+   than by counting, and an inserted column won't throw the whole thing off. */
+function buildSurveys(rows){
+  const norm = v => (v==null?"":String(v)).trim();
+  let hr = -1;
+  for(let i=0;i<Math.min(rows.length,12);i++){
+    const r=(rows[i]||[]).map(norm);
+    if(r.indexOf("SS")>=0 && r.indexOf("Troon")>=0 && r.indexOf("KB")>=0){ hr=i; break; }
+  }
+  if(hr<0) return null;
+  const head=(rows[hr]||[]).map(norm);
+  const starts=[];
+  head.forEach((c,i)=>{ if(c==="SS" && norm(head[i+1])==="Troon" && norm(head[i+2])==="KB") starts.push(i); });
+  if(!starts.length) return null;
+
+  const monthRow=(rows[hr-1]||[]).map(norm);
+  const months=starts.map((s,k)=>{
+    for(let j=s;j>=Math.max(0,s-3);j--){
+      const m=/YTD\s+thru\s+([A-Za-z]{3})/i.exec(monthRow[j]||"");
+      if(m) return m[1];
+    }
+    return "M"+(k+1);
+  });
+  const cell=(r,c)=>norm((rows[r]||[])[c]);
+  const int=v=>{ const n=parseInt(String(v).replace(/[^0-9-]/g,""),10); return isNaN(n)?null:n; };
+  const ser=(r,off)=>starts.map(s=>int(cell(r,s+off)));
+  const pct=(r,off)=>starts.map(s=>cell(r,s+off));
+  const label=r=>cell(r,0);
+  const scoreRow=r=>starts.every(s=>{
+    const a=cell(r,s), b=cell(r,s+1), c=cell(r,s+2);
+    return a&&b&&c && ![a,b,c].some(x=>x.indexOf("%")>=0)
+      && [a,b,c].every(x=>/^-?\d+$/.test(x));
+  });
+
+  let collectedRow=-1, npsRow=-1;
+  for(let i=0;i<rows.length;i++){
+    const L=label(i);
+    if(collectedRow<0 && /total surveys/i.test(L)) collectedRow=i;
+    if(npsRow<0 && /^how likely/i.test(L) && /world golf village/i.test(L)) npsRow=i;
+  }
+  if(npsRow<0) return null;
+
+  const catRows=[];
+  for(let i=0;i<rows.length;i++){
+    const L=label(i);
+    if(SURVEY_CATS.some(n=>n.toLowerCase()===L.toLowerCase())) catRows.push([i,L]);
+  }
+  if(!catRows.length) return null;
+
+  const mix={};
+  ["Detractor","Passive","Promoter"].forEach(k=>{
+    for(let i=npsRow;i<Math.min(npsRow+6,rows.length);i++){
+      if(label(i).toLowerCase()===k.toLowerCase()){
+        mix[k]={ss:pct(i,0)[starts.length-1],troon:pct(i,1)[starts.length-1],kb:pct(i,2)[starts.length-1]};
+        break;
+      }
+    }
+    if(!mix[k]) mix[k]={ss:"",troon:"",kb:""};
+  });
+
+  const cats=catRows.map(([hrow,name],k)=>{
+    const stop = k+1<catRows.length ? catRows[k+1][0] : rows.length;
+    const qs=[];
+    for(let r=hrow+1;r<stop;r++){
+      if(label(r) && scoreRow(r)) qs.push({q:label(r),ss:ser(r,0),troon:ser(r,1),kb:ser(r,2)});
+    }
+    return {name:name,ss:ser(hrow,0),troon:ser(hrow,1),kb:ser(hrow,2),qs:qs};
+  });
+
+  return {
+    months:months,
+    collected:{ss:collectedRow<0?[]:ser(collectedRow,0), kb:collectedRow<0?[]:ser(collectedRow,2)},
+    nps:{varSS:ser(npsRow,-1), ss:ser(npsRow,0), troon:ser(npsRow,1),
+         kb:ser(npsRow,2), varKB:ser(npsRow,3)},
+    mix:mix,
+    cats:cats
+  };
+}
+
+function loadSurveysTab(){
+  if(!GID_SURVEYS) return;
+  fetch(sheetCsvUrl(GID_SURVEYS),{cache:"no-store"})
+    .then(r=>r.text()).then(t=>{
+      const built=buildSurveys(parseCSV(t));
+      if(!built || !built.cats.length) return;   // bad read: keep what we have
+      SURVEY_DATA=built;
+      const cur=(S[state.view]||{}).items||[];
+      if((cur[state.idx]||{}).surveys) detail(cur[state.idx]);
+    }).catch(()=>{});
+}
+
+/* Customer Surveys — pinned to Announcements, one tab per course. */
+function surveysItem(){
+  return {t:"Customer Surveys", m:"", s:"", c:"f-flat", a:"", surveys:true};
+}
+
+function svLast(a){ return a && a.length ? a[a.length-1] : null; }
+function svChip(v){
+  if(v===null||isNaN(v)) return "";
+  const c = v>0?"sv-up":v<0?"sv-dn":"sv-ev";
+  return `<span class="sv-chip ${c}">${v>0?"+":""}${v}</span>`;
+}
+
+function svChart(me,tr){
+  const all=me.concat(tr).filter(v=>v!==null);
+  if(all.length<2) return "";
+  const lo=Math.min.apply(null,all)-8, hi=Math.max.apply(null,all)+8;
+  const W=640,H=196,PL=8,PR=8;
+  const x=i=>PL+i*((W-PL-PR)/Math.max(1,me.length-1));
+  const y=v=>H-24-((v-lo)/Math.max(1,hi-lo))*(H-46);
+  const path=a=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
+  let back="";
+  for(let i=me.length-1;i>=0;i--) back+="L"+x(i).toFixed(1)+" "+y(me[i]).toFixed(1)+" ";
+  let s=`<path d="${path(tr)} ${back}Z" fill="var(--red)" opacity=".10"></path>`;
+  s+=`<path d="${path(tr)}" fill="none" stroke="#b9b9b1" stroke-width="2" stroke-dasharray="5 4"></path>`;
+  s+=`<path d="${path(me)}" fill="none" stroke="var(--red)" stroke-width="3" stroke-linejoin="round"></path>`;
+  me.forEach((v,i)=>{ s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${i===me.length-1?5:3.5}" fill="var(--red)"></circle>`; });
+  (SURVEY_DATA.months||[]).forEach((m,i)=>{ s+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle" font-size="11" fill="#8a8a84">${m}</text>`; });
+  s+=`<text x="${x(me.length-1)}" y="${y(svLast(me))-13}" text-anchor="end" font-size="12" font-weight="700" fill="var(--red)">${svLast(me)}</text>`;
+  s+=`<text x="${x(tr.length-1)}" y="${y(svLast(tr))-11}" text-anchor="end" font-size="11" fill="#8a8a84">${svLast(tr)}</text>`;
+  return `<svg class="sv-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${s}</svg>`;
+}
+
+function detailSurveys(i){
+  const D=SURVEY_DATA||{}, c=(state.course==="ss")?"ss":"kb";
+  const NAME={kb:"King & Bear", ss:"Slammer & Squire"};
+  if(!D.cats||!D.cats.length){
+    el("#detail").innerHTML=
+      `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+      `<div class="detail-sub">Survey numbers aren't loading right now. Try again shortly.</div></div>`;
+    return;
+  }
+  const vs = c==="kb" ? D.nps.varKB : D.nps.varSS;
+  const now=svLast(vs), then=vs[0];
+  const mixRow=[["Promoter","var(--green)"],["Passive","#c9c5b8"],["Detractor","var(--red)"]];
+
+  const cats=D.cats.map((cat,ci)=>{
+    const sc=svLast(cat[c]), tr=svLast(cat.troon);
+    const qs=cat.qs.map(q=>{
+      const v=svLast(q[c])-svLast(q.troon);
+      return `<div class="sv-q"><span class="sv-qt">${q.q}</span>`+
+        `<span class="sv-bar"><i style="width:${svLast(q[c])}%"></i><b style="left:${svLast(q.troon)}%"></b></span>`+
+        `<span class="sv-qn">${svLast(q[c])}</span>${svChip(v)}</div>`;
+    }).join("");
+    return `<div class="sv-cat" data-cat="${ci}"><button type="button" aria-expanded="false">`+
+      `<span class="sv-cn">${cat.name}</span><span class="sv-cs">${sc}</span>${svChip(sc-tr)}`+
+      `<span class="sv-chev">&#8250;</span></button><div class="sv-qs">${qs}</div></div>`;
+  }).join("");
+
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">2026 season, year to date through ${D.months?svLast(D.months):""} 30.</div></div>`+
+    `<div class="detail-body">`+
+      `<div class="lang-switch wide">`+
+        ["kb","ss"].map(k=>`<button type="button" data-course="${k}" aria-pressed="${k===c}">${NAME[k]}</button>`).join("")+
+      `</div>`+
+      `<div class="sv-gap">`+
+        `<div class="sv-gaptop"><div>`+
+          `<div class="sv-lbl">Gap to Troon average</div>`+
+          `<div class="sv-num">${now>0?"+":""}${now}<small> pts</small></div>`+
+        `</div><p class="sv-say">In ${D.months[0]} ${NAME[c]} sat <b>${then}</b> behind the Troon average. `+
+        `Six months and <b>${svLast(D.collected[c])} surveys</b> later the gap is <b>${now}</b>.</p></div>`+
+        svChart(D.nps[c], D.nps.troon)+
+        `<div class="sv-legend"><span><i class="sv-key" style="background:var(--red)"></i>${NAME[c]}</span>`+
+        `<span><i class="sv-key" style="background:#b9b9b1"></i>Troon average</span></div>`+
+      `</div>`+
+      `<div class="sv-tri">`+
+        `<div class="sv-tile"><div class="sv-n">${svLast(D.nps[c])}</div><div class="sv-l">Net promoter</div></div>`+
+        `<div class="sv-tile"><div class="sv-n">${svLast(D.collected[c])}</div><div class="sv-l">Surveys in</div></div>`+
+        `<div class="sv-tile"><div class="sv-n">${D.mix.Promoter[c]}</div><div class="sv-l">Promoters</div></div>`+
+      `</div>`+
+      `<h3 class="sv-h">Who is answering</h3>`+
+      `<div class="sv-mix">`+mixRow.map(([k,col])=>{
+        const p=parseFloat(D.mix[k][c])||0;
+        return `<span style="width:${p}%;background:${col}">${p>=12?k.charAt(0)+" "+p+"%":""}</span>`;
+      }).join("")+`</div>`+
+      `<p class="sv-note">Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
+      `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>${cats}`+
+      `<p class="sv-foot">Scores are 0&ndash;100 satisfaction indexes; net promoter runs &minus;100 to +100. `+
+      `The grey marker on each bar is the Troon average for that question.</p>`+
+    `</div>`;
+
+  el("#detail").querySelectorAll("[data-course]").forEach(b=>b.addEventListener("click",()=>{
+    state.course=b.dataset.course; detail(i);
+  }));
+  el("#detail").querySelectorAll(".sv-cat>button").forEach(b=>b.addEventListener("click",()=>{
+    const open=b.parentNode.classList.toggle("open");
+    b.setAttribute("aria-expanded",String(open));
+  }));
 }
 
 /* ---------- one image per tab (e.g. Employee Parking Map) ---------- */
@@ -1359,13 +1608,13 @@ function applyContent(rows){
     // These four are hard-coded and always sit at the top, in this order. Any
     // sheet row or snapshotted builtin with the same title is dropped so they
     // can't show up a second time further down the list.
-    const annDrop = /^\s*(weather\s+stations?|work\s+schedule.*calendar|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
+    const annDrop = /^\s*(weather\s+stations?|work\s+schedule.*calendar|customer\s+surveys?|hours\s+of\s+operation|recent\s+member\s+emails?)\s*$/i;
     const extras=builtinAnnounceExtras().filter(x=>!annDrop.test((x.t||"").trim())
         && (x.imgOnly  // UKG flyer is always pinned
         || (contentTitles.indexOf((x.t||"").toLowerCase().trim())<0
         && !/verification of employment/i.test(x.t||""))));  // verification now comes from Content
     const annRows = anns.filter(r=>!annDrop.test((r.title||"").trim()));
-    S.announce.items = [weatherItem(), calendarItem(), hoursItem(), memberEmailsItem()]
+    S.announce.items = [weatherItem(), calendarItem(), surveysItem(), hoursItem(), memberEmailsItem()]
       .concat(annRows.map(contentTypeToItem)).concat(extras);
   }
 
@@ -1519,6 +1768,7 @@ buildNav();
 if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
 loadContentTab();
+loadSurveysTab();
 </script>
 </body>
 </html>
