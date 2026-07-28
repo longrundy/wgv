@@ -438,12 +438,12 @@ function calendarItem(title){
            '<script data-cfasync="false" data-tockify-script="embed" src="https://public.tockify.com/browser/embed.js"><\/script>'}};
 }
 
-/* View the Tee Sheet — EZLinks, embedded. Login pages very often refuse to be
-   framed, so the fallback link underneath matters more here than elsewhere. */
+/* View the Tee Sheet — EZLinks. Opens in a new tab: the site refuses to be
+   framed, so an embed here just renders an error box. */
 function teeSheetItem(title){
-  return {t:title||"View the Tee Sheet", m:"", s:"", c:"f-flat", a:"",
-    embedTabs:{sub:"Sign in with your own account — find it under My Account, top right.",
-      tabs:[["View the Tee Sheet","https://wgvviewonly.ezlinksgolf.com/index.html#/login"]]}};
+  return {t:title||"View the Tee Sheet", m:"", s:"", c:"f-flat", a:"", linkOnly:true,
+    d:{sub:"Sign in with your own account — find it under My Account, top right. Shared credentials are being retired; ask IT if you don't have yours yet.",
+       url:"https://wgvviewonly.ezlinksgolf.com/index.html#/login"}};
 }
 
 /* Hours of Operation — opens the public course site in a new tab.
