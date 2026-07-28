@@ -798,8 +798,8 @@ function render(){
   el("#list").innerHTML=items.map((i,n)=>`
     <button class="row" data-idx="${n}" aria-current="${n===state.idx}">
       <span class="row-main"><span class="row-title">${i.t}</span>${i.m?`<span class="row-meta">${i.m}</span>`:""}</span>
-      <span class="row-side">${i.langs?`<span class="row-langs">${["en","es"].map(k=>`<span class="lang-pill" data-lang="${k}" role="button" tabindex="0" aria-pressed="${n===state.idx&&state.lang===k}">${i.langs[k].label}</span>`).join("")}</span>`:i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
-      ${i.linkOnly||i.langs?"":`<span class="chev-r">&#8250;</span>`}
+      <span class="row-side">${i.linkOnly?`<span class="row-openpill">Open <span aria-hidden="true">&#8599;</span></span>`:`<span class="row-flag ${i.c}">${i.s||""}</span><span class="row-age">${i.a||""}</span>`}</span>
+      ${i.linkOnly?"":`<span class="chev-r">&#8250;</span>`}
     </button>`).join("");
   document.querySelectorAll(".row").forEach(r=>r.addEventListener("click",(ev)=>{
     if(ev.target.closest(".row-openpill")) return; // pill handles its own click
