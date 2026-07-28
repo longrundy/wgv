@@ -399,6 +399,20 @@ const TROON_IMG = {
   ukgPro:"ukg-pro-mobile-app.jpg",
 };
 
+/* Employee Handbook — pinned to Resources, English / Espanol Drive PDFs.
+   To swap in a newer year: replace the file in Drive via "Manage versions"
+   so the URL stays the same, or paste a new /view link below. */
+function handbookItem(){
+  return {t:"Employee Handbook", m:"", s:"", c:"f-flat", a:"", builtinRes:true,
+    langDocs:{sub:"Troon Associate Handbook \u2014 read it in English or Spanish.",
+      en:{label:"English", open:"Open handbook",
+          url:"https://drive.google.com/file/d/1pq1ZTXGuIGwF8Zrw_uNbrc_a3J3cfJha/view",
+          alt:"Troon Associate Handbook 2025 \u2014 English"},
+      es:{label:"Espa\u00f1ol", open:"Abrir manual",
+          url:"https://drive.google.com/file/d/1GStLayyVRut6SX10Y_NmDe9e-BHKqL80/view",
+          alt:"Manual del Asociado de Troon 2025 \u2014 Espa\u00f1ol"}}};
+}
+
 const link = (t,m,url,blurb) => ({t, m, s:"Open", c:"f-flat", a:"", d:{sub:blurb, url}});
 const S = {
 recognition:{title:"Recognition", sub:"Team news and milestones", items:[
@@ -409,7 +423,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
   {t:"Appreciation events", m:"", s:"", c:"f-flat", a:"", recogKey:"apprevts", d:{sub:"2026 schedule", rich:"<p>Loading the appreciation events schedule…</p>"}}
 ]},
 
-resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[]},
+resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem()]},
 
 management:{title:"Management", sub:"Management only", items:[]},
 
@@ -827,6 +841,7 @@ function render(){
 function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
+  if(i.langDocs){ detailLangDocs(i); return; }
   if(i.imgOnly){ detailImg(i); return; }
   if(i.linkOnly){
     el("#detail").innerHTML=
@@ -910,6 +925,30 @@ function detailLang(i){
   }));
   const img=el("#detail").querySelector(".img-card img");
   if(img) img.addEventListener("click",()=>openLightbox(img.src,img.alt));
+}
+
+/* ---------- bilingual PDF items (e.g. Employee Handbook) ---------- */
+function detailLangDocs(i){
+  const L=i.langDocs;
+  const k=(state.lang==="es")?"es":"en";
+  const pane=L[k];
+  const m=(pane.url||"").match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  const thumb=m?"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w1600":"";
+  el("#detail").innerHTML=
+    `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${L.sub||"&nbsp;"}</div></div>`+
+    `<a class="head-open" href="${pane.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
+    `<div class="detail-body">`+
+      `<div class="lang-switch">${["en","es"].map(x=>`<button type="button" data-pick="${x}" aria-pressed="${x===k}">${L[x].label}</button>`).join("")}</div>`+
+      (thumb?`<div class="doc-card"><img src="${thumb}" alt="${pane.alt||i.t}" onerror="this.parentNode.innerHTML='<div class=\\'doc-fallback\\'>Preview unavailable. Use the button below to open it.</div>'"></div>`:"")+
+      `<div class="actions"><a class="btn btn-primary" href="${pane.url}" target="_blank" rel="noopener">${pane.open||"Open"}</a></div>`+
+    `</div>`;
+  el("#detail").querySelectorAll("[data-pick]").forEach(b=>b.addEventListener("click",()=>{
+    state.lang=b.dataset.pick;
+    detail(i);
+    document.querySelectorAll(".lang-pill").forEach(p=>p.setAttribute("aria-pressed",
+      String(+p.closest(".row").dataset.idx===state.idx && p.dataset.lang===state.lang)));
+  }));
 }
 
 /* ---------- single hard-coded image item (e.g. UKG Pro flyer) ---------- */
@@ -1188,7 +1227,9 @@ function applyContent(rows){
 
   // --- Resources list from Content ---
   if(S.resources){
-    S.resources.items = res.map(contentTypeToItem);
+    // Handbook is hard-coded and always pinned first; drop a duplicate sheet row if one exists.
+    const fromSheet = res.filter(r=>!/^\s*employee\s+handbook\s*$/i.test(r.title||""));
+    S.resources.items = [handbookItem()].concat(fromSheet.map(contentTypeToItem));
   }
 
   // --- Management list from Content ---
