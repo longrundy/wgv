@@ -222,6 +222,49 @@ a{color:inherit}
 .embed-card.is-wx iframe{height:70vh;min-height:520px}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
+/* ---- survey course / view switch ---- */
+.svsw{display:flex;gap:10px;flex-wrap:wrap;margin:0 auto 14px}
+.svgrp{flex:1 1 auto;min-width:0}
+.svgrp-lbl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+ color:var(--muted);margin:0 0 4px;padding-left:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.svsplit{display:flex;border:1px solid #dde3ec;border-radius:8px;overflow:hidden;width:100%}
+.svsplit button{flex:1;border:0;background:#f2f6fb;color:#185fa5;font-family:inherit;font-size:12px;
+ font-weight:600;padding:9px 4px;cursor:pointer;white-space:nowrap;min-width:0;letter-spacing:.01em}
+.svsplit button+button{border-left:1px solid #dde3ec}
+.svsplit button[aria-pressed="true"]{background:var(--red);color:#fff}
+.svsplit button:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+@media (max-width:340px){ .svgrp{flex:1 1 100%} }
+
+/* ---- comments ---- */
+.cm-tools{margin:0 auto 6px}
+.cm-srch{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+ font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
+.cm-srch:focus{outline:2px solid #c3ddf4;outline-offset:1px}
+.cm-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.cm-chip{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;
+ font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit}
+.cm-chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.cm-chip.pro[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
+.cm-chip.det[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+.cm-count{font-size:11px;color:var(--muted);margin:14px auto 8px;font-weight:700;
+ text-transform:uppercase;letter-spacing:.07em}
+.cm-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 auto 9px;background:#fff}
+.cm-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.cm-date{font-size:12px;color:var(--muted);font-weight:600}
+.cm-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;
+ text-transform:uppercase;letter-spacing:.05em}
+.cm-Promoter{background:#eef6e6;color:#3f6a12}
+.cm-Passive{background:var(--line-soft);color:#7a7a72}
+.cm-Detractor{background:var(--red-tint);color:#a32d2d}
+.cm-Unknown{background:var(--line-soft);color:#7a7a72}
+.cm-tag{font-size:11px;color:var(--muted);font-weight:600;margin-left:auto}
+.cm-txt{font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+.cm-txt.clip{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.cm-more{background:none;border:0;color:#185fa5;font-weight:600;font-size:12.5px;cursor:pointer;
+ padding:5px 0 0;font-family:inherit}
+.cm-showmore{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#fff;
+ font-family:inherit;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;margin-top:6px}
+.cm-empty{padding:26px 6px;text-align:center;color:var(--muted);font-size:14px;margin:0 auto}
 /* ---- Customer Surveys ---- */
 .sv-gap{border:1px solid var(--line);border-radius:14px;padding:18px 18px 6px;background:#fff}
 .sv-gaptop{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
@@ -872,7 +915,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb"};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -968,7 +1011,7 @@ function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
-  if(i.surveys){ detailSurveys(i); return; }
+  if(i.surveys){ (state.svView==="comments"?detailComments:detailSurveys)(i); return; }
   if(i.imgTabs){ detailImgTabs(i); return; }
   if(i.embedTabs){ detailEmbedTabs(i); return; }
   if(i.embedHtml){ detailEmbedHtml(i); return; }
@@ -1122,6 +1165,195 @@ function detailEmbedHtml(i){
       `<div class="embed-card ${d.card||"is-mini"}"><iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe></div>`+
       (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
     `</div>`;
+}
+
+/* ---------- Customer Survey comments ----------
+   Lives on its own tab. Fetched the first time someone opens the Comments
+   view rather than on page load, since it's a few hundred rows.
+   The Name / Phone number / Email columns are deliberately never read. */
+const GID_COMMENTS = "1697333359";
+let COMMENTS_DATA = null, COMMENTS_STATE = "idle";   // idle | loading | ready | failed
+
+const CM_TAGS = [
+  [/best part/i,                "Praise"],
+  [/experience better/i,        "Suggestion"],
+  [/staff members/i,            "Staff"],
+  [/tee time reservation/i,     "Booking"],
+];
+const CM_LABEL = {Praise:"Praise", Suggestion:"Suggestions", Staff:"Staff shout-outs",
+                  Booking:"Booking", Other:"Other"};
+
+function cmTag(q){
+  for(const [re,tag] of CM_TAGS) if(re.test(q||"")) return tag;
+  return "Other";
+}
+function cmIso(s){
+  const m=/^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(s||"");
+  if(!m) return "";
+  return m[3]+"-"+("0"+m[1]).slice(-2)+"-"+("0"+m[2]).slice(-2);
+}
+function cmPretty(iso){
+  if(!iso) return "";
+  const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const p=iso.split("-");
+  return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];
+}
+
+/* Two blocks side by side, one per course. Block starts are found by looking
+   for the repeated "Date" header, so an inserted column won't break it. */
+function buildComments(rows){
+  const norm=v=>(v==null?"":String(v)).trim();
+  let hr=-1;
+  for(let i=0;i<Math.min(rows.length,8);i++){
+    const r=(rows[i]||[]).map(norm);
+    if(r.indexOf("Date")>=0 && r.indexOf("Comment")>=0){ hr=i; break; }
+  }
+  if(hr<0) return null;
+  const head=(rows[hr]||[]).map(norm);
+  const starts=[];
+  head.forEach((c,i)=>{ if(c==="Date") starts.push(i); });
+  if(!starts.length) return null;
+
+  const title=(rows[Math.max(0,hr-1)]||[]).map(norm);
+  const out={kb:[],ss:[]};
+  starts.forEach(s=>{
+    let which="";
+    for(let j=s;j>=Math.max(0,s-2);j--){
+      if(/king/i.test(title[j]||"")) { which="kb"; break; }
+      if(/slammer/i.test(title[j]||"")){ which="ss"; break; }
+    }
+    if(!which) which = starts.indexOf(s)===0 ? "kb" : "ss";
+    for(let r=hr+1;r<rows.length;r++){
+      const row=rows[r]||[];
+      const text=norm(row[s+3]);                    // s+5,6,7 are name/phone/email
+      if(!text) continue;
+      out[which].push({d:cmIso(norm(row[s])), t:cmTag(norm(row[s+2])),
+                       n:norm(row[s+4])||"Unknown", c:text});
+    }
+  });
+  out.kb.sort((a,b)=>b.d<a.d?-1:b.d>a.d?1:0);
+  out.ss.sort((a,b)=>b.d<a.d?-1:b.d>a.d?1:0);
+  return (out.kb.length||out.ss.length) ? out : null;
+}
+
+function loadCommentsTab(then){
+  if(COMMENTS_STATE==="loading") return;
+  COMMENTS_STATE="loading";
+  fetch(sheetCsvUrl(GID_COMMENTS),{cache:"no-store"})
+    .then(r=>r.text()).then(t=>{
+      const built=buildComments(parseCSV(t));
+      if(built){ COMMENTS_DATA=built; COMMENTS_STATE="ready"; }
+      else COMMENTS_STATE="failed";
+      if(then) then();
+    }).catch(()=>{ COMMENTS_STATE="failed"; if(then) then(); });
+}
+
+/* ---------- the shared course / view switch ---------- */
+function svSwitch(){
+  const NAME={kb:"King & Bear", ss:"Slammer & Squire"};
+  return `<div class="svsw">`+["kb","ss"].map(c=>
+    `<div class="svgrp"><div class="svgrp-lbl">${NAME[c]}</div><div class="svsplit">`+
+    ["scores","comments"].map(v=>
+      `<button type="button" data-sv="${c}|${v}" aria-pressed="${c===state.course&&v===state.svView}">`+
+      `${v==="scores"?"Scores":"Comments"}</button>`).join("")+
+    `</div></div>`).join("")+`</div>`;
+}
+function svSwitchWire(i){
+  el("#detail").querySelectorAll("[data-sv]").forEach(b=>b.addEventListener("click",()=>{
+    const p=b.dataset.sv.split("|");
+    if(p[0]===state.course && p[1]===state.svView) return;
+    state.course=p[0]; state.svView=p[1]; state.cmShown=25;
+    detail(i);
+  }));
+}
+
+/* ---------- comments view ---------- */
+function cmFiltered(){
+  const list=(COMMENTS_DATA&&COMMENTS_DATA[state.course])||[];
+  const q=(state.cmQ||"").trim().toLowerCase();
+  return list.filter(c=>
+    (state.cmType==="all"||c.t===state.cmType) &&
+    (state.cmNps==="all"||c.n===state.cmNps) &&
+    (!q||c.c.toLowerCase().indexOf(q)>=0));
+}
+
+function cmRenderList(){
+  const f=cmFiltered(), shown=state.cmShown||25, slice=f.slice(0,shown);
+  const det=f.filter(c=>c.n==="Detractor").length;
+  const cnt=el("#cmCount"), box=el("#cmList");
+  if(!cnt||!box) return;
+  cnt.textContent=f.length+(f.length===1?" comment":" comments")+(det?"  \u00b7  "+det+" from detractors":"");
+  box.innerHTML = slice.length ? slice.map((c,i)=>
+      `<div class="cm-card"><div class="cm-meta"><span class="cm-date">${cmPretty(c.d)}</span>`+
+      `<span class="cm-pill cm-${c.n}">${c.n}</span>`+
+      `<span class="cm-tag">${CM_LABEL[c.t]||c.t}</span></div>`+
+      `<div class="cm-txt${c.c.length>320?" clip":""}" id="cmT${i}">${esc(c.c)}</div>`+
+      (c.c.length>320?`<button type="button" class="cm-more" data-cmx="${i}">Read the rest</button>`:"")+
+      `</div>`).join("")
+      + (f.length>shown?`<button type="button" class="cm-showmore" id="cmMore">Show ${Math.min(25,f.length-shown)} more \u2014 ${f.length-shown} left</button>`:"")
+    : `<div class="cm-empty">Nothing matches that. Try a different word or clear the filters.</div>`;
+  box.querySelectorAll("[data-cmx]").forEach(b=>b.addEventListener("click",()=>{
+    const t=el("#cmT"+b.dataset.cmx); if(t) t.classList.remove("clip");
+    b.remove();
+  }));
+  const more=el("#cmMore");
+  if(more) more.addEventListener("click",()=>{ state.cmShown=(state.cmShown||25)+25; cmRenderList(); });
+}
+
+function cmChips(){
+  const list=(COMMENTS_DATA&&COMMENTS_DATA[state.course])||[];
+  const kinds=["Praise","Suggestion","Staff","Booking","Other"].filter(k=>list.some(c=>c.t===k));
+  const t=[`<button type="button" class="cm-chip" data-cmt="all" aria-pressed="${state.cmType==="all"}">All comments</button>`]
+    .concat(kinds.map(k=>`<button type="button" class="cm-chip" data-cmt="${k}" aria-pressed="${state.cmType===k}">${CM_LABEL[k]}</button>`));
+  const n=[`<button type="button" class="cm-chip" data-cmn="all" aria-pressed="${state.cmNps==="all"}">Everyone</button>`]
+    .concat(["Promoter","Passive","Detractor"].map(k=>
+      `<button type="button" class="cm-chip ${k==="Promoter"?"pro":k==="Detractor"?"det":""}" data-cmn="${k}" aria-pressed="${state.cmNps===k}">${k}s</button>`));
+  return `<div class="cm-chips">${t.join("")}</div><div class="cm-chips">${n.join("")}</div>`;
+}
+
+function detailComments(i){
+  const NAME={kb:"King & Bear", ss:"Slammer & Squire"};
+  const head=`<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">What guests wrote, newest first.</div></div>`;
+
+  if(COMMENTS_STATE!=="ready"){
+    const msg = COMMENTS_STATE==="failed"
+      ? "Comments aren't loading right now. Try again shortly."
+      : "Loading comments\u2026";
+    el("#detail").innerHTML=head+`<div class="detail-body">${svSwitch()}<p class="cm-empty">${msg}</p></div>`;
+    svSwitchWire(i);
+    if(COMMENTS_STATE==="idle") loadCommentsTab(()=>{
+      const cur=(S[state.view]||{}).items||[];
+      if((cur[state.idx]||{}).surveys && state.svView==="comments") detail(i);
+    });
+    return;
+  }
+
+  const all=COMMENTS_DATA[state.course]||[];
+  const span=all.length?`${all.length} comments, ${cmPretty(all[all.length-1].d)} to ${cmPretty(all[0].d)}`:"No comments yet";
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${NAME[state.course]} \u2014 ${span}.</div></div>`+
+    `<div class="detail-body">`+
+      svSwitch()+
+      `<div class="cm-tools">`+
+        `<input class="cm-srch" id="cmQ" type="search" placeholder="Search comments \u2014 try bunkers, pace, cart, greens" value="${esc(state.cmQ||"")}">`+
+        cmChips()+
+      `</div>`+
+      `<div class="cm-count" id="cmCount"></div><div id="cmList"></div>`+
+    `</div>`;
+  svSwitchWire(i);
+  el("#detail").querySelectorAll("[data-cmt]").forEach(b=>b.addEventListener("click",()=>{
+    state.cmType=b.dataset.cmt; state.cmShown=25; detail(i);
+  }));
+  el("#detail").querySelectorAll("[data-cmn]").forEach(b=>b.addEventListener("click",()=>{
+    state.cmNps=b.dataset.cmn; state.cmShown=25; detail(i);
+  }));
+  const q=el("#cmQ");
+  if(q) q.addEventListener("input",()=>{           // list only, so the box keeps focus
+    state.cmQ=q.value; state.cmShown=25; cmRenderList();
+  });
+  cmRenderList();
 }
 
 /* ---------- Customer Surveys ----------
@@ -1295,9 +1527,7 @@ function detailSurveys(i){
     `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">2026 season, year to date through ${D.months?svLast(D.months):""} 30.</div></div>`+
     `<div class="detail-body">`+
-      `<div class="lang-switch wide">`+
-        ["kb","ss"].map(k=>`<button type="button" data-course="${k}" aria-pressed="${k===c}">${NAME[k]}</button>`).join("")+
-      `</div>`+
+      svSwitch()+
       `<div class="sv-gap">`+
         `<div class="sv-gaptop"><div>`+
           `<div class="sv-lbl">Gap to Troon average</div>`+
@@ -1327,9 +1557,7 @@ function detailSurveys(i){
       `The grey marker on each bar is the Troon average for that question.</p>`+
     `</div>`;
 
-  el("#detail").querySelectorAll("[data-course]").forEach(b=>b.addEventListener("click",()=>{
-    state.course=b.dataset.course; detail(i);
-  }));
+  svSwitchWire(i);
   el("#detail").querySelectorAll(".sv-cat>button").forEach(b=>b.addEventListener("click",()=>{
     const open=b.parentNode.classList.toggle("open");
     b.setAttribute("aria-expanded",String(open));
