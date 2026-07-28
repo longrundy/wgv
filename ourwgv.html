@@ -768,7 +768,7 @@ function go(view){
   if(MGMT.indexOf(view)>-1 && !state.mgrOk){
     const p=prompt("Management area — enter the manager password.");
     if(p===null) return;
-    if(sha(p.trim())!==MANAGER_HASH){ alert("That password isn't right."); return; }
+    if(sha(p.replace(/\s+/g,""))!==MANAGER_HASH){ alert("That password isn't right."); return; }
     state.mgrOk=true;
   }
   state.view=view; state.idx=0; if(view==="announce") state.turf=true; render();
@@ -1044,7 +1044,7 @@ async function startEdit(i){
   if(!state.mgrOk){
     const pw=prompt("Manager password to edit this item:");
     if(pw===null) return;
-    if(sha(pw.trim())!==MANAGER_HASH){ alert("That password isn't right."); return; }
+    if(sha(pw.replace(/\s+/g,""))!==MANAGER_HASH){ alert("That password isn't right."); return; }
     state.mgrOk=true;
   }
   renderContentEditor(i);
