@@ -213,7 +213,16 @@ a{color:inherit}
 
 .embed-card iframe{width:100%;border:0;display:block;background:#fff}
 .embed-card.is-form iframe{height:72vh;min-height:560px}
-@media (max-width:820px){ .embed-card{max-width:none} .embed-card.is-form iframe{height:calc(100dvh - 220px)} }
+@media (max-width:820px){
+  .embed-card{max-width:none}
+  .embed-card.is-form iframe{height:calc(100dvh - 220px)}
+  /* Google Forms should use the full mobile screen: kill the detail padding,
+     card margins, and rounded corners so the form runs edge-to-edge. */
+  .detail-body.form-body,
+  .detail-body:has(.embed-card.is-form){padding:0}
+  .embed-card.is-form{margin:0;border-radius:0}
+  .embed-card.is-form iframe{height:calc(100dvh - 54px - 82px)}
+}
 
 
 
@@ -864,7 +873,7 @@ function detail(i){
     el("#detail").innerHTML=
       `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
       `<div class="detail-sub">${d.sub||"&nbsp;"}</div>`+`</div><a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
-      `<div class="detail-body"><div class="embed-card is-form"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div></div>`;
+      `<div class="detail-body form-body"><div class="embed-card is-form"><iframe src="${src}" title="${i.t}" loading="lazy" allow="autoplay"></iframe></div></div>`;
     return;
   }
     let html=`<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${d.sub||"&nbsp;"}</div></div><div class="detail-body"><div class="card">`;
