@@ -1423,6 +1423,52 @@ function finRatios(y,seg,prev){
   }).join("");
 }
 
+/* Years that only cover part of a calendar year. Add "2026":"through June"
+   here when the mid-year numbers go in, and the growth card will say so and
+   stop comparing a half year against full ones on the totals. */
+const FIN_PARTIAL = {};
+
+function finGrowth(seg){
+  const ys=finYears(), a=ys[0], b=ys[ys.length-1], span=(+b)-(+a);
+  const val=(y,k)=>finTot(y,k,seg);
+  const pct=(x,y)=>y?((x/y)-1)*100:0;
+  const cagr=(x,y)=>(y>0&&x>0&&span>0)?(Math.pow(x/y,1/span)-1)*100:null;
+  const rows=[
+    ["Revenue", val(a,"rev"), val(b,"rev"), "money"],
+    ["Net operating income", val(a,"noi"), val(b,"noi"), "money"],
+    ["Operating margin", val(a,"rev")?val(a,"noi")/val(a,"rev")*100:0,
+                          val(b,"rev")?val(b,"noi")/val(b,"rev")*100:0, "pts"],
+    ["Rounds", val(a,"rounds"), val(b,"rounds"), "count"],
+    ["Revenue per round", val(a,"rounds")?val(a,"rev")/val(a,"rounds"):0,
+                          val(b,"rounds")?val(b,"rev")/val(b,"rounds"):0, "each"],
+    ["Net operating income per round", val(a,"rounds")?val(a,"noi")/val(a,"rounds"):0,
+                          val(b,"rounds")?val(b,"noi")/val(b,"rounds"):0, "each"],
+  ];
+  const fmt=(v,k)=> k==="money"?finMoney(v) : k==="count"?finNum(v)
+                  : k==="pts"?v.toFixed(1)+"%" : "$"+v.toFixed(2);
+  const body=rows.map(([name,x,y,k])=>{
+    const d=y-x, up=d>=0;
+    const move = k==="pts" ? `${up?"+":"\u2212"}${Math.abs(d).toFixed(1)} pts`
+               : k==="count" ? `${up?"+":"\u2212"}${finNum(Math.abs(d))}`
+               : k==="each" ? `${up?"+":"\u2212"}$${Math.abs(d).toFixed(2)}`
+               : `${up?"+":"\u2212"}$${finNum(Math.abs(d))}`;
+    // compounding a margin percentage isn't meaningful, so leave it blank
+    const c = k==="pts" ? null : cagr(y,x);
+    return `<tr><td class="l">${name}</td><td>${fmt(x,k)}</td><td><b>${fmt(y,k)}</b></td>`+
+      `<td><span class="fin-chip ${up?"p":"m"}">${move}</span>`+
+      (k!=="pts"?`<div class="fin-pct">${up?"+":"\u2212"}${Math.abs(pct(y,x)).toFixed(0)}%</div>`:"")+
+      `</td><td>${c===null?'<span class="fin-chip">&mdash;</span>':
+        `<span class="fin-chip ${c>=0?"p":"m"}">${c>=0?"+":"\u2212"}${Math.abs(c).toFixed(1)}%</span>`}</td></tr>`;
+  }).join("");
+  const dept=FIN_DEPTS.map(dn=>{
+    const x=finGet(a,dn,"noi",seg), y=finGet(b,dn,"noi",seg);
+    return `<tr><td class="l">${dn}</td><td>${finMoney(x)}</td><td><b>${finMoney(y)}</b></td>`+
+      `<td>${finChg(y,x)}</td></tr>`;
+  }).join("");
+  const note = FIN_PARTIAL[b] ? ` ${b} covers ${FIN_PARTIAL[b]}, so totals are not a full year.` : "";
+  return {a,b,span,body,dept,note};
+}
+
 function detailFinancials(i){
   const [y,seg,ys]=finPick();
   const isFirst = ys.indexOf(y)===0;
@@ -1505,6 +1551,17 @@ function detailFinancials(i){
       `<div class="fin-card dt-full"><h4 class="fin-h">Net operating income, ${ys[0]}\u2013${ys[ys.length-1]}</h4>`+
       `<p class="fin-subh">${FIN_SEG[seg]}. Operating margin shown beneath each year.</p>`+
       finChart(seg,y)+`</div>`+
+      (()=>{const G=finGrowth(seg);
+        return `<div class="fin-card dt-full"><h4 class="fin-h">Growth since ${G.a}</h4>`+
+        `<p class="fin-subh">${FIN_SEG[seg]}, ${G.a} against ${G.b} \u2014 ${G.span} years.`+
+        `${G.note}</p>`+
+        `<div class="dt-cols"><div>`+
+          `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${G.a}</th><th>${G.b}</th>`+
+          `<th>Change</th><th>A year</th></tr>${G.body}</table>`+
+        `</div><div>`+
+          `<table class="fin-table"><tr><th class="l">Department</th><th>${G.a}</th><th>${G.b}</th>`+
+          `<th>Change</th></tr>${G.dept}</table>`+
+        `</div></div></div>`;})()+
       `<p class="fin-foot">Figures are year-end actuals from the department profit and loss reports. `+
       `Membership and Marketing are property-wide and split evenly between the courses, so course-level `+
       `figures for those two carry an assumption rather than a measurement.</p>`+
