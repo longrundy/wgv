@@ -503,7 +503,10 @@ function _tryUnlock(){
   var v=document.getElementById("pw").value.replace(/\s+/g,"");
   var msg=document.getElementById("pwMsg");
   if(v.indexOf("hash:")===0){ document.getElementById("pwHash").textContent=sha(v.slice(5)); msg.textContent="Copy the hash below into the file."; return; }
-  if(sha(v)===STAFF_HASH){ store.set("wgv_ok","1"); openApp(); }
+  // A manager password gets in here too, and carries the manager unlock with
+  // it, so supervisors sign in once instead of twice.
+  if(sha(v)===MANAGER_HASH){ store.set("wgv_ok","1"); store.set("wgv_mgr","1"); state.mgrOk=true; openApp(); }
+  else if(sha(v)===STAFF_HASH){ store.set("wgv_ok","1"); openApp(); }
   else{ msg.style.color="#f4a3a3"; msg.textContent="That password isn't right. Ask your manager."; document.getElementById("pw").value=""; }
 }
 function openApp(){
@@ -2347,6 +2350,7 @@ function loadLiveContent(){
 
 
 buildNav();
+if(store.get("wgv_mgr")==="1") state.mgrOk=true;   // survives a refresh, same as the sign-in
 if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
 loadContentTab();
