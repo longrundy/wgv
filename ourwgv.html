@@ -281,6 +281,11 @@ a{color:inherit}
 .wx-tile .n{font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
 .wx-tile .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
  font-weight:700;margin-top:4px;line-height:1.3}
+.wx-card{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:#fff}
+.wx-card>.wx-h:first-child{margin-top:0}
+.wx-card>.wx-sub:last-of-type{margin-bottom:11px}
+.wx-card .wx-legend{margin-bottom:2px}
+.wx-card .wx-scale{margin-bottom:2px}
 .wx-h{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
  font-weight:700;margin:24px auto 3px}
 .wx-sub{font-size:12.5px;color:var(--muted);margin:0 auto 9px}
@@ -1514,19 +1519,19 @@ function detailHistWx(i){
   if(view==="rain"){
     const B=D.rain[c];
     sub=`${WXNAME[c]} rainfall \u00b7 ${cf.of} years on record`;
-    main=`<div class="dt-cols"><div>`+
+    main=`<div class="dt-cols"><div class="wx-card">`+
       `<h4 class="wx-h">Annual totals</h4><p class="wx-sub">${cf.latest} is partial \u2014 ${cf.n} months in.</p>`+
       wxAnnualRain(B)+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--wet)"></i>Above normal</span>`+
       `<span><i class="wx-key" style="background:var(--dry)"></i>Below normal</span>`+
       `<span><i class="wx-key" style="background:#d9cfc2"></i>In progress</span></div>`+
-      `</div><div>`+
+      `</div><div class="wx-card">`+
       `<h4 class="wx-h">This year against the monthly normal</h4>`+
       `<p class="wx-sub">${cf.below} of ${cf.n} months so far have come in under normal.</p>`+
       wxMonthBars(B,cf.latest)+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--dry)"></i>${cf.latest}</span>`+
       `<span><i class="wx-key" style="background:#e9e6de"></i>Normal</span></div>`+
-      `</div><div class="dt-full">`+
+      `</div><div class="dt-full wx-card">`+
       `<h4 class="wx-h">Every month on record</h4>`+
       `<p class="wx-sub">Inches. Shading compares each month with its own normal.</p>`+wxRainGrid(B)+
       `<div class="wx-scale"><span>Drier</span><span class="wx-ramp" style="background:linear-gradient(90deg,#a8571f,#fff,#1f6fa8)"></span><span>Wetter</span></div>`+
@@ -1534,15 +1539,16 @@ function detailHistWx(i){
     foot=`About ${F.stormShare}% of a normal year falls June through September, so the annual total is decided by storm season more than any other stretch.`;
   } else {
     sub=`${D.temp.station} \u00b7 ${Object.keys(D.temp.years).length} years on record`;
-    main=`<h4 class="wx-h">Annual averages</h4><p class="wx-sub">Mean daytime high and overnight low per year.</p>`+
+    main=`<div class="wx-card">`+
+      `<h4 class="wx-h">Annual averages</h4><p class="wx-sub">Mean daytime high and overnight low per year.</p>`+
       wxAnnualTemp()+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--hot)"></i>Daytime high</span>`+
-      `<span><i class="wx-key" style="background:var(--cold)"></i>Overnight low</span></div>`+
-      `<div class="dt-cols"><div>`+
+      `<span><i class="wx-key" style="background:var(--cold)"></i>Overnight low</span></div></div>`+
+      `<div class="dt-cols"><div class="wx-card">`+
       `<h4 class="wx-h">Average high by month</h4><p class="wx-sub">&deg;F. Shading spans every year on record.</p>`+
       wxTempGrid(1)+
       `<div class="wx-scale"><span>Cooler</span><span class="wx-ramp" style="background:linear-gradient(90deg,#2a9d9b,#c8161d)"></span><span>Hotter</span></div>`+
-      `</div><div>`+
+      `</div><div class="wx-card">`+
       `<h4 class="wx-h">Average overnight low by month</h4><p class="wx-sub">&deg;F.</p>`+wxTempGrid(0)+
       `</div></div>`;
     foot="One station covers both courses. Highs and lows have moved in opposite directions over the record, which is worth confirming against the station's own history before leaning on it.";
