@@ -496,7 +496,7 @@ function _sha256(ascii){
 }
 function sha(t){ return _sha256(t); }
 const STAFF_HASH="5d1b67c4f5ebfbc63dd15285fa79e490cbc37c4c479a44f8e6646e0f7d65b5da";
-const MANAGER_HASH="3a6b70ac09d6872435e11da60eb334bc64e09ef10517f3e841e119b202d07500";
+const MANAGER_HASH="dd56de4137951d9c92681b03416ec15f886b4482a27e3a517d32f085244cbe5d";
 const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
 
 function _tryUnlock(){
