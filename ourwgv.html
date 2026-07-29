@@ -274,6 +274,15 @@ a{color:inherit}
    last two, so the whole page lines up on four invisible rails. */
 .fin-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;align-items:start}
 @media (min-width:1180px){ .fin-cols{grid-template-columns:1fr 1fr} }
+/* A card placed straight into the grid must not keep its auto side margins:
+   on a grid item those shrink it to its content and centre it instead of
+   filling the column, which is what knocked the left card out of line. */
+.fin-cols > .fin-card{margin-left:0;margin-right:0;width:100%}
+/* The two right-hand cards share the height of the department table beside
+   them, split evenly, so the block reads as one rectangle. */
+.fin-cols{align-items:stretch}
+.fin-stack{display:grid;grid-template-rows:1fr 1fr;gap:9px;height:100%}
+.fin-stack > .fin-card{margin:0;height:100%;display:flex;flex-direction:column}
 .fin-per{margin-left:auto}
 .fin-read h5{margin:0 0 7px;font-size:12px;font-weight:700;letter-spacing:.03em}
 .fin-read.good h5{color:#3f6a12}
@@ -1604,7 +1613,7 @@ function detailFinancials(i){
         deptRows+
         `<tr class="fin-tot"><td class="l">Net operating income</td><td>${finMoney(pNoi)}</td>`+
         `<td>${finMoney(noi)}</td><td>${finChg(noi,pNoi)}</td></tr></table>`+
-      `</div><div>`+
+      `</div><div class="fin-stack">`+
         `<div class="fin-card"><h4 class="fin-h">Operating ratios</h4>`+
         `<p class="fin-subh">Where the needle actually moves.</p>`+
         `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${y}</th><th>vs ${prev}</th></tr>`+
