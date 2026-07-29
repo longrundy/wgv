@@ -41,6 +41,11 @@ a{color:inherit}
 
 /* ---------- app shell ---------- */
 .app{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr) minmax(0,1fr);height:100vh;height:100dvh}
+/* Past this width the list only needs enough room for a row title; everything
+   else belongs to the detail pane, where the reports live. */
+@media (min-width:1180px){
+  .app{grid-template-columns:var(--rail-w) minmax(300px,370px) minmax(0,1fr)}
+}
 
 /* ---------- topbar (mobile only) ---------- */
 .topbar{display:none;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:12px 14px;
@@ -174,6 +179,18 @@ a{color:inherit}
 .btn-small:active{background:#d3e6f7}
 .detail-body{padding:16px 26px 26px}
 .detail-body > *{max-width:600px;margin-left:auto;margin-right:auto}
+/* Reports opt out of the reading-width cap: tables and charts want the room,
+   paragraphs don't. */
+.detail-body.is-wide > *{max-width:none}
+.detail-body.is-wide .wx-lead,.detail-body.is-wide .sv-say{max-width:820px}
+.dt-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+.dt-full{grid-column:1/-1}
+@media (min-width:1180px){
+  .is-wide .dt-cols{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)}
+  .is-wide .dt-cols>div>h3:first-child,
+  .is-wide .dt-cols>div>.sv-h:first-child,
+  .is-wide .dt-cols>div>.wx-h:first-child{margin-top:0}
+}
 .detail-title{font-size:22px;font-weight:600;margin:0;color:#17325a}
 .detail-sub{font-size:13px;color:#6a7a90;margin:5px 0 0;line-height:1.5}
 .card{background:#fff;border-radius:0;padding:2px 0 0;border:0}
@@ -1336,11 +1353,11 @@ function wxFacts(){
 }
 
 /* charts are drawn at true pixel width, same as the survey chart */
-function wxW(){ return svgW(); }
+function wxW(cols){ return svgW(cols||1); }
 
 function wxAnnualRain(B){
   const yrs=Object.keys(B.years).sort(), norm=wxSum(B.avg);
-  const W=wxW(),H=176,PL=28,PB=22;
+  const W=wxW(2),H=176,PL=28,PB=22;
   const tot=yrs.map(y=>({y,t:wxSum(B.years[y].filter(x=>x!==null)),part:!B.years[y].every(x=>x!==null)}));
   const max=Math.max.apply(null,tot.map(t=>t.t).concat([norm]))*1.12;
   const bw=(W-PL)/yrs.length, y=v=>H-PB-(v/max)*(H-PB-8);
@@ -1357,7 +1374,7 @@ function wxAnnualRain(B){
   return `<svg class="wx-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`;
 }
 function wxMonthBars(B,latest){
-  const cur=B.years[latest], W=wxW(),H=160,PL=26,PB=22;
+  const cur=B.years[latest], W=wxW(2),H=160,PL=26,PB=22;
   const max=Math.max.apply(null,B.avg.concat(cur.filter(x=>x!==null)))*1.1;
   const bw=(W-PL)/12, y=v=>H-PB-(v/max)*(H-PB-8);
   let s="";
@@ -1371,7 +1388,7 @@ function wxMonthBars(B,latest){
 }
 function wxAnnualTemp(){
   const T=WX_DATA.temp, yrs=Object.keys(T.years).sort();
-  const W=wxW(),H=176,PL=26,PB=22;
+  const W=wxW(1),H=176,PL=26,PB=22;
   const pts=yrs.map(y=>{const v=T.years[y], n=wxDone(v[1]);
     return {y,hi:wxMean(v[1].slice(0,n)),lo:wxMean(v[0].slice(0,n)),part:n<12};});
   const all=pts.flatMap(p=>[p.hi,p.lo]);
@@ -1463,19 +1480,23 @@ function detailHistWx(i){
   if(view==="rain"){
     const B=D.rain[c];
     sub=`${WXNAME[c]} rainfall \u00b7 ${cf.of} years on record`;
-    main=`<h4 class="wx-h">Annual totals</h4><p class="wx-sub">${cf.latest} is partial \u2014 ${cf.n} months in.</p>`+
+    main=`<div class="dt-cols"><div>`+
+      `<h4 class="wx-h">Annual totals</h4><p class="wx-sub">${cf.latest} is partial \u2014 ${cf.n} months in.</p>`+
       wxAnnualRain(B)+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--wet)"></i>Above normal</span>`+
       `<span><i class="wx-key" style="background:var(--dry)"></i>Below normal</span>`+
       `<span><i class="wx-key" style="background:#d9cfc2"></i>In progress</span></div>`+
+      `</div><div>`+
       `<h4 class="wx-h">This year against the monthly normal</h4>`+
       `<p class="wx-sub">${cf.below} of ${cf.n} months so far have come in under normal.</p>`+
       wxMonthBars(B,cf.latest)+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--dry)"></i>${cf.latest}</span>`+
       `<span><i class="wx-key" style="background:#e9e6de"></i>Normal</span></div>`+
+      `</div><div class="dt-full">`+
       `<h4 class="wx-h">Every month on record</h4>`+
       `<p class="wx-sub">Inches. Shading compares each month with its own normal.</p>`+wxRainGrid(B)+
-      `<div class="wx-scale"><span>Drier</span><span class="wx-ramp" style="background:linear-gradient(90deg,#a8571f,#fff,#1f6fa8)"></span><span>Wetter</span></div>`;
+      `<div class="wx-scale"><span>Drier</span><span class="wx-ramp" style="background:linear-gradient(90deg,#a8571f,#fff,#1f6fa8)"></span><span>Wetter</span></div>`+
+      `</div></div>`;
     foot=`About ${F.stormShare}% of a normal year falls June through September, so the annual total is decided by storm season more than any other stretch.`;
   } else {
     sub=`${D.temp.station} \u00b7 ${Object.keys(D.temp.years).length} years on record`;
@@ -1483,16 +1504,19 @@ function detailHistWx(i){
       wxAnnualTemp()+
       `<div class="wx-legend"><span><i class="wx-key" style="background:var(--hot)"></i>Daytime high</span>`+
       `<span><i class="wx-key" style="background:var(--cold)"></i>Overnight low</span></div>`+
+      `<div class="dt-cols"><div>`+
       `<h4 class="wx-h">Average high by month</h4><p class="wx-sub">&deg;F. Shading spans every year on record.</p>`+
       wxTempGrid(1)+
       `<div class="wx-scale"><span>Cooler</span><span class="wx-ramp" style="background:linear-gradient(90deg,#2a9d9b,#c8161d)"></span><span>Hotter</span></div>`+
-      `<h4 class="wx-h">Average overnight low by month</h4><p class="wx-sub">&deg;F.</p>`+wxTempGrid(0);
+      `</div><div>`+
+      `<h4 class="wx-h">Average overnight low by month</h4><p class="wx-sub">&deg;F.</p>`+wxTempGrid(0)+
+      `</div></div>`;
     foot="One station covers both courses. Highs and lows have moved in opposite directions over the record, which is worth confirming against the station's own history before leaning on it.";
   }
 
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${sub}</div></div>`+
-    `<div class="detail-body">${sw}${lead}${main}<p class="wx-foot">${foot}</p></div>`;
+    `<div class="detail-body is-wide">${sw}${lead}${main}<p class="wx-foot">${foot}</p></div>`;
 
   el("#detail").querySelectorAll("[data-wxv]").forEach(b=>b.addEventListener("click",()=>{
     state.wxView=b.dataset.wxv; detail(i);
@@ -1669,13 +1693,15 @@ function detailComments(i){
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">${NAME[state.course]} \u2014 ${span}.</div></div>`+
-    `<div class="detail-body">`+
+    `<div class="detail-body is-wide">`+
       svSwitch()+
+      `<div class="dt-cols"><div>`+
       `<div class="cm-tools">`+
         `<input class="cm-srch" id="cmQ" type="search" placeholder="Search comments \u2014 try bunkers, pace, cart, greens" value="${esc(state.cmQ||"")}">`+
         cmChips()+
       `</div>`+
-      `<div class="cm-count" id="cmCount"></div><div id="cmList"></div>`+
+      `<div class="cm-count" id="cmCount"></div>`+
+      `</div><div><div id="cmList"></div></div></div>`+
     `</div>`;
   svSwitchWire(i);
   el("#detail").querySelectorAll("[data-cmt]").forEach(b=>b.addEventListener("click",()=>{
@@ -1815,17 +1841,20 @@ function svSpan(n){
 /* The chart is drawn at the width it will actually occupy. With a viewBox that
    matches the rendered pixels there's no rescaling, so labels stay true size on
    a phone instead of being squashed horizontally. */
-function svgW(){
+function svgW(cols){
   const d=el("#detail");
   const pad = window.innerWidth<=820 ? 28 : 52;
-  const w = (d?d.clientWidth:0) || 700;
-  return Math.max(280, Math.min(600, w-pad));
+  const inner = ((d?d.clientWidth:0) || 700) - pad;
+  // Below the two-column breakpoint everything stays at reading width.
+  if(window.innerWidth < 1180) return Math.max(280, Math.min(600, inner));
+  const per = (cols===2) ? (inner-22)/2 : inner;
+  return Math.max(280, Math.min(1000, per));
 }
 function svChart(me,tr){
   const all=me.concat(tr).filter(v=>v!==null);
   if(all.length<2) return "";
   const lo=Math.min.apply(null,all)-8, hi=Math.max.apply(null,all)+8;
-  const W=svgW(),H=196,PL=8,PR=8;
+  const W=svgW(2),H=196,PL=8,PR=8;
   const x=i=>PL+i*((W-PL-PR)/Math.max(1,me.length-1));
   const y=v=>H-24-((v-lo)/Math.max(1,hi-lo))*(H-46);
   const path=a=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
@@ -1870,8 +1899,9 @@ function detailSurveys(i){
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">2026 season, year to date through ${D.months?svLast(D.months):""} 30.</div></div>`+
-    `<div class="detail-body">`+
+    `<div class="detail-body is-wide">`+
       svSwitch()+
+      `<div class="dt-cols"><div>`+
       `<div class="sv-gap">`+
         `<div class="sv-gaptop"><div>`+
           `<div class="sv-lbl">Gap to Troon average</div>`+
@@ -1896,7 +1926,9 @@ function detailSurveys(i){
         return `<span style="width:${p}%;background:${col}" title="${k}: ${p}%">${lbl}</span>`;
       }).join("")+`</div>`+
       `<p class="sv-note">Promoters, passives, then detractors. Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
+      `</div><div>`+
       `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>${cats}`+
+      `</div></div>`+
       `<p class="sv-foot">Scores are 0&ndash;100 satisfaction indexes; net promoter runs &minus;100 to +100. `+
       `The grey marker on each bar is the Troon average for that question.</p>`+
     `</div>`;
