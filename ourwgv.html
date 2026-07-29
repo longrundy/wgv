@@ -374,6 +374,13 @@ a{color:inherit}
 .sv-mix{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .sv-mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
 .sv-note{font-size:12px;color:var(--muted);margin:7px auto 0}
+.sv-guide{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 auto 12px;
+ background:#fbfbf9}
+.sv-guide p{margin:0 0 7px;font-size:12.5px;line-height:1.5;color:#5f5f58}
+.sv-guide p:last-child{margin-bottom:0}
+.sv-guide b{color:var(--ink);font-weight:600}
+.sv-npstag{flex:none;width:92px;text-align:center;font-size:9.5px;font-weight:700;
+ letter-spacing:.07em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 0}
 .sv-cat{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden;background:#fff}
 .sv-cat>button{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;background:none;border:0;cursor:pointer;text-align:left;font-family:inherit;font-size:15px;color:var(--ink)}
 .sv-cn{flex:1;font-weight:600}
@@ -1866,6 +1873,10 @@ function surveysItem(){
   return {t:"Customer Surveys", m:"", s:"", c:"f-flat", a:"", surveys:true};
 }
 
+/* "How likely is it that you would recommend..." is a net promoter question:
+   it runs -100 to +100, unlike the 0-100 satisfaction indexes around it. */
+function svIsNps(q){ return /^\s*how likely/i.test(q||""); }
+
 function svLast(a){ return a && a.length ? a[a.length-1] : null; }
 function svChip(v){
   if(v===null||isNaN(v)) return "";
@@ -1929,9 +1940,13 @@ function detailSurveys(i){
     const sc=svLast(cat[c]), tr=svLast(cat.troon);
     const qs=cat.qs.map(q=>{
       const v=svLast(q[c])-svLast(q.troon);
+      const nps=svIsNps(q.q);
+      // an NPS answer isn't on the 0-100 scale, so it gets a tag instead of a bar
+      const gauge = nps
+        ? `<span class="sv-npstag">NPS</span>`
+        : `<span class="sv-bar"><i style="width:${svLast(q[c])}%"></i><b style="left:${svLast(q.troon)}%"></b></span>`;
       return `<div class="sv-q"><span class="sv-qt">${q.q}</span>`+
-        `<span class="sv-bar"><i style="width:${svLast(q[c])}%"></i><b style="left:${svLast(q.troon)}%"></b></span>`+
-        `<span class="sv-qn">${svLast(q[c])}</span>${svChip(v)}</div>`;
+        gauge+`<span class="sv-qn">${svLast(q[c])}</span>${svChip(v)}</div>`;
     }).join("");
     return `<div class="sv-cat" data-cat="${ci}"><button type="button" aria-expanded="false">`+
       `<span class="sv-cn">${cat.name}</span><span class="sv-cs">${sc}</span>${svChip(sc-tr)}`+
@@ -1969,10 +1984,19 @@ function detailSurveys(i){
       }).join("")+`</div>`+
       `<p class="sv-note">Promoters, passives, then detractors. Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
       `</div><div>`+
-      `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>${cats}`+
+      `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>`+
+      `<div class="sv-guide">`+
+        `<p><b>The big number</b> is that area's score out of 100 — Troon's own figure for the section, `+
+        `close to the average of the satisfaction questions inside it.</p>`+
+        `<p><b>The chip beside it</b> is the difference against the Troon average for the same measure. `+
+        `Green is ahead, red is behind.</p>`+
+        `<p><b>Questions tagged NPS</b> are net promoter scores running −100 to +100, not 0 to 100. `+
+        `They read far lower by design and are left out of the area score — so a −9 on an NPS question `+
+        `doesn't drag the section down by nine.</p>`+
+      `</div>${cats}`+
       `</div></div>`+
-      `<p class="sv-foot">Scores are 0&ndash;100 satisfaction indexes; net promoter runs &minus;100 to +100. `+
-      `The grey marker on each bar is the Troon average for that question.</p>`+
+      `<p class="sv-foot">The grey marker on each bar is the Troon average for that question. `+
+      `Figures come straight from Troon's survey reporting.</p>`+
     `</div>`;
 
   svSwitchWire(i);
