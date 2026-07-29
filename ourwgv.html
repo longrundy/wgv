@@ -374,13 +374,13 @@ a{color:inherit}
 .sv-mix{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .sv-mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
 .sv-note{font-size:12px;color:var(--muted);margin:7px auto 0}
-.sv-guide{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 auto 12px;
- background:#fbfbf9}
-.sv-guide p{margin:0 0 7px;font-size:12.5px;line-height:1.5;color:#5f5f58}
-.sv-guide p:last-child{margin-bottom:0}
-.sv-guide b{color:var(--ink);font-weight:600}
 .sv-npstag{flex:none;width:92px;text-align:center;font-size:9.5px;font-weight:700;
  letter-spacing:.07em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 0}
+.sv-vs{font-size:10.5px;font-weight:600;color:var(--muted);margin-top:2px}
+.sv-mixkey{display:flex;flex-wrap:wrap;gap:6px 18px;margin:9px auto 0;font-size:12px;color:var(--muted)}
+.sv-mixkey b{color:var(--ink);font-weight:700}
+.sv-mixkey em{font-style:normal;color:#b0b0a8}
+.sv-mixdot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .sv-cat{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden;background:#fff}
 .sv-cat>button{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;background:none;border:0;cursor:pointer;text-align:left;font-family:inherit;font-size:15px;color:var(--ink)}
 .sv-cn{flex:1;font-weight:600}
@@ -1970,30 +1970,29 @@ function detailSurveys(i){
         `<span><i class="sv-key" style="background:#b9b9b1"></i>Troon average</span></div>`+
       `</div>`+
       `<div class="sv-tri">`+
-        `<div class="sv-tile"><div class="sv-n">${svLast(D.nps[c])}</div><div class="sv-l">Net promoter</div></div>`+
-        `<div class="sv-tile"><div class="sv-n">${svLast(D.collected[c])}</div><div class="sv-l">Surveys in</div></div>`+
-        `<div class="sv-tile"><div class="sv-n">${D.mix.Promoter[c]}</div><div class="sv-l">Promoters</div></div>`+
+        `<div class="sv-tile"><div class="sv-n">${svLast(D.nps[c])}</div>`+
+          `<div class="sv-vs">Troon ${svLast(D.nps.troon)}</div>`+
+          `<div class="sv-l">Net promoter score</div></div>`+
+        `<div class="sv-tile"><div class="sv-n">${svLast(D.collected[c])}</div>`+
+          `<div class="sv-vs">&nbsp;</div><div class="sv-l">Surveys in</div></div>`+
+        `<div class="sv-tile"><div class="sv-n">${D.mix.Promoter[c]}</div>`+
+          `<div class="sv-vs">Troon ${D.mix.Promoter.troon}</div>`+
+          `<div class="sv-l">Promoters</div></div>`+
       `</div>`+
       `<h3 class="sv-h">Who is answering</h3>`+
       `<div class="sv-mix">`+mixRow.map(([k,col])=>{
         const p=parseFloat(D.mix[k][c])||0;
-        // Promoter and Passive both start with P, so spell the word out when
-        // the band is wide enough and fall back to the bare number when it isn't.
-        const lbl = p>=22 ? k+"s "+p+"%" : p>=9 ? p+"%" : "";
-        return `<span style="width:${p}%;background:${col}" title="${k}: ${p}%">${lbl}</span>`;
+        // the detractor band is too narrow for a word, so the bands carry only
+        // numbers and the key underneath does the naming
+        return `<span style="width:${p}%;background:${col}" title="${k}: ${p}%">${p>=7?p+"%":""}</span>`;
       }).join("")+`</div>`+
-      `<p class="sv-note">Promoters, passives, then detractors. Troon average: ${D.mix.Promoter.troon} promoters, ${D.mix.Detractor.troon} detractors.</p>`+
+      `<div class="sv-mixkey">`+mixRow.map(([k,col])=>
+        `<span><i class="sv-mixdot" style="background:${col}"></i>${k}s `+
+        `<b>${D.mix[k][c]}</b> <em>Troon ${D.mix[k].troon}</em></span>`).join("")+`</div>`+
+
       `</div><div>`+
       `<h3 class="sv-h">By area &mdash; tap to see the questions</h3>`+
-      `<div class="sv-guide">`+
-        `<p><b>The big number</b> is that area's score out of 100 — Troon's own figure for the section, `+
-        `close to the average of the satisfaction questions inside it.</p>`+
-        `<p><b>The chip beside it</b> is the difference against the Troon average for the same measure. `+
-        `Green is ahead, red is behind.</p>`+
-        `<p><b>Questions tagged NPS</b> are net promoter scores running −100 to +100, not 0 to 100. `+
-        `They read far lower by design and are left out of the area score — so a −9 on an NPS question `+
-        `doesn't drag the section down by nine.</p>`+
-      `</div>${cats}`+
+      `${cats}`+
       `</div></div>`+
       `<p class="sv-foot">The grey marker on each bar is the Troon average for that question. `+
       `Figures come straight from Troon's survey reporting.</p>`+
