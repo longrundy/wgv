@@ -277,7 +277,8 @@ a{color:inherit}
 /* A card placed straight into the grid must not keep its auto side margins:
    on a grid item those shrink it to its content and centre it instead of
    filling the column, which is what knocked the left card out of line. */
-.fin-cols > .fin-card{margin-left:0;margin-right:0;width:100%}
+.fin-cols > .fin-card{margin:0;width:100%}   /* keeps both columns the same height */
+.fin-cols{margin-bottom:9px}                 /* and clear of the card beneath */
 /* The two right-hand cards share the height of the department table beside
    them, split evenly, so the block reads as one rectangle. */
 .fin-cols{align-items:stretch}
