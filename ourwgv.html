@@ -1467,7 +1467,11 @@ function finTrend(seg,metric,dept,perRound){
   const ys=finYears();
   const vals=ys.map(y=>finVal(y,metric,dept,seg,perRound));
   const W=svgW(1), H=210, PL=46, PR=20, PB=28;
-  const lo=Math.min(0,Math.min.apply(null,vals)), hi=Math.max.apply(null,vals)*1.1 || 1;
+  /* Headroom has to be added, not multiplied: for a cost centre every value is
+     negative, so max*1.1 lands BELOW the maximum and the line overflows the box. */
+  const rawLo=Math.min.apply(null,vals), rawHi=Math.max.apply(null,vals);
+  const span=(rawHi-rawLo)||Math.abs(rawHi)||1;
+  const lo=rawLo-span*0.18, hi=rawHi+span*0.18;
   const x=i=>PL+i*((W-PL-PR)/Math.max(1,ys.length-1));
   const y=v=>H-PB-((v-lo)/Math.max(1,hi-lo))*(H-PB-16);
   const good = FIN_LOWER_BETTER[metric] ? (vals[vals.length-1]<vals[0]) : (vals[vals.length-1]>vals[0]);
