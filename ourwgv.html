@@ -241,6 +241,20 @@ a{color:inherit}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
 /* ---- Historical Weather ---- */
+/* Wide screens: the summary reads as one header block — the note on the left,
+   the three figures stacked beside it at matching height. */
+.svsw .svgrp{max-width:300px}
+@media (min-width:1180px){
+  .is-wide .wx-head{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);
+    gap:16px;align-items:stretch;margin-bottom:22px}
+  .is-wide .wx-head .wx-lead{max-width:none;margin:0;height:100%}
+  .is-wide .wx-head .wx-strip{grid-template-columns:minmax(0,1fr);
+    grid-template-rows:repeat(3,1fr);gap:10px;margin:0;height:100%}
+  .is-wide .wx-head .wx-tile{display:flex;flex-direction:column;justify-content:center}
+  .is-wide .wx-tile .n{font-size:23px}
+  .is-wide .wx-tile .l{font-size:10px}
+}
+
 .svsplit button.is-static{background:#fff;color:var(--muted);cursor:default}
 .wx-lead{border:1px solid var(--line);border-left:4px solid var(--dry);border-radius:12px;
  padding:16px 18px;margin:0 auto 12px;background:#fffdfb;max-width:600px}
@@ -1516,7 +1530,7 @@ function detailHistWx(i){
 
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${sub}</div></div>`+
-    `<div class="detail-body is-wide">${sw}${lead}${main}<p class="wx-foot">${foot}</p></div>`;
+    `<div class="detail-body is-wide">${sw}<div class="wx-head">${lead}</div>${main}<p class="wx-foot">${foot}</p></div>`;
 
   el("#detail").querySelectorAll("[data-wxv]").forEach(b=>b.addEventListener("click",()=>{
     state.wxView=b.dataset.wxv; detail(i);
