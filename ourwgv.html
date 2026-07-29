@@ -257,6 +257,12 @@ a{color:inherit}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
 /* ---- Financials ---- */
+/* three options need more room than the two-way switches elsewhere */
+.svsw .svgrp.fin-seg{max-width:480px}
+.svsw .svgrp.fin-seg .svsplit button{padding:9px 10px}
+@media (max-width:600px){
+  .svsw .svgrp.fin-seg .svsplit button{padding:9px 4px;font-size:11px}
+}
 .fin-years{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:0 auto 14px}
 .fin-yl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
  color:var(--muted);margin-right:4px}
@@ -1425,7 +1431,7 @@ function detailFinancials(i){
   const pRev=finTot(prev,"rev",seg), pLab=finTot(prev,"lab",seg), pNoi=finTot(prev,"noi",seg);
   const margin=rev?noi/rev*100:0, pMargin=pRev?pNoi/pRev*100:0;
 
-  const sw=`<div class="svsw"><div class="svgrp"><div class="svgrp-lbl">Segment</div>`+
+  const sw=`<div class="svsw"><div class="svgrp fin-seg"><div class="svgrp-lbl">Segment</div>`+
     `<div class="svsplit">`+["all","ss","kb"].map(k=>
       `<button type="button" data-fseg="${k}" aria-pressed="${k===seg}">${FIN_SEG[k]}</button>`).join("")+
     `</div></div></div>`+
