@@ -269,6 +269,15 @@ a{color:inherit}
 .fin-years button{border:1px solid #dde3ec;background:#f2f6fb;color:#185fa5;font-family:inherit;
  font-size:12px;font-weight:600;padding:6px 10px;border-radius:7px;cursor:pointer}
 .fin-years button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.fin-pick{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin:2px 0 10px}
+.fin-mrow{display:flex;flex-wrap:wrap;gap:5px}
+.fin-mrow button{border:1px solid #dde3ec;background:#f2f6fb;color:#185fa5;font-family:inherit;
+ font-size:12px;font-weight:600;padding:7px 11px;border-radius:7px;cursor:pointer}
+.fin-mrow button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.fin-sel{display:flex;flex-direction:column;gap:3px;font-size:9.5px;font-weight:700;
+ letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fin-sel select{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink);
+ padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer}
 .fin-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:0 auto 20px}
 .fin-tile{border:1px solid var(--line);border-radius:12px;padding:12px 13px}
 .fin-tile .n{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
@@ -1074,7 +1083,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:""};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -1374,31 +1383,6 @@ function finChg(now,then,asNum){
     (pct<1000?`<div class="fin-pct">${d>0?"+":"\u2212"}${pct.toFixed(0)}%</div>`:"");
 }
 
-/* NOI across every year, with the selected one picked out. */
-function finChart(seg,year){
-  const ys=finYears(), W=svgW(1), H=190, PL=40, PB=30;
-  const vals=ys.map(y=>finTot(y,"noi",seg));
-  const max=Math.max.apply(null,vals)*1.14, min=Math.min(0,Math.min.apply(null,vals));
-  const bw=(W-PL)/ys.length;
-  const y0=v=>H-PB-((v-min)/Math.max(1,max-min))*(H-PB-14);
-  let s="";
-  ys.forEach((yy,i)=>{
-    const x=PL+i*bw, v=vals[i], sel=yy===year;
-    const top=y0(Math.max(v,0)), bot=y0(Math.min(v,0));
-    s+=`<rect x="${x+bw*.16}" y="${top}" width="${bw*.68}" height="${Math.max(1,bot-top)}" rx="2" `+
-       `fill="${sel?"var(--red)":"#c9d4e2"}"></rect>`;
-    s+=`<text x="${x+bw/2}" y="${H-16}" text-anchor="middle" font-size="10" `+
-       `fill="${sel?"var(--ink)":"#8a8a84"}" font-weight="${sel?700:400}">${yy.slice(2)}</text>`;
-    const rev=finTot(yy,"rev",seg);
-    if(rev) s+=`<text x="${x+bw/2}" y="${H-4}" text-anchor="middle" font-size="9" fill="#b9b9b1">`+
-      `${(v/rev*100).toFixed(0)}%</text>`;
-  });
-  s+=`<line x1="${PL}" x2="${W}" y1="${y0(0)}" y2="${y0(0)}" stroke="var(--line)"></line>`;
-  [0,max/2,max].forEach(v=>{
-    s+=`<text x="0" y="${y0(v)+3}" font-size="9.5" fill="#b9b9b1">$${(v/1e6).toFixed(1)}M</text>`;});
-  return `<svg class="fin-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`;
-}
-
 function finRatios(y,seg,prev){
   const rev=finTot(y,"rev",seg), lab=finTot(y,"lab",seg), cos=finTot(y,"cos",seg),
         noi=finTot(y,"noi",seg), rd=finTot(y,"rounds",seg);
@@ -1467,6 +1451,37 @@ function finGrowth(seg){
   }).join("");
   const note = FIN_PARTIAL[b] ? ` ${b} covers ${FIN_PARTIAL[b]}, so totals are not a full year.` : "";
   return {a,b,span,body,dept,note};
+}
+
+const FIN_METRICS=[["rev","Revenue"],["cos","Cost of sales"],["lab","Labor"],
+                   ["opx","Operating expenses"],["noi","Net operating income"]];
+const FIN_LOWER_BETTER={cos:1,lab:1,opx:1};
+
+/* One metric, one department, every year on record. */
+function finTrend(seg,metric,dept){
+  const ys=finYears();
+  const at = y => dept==="__all__" ? finTot(y,metric,seg) : finGet(y,dept,metric,seg);
+  const vals=ys.map(at);
+  const W=svgW(1), H=210, PL=46, PR=20, PB=28;
+  const lo=Math.min(0,Math.min.apply(null,vals)), hi=Math.max.apply(null,vals)*1.1 || 1;
+  const x=i=>PL+i*((W-PL-PR)/Math.max(1,ys.length-1));
+  const y=v=>H-PB-((v-lo)/Math.max(1,hi-lo))*(H-PB-16);
+  const good = FIN_LOWER_BETTER[metric] ? (vals[vals.length-1]<vals[0]) : (vals[vals.length-1]>vals[0]);
+  const stroke = good ? "#4c7a1a" : "var(--red)";
+  let s=`<path d="${vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" `+
+        `fill="none" stroke="${stroke}" stroke-width="3" stroke-linejoin="round"></path>`;
+  vals.forEach((v,i)=>{
+    s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${i===vals.length-1?5:3.5}" fill="${stroke}"></circle>`;
+    s+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#8a8a84">${ys[i].slice(2)}</text>`;
+  });
+  [lo,(lo+hi)/2,hi].forEach(v=>{
+    s+=`<text x="0" y="${y(v)+3}" font-size="9.5" fill="#b9b9b1">$${(v/1e6).toFixed(1)}M</text>`;
+    s+=`<line x1="${PL}" x2="${W-PR}" y1="${y(v)}" y2="${y(v)}" stroke="#f5f3ee"></line>`;
+  });
+  s+=`<text x="${x(vals.length-1)}" y="${y(vals[vals.length-1])-13}" text-anchor="end" `+
+     `font-size="12" font-weight="700" fill="${stroke}">${finMoney(vals[vals.length-1])}</text>`;
+  return {svg:`<svg class="fin-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`,
+          first:vals[0], last:vals[vals.length-1], good, ys};
 }
 
 function detailFinancials(i){
@@ -1548,9 +1563,26 @@ function detailFinancials(i){
         `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${prev}</th><th>${y}</th><th>Change</th></tr>`+
         mixRows+`</table></div>`+
       `</div></div>`+
-      `<div class="fin-card dt-full"><h4 class="fin-h">Net operating income, ${ys[0]}\u2013${ys[ys.length-1]}</h4>`+
-      `<p class="fin-subh">${FIN_SEG[seg]}. Operating margin shown beneath each year.</p>`+
-      finChart(seg,y)+`</div>`+
+      (()=>{
+        const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
+        const dept = (state.finDept==="__all__"||FIN_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
+        const T=finTrend(seg,metric,dept);
+        const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
+        const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
+        return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${ys[0]}\u2013${ys[ys.length-1]}</h4>`+
+        `<div class="fin-pick">`+
+          `<div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
+            `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+
+          `</div>`+
+          `<label class="fin-sel"><span>Department</span><select data-fdept>`+
+            `<option value="__all__"${dept==="__all__"?" selected":""}>All departments</option>`+
+            FIN_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
+          `</select></label>`+
+        `</div>`+
+        `<p class="fin-subh">${mname} \u00b7 ${dept==="__all__"?"all departments":dept} \u00b7 ${FIN_SEG[seg]}. `+
+        `${finMoney(T.first)} in ${ys[0]} to <b>${finMoney(T.last)}</b> in ${ys[ys.length-1]} `+
+        `\u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
+        T.svg+`</div>`;})()+
       (()=>{const G=finGrowth(seg);
         return `<div class="fin-card dt-full"><h4 class="fin-h">Growth since ${G.a}</h4>`+
         `<p class="fin-subh">${FIN_SEG[seg]}, ${G.a} against ${G.b} \u2014 ${G.span} years.`+
@@ -1573,6 +1605,11 @@ function detailFinancials(i){
   el("#detail").querySelectorAll("[data-fyear]").forEach(b=>b.addEventListener("click",()=>{
     state.finYear=b.dataset.fyear; detail(i);
   }));
+  el("#detail").querySelectorAll("[data-fmet]").forEach(b=>b.addEventListener("click",()=>{
+    state.finMetric=b.dataset.fmet; detail(i);
+  }));
+  const dsel=el("#detail").querySelector("[data-fdept]");
+  if(dsel) dsel.addEventListener("change",()=>{ state.finDept=dsel.value; detail(i); });
 }
 
 /* ---------- Historical Weather ----------
