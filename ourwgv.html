@@ -269,6 +269,11 @@ a{color:inherit}
 .fin-years button{border:1px solid #dde3ec;background:#f2f6fb;color:#185fa5;font-family:inherit;
  font-size:12px;font-weight:600;padding:6px 10px;border-radius:7px;cursor:pointer}
 .fin-years button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+/* The tile strip is four columns with a 9px gap. Using the same gap here makes
+   the left column sit exactly under the first two tiles and the right under the
+   last two, so the whole page lines up on four invisible rails. */
+.fin-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;align-items:start}
+@media (min-width:1180px){ .fin-cols{grid-template-columns:1fr 1fr} }
 .fin-pick{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin:2px 0 10px}
 .fin-mrow{display:flex;flex-wrap:wrap;gap:5px}
 .fin-mrow button{border:1px solid #dde3ec;background:#f2f6fb;color:#185fa5;font-family:inherit;
@@ -286,7 +291,7 @@ a{color:inherit}
  font-weight:700;margin-top:4px}
 .fin-tile .up{color:#4c7a1a}.fin-tile .dn{color:var(--red)}
 .fin-card{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:#fff;
- margin:0 auto 18px}
+ margin:0 auto 9px}
 .fin-card:last-of-type{margin-bottom:0}
 .fin-h{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
  font-weight:700;margin:0 0 3px}
@@ -1546,7 +1551,7 @@ function detailFinancials(i){
           `${margin>=pMargin?"+":"\u2212"}${Math.abs(margin-pMargin).toFixed(1)} pts vs ${prev}`}</div>`+
         `<div class="l">Operating margin</div></div>`+
       `</div>`+
-      `<div class="dt-cols"><div class="fin-card">`+
+      `<div class="fin-cols"><div class="fin-card">`+
         `<h4 class="fin-h">Contribution by department</h4>`+
         `<p class="fin-subh">Positive figures contribute, negative ones consume.</p>`+
         `<table class="fin-table"><tr><th class="l">Department</th><th>${prev}</th><th>${y}</th><th>Change</th></tr>`+
