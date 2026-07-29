@@ -273,7 +273,7 @@ a{color:inherit}
 .sv-num small{font-size:19px;font-weight:600}
 .sv-say{font-size:14px;color:var(--muted);max-width:330px;margin:2px 0 0}
 .sv-say b{color:var(--ink);font-weight:600}
-.sv-chart{width:100%;height:196px;display:block;overflow:visible;margin-top:4px}
+.sv-chart{width:100%;height:auto;display:block;overflow:visible;margin-top:4px}
 .sv-legend{display:flex;gap:16px;font-size:12px;color:var(--muted);padding:2px 0 12px}
 .sv-key{display:inline-block;width:22px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .sv-tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px auto 4px}
@@ -1477,11 +1477,20 @@ function svSpan(n){
   return word+" month"+(n===1?"":"s");
 }
 
+/* The chart is drawn at the width it will actually occupy. With a viewBox that
+   matches the rendered pixels there's no rescaling, so labels stay true size on
+   a phone instead of being squashed horizontally. */
+function svgW(){
+  const d=el("#detail");
+  const pad = window.innerWidth<=820 ? 28 : 52;
+  const w = (d?d.clientWidth:0) || 700;
+  return Math.max(280, Math.min(600, w-pad));
+}
 function svChart(me,tr){
   const all=me.concat(tr).filter(v=>v!==null);
   if(all.length<2) return "";
   const lo=Math.min.apply(null,all)-8, hi=Math.max.apply(null,all)+8;
-  const W=640,H=196,PL=8,PR=8;
+  const W=svgW(),H=196,PL=8,PR=8;
   const x=i=>PL+i*((W-PL-PR)/Math.max(1,me.length-1));
   const y=v=>H-24-((v-lo)/Math.max(1,hi-lo))*(H-46);
   const path=a=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
@@ -2009,6 +2018,15 @@ if(store.get("wgv_ok")==="1") openApp();
 else document.getElementById("pw").focus();
 loadContentTab();
 loadSurveysTab();
+let _svResize;
+window.addEventListener("resize",()=>{
+  clearTimeout(_svResize);
+  _svResize=setTimeout(()=>{
+    const cur=(S[state.view]||{}).items||[];
+    const it=cur[state.idx];
+    if(it && it.surveys && state.svView==="scores") detail(it);
+  },180);
+});
 </script>
 </body>
 </html>
