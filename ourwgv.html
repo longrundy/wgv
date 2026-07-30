@@ -1895,34 +1895,67 @@ function ydSay(seg,period,prevLabel,open){
     return {who:dn, good, work};
   }
 
-  const R=P.rounds;
-  if(R){
-    const T=ydPick(R.total,seg);
-    if(T[1]!=null){const d=T[0]-T[1]; push(d>0,`Rounds are <b>${finNum(T[0])}</b>, `+
-      `${d>0?"up":"down"} ${ydAbsN(d)} on ${prevLabel}.`);}
-    if(T[2]!=null){const d=T[0]-T[2]; push(d>0,`That is ${ydAbsN(d)} ${d>0?"ahead of":"behind"} budget.`);}
-    R.lines.forEach(l=>{
-      const [a,,b]=ydPick(l,seg);
-      if(a==null||b==null) return;
-      const d=a-b;
-      if(Math.abs(d) >= Math.max(300,(T[0]||0)*0.01))
-        push(d>0,`<b>${l[0]}</b> rounds are ${ydAbsN(d)} ${d>0?"over":"under"} budget.`);
-    });
+  /* Rounds selected: the mix is the story. */
+  if(dn==="Rounds"){
+    const R=P.rounds;
+    if(R){
+      const T=ydPick(R.total,seg);
+      if(T[1]!=null){const d=T[0]-T[1]; push(d>0,`Rounds are <b>${finNum(T[0])}</b>, `+
+        `${d>0?"up":"down"} ${ydAbsN(d)} on ${prevLabel}.`);}
+      if(T[2]!=null){const d=T[0]-T[2]; push(d>0,`That is ${ydAbsN(d)} ${d>0?"ahead of":"behind"} budget.`);}
+      R.lines.forEach(l=>{
+        const [a2,,b2]=ydPick(l,seg);
+        if(a2==null||b2==null) return;
+        const d=a2-b2;
+        if(Math.abs(d) >= Math.max(300,(T[0]||0)*0.01))
+          push(d>0,`<b>${l[0]}</b> rounds are ${ydAbsN(d)} ${d>0?"over":"under"} budget.`);
+      });
+    }
+    return {who:"Rounds", good, work};
   }
-  if(!dn){
-    const t=k=>(P.totals||[]).find(l=>l[0]===k);
-    const noi=t("NOI");
-    if(noi){const [a,p,b]=ydPick(noi,seg);
-      if(p!=null){const d=a-p; push(d>0,`Net operating income is <b>${finMoney(a)}</b>, `+
-        `${d>0?"up":"down"} ${ydAbs(d)} on ${prevLabel}.`);}
-      if(b!=null){const d=a-b; push(d>0,`NOI is ${ydAbs(d)} ${d>0?"ahead of":"behind"} budget.`);}}
-    const rv=t("Revenues");
-    if(rv){const [a,,b]=ydPick(rv,seg);
-      if(b!=null){const d=a-b; push(d>0,`Revenue is ${ydAbs(d)} ${d>0?"over":"under"} plan.`);}}
-    const lb=t("Employee Related");
-    if(lb){const [a,,b]=ydPick(lb,seg);
-      if(b!=null){const d=a-b; push(d<0,`Labor is ${ydAbs(d)} ${d<0?"under":"over"} budget.`);}}
+
+  /* Nothing selected: the whole operation, top to bottom. */
+  const t=k=>(P.totals||[]).find(l=>l[0]===k);
+  const g=[], wk=[];
+  const add=(ok,t2)=>(ok?g:wk).push(t2);
+  const noi=t("NOI");
+  if(noi){
+    const [a2,p2,b2]=ydPick(noi,seg);
+    if(p2!=null){const d=a2-p2; add(d>0,`Net operating income is <b>${finMoney(a2)}</b>, `+
+      `${d>0?"up":"down"} ${ydAbs(d)} on ${prevLabel}.`);}
+    if(b2!=null){const d=a2-b2; add(d>0,`NOI is ${ydAbs(d)} ${d>0?"ahead of":"behind"} budget.`);}
   }
+  const rv2=t("Revenues");
+  if(rv2){const [a2,,b2]=ydPick(rv2,seg);
+    if(b2!=null){const d=a2-b2; add(d>0,`Revenue is ${ydAbs(d)} ${d>0?"over":"under"} plan.`);}}
+  const lb=t("Employee Related");
+  if(lb){const [a2,,b2]=ydPick(lb,seg);
+    if(b2!=null){const d=a2-b2; add(d<0,`Labor is ${ydAbs(d)} ${d<0?"under":"over"} budget.`);}}
+  if(P.rounds){
+    const T=ydPick(P.rounds.total,seg);
+    if(T[2]!=null){const d=T[0]-T[2]; add(d>0,`Rounds are ${ydAbsN(d)} ${d>0?"ahead of":"behind"} `+
+      `budget at <b>${finNum(T[0])}</b>.`);}
+  }
+  /* which departments are carrying the result, and which are dragging it */
+  const scored=YD_DEPTS.map(nm=>{
+    const rows=(P.depts||{})[nm]; if(!rows) return null;
+    const n2=rows.find(l=>l[0]==="NOI"); if(!n2) return null;
+    const [a2,,b2]=ydPick(n2,seg);
+    if(a2==null||b2==null) return null;
+    return {nm, d:a2-b2};
+  }).filter(Boolean).sort((x,y)=>y.d-x.d);
+  if(scored.length){
+    const best=scored[0], worst=scored[scored.length-1];
+    if(best.d>0) g.push(`<b>${best.nm}</b> is furthest ahead of budget, by ${ydAbs(best.d)}.`);
+    if(worst.d<0) wk.push(`<b>${worst.nm}</b> is furthest behind, by ${ydAbs(worst.d)}.`);
+  }
+  /* margin is context rather than a variance, so it only lands if there is room */
+  if(noi && g.length<3){
+    const rv3=t("Revenues");
+    if(rv3){const [ra]=ydPick(rv3,seg), [na]=ydPick(noi,seg);
+      if(ra) g.push(`Operating margin is <b>${(na/ra*100).toFixed(1)}%</b>.`);}
+  }
+  return {who: FIN_SEG[seg], good:g, work:wk};
   return {who: dn || FIN_SEG[seg], good, work};
 }
 function ydBand(seg,period,prevLabel){
