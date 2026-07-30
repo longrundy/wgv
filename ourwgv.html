@@ -752,6 +752,9 @@ button.yd-r:hover{background:#f2f5f9}
 }
 .embed-card.is-list{max-width:640px}
 .embed-card.is-list iframe{height:70vh;min-height:480px}
+/* Full monthly calendar: the grid needs the width, not a widget column. */
+.embed-card.is-cal{max-width:none}
+.embed-card.is-cal iframe{height:78vh;min-height:620px}
 .lang-switch.wide button{max-width:230px}
 .embed-note{margin:12px auto 0;text-align:center;font-size:12px;color:var(--muted)}
 .embed-note a{color:#185fa5;font-weight:600;text-decoration:none}
@@ -762,6 +765,7 @@ button.yd-r:hover{background:#f2f5f9}
   .embed-card.is-mini iframe{height:520px}
   .embed-card.is-list{max-width:none}
   .embed-card.is-list iframe{height:calc(100dvh - 300px);min-height:420px}
+  .embed-card.is-cal iframe{height:calc(100dvh - 240px);min-height:560px}
   /* Google Forms should use the full mobile screen: kill the detail padding,
      card margins, and rounded corners so the form runs edge-to-edge. */
   .detail-body.form-body,
@@ -979,16 +983,17 @@ function parkingItem(){
             ["Slammer & Squire", PARKING_IMG.ss, "Employee parking at Slammer & Squire — park in the areas shaded red"]]}};
 }
 
-/* Work Schedule & Club Calendar — Tockify "mini" widget. This is a script
-   embed rather than a framable URL, so it runs inside a srcdoc iframe: the
-   script executes there and gets a fresh document each time the row opens. */
+/* Work Schedule & Club Calendar — the full monthly view, framed straight from
+   its URL. (It used to be Tockify's "mini" script widget in a srcdoc iframe.)
+   If Tockify ever refuses to be framed, the "Not loading?" link below the
+   frame still gets staff to the calendar. */
 const TOCKIFY_CAL = "2courses";
 function calendarItem(title){
   return {t:title||"Work Schedule & Club Calendar", m:"", s:"", c:"f-flat", a:"",
     embedHtml:{sub:"The posted schedule and club events.",
       url:"https://tockify.com/"+TOCKIFY_CAL+"/monthly",
-      html:'<div data-tockify-component="mini" data-tockify-calendar="'+TOCKIFY_CAL+'"></div>'+
-           '<script data-cfasync="false" data-tockify-script="embed" src="https://public.tockify.com/browser/embed.js"><\/script>'}};
+      src:"https://tockify.com/"+TOCKIFY_CAL+"/monthly",
+      card:"is-cal"}};
 }
 
 /* View the Tee Sheet — EZLinks. Opens in a new tab: the site refuses to be
@@ -1600,7 +1605,8 @@ function detailEmbedTabs(i){
   }));
 }
 
-/* ---------- script-based widgets that can't be framed by URL (e.g. Tockify) ---------- */
+/* ---------- embedded widgets: a framable URL if given, else a script widget
+   that has to run inside a srcdoc document (e.g. Tockify's mini widget) ---- */
 function detailEmbedHtml(i){
   const d=i.embedHtml||{};
   const page='<!doctype html><html><head><meta charset="utf-8">'+
@@ -1610,13 +1616,16 @@ function detailEmbedHtml(i){
     (d.css||"")+'</style>'+
     '</head><body>'+(d.html||"")+'</body></html>';
   const srcdoc=page.replace(/&/g,"&amp;").replace(/"/g,"&quot;");
+  const frame=d.src
+    ? `<iframe src="${d.src}" title="${i.t}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
+    : `<iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe>`;
   el("#detail").innerHTML=
     `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
     (d.url?`<a class="head-open" href="${d.url}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a>`:"")+
     `</div>`+
     `<div class="detail-body">`+
-      `<div class="embed-card ${d.card||"is-mini"}"><iframe srcdoc="${srcdoc}" title="${i.t}" loading="lazy"></iframe></div>`+
+      `<div class="embed-card ${d.card||"is-mini"}">${frame}</div>`+
       (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
     `</div>`;
 }
