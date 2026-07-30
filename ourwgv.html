@@ -324,7 +324,12 @@ a{color:inherit}
 .gh-card{border:1px solid #dfe3e9;border-radius:13px;background:#fff;padding:14px 16px 16px}
 .gh-card>.sv-h:first-child,.gh-card>.gh-sh:first-child{margin-top:0}
 .gh-card .gh-list li:last-child{padding-bottom:0}
-.gh-sum{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px;align-items:start}
+.gh-gap{font-size:12.5px;color:#5f5e5a;line-height:1.55;margin:12px 0 0;padding-top:11px;
+ border-top:1px solid #f0eee8}
+.gh-gap b{color:var(--ink)}
+/* Equal height, always: the grid stretches both cards to the taller one. */
+.gh-sum{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px;align-items:stretch}
+.gh-sum>.gh-card{height:100%}
 .gh-sh{margin:0 0 7px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
 .gh-sh.up{color:var(--green)}
 .gh-sh.down{color:var(--red)}
@@ -3148,6 +3153,27 @@ function gyWire(i){
     const after=el("#detail"); if(after) after.scrollTop=keep;
   }));
 }
+/* Why a month is blank. Anything not listed here still gets a neutral note
+   so a gap never reads as a zero. */
+const GH_GAPS={
+  "2020":{qs:["F&B Quality","Restaurant Service"],
+          cell:"restaurant closed \u2014 COVID-19",
+          note:"Dining scores are blank from April through August. The restaurant was closed "+
+               "under COVID-19 restrictions, so no dining surveys were taken in those months."},
+  // qs omitted: the outage took out every touchpoint, not just one department
+  "2022":{cell:"no surveys captured \u2014 technical issue",
+          note:"October and November are blank across every touchpoint. A technical issue "+
+               "prevented surveys from being captured during those two months."}
+};
+function ghGapNote(y,B,M){
+  const known=GH_GAPS[y];
+  if(known) return known.note;
+  const miss=[];
+  M.forEach((m,k)=>{ if(B.q.every(q=>q.m[k]==null)) miss.push(m); });
+  if(miss.length) return `No surveys were collected in ${miss.join(" or ")}, so those months are blank.`;
+  const part=B.q.filter(q=>q.m.some(v=>v==null)).map(q=>q.q);
+  return part.length?`Some months are blank for ${part.join(", ")} \u2014 no surveys were taken.`:"";
+}
 function ghTone(v){
   if(v==null) return ["",""];
   if(v>=90) return ["#eef5e6","#3b6d11"];
@@ -3212,11 +3238,16 @@ function detailGuestHist(i){
     .map(([l,v])=>`<div class="gh-tile${v!=null&&v<85?" low":""}">`+
       `<div class="gh-tn">${v!=null?v.toFixed(1)+"%":"\u2014"}</div>`+
       `<div class="gh-tl">${l.toUpperCase()}</div></div>`).join("");
+  const gap=ghGapNote(y,B,M);
   const head=`<div class="gh-row gh-head"><span></span>`+
     M.map(m=>`<span class="gh-m">${m}</span>`).join("")+`<span class="gh-m yr">YR</span></div>`;
   const rows=B.q.map(r=>{
     const cells=r.m.map((v,k)=>{
-      if(v==null) return `<span class="gh-c na" title="${M[k]} \u2014 no data">&middot;</span>`;
+      if(v==null){
+        const g=GH_GAPS[y];
+        const why=(g&&(!g.qs||g.qs.indexOf(r.q)>-1))?g.cell:"no surveys collected";
+        return `<span class="gh-c na" title="${M[k]} \u2014 ${why}">&middot;</span>`;
+      }
       const [bg,fg]=ghTone(v);
       return `<span class="gh-c" style="background:${bg};color:${fg}" `+
         `title="${r.q} \u2014 ${M[k]} ${v}%">${Math.round(v)}</span>`;
@@ -3229,7 +3260,8 @@ function detailGuestHist(i){
     `<div class="detail-body is-wide">`+gyBar()+
       `<div class="gh-tiles">${tiles}</div>`+
       `<div class="gh-card"><h3 class="sv-h">Every touchpoint, month by month</h3>`+
-      `<div class="gh-scroll"><div class="gh-wrap">${head}${rows}</div></div></div>`+
+      `<div class="gh-scroll"><div class="gh-wrap">${head}${rows}</div></div>`+
+      (gap?`<p class="gh-gap"><b>Missing months.</b> ${gap}</p>`:"")+`</div>`+
       ghSummary(y)+
       `<p class="gh-foot">Property-wide scores from the survey format used through 2025. `+
       `Not split by course, and the questions differ from Troon's, so these are not directly `+
