@@ -312,11 +312,13 @@ a{color:inherit}
 .mg-cell{font-family:inherit;font-size:13.5px;font-weight:700;text-align:center;padding:9px 0;
  border:0;border-radius:7px;cursor:pointer;width:100%}
 .mg-cell:hover{outline:2px solid var(--navy);outline-offset:-2px}
-.mg-back{display:inline-flex;align-items:center;gap:7px;border:1px solid #dde3ec;background:#fff;
- color:var(--ink);font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;
- border-radius:999px;cursor:pointer;margin:0 0 12px}
-.mg-back:hover{background:#eef2f8}
-.mg-evh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.mg-cell.is-on{box-shadow:inset 0 0 0 2px var(--navy)}
+/* The picked event opens underneath the grid rather than replacing it. */
+.mg-card{border:1px solid #dfe3e9;border-radius:13px;background:#fff;padding:15px 17px 16px;margin:18px 0 0}
+.mg-close{border:0;background:#f4f3ef;color:#5f5e5a;font-family:inherit;font-size:15px;line-height:1;
+ width:26px;height:26px;border-radius:50%;cursor:pointer;margin-left:auto;flex:none}
+.mg-close:hover{background:#e8e6df;color:var(--ink)}
+.mg-evh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:3px}
 .mg-evt{font-size:16px;font-weight:700;color:var(--ink)}
 .mg-evm{font-size:12px;color:var(--muted)}
 .mg-tp{display:grid;grid-template-columns:minmax(0,1fr) 80px 34px;gap:0 9px;align-items:center;
@@ -3117,7 +3119,9 @@ function mgOverview(){
       const e=(MEMBER_GOLF.ev[y]||{})[k];
       if(!e) return `<span class="mg-gh">&mdash;</span>`;
       const [bg,fg]=mgTone(e.o);
-      return `<button type="button" class="mg-cell" data-mg="${k}" data-mgy="${y}" `+
+      const on=(state.mgEv===k&&state.mgYear===y);
+      return `<button type="button" class="mg-cell${on?" is-on":""}" data-mg="${k}" data-mgy="${y}" `+
+        `aria-expanded="${on}" `+
         `style="background:${bg};color:${fg}" title="${MEMBER_GOLF.names[k]} ${y} \u2014 tap for detail">`+
         `${Math.round(e.o)}%</button>`;
     }).join("");
@@ -3130,7 +3134,7 @@ function mgOverview(){
 }
 function mgEvent(){
   const y=state.mgYear, k=state.mgEv, e=((MEMBER_GOLF.ev[y]||{})[k])||null;
-  if(!e) return mgOverview();
+  if(!e) return "";
   const tp=e.tp.slice().sort((a,b)=>b.s-a.s);
   const worst=tp.length?tp[tp.length-1]:null;
   const golfish=q=>/golf/i.test(q)&&!/format/i.test(q);
@@ -3149,24 +3153,31 @@ function mgEvent(){
   const more=e.cm.length>shown
     ? `<button type="button" class="mg-more" id="mgMore">Show ${Math.min(20,e.cm.length-shown)} more `+
       `of ${e.cm.length}</button>` : "";
-  return `<button type="button" class="mg-back" id="mgBack"><span aria-hidden="true">&#8592;</span> All events</button>`+
+  return `<div class="mg-card" id="mgCard">`+
     `<div class="mg-evh"><span class="mg-evt">${MEMBER_GOLF.names[k]}</span>`+
-    `<span class="mg-evm">${y} &middot; ${e.n} responses &middot; ${e.cm.length} comments</span></div>`+
+    `<span class="mg-evm">${y} &middot; ${e.n} responses &middot; ${e.cm.length} comments</span>`+
+    `<button type="button" class="mg-close" id="mgClose" aria-label="Close ${MEMBER_GOLF.names[k]} detail" `+
+    `title="Close">&times;</button></div>`+
     (worst?`<p class="mg-say">Lowest scoring touchpoint was <b>${worst.q}</b> at <b>${worst.s}</b>.</p>`:"")+
     `<div class="mg-tiles">${tiles}</div>`+
     `<div class="dt-cols"><div><h3 class="sv-h">Every touchpoint, best to worst</h3>${rows}</div>`+
-    `<div><h3 class="sv-h">What members wrote</h3>${cms}${more}</div></div>`;
+    `<div><h3 class="sv-h">What members wrote</h3>${cms}${more}</div></div></div>`;
 }
 function detailMemberGolf(i){
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
-    `<div class="detail-body is-wide">`+(state.mgEv?mgEvent():mgOverview())+`</div>`;
+    `<div class="detail-body is-wide">`+mgOverview()+mgEvent()+`</div>`;
   svAudWire(i);
   el("#detail").querySelectorAll(".mg-cell").forEach(b=>b.addEventListener("click",()=>{
-    state.mgEv=b.dataset.mg; state.mgYear=b.dataset.mgy; state.mgCm=14; detail(i);
+    const same=(state.mgEv===b.dataset.mg && state.mgYear===b.dataset.mgy);
+    if(same){ state.mgEv=null; }                 // tapping the open cell closes it
+    else { state.mgEv=b.dataset.mg; state.mgYear=b.dataset.mgy; state.mgCm=14; }
+    detail(i);
+    const card=document.getElementById("mgCard");
+    if(card&&card.scrollIntoView) card.scrollIntoView({block:"nearest",behavior:"smooth"});
   }));
-  const back=document.getElementById("mgBack");
-  if(back) back.addEventListener("click",()=>{ state.mgEv=null; detail(i); });
+  const close=document.getElementById("mgClose");
+  if(close) close.addEventListener("click",()=>{ state.mgEv=null; detail(i); });
   const more=document.getElementById("mgMore");
   if(more) more.addEventListener("click",()=>{ state.mgCm=(state.mgCm||14)+20; detail(i); });
 }
