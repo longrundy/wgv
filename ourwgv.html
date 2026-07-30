@@ -315,7 +315,11 @@ a{color:inherit}
 .mb-bl{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#9aa3ae;font-weight:700;
  margin-top:5px}
 /* market rows */
-.mb-mcols{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+/* Two halves of one ranking. Without a rule between them the left column's
+   initiation figure runs straight into the right column's club name. */
+.mb-mcols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.mb-mcols>div:first-child{padding-right:20px;border-right:1px solid #e5e2da}
+.mb-mcols>div:last-child{padding-left:20px}
 /* The name column flexes and the bar is a short fixed track, so full club
    names fit — "Jacksonville Golf & Country Club" was the one that broke it. */
 .mb-row{display:grid;grid-template-columns:minmax(0,1fr) 58px 70px 76px;
@@ -392,6 +396,8 @@ a{color:inherit}
   .mb-bigrow{grid-template-columns:1fr 1fr}
   .mb-bn{font-size:23px}
   .mb-mcols,.mb-lwrap{grid-template-columns:1fr}
+  .mb-mcols>div:first-child{padding-right:0;border-right:0}
+  .mb-mcols>div:last-child{padding-left:0}
   .mb-row{grid-template-columns:minmax(0,1fr) 68px 72px}
   .mb-bar{display:none}
   .mb-crow{grid-template-columns:minmax(0,1fr) 104px 62px;row-gap:4px}
