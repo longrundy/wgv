@@ -3162,14 +3162,23 @@ function detailMemberGolf(i){
     const same=(state.mgEv===b.dataset.mg && state.mgYear===b.dataset.mgy);
     if(same){ state.mgEv=null; }                 // tapping the open cell closes it
     else { state.mgEv=b.dataset.mg; state.mgYear=b.dataset.mgy; state.mgCm=14; }
+    // Re-rendering replaces the pane's contents, which would otherwise jump the
+    // reader back to the top. Hold the scroll position exactly where it was.
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     detail(i);
-    const card=document.getElementById("mgCard");
-    if(card&&card.scrollIntoView) card.scrollIntoView({block:"nearest",behavior:"smooth"});
+    const after=el("#detail");
+    if(after) after.scrollTop=keep;
   }));
+  const hold=fn=>()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    fn(); detail(i);
+    const after=el("#detail");
+    if(after) after.scrollTop=keep;
+  };
   const close=document.getElementById("mgClose");
-  if(close) close.addEventListener("click",()=>{ state.mgEv=null; detail(i); });
+  if(close) close.addEventListener("click",hold(()=>{ state.mgEv=null; }));
   const more=document.getElementById("mgMore");
-  if(more) more.addEventListener("click",()=>{ state.mgCm=(state.mgCm||14)+20; detail(i); });
+  if(more) more.addEventListener("click",hold(()=>{ state.mgCm=(state.mgCm||14)+20; }));
 }
 
 function detailSurveyPending(i){
