@@ -258,6 +258,86 @@ a{color:inherit}
 .embed-card.is-mini iframe{height:560px}
 /* ---- Financials ---- */
 /* ---- Year Detail report ---- */
+/* ---- Memberships ---- */
+.mb-nav{display:flex;gap:5px;flex-wrap:wrap;margin:0 auto 12px}
+.mb-nav button{border:1px solid #dde3ec;background:#f4f7fb;color:#33507a;font-family:inherit;
+ font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer}
+.mb-nav button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.mb-view{border:1px solid #dfe3e9;border-radius:13px;padding:14px 16px 16px;background:#fff;
+ margin:0 auto}
+.mb-vt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.mb-vt h4{margin:0;font-size:14.5px;font-weight:700;color:var(--ink)}
+.mb-vt span{font-size:11.5px;color:#9aa3ae}
+.mb-cap{font-size:12.5px;color:#5f5f58;margin:0 0 12px;line-height:1.5}
+.mb-cap b{color:var(--ink);font-weight:600}
+.mb-cap2{font-size:12.5px;color:#5f5f58;margin:9px 0 0;line-height:1.55}
+.mb-cap2 b{color:var(--ink);font-weight:600}
+.mb-svg{width:100%;height:auto;display:block;overflow:visible}
+.mb-legend{display:flex;gap:14px;font-size:11px;color:#7c8593;margin-top:8px;flex-wrap:wrap}
+.mb-key{display:inline-block;width:12px;height:8px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.mb-notes{display:flex;gap:18px;flex-wrap:wrap;margin-top:7px;font-size:11.5px;color:#7c8593}
+.mb-notes b{color:var(--red);font-weight:700;margin-right:4px}
+.mb-sect{margin-top:16px;padding-top:13px;border-top:1px solid #edeff2}
+.mb-st{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:#9aa3ae;font-weight:700;
+ margin-bottom:5px}
+/* big stat blocks */
+.mb-bigrow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:0 0 18px}
+.mb-big{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
+.mb-bn{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
+.mb-bl{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#9aa3ae;font-weight:700;
+ margin-top:5px}
+/* market rows */
+.mb-mcols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+.mb-row{display:grid;grid-template-columns:minmax(0,150px) minmax(60px,1fr) 74px 80px;
+ align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #edeff2}
+.mb-nm{font-size:14px;font-weight:600;color:#55554e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mb-bar{display:block;height:11px;background:#eef1f5;border-radius:3px;overflow:hidden}
+.mb-bar i{display:block;height:100%;border-radius:3px}
+.mb-d{font-size:16px;font-weight:700;text-align:right;color:var(--ink)}
+.mb-i{font-size:14px;text-align:right;color:#7c8593;font-weight:500}
+.mb-row.me{background:#fdf3f3;border-radius:7px;padding-left:7px;padding-right:7px;
+ margin-left:-7px;margin-right:-7px;border-bottom-color:#f3dcdc}
+.mb-row.me .mb-nm{color:var(--ink);font-weight:700}
+.mb-row.me .mb-d,.mb-row.me .mb-i{color:var(--red);font-weight:700}
+/* categories */
+.mb-crow{display:grid;grid-template-columns:minmax(0,1.5fr) 138px 148px 72px;align-items:center;
+ gap:10px;padding:10px 0;border-bottom:1px solid #eef0f3}
+.mb-crow.mb-chead{border-bottom:1px solid #dfe3e9;padding-bottom:6px}
+.mb-chead span{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#9aa3ae;font-weight:700}
+.mb-cn{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;overflow:hidden}
+.mb-stk{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}
+.mb-stk b{font-size:15.5px;font-weight:700;color:var(--ink)}
+.mb-stk em{font-size:12px;font-style:normal;color:#8a94a3;font-weight:600;margin-top:2px}
+.mb-ct{font-size:17px;text-align:right;font-weight:700;color:var(--ink)}
+.mb-z{color:#c5cbd4;font-style:normal;font-weight:400}
+.mb-tag{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;
+ padding:2px 7px;background:#e4efe0;color:#4c7a1a;flex:none}
+.mb-tag.off{background:#eef1f5;color:#94a0af}
+.mb-crow.open{background:#f5f9fd;border-radius:8px;margin:0 -9px;padding-left:9px;padding-right:9px}
+.mb-crow.mb-ctot{border-top:1px solid #dfe3e9;border-bottom:0;background:#f4f7fb;
+ margin:3px -9px 0;padding-left:9px;padding-right:9px;border-radius:8px}
+.mb-ctot .mb-cn{font-weight:700}
+.mb-ctot .mb-stk em{color:#5f6b7a}
+/* turnover loss rate */
+.mb-lwrap{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+.mb-lrow{display:grid;grid-template-columns:56px minmax(60px,1fr) 58px;align-items:center;gap:10px;
+ padding:7px 0;border-bottom:1px solid #edeff2}
+.mb-ly{font-size:13.5px;font-weight:700;color:#5f6b7a}
+.mb-lb{display:block;height:11px;background:#eef1f5;border-radius:3px;overflow:hidden}
+.mb-lb i{display:block;height:100%;border-radius:3px}
+.mb-lv{font-size:15px;font-weight:700;text-align:right;color:var(--ink)}
+@media (max-width:900px){
+  .mb-bigrow{grid-template-columns:1fr 1fr}
+  .mb-bn{font-size:23px}
+  .mb-mcols,.mb-lwrap{grid-template-columns:1fr}
+  .mb-row{grid-template-columns:minmax(0,1fr) 72px 76px}
+  .mb-bar{display:none}
+  .mb-crow{grid-template-columns:minmax(0,1fr) 104px 62px;row-gap:4px}
+  .mb-crow .mb-stk:nth-of-type(2){display:none}
+  .mb-view{padding:12px 11px 14px}
+  .mb-nav button{padding:6px 11px;font-size:12px}
+}
+
 /* ---- narrative band ---- */
 .yd-band{border:1px solid #e3e8ef;border-radius:12px;
  background:linear-gradient(180deg,#fbfcfe,#f8fafc);padding:11px 15px 12px;margin:0 auto 13px}
@@ -963,7 +1043,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
 
 resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem(), parkingItem()].concat(troonItems())},
 
-management:{title:"Management", sub:"Management only", items:[surveysItem(), histWeatherItem(), financialsItem()]},
+management:{title:"Management", sub:"Management only", items:[surveysItem(), histWeatherItem(), financialsItem(), membershipsItem()]},
 
 requests:{title:"Requests / Forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
@@ -1278,7 +1358,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:""};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"share"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -1374,6 +1454,7 @@ function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
   if(i.langDocs){ detailLangDocs(i); return; }
+  if(i.memb){ detailMemberships(i); return; }
   if(i.fin){ detailFinancials(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
   if(i.surveys){ (state.svView==="comments"?detailComments:detailSurveys)(i); return; }
@@ -1801,6 +1882,312 @@ function finDeptPanel(dept,y,p,seg,yLabel,prevLabel){
   return `<div class="mx-inner"><h5>${dept} &mdash; ${FIN_SEG[seg]}, ${yLabel}</h5><table class="mx-sub">`+
     `<tr><th class="l">&nbsp;</th><th>${prevLabel}</th><th>${yLabel}</th><th>Change</th>`+
     `<th>Per round</th><th>% of rev</th></tr>${rows}</table>${pt}</div>`;
+}
+
+/* ---------- Memberships ----------
+   Five views behind one nav: member share of rounds, memberships and revenue,
+   market position, categories, turnover. Baked in — the roster counts come from
+   a sheet that isn't published, and the market study is an annual exercise. */
+const MB_DATA = {"series":[{"y":"2018","mem":16459.0,"guest":40988.0,"tot":62105.0,"members":260.0,"dues":1319812,"per":5076.2},{"y":"2019","mem":18782,"guest":40073,"tot":63036.0,"members":268.0,"dues":1327216,"per":4952.298507462687},{"y":"2020","mem":23180,"guest":40321,"tot":65249.0,"members":273.0,"dues":1535600,"per":5624.908424908425},{"y":"2021","mem":25682,"guest":50636,"tot":78153.0,"members":312.0,"dues":1854700,"per":5944.551282051282},{"y":"2022","mem":25621.0,"guest":53322.0,"tot":83433.0,"members":333.0,"dues":2123700,"per":6377.477477477478},{"y":"2023","mem":27133,"guest":48043,"tot":79897.0,"members":331.0,"dues":2200615,"per":6648.383685800604},{"y":"2024","mem":25375.0,"guest":41069.0,"tot":70168.0,"members":336.0,"dues":2307605,"per":6867.872023809524},{"y":"2025","mem":23979.0,"guest":51641.0,"tot":79507.0,"members":294.0,"dues":2307690,"per":7849.285714285715},{"y":"2026 H1","mem":12529,"guest":30826,"tot":45211,"members":293.0,"dues":2405110,"per":8208.566552901024,"partial":true}],"dues":{"2016":425.0,"2017":425.0,"2018":425.0,"2019":425.0,"2020":460.0,"2021":475.0,"2022":500.0,"2023":525.0,"2024":550.0,"2025":625.0,"2026":660.0,"2027":700.0},"memb":{"years":[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027],"cats":[{"name":"Affiliate - Full","gf":false,"y":{"2016":{"mRate":425.0,"aRate":4800.0,"mCount":62.0,"aCount":60.0},"2017":{"mRate":425.0,"aRate":4800.0,"mCount":60.0,"aCount":68.0},"2018":{"mRate":425.0,"aRate":4800.0,"mCount":68.0,"aCount":67.0},"2019":{"mRate":425.0,"aRate":4800.0,"mCount":65.0,"aCount":70.0},"2020":{"mRate":460.0,"aRate":5300.0,"mCount":100.0,"aCount":66.0},"2021":{"mRate":475.0,"aRate":5400.0,"mCount":142.0,"aCount":74.0},"2022":{"mRate":500.0,"aRate":5650.0,"mCount":160.0,"aCount":92.0},"2023":{"mRate":525.0,"aRate":5925.0,"mCount":174.0,"aCount":91.0},"2024":{"mRate":550.0,"aRate":6225.0,"mCount":198.0,"aCount":85.0},"2025":{"mRate":625.0,"aRate":7500.0,"mCount":218.0,"aCount":38.0},"2026":{"mRate":660.0,"aRate":7920.0,"mCount":221.0,"aCount":35.0},"2027":{"mRate":700.0,"aRate":7400.0,"mCount":0,"aCount":0}}},{"name":"Golf Cart - Individual","gf":false,"y":{"2016":{"mRate":null,"aRate":2200.0,"mCount":0,"aCount":19.0},"2017":{"mRate":null,"aRate":2200.0,"mCount":0,"aCount":22.0},"2018":{"mRate":null,"aRate":2200.0,"mCount":0,"aCount":23.0},"2019":{"mRate":null,"aRate":2200.0,"mCount":0,"aCount":23.0},"2020":{"mRate":null,"aRate":2400.0,"mCount":0,"aCount":27.0},"2021":{"mRate":null,"aRate":2500.0,"mCount":0,"aCount":29.0},"2022":{"mRate":null,"aRate":2700.0,"mCount":0,"aCount":33.0},"2023":{"mRate":null,"aRate":2700.0,"mCount":0,"aCount":29.0},"2024":{"mRate":null,"aRate":2700.0,"mCount":0,"aCount":23.0},"2025":{"mRate":null,"aRate":3000.0,"mCount":0,"aCount":21.0},"2026":{"mRate":null,"aRate":3000.0,"mCount":0,"aCount":17.0},"2027":{"mRate":null,"aRate":3000.0,"mCount":0,"aCount":0}}},{"name":"Golf Cart - Family","gf":false,"y":{"2016":{"mRate":null,"aRate":3100.0,"mCount":0,"aCount":24.0},"2017":{"mRate":null,"aRate":3100.0,"mCount":0,"aCount":24.0},"2018":{"mRate":null,"aRate":3100.0,"mCount":0,"aCount":28.0},"2019":{"mRate":null,"aRate":3100.0,"mCount":0,"aCount":26.0},"2020":{"mRate":null,"aRate":3400.0,"mCount":0,"aCount":30.0},"2021":{"mRate":null,"aRate":3500.0,"mCount":0,"aCount":36.0},"2022":{"mRate":null,"aRate":3800.0,"mCount":0,"aCount":38.0},"2023":{"mRate":null,"aRate":3800.0,"mCount":0,"aCount":35.0},"2024":{"mRate":null,"aRate":3800.0,"mCount":0,"aCount":28.0},"2025":{"mRate":null,"aRate":4200.0,"mCount":0,"aCount":17.0},"2026":{"mRate":null,"aRate":4200.0,"mCount":0,"aCount":15.0},"2027":{"mRate":null,"aRate":4200.0,"mCount":0,"aCount":0}}},{"name":"Affiliate - Weekday","gf":true,"y":{"2016":{"mRate":315.0,"aRate":3550.0,"mCount":29.0,"aCount":13.0},"2017":{"mRate":315.0,"aRate":3550.0,"mCount":37.0,"aCount":15.0},"2018":{"mRate":315.0,"aRate":3550.0,"mCount":41.0,"aCount":17.0},"2019":{"mRate":315.0,"aRate":3550.0,"mCount":38.0,"aCount":20.0},"2020":{"mRate":350.0,"aRate":4200.0,"mCount":40.0,"aCount":16.0},"2021":{"mRate":375.0,"aRate":4500.0,"mCount":43.0,"aCount":8.0},"2022":{"mRate":400.0,"aRate":4800.0,"mCount":38.0,"aCount":6.0},"2023":{"mRate":425.0,"aRate":5100.0,"mCount":34.0,"aCount":6.0},"2024":{"mRate":450.0,"aRate":5400.0,"mCount":29.0,"aCount":2.0},"2025":{"mRate":520.0,"aRate":6240.0,"mCount":21.0,"aCount":0},"2026":{"mRate":570.0,"aRate":6840.0,"mCount":21.0,"aCount":0},"2027":{"mRate":625.0,"aRate":7500.0,"mCount":0,"aCount":0}}},{"name":"Affiliate - Junior","gf":true,"y":{"2016":{"mRate":325.0,"aRate":3666.0,"mCount":0,"aCount":0},"2017":{"mRate":325.0,"aRate":3666.0,"mCount":3.0,"aCount":0},"2018":{"mRate":325.0,"aRate":3666.0,"mCount":7.0,"aCount":2.0},"2019":{"mRate":325.0,"aRate":3666.0,"mCount":9.0,"aCount":1.0},"2020":{"mRate":375.0,"aRate":4500.0,"mCount":7.0,"aCount":1.0},"2021":{"mRate":400.0,"aRate":4800.0,"mCount":6.0,"aCount":1.0},"2022":{"mRate":425.0,"aRate":5100.0,"mCount":5.0,"aCount":1.0},"2023":{"mRate":450.0,"aRate":5400.0,"mCount":5.0,"aCount":1.0},"2024":{"mRate":475.0,"aRate":5700.0,"mCount":4.0,"aCount":0},"2025":{"mRate":550.0,"aRate":6600.0,"mCount":4.0,"aCount":0},"2026":{"mRate":575.0,"aRate":6900.0,"mCount":4.0,"aCount":0},"2027":{"mRate":650.0,"aRate":7800.0,"mCount":0,"aCount":0}}},{"name":"Affiliate - Weekend","gf":true,"y":{"2016":{"mRate":315.0,"aRate":3550.0,"mCount":16.0,"aCount":0},"2017":{"mRate":315.0,"aRate":3550.0,"mCount":14.0,"aCount":1.0},"2018":{"mRate":315.0,"aRate":3550.0,"mCount":14.0,"aCount":2.0},"2019":{"mRate":315.0,"aRate":3550.0,"mCount":15.0,"aCount":3.0},"2020":{"mRate":350.0,"aRate":4200.0,"mCount":12.0,"aCount":1.0},"2021":{"mRate":375.0,"aRate":4500.0,"mCount":9.0,"aCount":1.0},"2022":{"mRate":400.0,"aRate":4800.0,"mCount":10.0,"aCount":0},"2023":{"mRate":425.0,"aRate":5100.0,"mCount":8.0,"aCount":0},"2024":{"mRate":450.0,"aRate":5400.0,"mCount":7.0,"aCount":0},"2025":{"mRate":520.0,"aRate":6240.0,"mCount":7.0,"aCount":0},"2026":{"mRate":570.0,"aRate":6840.0,"mCount":6.0,"aCount":0},"2027":{"mRate":625.0,"aRate":7500.0,"mCount":0,"aCount":0}}},{"name":"Patron - Family","gf":true,"y":{"2016":{"mRate":300.0,"aRate":3400.0,"mCount":3.0,"aCount":3.0},"2017":{"mRate":300.0,"aRate":3400.0,"mCount":5.0,"aCount":3.0},"2018":{"mRate":300.0,"aRate":3400.0,"mCount":7.0,"aCount":2.0},"2019":{"mRate":300.0,"aRate":3400.0,"mCount":8.0,"aCount":3.0},"2020":{"mRate":350.0,"aRate":4200.0,"mCount":5.0,"aCount":2.0},"2021":{"mRate":375.0,"aRate":4500.0,"mCount":5.0,"aCount":1.0},"2022":{"mRate":425.0,"aRate":5100.0,"mCount":4.0,"aCount":1.0},"2023":{"mRate":475.0,"aRate":5700.0,"mCount":1.0,"aCount":1.0},"2024":{"mRate":530.0,"aRate":6360.0,"mCount":1.0,"aCount":1.0},"2025":{"mRate":615.0,"aRate":7380.0,"mCount":1.0,"aCount":1.0},"2026":{"mRate":640.0,"aRate":7680.0,"mCount":1.0,"aCount":1.0},"2027":{"mRate":null,"aRate":null,"mCount":0,"aCount":0}}},{"name":"Patron - Single","gf":true,"y":{"2016":{"mRate":235.0,"aRate":2650.0,"mCount":9.0,"aCount":2.0},"2017":{"mRate":235.0,"aRate":2650.0,"mCount":14.0,"aCount":7.0},"2018":{"mRate":235.0,"aRate":2650.0,"mCount":19.0,"aCount":9.0},"2019":{"mRate":235.0,"aRate":2650.0,"mCount":18.0,"aCount":12.0},"2020":{"mRate":275.0,"aRate":3300.0,"mCount":14.0,"aCount":6.0},"2021":{"mRate":300.0,"aRate":3600.0,"mCount":13.0,"aCount":4.0},"2022":{"mRate":350.0,"aRate":4200.0,"mCount":10.0,"aCount":3.0},"2023":{"mRate":410.0,"aRate":4920.0,"mCount":2.0,"aCount":5.0},"2024":{"mRate":480.0,"aRate":5760.0,"mCount":5.0,"aCount":1.0},"2025":{"mRate":555.0,"aRate":6660.0,"mCount":2.0,"aCount":0},"2026":{"mRate":575.0,"aRate":6900.0,"mCount":2.0,"aCount":0},"2027":{"mRate":650.0,"aRate":7800.0,"mCount":0,"aCount":0}}},{"name":"Ambassador - Full","gf":true,"y":{"2016":{"mRate":325.0,"aRate":3650.0,"mCount":0,"aCount":3.0},"2017":{"mRate":325.0,"aRate":3650.0,"mCount":1.0,"aCount":3.0},"2018":{"mRate":325.0,"aRate":3650.0,"mCount":2.0,"aCount":3.0},"2019":{"mRate":325.0,"aRate":3650.0,"mCount":3.0,"aCount":3.0},"2020":{"mRate":375.0,"aRate":4500.0,"mCount":2.0,"aCount":1.0},"2021":{"mRate":400.0,"aRate":4800.0,"mCount":3.0,"aCount":2.0},"2022":{"mRate":425.0,"aRate":5100.0,"mCount":2.0,"aCount":1.0},"2023":{"mRate":450.0,"aRate":5400.0,"mCount":2.0,"aCount":1.0},"2024":{"mRate":475.0,"aRate":5700.0,"mCount":1.0,"aCount":0},"2025":{"mRate":550.0,"aRate":6600.0,"mCount":0,"aCount":0},"2026":{"mRate":635.0,"aRate":7620.0,"mCount":0,"aCount":0},"2027":{"mRate":null,"aRate":null,"mCount":0,"aCount":0}}},{"name":"Ambassador - Weekday","gf":true,"y":{"2016":{"mRate":240.0,"aRate":2700.0,"mCount":0,"aCount":0},"2017":{"mRate":240.0,"aRate":2700.0,"mCount":0,"aCount":0},"2018":{"mRate":240.0,"aRate":2700.0,"mCount":0,"aCount":0},"2019":{"mRate":240.0,"aRate":2700.0,"mCount":0,"aCount":0},"2020":{"mRate":275.0,"aRate":3300.0,"mCount":0,"aCount":0},"2021":{"mRate":300.0,"aRate":3600.0,"mCount":0,"aCount":0},"2022":{"mRate":325.0,"aRate":3900.0,"mCount":0,"aCount":0},"2023":{"mRate":350.0,"aRate":4200.0,"mCount":0,"aCount":0},"2024":{"mRate":375.0,"aRate":4500.0,"mCount":2.0,"aCount":0},"2025":{"mRate":435.0,"aRate":5220.0,"mCount":2.0,"aCount":0},"2026":{"mRate":500.0,"aRate":6000.0,"mCount":2.0,"aCount":0},"2027":{"mRate":600.0,"aRate":7200.0,"mCount":0,"aCount":0}}},{"name":"Non-Resident","gf":true,"y":{"2016":{"mRate":null,"aRate":2050.0,"mCount":0,"aCount":44.0},"2017":{"mRate":null,"aRate":2050.0,"mCount":0,"aCount":39.0},"2018":{"mRate":null,"aRate":2050.0,"mCount":0,"aCount":37.0},"2019":{"mRate":null,"aRate":2050.0,"mCount":0,"aCount":31.0},"2020":{"mRate":null,"aRate":2400.0,"mCount":0,"aCount":7.0},"2021":{"mRate":null,"aRate":2600.0,"mCount":0,"aCount":4.0},"2022":{"mRate":null,"aRate":2700.0,"mCount":0,"aCount":3.0},"2023":{"mRate":null,"aRate":2800.0,"mCount":0,"aCount":0},"2024":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2025":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2026":{"mRate":null,"aRate":null,"mCount":0,"aCount":0},"2027":{"mRate":null,"aRate":null,"mCount":0,"aCount":0}}},{"name":"Social Membership","gf":false,"y":{"2016":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2017":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2018":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2019":{"mRate":null,"aRate":0.0,"mCount":0,"aCount":0},"2020":{"mRate":null,"aRate":250.0,"mCount":0,"aCount":62.0},"2021":{"mRate":null,"aRate":250.0,"mCount":0,"aCount":66.0},"2022":{"mRate":null,"aRate":300.0,"mCount":0,"aCount":57.0},"2023":{"mRate":null,"aRate":300.0,"mCount":0,"aCount":49.0},"2024":{"mRate":null,"aRate":300.0,"mCount":0,"aCount":44.0},"2025":{"mRate":null,"aRate":350.0,"mCount":0,"aCount":39.0},"2026":{"mRate":null,"aRate":350.0,"mCount":0,"aCount":29.0},"2027":{"mRate":null,"aRate":350.0,"mCount":0,"aCount":0}}}],"totals":{"2016":{"m":119.0,"a":81.0,"all":200.0,"dues":1089480},"2017":{"m":134.0,"a":97.0,"all":231.0,"dues":1197510},"2018":{"m":158.0,"a":102.0,"all":260.0,"dues":1319812},"2019":{"m":156.0,"a":112.0,"all":268.0,"dues":1327216},"2020":{"m":180.0,"a":93.0,"all":273.0,"dues":1535600},"2021":{"m":221.0,"a":91.0,"all":312.0,"dues":1854700},"2022":{"m":229.0,"a":104.0,"all":333.0,"dues":2123700},"2023":{"m":226.0,"a":105.0,"all":331.0,"dues":2200615},"2024":{"m":247.0,"a":89.0,"all":336.0,"dues":2307605},"2025":{"m":255.0,"a":39.0,"all":294.0,"dues":2307690},"2026":{"m":257.0,"a":36.0,"all":293.0,"dues":2405110},"2027":{"m":0,"a":0,"all":0,"dues":0}},"attrition":{"2016":{"add":null,"term":null,"net":null},"2017":{"add":null,"term":null,"net":null},"2018":{"add":null,"term":null,"net":null},"2019":{"add":null,"term":null,"net":null},"2020":{"add":38.0,"term":33.0,"net":5.0},"2021":{"add":68.0,"term":29.0,"net":39.0},"2022":{"add":47.0,"term":26.0,"net":21.0},"2023":{"add":29.0,"term":31.0,"net":-2.0},"2024":{"add":51.0,"term":46.0,"net":5.0},"2025":{"add":16.0,"term":58.0,"net":-42.0},"2026":{"add":10.0,"term":11.0,"net":-1.0},"2027":{"add":null,"term":null,"net":null}},"rounds":{"2016":{"ss":3958.0,"kb":9548.0,"all":13506.0},"2017":{"ss":5855.0,"kb":9481.0,"all":15336.0},"2018":{"ss":6416.0,"kb":10043.0,"all":16459.0},"2019":{"ss":7117.0,"kb":11665.0,"all":18782.0},"2020":{"ss":7916.0,"kb":15264.0,"all":23180.0},"2021":{"ss":10026.0,"kb":15656.0,"all":25682.0},"2022":{"ss":11056.0,"kb":14565.0,"all":25621.0},"2023":{"ss":11060.0,"kb":16073.0,"all":27133.0},"2024":{"ss":14548.0,"kb":10827.0,"all":25375.0},"2025":{"ss":8454.0,"kb":15525.0,"all":23979.0},"2026":{"ss":4646.0,"kb":7883.0,"all":12529.0},"2027":{"ss":null,"kb":null,"all":0.0}},"init":{"2016":{"full":null},"2017":{"full":null},"2018":{"full":null},"2019":{"full":10000.0},"2020":{"full":5000.0},"2021":{"full":5000.0},"2022":{"full":7500.0},"2023":{"full":8500.0},"2024":{"full":8500.0},"2025":{"full":10000.0},"2026":{"full":10000.0},"2027":{"full":10000.0}}},"clubs":[{"name":"Amelia Island Club","type":"Private","init23":65000.0,"dues23":970.0,"init26":75000.0,"dues26":1180,"gf":140,"cart":30.0,"fb":"None","label":"Amelia Island Club"},{"name":"Atlantic Beach CC","type":"Private/Mandatory","init23":40000.0,"dues23":840.0,"init26":120000.0,"dues26":1360.0,"gf":160,"cart":27.0,"fb":"None","label":"Atlantic Beach Country Club"},{"name":"Deerwood CC","type":"Private/Equity","init23":null,"dues23":null,"init26":32750.0,"dues26":899.0,"gf":120,"cart":32.0,"fb":900,"label":"Deerwood Country Club"},{"name":"Grand Haven Golf Club","type":"Private","init23":null,"dues23":null,"init26":30000.0,"dues26":1035.0,"gf":90,"cart":30.0,"fb":600,"label":"Grand Haven Country Club"},{"name":"Hammock Dunes Club","type":"Private/Equity","init23":50000.0,"dues23":1238.0,"init26":65000.0,"dues26":1720.33,"gf":195,"cart":27.0,"fb":"None","label":"Hammock Dunes"},{"name":"Jacksonville G&CC","type":"Private/Equity","init23":25000.0,"dues23":819.0,"init26":35000.0,"dues26":860,"gf":110,"cart":30.0,"fb":"None","label":"Jacksonville Golf & Country Club"},{"name":"Palencia GC","type":"Private","init23":25000.0,"dues23":561.0,"init26":37000.0,"dues26":610.0,"gf":95,"cart":30.0,"fb":2000,"label":"Palencia Club"},{"name":"Plantation at Ponte Vedra","type":"Private","init23":60000.0,"dues23":1508.0,"init26":80000.0,"dues26":1900,"gf":"$80-$155","cart":34.0,"fb":"None","label":"Plantation at Ponte Vedra"},{"name":"Plantation Bay","type":"Private","init23":30000.0,"dues23":683.0,"init26":50000.0,"dues26":875.0,"gf":120,"cart":28.0,"fb":"$1200/$900","label":"Plantation Bay"},{"name":"Ponte Vedra Inn & Club","type":"Semi-Private","init23":85000.0,"dues23":986.0,"init26":150000.0,"dues26":1440,"gf":202,"cart":32.0,"fb":"None","label":"Ponte Vedra Inn & Club"},{"name":"San Jose CC","type":"Private","init23":35000.0,"dues23":975.0,"init26":40000.0,"dues26":935,"gf":190,"cart":30.0,"fb":"None","label":"San Jose Country Club"},{"name":"Sawgrass CC","type":"Private","init23":65000.0,"dues23":1208.0,"init26":125000.0,"dues26":1760,"gf":142,"cart":32.0,"fb":750,"label":"Sawgrass Country Club"},{"name":"St. Johns Golf & CC","type":"Semi-Private","init23":null,"dues23":null,"init26":10000.0,"dues26":440,"gf":"$69-$115","cart":26.0,"fb":"None","label":"St. Johns Golf & CC"},{"name":"The Club at Hammock Beach","type":"Semi-Private","init23":40000.0,"dues23":1041.0,"init26":50000.0,"dues26":1300,"gf":144,"cart":37.5,"fb":"$1,900/$1,050","label":"Hammock Beach"},{"name":"Timuquana CC","type":"Private","init23":60000.0,"dues23":945.0,"init26":80000.0,"dues26":1125,"gf":150,"cart":30.0,"fb":"None","label":"Timuquana Country Club"},{"name":"World Golf Village","type":"Resort Semi-Private","init23":null,"dues23":null,"init26":10000.0,"dues26":660.0,"gf":"$89-$129","cart":30.0,"fb":"N/A","label":"World Golf Village"},{"label":"Marsh Creek Country Club","name":"Marsh Creek Country Club","type":"Private","dues26":700,"dues23":null,"init26":null,"init23":null,"gf":null,"cart":null,"fb":null},{"label":"Marsh Landing Country Club","name":"Marsh Landing Country Club","type":"Private","dues26":600,"dues23":null,"init26":null,"init23":null,"gf":null,"cart":null,"fb":null},{"label":"TPC Sawgrass","name":"TPC Sawgrass","type":"Semi-Private","dues26":890,"dues23":null,"init26":80000,"init23":null,"gf":null,"cart":null,"fb":null}],"act":{"2018":{"dues":null,"init":null,"total":1278780.0,"n":260.0,"per":4918.384615384615},"2019":{"dues":null,"init":null,"total":1292294.0,"n":268.0,"per":4821.992537313433},"2020":{"dues":null,"init":null,"total":1334054.0,"n":273.0,"per":4886.644688644688},"2021":{"dues":1520702.0,"init":170386.0,"total":1691088.0,"n":312.0,"per":5420.153846153846},"2022":{"dues":null,"init":null,"total":2065724.0,"n":333.0,"per":6203.375375375375},"2023":{"dues":1877534.0,"init":253800.0,"total":2131334.0,"n":331.0,"per":6439.075528700906},"2024":{"dues":null,"init":null,"total":2098268.0,"n":336.0,"per":6244.8452380952385},"2025":{"dues":1979512.0,"init":287112.0,"total":2266624.0,"n":294.0,"per":7709.60544217687},"2026 YTD":{"dues":1198848,"init":137898,"total":1336746,"n":293.0,"per":4562.273037542662},"2025 H1":{"total":1187183}},"pr":{"2018":{"per":77.69487818214958,"gf":58.87947692007417},"2019":{"per":68.80491960387606,"gf":60.06520599905173},"2020":{"per":57.551941328731665,"gf":57.516653852831034},"2021":{"per":65.84720816135815,"gf":89.5344024014535},"2022":{"per":80.62620506615667,"gf":98.29218075988472},"2023":{"per":78.55135812479269,"gf":109.38346897570926},"2024":{"per":82.6903645320197,"gf":110.18975382892206},"2025":{"per":94.52537637099128,"gf":105.25822505373637},"2026 YTD":{"per":106.69215420225078,"gf":114.84811522740544}}};
+const MB_TABS = [["share","Member Share"],["rev","Memberships & Revenue"],
+                 ["market","Market Position"],["cats","Categories"],["turn","Turnover"]];
+const MB_DROP = {"Golf Cart - Individual":1,"Golf Cart - Family":1,"Non-Resident":1};
+const MB_OPEN = {"Affiliate - Full":1};        /* the only category still selling */
+const MB_NOTE = {"2020":"*","2024":"**"};
+const MB_CATYRS = ["2020","2021","2022","2023","2024","2025","2026"];
+
+function membershipsItem(){ return {t:"Memberships", m:"", s:"", c:"f-flat", a:"", memb:true}; }
+
+const mbS = () => MB_DATA.series;
+const mbT = y => MB_DATA.memb.totals[String(y)];
+const mbA = y => MB_DATA.memb.attrition[String(y)];
+const mbYrs = () => Object.keys(MB_DATA.memb.totals).filter(y=>mbT(y).all>0).sort();
+const mbMoney = n => n==null?"\u2014":(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
+const mbNum = n => n==null?"\u2014":Math.round(n).toLocaleString();
+const mbMed = a => { const s=a.slice().sort((x,y)=>x-y);
+  return s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2; };
+
+/* ---- member share of rounds ---- */
+function mbShare(){
+  const S=mbS(), W=svgW(1), H=250, PL=34, PR=34, PB=24, TOP=26;
+  const bw=(W-PL-PR)/S.length, plot=H-PB-TOP;
+  let s="";
+  [25,50,75].forEach(g=>{const y=TOP+plot*(1-g/100);
+    s+=`<line x1="${PL}" x2="${W-PR}" y1="${y}" y2="${y}" stroke="#eef1f5"></line>`;});
+  S.forEach((d,i)=>{
+    const share=d.mem/d.tot, x=PL+i*bw;
+    const comp=Math.max(0,d.tot-d.mem-d.guest)/d.tot;
+    const hm=plot*share, hc=plot*comp, hg=plot-hm-hc;
+    if(MB_NOTE[d.y]) s+=`<rect x="${x+bw*.06}" y="${TOP-6}" width="${bw*.88}" height="${plot+12}" `+
+      `fill="#fdf3f3" rx="4"></rect>`;
+    s+=`<rect x="${x+bw*.2}" y="${TOP}" width="${bw*.6}" height="${hc}" fill="#eceef1" rx="2"></rect>`+
+       `<rect x="${x+bw*.2}" y="${TOP+hc}" width="${bw*.6}" height="${hg}" fill="#c9d4e2"></rect>`+
+       `<rect x="${x+bw*.2}" y="${TOP+plot-hm}" width="${bw*.6}" height="${hm}" fill="var(--navy)" rx="2"></rect>`+
+       `<text x="${x+bw/2}" y="${TOP+plot-hm-6}" text-anchor="middle" font-size="11" font-weight="700" `+
+       `fill="var(--navy)">${(share*100).toFixed(0)}%</text>`+
+       `<text x="${x+bw/2}" y="${TOP-11}" text-anchor="middle" font-size="9.5" fill="#9aa3ae">${mbNum(d.tot)}</text>`+
+       `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-size="10" fill="#7c8593">`+
+       `${d.partial?"26 YTD":d.y.slice(2)}`+
+       `${MB_NOTE[d.y]?`<tspan fill="var(--red)" font-weight="700"> ${MB_NOTE[d.y]}</tspan>`:""}</text>`;
+  });
+  return `<svg class="mb-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`;
+}
+function mbPerMember(){
+  const S=mbS(), W=svgW(1), H=132, PL=34, PR=34, PB=22;
+  const vals=S.map(d=>d.members?d.mem/d.members:0);
+  const max=Math.max.apply(null,vals)*1.3, bw=(W-PL-PR)/S.length;
+  let s="";
+  S.forEach((d,i)=>{
+    const v=vals[i], x=PL+i*bw, h=(v/max)*(H-PB-14);
+    s+=`<rect x="${x+bw*.24}" y="${H-PB-h}" width="${bw*.52}" height="${h}" rx="2" `+
+       `fill="${d.partial?"#dfe4ea":"#8ea3bd"}"></rect>`+
+       `<text x="${x+bw/2}" y="${H-PB-h-4}" text-anchor="middle" font-size="9.5" font-weight="700" `+
+       `fill="${d.partial?"#9aa3ae":"var(--navy)"}">${v.toFixed(0)}</text>`+
+       `<text x="${x+bw/2}" y="${H-6}" text-anchor="middle" font-size="10" fill="#7c8593">`+
+       `${d.partial?"26 YTD":d.y.slice(2)}</text>`;
+  });
+  return `<svg class="mb-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`;
+}
+function mbShareView(){
+  const S=mbS(), last=S[S.length-1], first=S[0];
+  const pk=S.reduce((a,d)=>(d.mem/d.tot)>(a.mem/a.tot)?d:a,S[0]);
+  const y23=S.filter(d=>d.y==="2023")[0], y25=S.filter(d=>d.y==="2025")[0];
+  const held=Math.round(y25.mem/y25.members*y23.members);
+  return {t:"Member Share of Rounds", s:"2018 to June 2026",
+    cap:`Member play accounts for <b>${(last.mem/last.tot*100).toFixed(0)}%</b> of rounds, against a high of `+
+      `${(pk.mem/pk.tot*100).toFixed(0)}% in 2020 and 2024. Rounds per membership have moved the other way `+
+      `\u2014 from <b>${(first.mem/first.members).toFixed(0)}</b> in ${first.y} to `+
+      `<b>${(y25.mem/y25.members).toFixed(0)}</b> in 2025.`,
+    body: mbShare()+
+      `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Member Rounds</span>`+
+      `<span><i class="mb-key" style="background:#c9d4e2"></i>Guest and Outside Rounds</span>`+
+      `<span><i class="mb-key" style="background:#eceef1"></i>Complimentary</span></div>`+
+      `<div class="mb-notes"><span><b>*</b> 2020 \u2014 member play rose sharply; guest play held.</span>`+
+      `<span><b>**</b> 2024 \u2014 King &amp; Bear closed for greens renovation.</span></div>`+
+      `<div class="mb-sect"><div class="mb-st">Rounds per Membership</div>${mbPerMember()}`+
+      `<p class="mb-cap2"><b>A lower share is not less member golf.</b> Member rounds fell from `+
+      `${mbNum(y23.mem)} in 2023 to ${mbNum(y25.mem)} in 2025 while the roster went from ${y23.members} `+
+      `to ${y25.members}. At the 2025 rate of play, a 2023-sized roster would have produced ${mbNum(held)} `+
+      `rounds \u2014 within ${Math.abs(Math.round((held/y23.mem-1)*100))}% of what it actually did. `+
+      `The change is roster size, not behavior.</p></div>`+
+      `<p class="mb-cap2"><b>The share moved for different reasons each time.</b> In 2020 member rounds rose `+
+      `23% while guest rounds were flat. In 2024 member rounds fell 6% while guest rounds fell 15%, with `+
+      `King &amp; Bear closed for renovation for much of the year and member tee times carried at `+
+      `Slammer &amp; Squire.</p>`};
+}
+
+/* ---- memberships and revenue ---- */
+function mbRevView(){
+  const S=mbS(), ACT=MB_DATA.act, PR=MB_DATA.pr;
+  const W=svgW(1), H=232, PL=38, PRt=62, PB=26;
+  const rows=S.map(d=>{const k=d.partial?"2026 YTD":d.y, A=ACT[k]||{};
+    return {y:d.y,partial:d.partial,n:d.members,rev:A.total||0,per:A.per||0};});
+  const mx=Math.max.apply(null,rows.map(r=>r.n))*1.24;
+  const full=rows.filter(r=>!r.partial);
+  const px=Math.max.apply(null,full.map(r=>r.per))*1.2, bw=(W-PL-PRt)/rows.length;
+  let s="";
+  rows.forEach((r,i)=>{
+    const x=PL+i*bw, h=(r.n/mx)*(H-PB-16);
+    s+=`<rect x="${x+bw*.22}" y="${H-PB-h}" width="${bw*.56}" height="${h}" fill="#c9d4e2" rx="2"></rect>`+
+       `<text x="${x+bw/2}" y="${H-PB-h-4}" text-anchor="middle" font-size="9.5" fill="#7f8a99">${r.n}</text>`+
+       `<text x="${x+bw/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="#7c8593">`+
+       `${r.partial?"26 YTD":r.y.slice(2)}</text>`;
+  });
+  const yl=v=>H-PB-16-(v/px)*(H-PB-42);
+  const pts=full.map((r,i)=>[PL+i*bw+bw/2, yl(r.per)]);
+  s+=`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" `+
+     `fill="none" stroke="var(--red)" stroke-width="2.5"></path>`;
+  pts.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="3.2" fill="var(--red)"></circle>`;});
+  const lastFull=full[full.length-1];
+  s+=`<text x="${pts[pts.length-1][0]+9}" y="${pts[pts.length-1][1]+4}" font-size="11" font-weight="700" `+
+     `fill="var(--red)">${mbMoney(lastFull.per)}</text>`;
+
+  /* revenue per round: dues against the average guest green fee */
+  const ys=["2018","2019","2020","2021","2022","2023","2024","2025","2026 YTD"];
+  const W2=svgW(1), H2=190, PL2=40, PR2=52, PB2=24, TOP2=16;
+  const vals=ys.reduce((a,y)=>a.concat([PR[y].per,PR[y].gf]),[]);
+  const lo=Math.min.apply(null,vals)*0.86, hi=Math.max.apply(null,vals)*1.06;
+  const xs=i=>PL2+i*((W2-PL2-PR2)/(ys.length-1));
+  const yv=v=>TOP2+(H2-PB2-TOP2)*(1-(v-lo)/(hi-lo));
+  const mem=ys.map((y,i)=>[xs(i),yv(PR[y].per)]), gst=ys.map((y,i)=>[xs(i),yv(PR[y].gf)]);
+  let s2=`<path d="${mem.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")} `+
+    `${gst.slice().reverse().map(p=>"L"+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")} Z" fill="#eef2f7"></path>`;
+  [gst,mem].forEach((set,k)=>{
+    s2+=`<path d="${set.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" `+
+      `fill="none" stroke="${k?"var(--navy)":"var(--red)"}" stroke-width="2.5"></path>`;
+    set.forEach(p=>{s2+=`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${k?"var(--navy)":"var(--red)"}"></circle>`;});
+  });
+  ys.forEach((y,i)=>{s2+=`<text x="${xs(i)}" y="${H2-6}" text-anchor="middle" font-size="10" fill="#7c8593">`+
+    `${y==="2026 YTD"?"26 YTD":y.slice(2)}</text>`;});
+  const L=ys.length-1;
+  s2+=`<text x="${xs(L)+8}" y="${gst[L][1]+4}" font-size="10.5" font-weight="700" fill="var(--red)">`+
+      `$${PR[ys[L]].gf.toFixed(0)}</text>`+
+      `<text x="${xs(L)+8}" y="${mem[L][1]+4}" font-size="10.5" font-weight="700" fill="var(--navy)">`+
+      `$${PR[ys[L]].per.toFixed(0)}</text>`;
+  const gapPk=ys.slice(0,8).reduce((a,y)=>(PR[y].gf-PR[y].per)>(PR[a].gf-PR[a].per)?y:a,"2018");
+  const peak=S.reduce((a,d)=>d.members>a.members?d:a,S[0]);
+  return {t:"Memberships and Revenue per Membership", s:"2018 to June 2026",
+    cap:`Recorded membership revenue per membership has risen from <b>${mbMoney(rows[0].per)}</b> in `+
+      `${rows[0].y} to <b>${mbMoney(lastFull.per)}</b> in ${lastFull.y}, while the roster sits `+
+      `${peak.members-mbT(2026).all} below its ${peak.y} peak.`,
+    body: s ? `<svg class="mb-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`+
+      `<div class="mb-legend"><span><i class="mb-key" style="background:#c9d4e2"></i>Memberships</span>`+
+      `<span><i class="mb-key" style="background:var(--red)"></i>Revenue per Membership</span></div>`+
+      `<p class="mb-cap2">Total membership revenue was <b>${mbMoney(lastFull.rev)}</b> in ${lastFull.y}, `+
+      `against ${mbMoney(rows[0].rev)} in ${rows[0].y}. Through June 2026 it is `+
+      `<b>${mbMoney(ACT["2026 YTD"].total)}</b>, against ${mbMoney(ACT["2025 H1"].total)} in the same `+
+      `months of 2025.</p>`+
+      `<div class="mb-sect"><div class="mb-st">Revenue per Round</div>`+
+      `<svg class="mb-svg" viewBox="0 0 ${W2} ${H2}">${s2}</svg>`+
+      `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Dues per Member Round</span>`+
+      `<span><i class="mb-key" style="background:var(--red)"></i>Average Guest Green Fee</span></div>`+
+      `<p class="mb-cap2">A member round yielded <b>${mbMoney(PR["2025"].per)}</b> in dues in 2025 against `+
+      `${mbMoney(PR["2025"].gf)} for the average guest round \u2014 a gap of `+
+      `${mbMoney(PR["2025"].gf-PR["2025"].per)}. The gap was widest in ${gapPk} at `+
+      `${mbMoney(PR[gapPk].gf-PR[gapPk].per)} and stands at `+
+      `${mbMoney(PR["2026 YTD"].gf-PR["2026 YTD"].per)} through June 2026.</p></div>` : ""};
+}
+
+/* ---- market position ---- */
+function mbMarketView(){
+  const CL=MB_DATA.clubs;
+  const wgv=CL.filter(c=>c.label==="World Golf Village")[0];
+  const mkt=CL.filter(c=>c.label!=="World Golf Village");
+  const d26=mkt.map(c=>c.dues26).filter(v=>v);
+  const i26=mkt.map(c=>c.init26).filter(v=>v);
+  const all=mkt.filter(c=>c.dues26).concat([wgv]).sort((a,b)=>b.dues26-a.dues26);
+  const m=mbMed(d26), max=Math.max.apply(null,all.map(c=>c.dues26));
+  const isSemi=c=>/Semi/.test(c.type||"");
+  const rank=all.findIndex(c=>c.label==="World Golf Village")+1;
+  const row=c=>{
+    const me=c.label==="World Golf Village";
+    return `<div class="mb-row${me?" me":""}"><span class="mb-nm">${c.label}</span>`+
+      `<span class="mb-bar"><i style="width:${(c.dues26/max*100).toFixed(1)}%;background:`+
+      `${me?"var(--red)":(isSemi(c)?"#9fb4cc":"#dde2e9")}"></i></span>`+
+      `<span class="mb-d">${mbMoney(c.dues26)}</span>`+
+      `<span class="mb-i">${c.init26?mbMoney(c.init26):"\u2014"}</span></div>`;
+  };
+  const half=Math.ceil(all.length/2);
+  const big=[[mbMoney(wgv.dues26),"Our monthly dues"],[mbMoney(m),"Market median"],
+             [mbMoney(wgv.init26),"Our initiation"],[mbMoney(mbMed(i26)),"Median initiation"]]
+    .map(([n,l])=>`<div class="mb-big"><div class="mb-bn">${n}</div><div class="mb-bl">${l}</div></div>`).join("");
+  return {t:"Monthly Dues and Initiation Across the Market", s:"2026 study",
+    cap:`World Golf Village is <b>${rank}th of ${all.length}</b> on monthly dues, at `+
+      `${Math.round(wgv.dues26/m*100)}% of the market median.`,
+    body:`<div class="mb-bigrow">${big}</div>`+
+      `<div class="mb-mcols"><div>${all.slice(0,half).map(row).join("")}</div>`+
+      `<div>${all.slice(half).map(row).join("")}</div></div>`+
+      `<div class="mb-legend"><span><i class="mb-key" style="background:#dde2e9"></i>Private</span>`+
+      `<span><i class="mb-key" style="background:#9fb4cc"></i>Semi-Private</span>`+
+      `<span><i class="mb-key" style="background:var(--red)"></i>World Golf Village</span></div>`};
+}
+
+/* ---- categories ---- */
+function mbCatsView(){
+  const cats=MB_DATA.memb.cats;
+  const golf=cats.filter(c=>!MB_DROP[c.name] && c.name!=="Social Membership");
+  const social=cats.filter(c=>c.name==="Social Membership")[0];
+  const rate=(c,k)=>c.y["2026"][k];
+  const cnt=(c,k)=>c.y["2026"][k]||0;
+  const tot=c=>cnt(c,"mCount")+cnt(c,"aCount");
+  const stack=(r,n)=>r? `<span class="mb-stk"><b>${mbMoney(r)}</b><em>`+
+      `${n? n+" paying" : '<i class="mb-z">none</i>'}</em></span>`
+    : `<span class="mb-stk"><b class="mb-z">\u2014</b></span>`;
+  const rows=golf.filter(c=>tot(c)>0).sort((a,b)=>tot(b)-tot(a));
+  const row=c=>{
+    const open=!!MB_OPEN[c.name];
+    return `<div class="mb-crow${open?" open":""}"><span class="mb-cn">${c.name}`+
+      `<b class="mb-tag${open?"":" off"}">${open?"Selling":"Closed"}</b></span>`+
+      stack(rate(c,"mRate"),cnt(c,"mCount"))+stack(rate(c,"aRate"),cnt(c,"aCount"))+
+      `<span class="mb-ct">${tot(c)}</span></div>`;
+  };
+  const tm=rows.reduce((x,c)=>x+cnt(c,"mCount"),0), ta=rows.reduce((x,c)=>x+cnt(c,"aCount"),0);
+  return {t:"Memberships by Category", s:"Rates and counts as of June 2026",
+    cap:`<b>Affiliate - Full</b> is the only category still selling, at ${mbMoney(rate(rows[0],"mRate"))} `+
+      `a month or ${mbMoney(rate(rows[0],"aRate"))} a year. It holds ${tot(rows[0])} of the ${tm+ta} `+
+      `golf memberships; the other ${rows.length-1} categories are closed and running off.`,
+    body:`<div class="mb-ctable">`+
+      `<div class="mb-crow mb-chead"><span class="mb-cn">Category</span>`+
+      `<span class="mb-stk">Monthly</span><span class="mb-stk">Annual</span>`+
+      `<span class="mb-ct">Total</span></div>`+
+      rows.map(row).join("")+
+      `<div class="mb-crow mb-ctot"><span class="mb-cn">Golf Memberships</span>`+
+      `<span class="mb-stk"><em>${tm} paying monthly</em></span>`+
+      `<span class="mb-stk"><em>${ta} paying annually</em></span>`+
+      `<span class="mb-ct">${tm+ta}</span></div></div>`+
+      `<div class="mb-sect"><div class="mb-st">Held Separately</div>`+
+      `<div class="mb-crow"><span class="mb-cn">Social Membership<b class="mb-tag off">Closed</b></span>`+
+      stack(null,0)+stack(rate(social,"aRate"),cnt(social,"aCount"))+
+      `<span class="mb-ct">${tot(social)}</span></div>`+
+      `<p class="mb-cap2">Social memberships carry no golf privileges and sit outside the golf roster. `+
+      `The category is closed and has fallen from `+
+      `${social.y["2020"].mCount+social.y["2020"].aCount} in 2020 to ${tot(social)}.</p></div>`};
+}
+
+/* ---- turnover ---- */
+function mbTurnView(){
+  const ys=mbYrs().filter(y=>mbA(y).net!=null);
+  const openR=y=>mbT(+y-1)?mbT(+y-1).all:null;
+  const lr=y=>(mbA(y).term||0)/openR(y)*100;
+  const W=svgW(1), H=270, PL=44, PR=30, MID=136;
+  const bw=(W-PL-PR)/ys.length;
+  const max=Math.max.apply(null,ys.map(y=>Math.max(mbA(y).add||0,mbA(y).term||0)))*1.18;
+  const h=v=>(v/max)*104;
+  let s=`<line x1="${PL}" x2="${W-PR}" y1="${MID}" y2="${MID}" stroke="#dfe3e9"></line>`;
+  ys.forEach((y,i)=>{
+    const x=PL+i*bw, a=mbA(y), ha=h(a.add||0), ht=h(a.term||0);
+    s+=`<rect x="${x+bw*.26}" y="${MID-ha}" width="${bw*.48}" height="${ha}" rx="3" fill="var(--navy)"></rect>`+
+       `<rect x="${x+bw*.26}" y="${MID}" width="${bw*.48}" height="${ht}" rx="3" fill="#d8a0a0"></rect>`+
+       `<text x="${x+bw/2}" y="${MID-ha-7}" text-anchor="middle" font-size="14" font-weight="700" `+
+       `fill="var(--navy)">${a.add||0}</text>`+
+       `<text x="${x+bw/2}" y="${MID+ht+17}" text-anchor="middle" font-size="14" font-weight="700" `+
+       `fill="#b06b6b">${a.term||0}</text>`+
+       `<text x="${x+bw/2}" y="${H-30}" text-anchor="middle" font-size="13" font-weight="700" `+
+       `fill="#5f6b7a">${y.slice(2)}${y==="2026"?" YTD":""}</text>`+
+       `<text x="${x+bw/2}" y="${H-11}" text-anchor="middle" font-size="13" font-weight="700" `+
+       `fill="${(a.net||0)>=0?"var(--navy)":"var(--red)"}">${(a.net||0)>0?"+":""}${a.net||0}</text>`;
+  });
+  s+=`<text x="${PL}" y="${H-11}" text-anchor="end" font-size="9.5" fill="#9aa3ae">NET</text>`;
+  const tj=ys.reduce((x,y)=>x+(mbA(y).add||0),0), tl=ys.reduce((x,y)=>x+(mbA(y).term||0),0);
+  const worst=ys.reduce((x,y)=>lr(y)>lr(x)?y:x,ys[0]);
+  const mxr=Math.max.apply(null,ys.map(lr));
+  const bars=ys.map(y=>`<div class="mb-lrow"><span class="mb-ly">${y.slice(2)}${y==="2026"?" YTD":""}</span>`+
+    `<span class="mb-lb"><i style="width:${(lr(y)/mxr*100).toFixed(1)}%;background:`+
+    `${y===worst?"var(--red)":"#b9c9dc"}"></i></span>`+
+    `<span class="mb-lv">${lr(y).toFixed(1)}%</span></div>`).join("");
+  const big=[[tj,"Joined since 2020"],[tl,"Left since 2020"],
+             [(tj-tl>0?"+":"")+(tj-tl),"Net change"],[lr("2025").toFixed(0)+"%","2025 loss rate"]]
+    .map(([n,l])=>`<div class="mb-big"><div class="mb-bn">${n}</div><div class="mb-bl">${l}</div></div>`).join("");
+  const early=["2020","2021","2022","2023"].map(lr);
+  return {t:"Membership Turnover", s:"2020 to June 2026",
+    cap:`<b>${tj}</b> memberships joined and <b>${tl}</b> left since 2020, a net change of `+
+      `${tj-tl>0?"+":""}${tj-tl}.`,
+    body:`<div class="mb-bigrow">${big}</div><svg class="mb-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`+
+      `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Joined</span>`+
+      `<span><i class="mb-key" style="background:#d8a0a0"></i>Left</span></div>`+
+      `<div class="mb-sect"><div class="mb-st">Departures as a Share of the Opening Roster</div>`+
+      `<div class="mb-lwrap">${bars}</div></div>`+
+      `<p class="mb-cap2">The loss rate ran between ${Math.min.apply(null,early).toFixed(1)}% and `+
+      `${Math.max.apply(null,early).toFixed(1)}% through 2023, then reached <b>${lr(worst).toFixed(1)}%</b> `+
+      `in ${worst}. Half of 2026 has produced ${lr("2026").toFixed(1)}%.</p>`};
+}
+
+function detailMemberships(i){
+  const tab = MB_TABS.some(t=>t[0]===state.mbTab) ? state.mbTab : "share";
+  const V = tab==="share" ? mbShareView() : tab==="rev" ? mbRevView()
+          : tab==="market" ? mbMarketView() : tab==="cats" ? mbCatsView() : mbTurnView();
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${mbT(2026).all} memberships as of June 30, 2026</div></div>`+
+    `<div class="detail-body is-wide">`+
+      `<div class="mb-nav">`+MB_TABS.map(([k,l])=>
+        `<button type="button" data-mbtab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("")+`</div>`+
+      `<div class="mb-view"><div class="mb-vt"><h4>${V.t}</h4><span>${V.s}</span></div>`+
+      `<p class="mb-cap">${V.cap}</p>${V.body}</div>`+
+    `</div>`;
+  el("#detail").querySelectorAll("[data-mbtab]").forEach(b=>b.addEventListener("click",()=>{
+    state.mbTab=b.dataset.mbtab; detail(i);
+  }));
 }
 
 /* ---------- Year Detail: the department report ----------
@@ -3191,9 +3578,9 @@ function applyContent(rows){
   if(S.management){
     // Customer Surveys is hard-coded and pinned to the top; a duplicate sheet
     // row is dropped so it can't appear twice.
-    const mgmtDrop = /^\s*(customer\s+surveys?|historical\s+weather|financials?)\s*$/i;
+    const mgmtDrop = /^\s*(customer\s+surveys?|historical\s+weather|financials?|memberships?)\s*$/i;
     const mgmtRows = mgmt.filter(r=>!mgmtDrop.test((r.title||"").trim()));
-    S.management.items = [surveysItem(), histWeatherItem(), financialsItem()]
+    S.management.items = [surveysItem(), histWeatherItem(), financialsItem(), membershipsItem()]
       .concat(mgmtRows.map(contentTypeToItem));
   }
 
@@ -3316,7 +3703,7 @@ window.addEventListener("resize",()=>{
   _svResize=setTimeout(()=>{
     const cur=(S[state.view]||{}).items||[];
     const it=cur[state.idx];
-    if(it && ((it.surveys && state.svView==="scores") || it.histwx || it.fin)) detail(it);
+    if(it && ((it.surveys && state.svView==="scores") || it.histwx || it.fin || it.memb)) detail(it);
   },180);
 });
 </script>
