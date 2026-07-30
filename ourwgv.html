@@ -307,7 +307,17 @@ a{color:inherit}
 .mg-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:3px}
 .mg-say{font-size:13.5px;color:#3d3d3a;line-height:1.5;margin:0 0 6px}
 .mg-grid{display:grid;gap:0 8px;align-items:center;margin-bottom:6px}
-.mg-gh{font-size:11px;color:#b4b2a9;text-align:center}
+.mg-head{margin-bottom:8px}
+.mg-gh{display:flex;align-items:baseline;justify-content:center;gap:7px;text-align:center}
+.mg-gh b{font-size:14px;font-weight:700;color:#5f6b7a}
+.mg-gh em{font-style:normal;font-size:12.5px;font-weight:600;color:#8a8a84}
+.mg-gh-lbl{font-size:11px;letter-spacing:.04em;color:#b4b2a9;text-align:right}
+@media (max-width:820px){
+  .mg-gh{gap:0;flex-direction:column}
+  .mg-gh b{font-size:12.5px}
+  .mg-gh em{font-size:11px}
+  .mg-gh-lbl{font-size:10px}
+}
 .mg-en{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mg-cell{font-family:inherit;font-size:13.5px;font-weight:700;text-align:center;padding:9px 0;
  border:0;border-radius:7px;cursor:pointer;width:100%}
@@ -3101,8 +3111,15 @@ function mgTone(v){
 function mgOverview(){
   const Y=MEMBER_GOLF.years;
   const cols=`grid-template-columns:minmax(0,190px) repeat(${Y.length},minmax(0,1fr))`;
-  const head=`<div class="mg-grid" style="${cols}"><span></span>`+
-    Y.map(y=>`<span class="mg-gh">${y}</span>`).join("")+`</div>`;
+  // The summary sheets' season total is the mean of that year's four events,
+  // so it belongs beside the year rather than in a separate row.
+  const head=`<div class="mg-grid mg-head" style="${cols}">`+
+    `<span class="mg-gh-lbl">Year average</span>`+
+    Y.map(y=>{
+      const avg=(MEMBER_GOLF.tot[y]||[])[2];
+      return `<span class="mg-gh"><b>${y}</b>`+
+        (avg!=null?`<em>${Math.round(avg)}%</em>`:"")+`</span>`;
+    }).join("")+`</div>`;
   const grid=MEMBER_GOLF.order.map(k=>{
     const cells=Y.map(y=>{
       const e=(MEMBER_GOLF.ev[y]||{})[k];
