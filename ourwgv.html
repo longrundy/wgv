@@ -1257,7 +1257,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"trend",finMode:"amt",finOpen:""};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:""};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -1923,7 +1923,7 @@ function detailFinancials(i){
   const pRev=finTot(prev,"rev",seg), pLab=finTot(prev,"lab",seg), pNoi=finTot(prev,"noi",seg);
   const margin=rev?noi/rev*100:0, pMargin=pRev?pNoi/pRev*100:0;
 
-  const tab = state.finTab==="year" ? "year" : "trend";
+  const tab = state.finTab==="trend" ? "trend" : "year";   /* Year Detail is the landing view */
   /* Segment means the same thing on both tabs, so it sits above them and holds
      its value when you switch. Year and the metric pickers belong to one tab
      each and move inside. */
@@ -1932,8 +1932,8 @@ function detailFinancials(i){
       `<button type="button" data-fseg="${k}" aria-pressed="${k===seg}">${FIN_SEG[k]}</button>`).join("")+
     `</div></div></div>`+
     `<div class="fin-tabs" role="tablist">`+
-      `<button type="button" role="tab" data-ftab="trend" aria-selected="${tab==="trend"}">Annual Trend</button>`+
       `<button type="button" role="tab" data-ftab="year" aria-selected="${tab==="year"}">Year Detail</button>`+
+      `<button type="button" role="tab" data-ftab="trend" aria-selected="${tab==="trend"}">Annual Trend</button>`+
       `<span class="fin-hint">${tab==="trend"
         ? finFullYears()[0]+" to "+finFullYears()[finFullYears().length-1]
         : (FIN_PARTIAL[y] ? y.replace(" YTD","")+" \u00b7 "+FIN_PARTIAL[y]
