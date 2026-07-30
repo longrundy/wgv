@@ -128,15 +128,15 @@ a{color:inherit}
 /* live cart card on announcements */
 
 .cartcard{margin:18px 26px 22px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
-.cartcard h3{margin:0;padding:13px 16px 9px;font-size:12px;letter-spacing:.7px;font-weight:600;color:var(--navy)}
-.cart-body{padding:0 16px 13px}
+.cartcard h3{margin:0;padding:10px 14px 7px;font-size:11px;letter-spacing:.7px;font-weight:600;color:var(--navy)}
+.cart-body{padding:0 14px 10px}
 .cart-loading{color:var(--muted);font-size:13px;padding:2px 0 4px}
-.cart-row{padding:11px 13px;border-left:3px solid #d3d1c7;background:#f7f6f2;border-radius:0}
-.cart-row + .cart-row{margin-top:8px}
-.cart-row-top{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
-.cart-course-name{font-size:14px;font-weight:600;color:var(--ink)}
-.cart-time{font-size:11px;margin-left:auto;flex:none;white-space:nowrap;color:#b4b2a9}
-.cart-rule-txt{font-size:14px;color:#5f5e5a;line-height:1.45}
+.cart-row{padding:7px 11px;border-left:3px solid #d3d1c7;background:#f7f6f2;border-radius:0}
+.cart-row + .cart-row{margin-top:6px}
+.cart-row-top{display:flex;align-items:baseline;gap:8px}
+.cart-course-name{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3}
+.cart-time{font-size:11px;margin-left:auto;flex:none;white-space:nowrap;color:#b4b2a9;line-height:1.3}
+.cart-rule-txt{margin:1px 0 0;font-size:13px;color:#5f5e5a;line-height:1.35}
 .cart-row.is-limited{border-left-color:#85b7eb;background:#eaf0f7}
 .cart-row.is-limited .cart-course-name{color:var(--navy)}
 .cart-row.is-limited .cart-time{color:#5c7699}
@@ -147,9 +147,9 @@ a{color:inherit}
 .cart-row.is-closed .cart-rule-txt{color:var(--red-dark)}
 .cart-err{font-size:12px;color:var(--muted);line-height:1.6;padding:2px 0 4px}
 .cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all;display:inline-block}
-.cart-learn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--navy);font-size:14px;font-weight:600;color:#fff;text-decoration:none;transition:background .12s ease}
+.cart-learn{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--navy);font-size:13px;font-weight:600;color:#fff;text-decoration:none;transition:background .12s ease}
 .cart-learn:hover,.cart-learn:focus-visible{background:var(--navy-2,#22406c)}
-.cart-learn .cart-chev{margin-left:auto;flex:none;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;font-weight:700;padding-bottom:1px}
+.cart-learn .cart-chev{margin-left:auto;flex:none;width:20px;height:20px;border-radius:50%;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;font-weight:700;padding-bottom:1px}
 .cart-learn.is-active{background:var(--navy-2,#22406c)}
 @media (prefers-reduced-motion:reduce){.cart-learn{transition:none}}
 
@@ -754,7 +754,7 @@ button.yd-r:hover{background:#f2f5f9}
 .embed-card.is-list iframe{height:70vh;min-height:480px}
 /* Full monthly calendar: the grid needs the width, not a widget column. */
 .embed-card.is-cal{max-width:none}
-.embed-card.is-cal iframe{height:78vh;min-height:620px}
+.embed-card.is-cal iframe{height:calc(100vh - 196px);min-height:640px}
 .lang-switch.wide button{max-width:230px}
 .embed-note{margin:12px auto 0;text-align:center;font-size:12px;color:var(--muted)}
 .embed-note a{color:#185fa5;font-weight:600;text-decoration:none}
@@ -765,7 +765,7 @@ button.yd-r:hover{background:#f2f5f9}
   .embed-card.is-mini iframe{height:520px}
   .embed-card.is-list{max-width:none}
   .embed-card.is-list iframe{height:calc(100dvh - 300px);min-height:420px}
-  .embed-card.is-cal iframe{height:calc(100dvh - 240px);min-height:560px}
+  .embed-card.is-cal iframe{height:calc(100dvh - 200px);min-height:560px}
   /* Google Forms should use the full mobile screen: kill the detail padding,
      card margins, and rounded corners so the form runs edge-to-edge. */
   .detail-body.form-body,
@@ -993,7 +993,7 @@ function calendarItem(title){
     embedHtml:{sub:"The posted schedule and club events.",
       url:"https://tockify.com/"+TOCKIFY_CAL+"/monthly",
       src:"https://tockify.com/"+TOCKIFY_CAL+"/monthly",
-      card:"is-cal"}};
+      card:"is-cal", note:false}};
 }
 
 /* View the Tee Sheet — EZLinks. Opens in a new tab: the site refuses to be
@@ -1626,7 +1626,7 @@ function detailEmbedHtml(i){
     `</div>`+
     `<div class="detail-body">`+
       `<div class="embed-card ${d.card||"is-mini"}">${frame}</div>`+
-      (d.url?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
+      (d.url&&d.note!==false?`<p class="embed-note">Not loading? <a href="${d.url}" target="_blank" rel="noopener">Open ${d.openLabel||"the full calendar"} in a new tab <span aria-hidden="true">&#8599;</span></a></p>`:"")+
     `</div>`;
 }
 
