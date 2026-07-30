@@ -128,23 +128,30 @@ a{color:inherit}
 /* live cart card on announcements */
 
 .cartcard{margin:18px 26px 22px;border:1px solid #dde3ec;border-radius:14px;overflow:hidden;background:#fff}
-.cartcard h3{margin:0;background:var(--navy);color:#fff;font-size:12px;letter-spacing:.7px;padding:11px 16px;font-weight:600;display:flex;align-items:center;gap:8px}
-.cart-body{padding:0}
-.cart-loading{color:var(--muted);font-size:13px;padding:14px 16px}
-.cart-row{display:flex;align-items:center;gap:12px;padding:13px 16px}
-.cart-dot{width:9px;height:9px;border-radius:50%;flex:none}
-.cart-mid{flex:1;min-width:0}
-.cart-course-name{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.3px}
-.cart-rule-txt{font-size:14px;color:#3d3d3a;margin-top:2px;line-height:1.35}
-.cart-right{text-align:right;flex:none}
-.cart-pill{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;display:inline-block}
-.cart-time{font-size:10px;color:var(--muted);margin-top:4px}
-.cart-err{font-size:12px;color:var(--muted);line-height:1.6;padding:14px 16px}
+.cartcard h3{margin:0;padding:13px 16px 9px;font-size:12px;letter-spacing:.7px;font-weight:600;color:var(--navy)}
+.cart-body{padding:0 16px 13px}
+.cart-loading{color:var(--muted);font-size:13px;padding:2px 0 4px}
+.cart-row{padding:11px 13px;border-left:3px solid #d3d1c7;background:#f7f6f2;border-radius:0}
+.cart-row + .cart-row{margin-top:8px}
+.cart-row-top{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.cart-course-name{font-size:14px;font-weight:600;color:var(--ink)}
+.cart-time{font-size:11px;margin-left:auto;flex:none;white-space:nowrap;color:#b4b2a9}
+.cart-rule-txt{font-size:14px;color:#5f5e5a;line-height:1.45}
+.cart-row.is-limited{border-left-color:#85b7eb;background:#eaf0f7}
+.cart-row.is-limited .cart-course-name{color:var(--navy)}
+.cart-row.is-limited .cart-time{color:#5c7699}
+.cart-row.is-limited .cart-rule-txt{color:#2c4a75}
+.cart-row.is-closed{border-left-color:#e24b4a;background:#fcebeb}
+.cart-row.is-closed .cart-course-name{color:#501313}
+.cart-row.is-closed .cart-time{color:var(--red-dark)}
+.cart-row.is-closed .cart-rule-txt{color:var(--red-dark)}
+.cart-err{font-size:12px;color:var(--muted);line-height:1.6;padding:2px 0 4px}
 .cart-err code{font-size:11px;background:#f4f2ec;padding:1px 5px;border-radius:4px;word-break:break-all;display:inline-block}
-.cart-learn{padding:12px 16px 14px;border-top:1px solid #eef0f4}
-.cart-learn a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#185fa5;background:#e6f1fb;border:1px solid #c3ddf4;padding:7px 13px;border-radius:20px;text-decoration:none}
-.cart-learn a:active{background:#d3e6f7}
-.cart-learn a.is-active{background:#185fa5;color:#fff;border-color:#185fa5}
+.cart-learn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--navy);font-size:14px;font-weight:600;color:#fff;text-decoration:none;transition:background .12s ease}
+.cart-learn:hover,.cart-learn:focus-visible{background:var(--navy-2,#22406c)}
+.cart-learn .cart-chev{margin-left:auto;flex:none;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;font-weight:700;padding-bottom:1px}
+.cart-learn.is-active{background:var(--navy-2,#22406c)}
+@media (prefers-reduced-motion:reduce){.cart-learn{transition:none}}
 
 .tabs{display:flex;gap:22px;margin-top:16px;border-bottom:1px solid var(--line);padding:0 22px}
 .tab{padding:0 0 12px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
@@ -850,8 +857,9 @@ button.yd-r:hover{background:#f2f5f9}
       <p class="queue-sub" id="queueSub"></p>
     </div>
     <div class="cartcard" id="cartcard" hidden>
-      <h3><span class="dot" style="background:#7dd3b0"></span> Today's cart rule &middot; live</h3>
+      <h3>TODAY&rsquo;S CART RULE</h3>
       <div class="cart-body" id="cartBody"><div class="cart-loading">Loading today's cart rule…</div></div>
+      <a class="cart-learn" id="turfLink" href="#" onclick="goTurf(event)" hidden>Learn About TurfSaver Entry-Exit<span class="cart-chev" aria-hidden="true">&rsaquo;</span></a>
     </div>
     <div class="list" id="list" role="listbox" aria-label="Items"></div>
   </main>
@@ -3343,10 +3351,11 @@ function renderCart(rows){
   const cells=[];
   rows.forEach(r=>r.forEach(c=>{ const v=(c||"").trim(); if(v) cells.push(v); }));
   const isCourse=s=>{const l=s.toLowerCase();return (l.indexOf("king")>-1&&l.indexOf("bear")>-1)||(l.indexOf("slammer")>-1&&l.indexOf("squire")>-1);};
-  const label=s=>{const l=s.toLowerCase();return l.indexOf("king")>-1?"KING & BEAR":"SLAMMER & SQUIRE";};
+  const label=s=>{const l=s.toLowerCase();return l.indexOf("king")>-1?"King & Bear":"Slammer & Squire";};
   const isStatusWord=s=>/^(open|closed|caution|path only|cart path only)$/i.test(s.trim());
-  const isUpdatedLabel=s=>/^updated/i.test(s.trim());
   const isTime=s=>/\b(am|pm)\b/i.test(s)||/\d{1,2}\/\d{1,2}/.test(s);
+  // "Updated as of:" may sit in its own cell or share one with the stamp.
+  const isUpdatedLabel=s=>/^updated/i.test(s.trim()) && !isTime(s);
   const isLearn=s=>/learn about/i.test(s);
   const blocks=[];
   for(let i=0;i<cells.length;i++){
@@ -3368,23 +3377,48 @@ function renderCart(rows){
     document.getElementById("cartBody").innerHTML='<div class="cart-err"><b>Mapping needed.</b> First cells:<br><code>'+cells.slice(0,12).join("<br>")+'</code></div>';
     return;
   }
-  function meta(b){
-    const s=((b.status||"")+" "+(b.rule||"")).toLowerCase();
-    if(s.indexOf("clos")>-1||s.indexOf("maintenance")>-1) return {word:"CLOSED",dot:"#c8161d",pillBg:"#c8161d",pillFg:"#fff",rowBg:"#fcf1f1"};
-    if(s.indexOf("path only")>-1||s.indexOf("caution")>-1) return {word:"CAUTION",dot:"#ba7517",pillBg:"#fbeed4",pillFg:"#8a5a12",rowBg:"#fdf9f0"};
-    return {word:"OPEN",dot:"#378add",pillBg:"#e6f1fb",pillFg:"#185fa5",rowBg:"#fff"};
+  // Tone comes from what the rule actually says, never from a status column:
+  // a course can be open under a restriction while its range is closed.
+  function toneOf(b){
+    const t=((b.rule||b.status||"")+"").toLowerCase();
+    if(!t) return "";
+    const CLOSED=/clos|maintenance|aerif|aerat/;
+    const LIMITED=/path only|90|caution|frost|wet|cart path/;
+    // "Course & range closed" shares one predicate — catch it before splitting.
+    if(/\bcourse\b\s*(?:&|and|\+|\/)\s*(?:practice\s+)?range\b[^.]*(?:clos|maintenance)/.test(t)) return "is-closed";
+    if(/\brange\b\s*(?:&|and|\+|\/)\s*(?:the\s+)?course\b[^.]*(?:clos|maintenance)/.test(t)) return "is-closed";
+    var courseClosed=false, limited=false, rangeClosed=false;
+    t.split(/\s*(?:&|\band\b|;|\.|,|\/)\s*/).forEach(function(c){
+      if(!c) return;
+      var isRange=/range|practice|putting|chipping/.test(c);
+      if(CLOSED.test(c)){ if(isRange) rangeClosed=true; else courseClosed=true; }
+      if(LIMITED.test(c)) limited=true;
+    });
+    if(courseClosed) return "is-closed";
+    if(limited||rangeClosed) return "is-limited";
+    return "";
   }
-  function row(b,last){
-    const m=meta(b);
-    return '<div class="cart-row" style="background:'+m.rowBg+(last?"":";border-bottom:1px solid #eef0f4")+'">'+
-      '<span class="cart-dot" style="background:'+m.dot+'"></span>'+
-      '<div class="cart-mid"><div class="cart-course-name">'+b.name+'</div><div class="cart-rule-txt">'+(b.rule||b.status||"—")+'</div></div>'+
-      '<div class="cart-right"><span class="cart-pill" style="background:'+m.pillBg+';color:'+m.pillFg+'">'+m.word+'</span>'+
-      (b.time?'<div class="cart-time">'+b.time+'</div>':'')+'</div></div>';
+  // Capitalize each word so the sheet can be typed however is fastest at 6 a.m.
+  var SMALL={and:1,or:1,for:1,the:1,of:1,on:1,to:1,in:1,at:1,a:1,an:1,until:1,per:1};
+  function titleCase(s){
+    var v=String(s||"").trim();
+    if(v && v===v.toUpperCase()) v=v.toLowerCase(); // shouted cells come back readable
+    return v.split(/\s+/).map(function(w,i){
+      var bare=w.toLowerCase();
+      if(i>0 && SMALL[bare]) return bare;
+      return w.charAt(0).toUpperCase()+w.slice(1);
+    }).join(" ");
   }
-  document.getElementById("cartBody").innerHTML=
-    '<div class="cart-rows">'+blocks.map((b,i)=>row(b,i===blocks.length-1)).join("")+'</div>'+
-    '<div class="cart-learn"><a id="turfLink" href="#" onclick="goTurf(event)" class="'+(state.turf?"is-active":"")+'">Learn about TurfSaver entry-exit &rsaquo;</a></div>';
+  function row(b){
+    var txt=b.rule||b.status||"—";
+    return '<div class="cart-row '+toneOf(b)+'">'+
+      '<div class="cart-row-top"><span class="cart-course-name">'+esc(titleCase(b.name))+'</span>'+
+      (b.time?'<span class="cart-time">'+esc(b.time)+'</span>':'')+'</div>'+
+      '<p class="cart-rule-txt">'+esc(titleCase(txt))+'</p></div>';
+  }
+  document.getElementById("cartBody").innerHTML=blocks.map(row).join("");
+  var foot=document.getElementById("turfLink");
+  if(foot){ foot.hidden=false; foot.classList.toggle("is-active", !!state.turf); }
 }
 function goTurf(e){ if(e) e.preventDefault(); state.turf=true; renderTurfDetail(); markTurf(true); document.querySelectorAll(".row").forEach(x=>x.setAttribute("aria-current","false")); if(isMobile()) document.body.classList.add("show-detail"); }
 function markTurf(on){ const l=document.getElementById("turfLink"); if(l) l.classList.toggle("is-active", !!on); }
