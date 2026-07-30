@@ -321,6 +321,16 @@ a{color:inherit}
 .gh-c.na{background:#fafaf8;color:#cfcdc5}
 .gh-t{text-align:center;font-size:11.5px;font-weight:700}
 .gh-foot{font-size:12px;color:var(--muted);line-height:1.55;margin:12px 0 0}
+.gh-sum{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin-top:2px}
+.gh-sh{margin:0 0 7px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.gh-sh.up{color:var(--green)}
+.gh-sh.down{color:var(--red)}
+.gh-list{margin:0;padding:0;list-style:none}
+.gh-list li{position:relative;font-size:13px;color:#3d3d3a;line-height:1.5;padding:0 0 7px 15px}
+.gh-list li:before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%}
+.gh-list.up li:before{background:var(--green)}
+.gh-list.down li:before{background:var(--red)}
+@media (max-width:820px){.gh-sum{grid-template-columns:1fr;gap:14px}}
 @media (max-width:820px){.gh-tiles{grid-template-columns:1fr 1fr}}
 .mg-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:0 0 14px}
 .mg-tile{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
@@ -3139,6 +3149,55 @@ function ghTone(v){
   if(v>=70) return ["#fbf4ec","#8a5a12"];
   return ["#fdeeee","#a32d2d"];
 }
+/* Year summary. Everything here is derived from the grid above rather than
+   written by hand, so it can't drift from the numbers it describes. */
+function ghSummary(y){
+  const B=GUEST_HIST.y[y], M=GUEST_HIST.months, Ys=GUEST_HIST.years;
+  const prev=GUEST_HIST.y[Ys[Ys.indexOf(y)+1]];
+  const pct=v=>Math.round(v)+"%";
+  const qs=B.q.filter(q=>q.t!=null).slice().sort((a,b)=>b.t-a.t);
+  const ds=GUEST_HIST.depts.map(d=>[d,B.d[d]]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1]);
+  const mv=B.tpe.m.map((v,k)=>[k,v]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1]);
+  // biggest climb and biggest slide within a single touchpoint across the year
+  let rise=null, fall=null;
+  B.q.forEach(q=>{
+    for(let a=0;a<q.m.length;a++){ if(q.m[a]==null) continue;
+      for(let b=a+1;b<q.m.length;b++){ if(q.m[b]==null) continue;
+        const d=q.m[b]-q.m[a];
+        if(!rise||d>rise.d) rise={d,q:q.q,a,b};
+        if(!fall||d<fall.d) fall={d,q:q.q,a,b};
+      }}
+  });
+  const up=[], down=[];
+  if(prev&&B.tpe.t!=null&&prev.tpe.t!=null){
+    const d=+(B.tpe.t-prev.tpe.t).toFixed(1);
+    (d>=0?up:down).push(`Total property experience ${d>=0?"rose":"fell"} `+
+      `<b>${Math.abs(d).toFixed(1)} points</b> from ${Ys[Ys.indexOf(y)+1]}, to <b>${B.tpe.t}%</b>`);
+  }
+  if(qs.length){
+    up.push(`<b>${qs[0].q}</b> was the strongest touchpoint at <b>${pct(qs[0].t)}</b>`+
+      (qs[1]?`, followed by ${qs[1].q} at ${pct(qs[1].t)}`:""));
+    down.push(`<b>${qs[qs.length-1].q}</b> was the weakest at <b>${pct(qs[qs.length-1].t)}</b>`+
+      (qs[qs.length-2]?`, with ${qs[qs.length-2].q} at ${pct(qs[qs.length-2].t)}`:""));
+  }
+  if(mv.length){
+    up.push(`<b>${M[mv[0][0]]}</b> was the best month at <b>${pct(mv[0][1])}</b>`);
+    down.push(`<b>${M[mv[mv.length-1][0]]}</b> was the weakest month at <b>${pct(mv[mv.length-1][1])}</b>`);
+  }
+  if(ds.length){
+    up.push(`<b>${ds[0][0]}</b> led the departments at <b>${pct(ds[0][1])}</b>`);
+    down.push(`<b>${ds[ds.length-1][0]}</b> trailed at <b>${pct(ds[ds.length-1][1])}</b>`);
+  }
+  if(rise&&rise.d>=8) up.push(`<b>${rise.q}</b> climbed <b>${Math.round(rise.d)} points</b> `+
+    `between ${M[rise.a]} and ${M[rise.b]}`);
+  if(fall&&fall.d<=-8) down.push(`<b>${fall.q}</b> dropped <b>${Math.round(Math.abs(fall.d))} points</b> `+
+    `between ${M[fall.a]} and ${M[fall.b]}`);
+  const list=(items,cls)=>`<ul class="gh-list ${cls}">`+
+    items.map(t=>`<li>${t}</li>`).join("")+`</ul>`;
+  return `<h3 class="sv-h">${y} in summary</h3>`+
+    `<div class="gh-sum"><div><h4 class="gh-sh up">Highlights</h4>${list(up,"up")}</div>`+
+    `<div><h4 class="gh-sh down">Lowlights</h4>${list(down,"down")}</div></div>`;
+}
 function detailGuestHist(i){
   const y=gYear(), B=GUEST_HIST.y[y], M=GUEST_HIST.months;
   const tiles=[["Total property",B.tpe.t]].concat(GUEST_HIST.depts.map(d=>[d,B.d[d]]))
@@ -3157,15 +3216,13 @@ function detailGuestHist(i){
     return `<div class="gh-row"><span class="gh-q" title="${r.q}">${r.q}</span>${cells}`+
       `<span class="gh-t" style="color:${ghTone(r.t)[1]}">${r.t!=null?Math.round(r.t):"\u2014"}</span></div>`;
   }).join("");
-  const lows=B.q.map(r=>({q:r.q,t:r.t})).filter(x=>x.t!=null).sort((a,b)=>a.t-b.t)[0];
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
     `<div class="detail-body is-wide">`+gyBar()+
       `<div class="gh-tiles">${tiles}</div>`+
       `<h3 class="sv-h">Every touchpoint, month by month</h3>`+
       `<div class="gh-scroll"><div class="gh-wrap">${head}${rows}</div></div>`+
-      (lows?`<p class="gh-foot">Lowest scoring touchpoint of ${y} was <b>${lows.q}</b> at `+
-        `<b>${Math.round(lows.t)}%</b>.</p>`:"")+
+      ghSummary(y)+
       `<p class="gh-foot">Property-wide scores from the survey format used through 2025. `+
       `Not split by course, and the questions differ from Troon's, so these are not directly `+
       `comparable to ${GY_NOW}. Response counts were not recorded reliably in this sheet and are `+
