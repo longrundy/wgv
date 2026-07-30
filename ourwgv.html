@@ -370,6 +370,9 @@ a{color:inherit}
 .mg-yhead em{font-style:normal;font-size:13px;font-weight:700;color:var(--wet)}
 .mg-yhead span{font-size:11.5px;color:#b4b2a9}
 /* one row per event; the name takes the width so nothing truncates */
+/* One or two events: hold the rows to half width so the name and its scores
+   stay together instead of sprawling across the panel. */
+.mg-one{max-width:calc(50% - 20px)}
 .mg-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
 .mg-cols>div:first-child{padding-right:20px;border-right:1px solid #e5e2da}
 .mg-cols>div:last-child{padding-left:20px}
@@ -410,6 +413,7 @@ a{color:inherit}
 .mg-more{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--navy);background:#f4f7fb;
  border:1px solid #dde3ec;border-radius:999px;padding:6px 14px;cursor:pointer;margin-top:10px}
 @media (max-width:1180px){
+  .mg-one{max-width:none}
   .mg-cols{grid-template-columns:1fr}
   .mg-cols>div:first-child{padding-right:0;border-right:0}
   .mg-cols>div:last-child{padding-left:0}
@@ -3380,14 +3384,15 @@ function mgOverview(){
       `<span class="mg-num mg-sub" style="color:${mgTone(r.f)[1]}">${r.f!=null?Math.round(r.f)+"%":"\u2014"}</span>`+
       `<span class="mg-num mg-ov" style="background:${bg};color:${fg}">${Math.round(r.o)}%</span></button>`;
   };
-  // Two columns once there are enough events to justify one, same split as
-  // Market Position: the taller half on the left, a rule down the middle.
-  const two=rows.length>=6;
+  // Two columns from four events up, same split as Market Position: rule down
+  // the middle, taller half on the left. Below four there is nothing to split,
+  // so the single column is capped instead of stretching the full page width.
+  const two=rows.length>=4;
   const half=Math.ceil(rows.length/2);
   const body=two
     ? `<div class="mg-cols"><div>${head}${rows.slice(0,half).map(row).join("")}</div>`+
       `<div>${head}${rows.slice(half).map(row).join("")}</div></div>`
-    : head+rows.map(row).join("");
+    : `<div class="mg-one">${head}${rows.map(row).join("")}</div>`;
   if(!rows.length) return mgKindBar()+mgYearBar()+
     `<p class="mg-note">No events recorded for ${y}.</p>`;
   const total=mgIsGolf()?MEMBER_GOLF.order.length:rows.length;
