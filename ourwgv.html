@@ -258,6 +258,40 @@ a{color:inherit}
 .embed-card.is-mini iframe{height:560px}
 /* ---- Financials ---- */
 /* ---- department matrix ---- */
+/* ---- the matrix becomes a stack of cards on a phone ----
+   Five money columns cannot be read at 390px, so each row turns into a card and
+   every figure carries its own label from data-l. */
+@media (max-width:820px){
+  .mx-scroll{overflow-x:visible}
+  .mx-table,.mx-sub{min-width:0;display:block;width:100%}
+  .mx-table tbody,.mx-sub tbody{display:block}   /* browsers insert tbody implicitly */
+  .mx-table>tr:first-child,.mx-sub>tr:first-child,
+  .mx-table tbody>tr:first-child,.mx-sub tbody>tr:first-child{display:none}
+  .mx-table tr,.mx-sub tr{display:block;border:1px solid var(--line);border-radius:11px;
+    padding:11px 13px;margin-bottom:8px;background:#fff}
+  .mx-table td,.mx-sub td{display:flex;justify-content:space-between;align-items:baseline;
+    border:0;padding:5px 0;text-align:right;font-size:13.5px}
+  .mx-table td::before,.mx-sub td::before{content:attr(data-l);font-size:10px;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;
+    text-align:left;padding-right:14px;white-space:nowrap}
+  .mx-table td.l,.mx-sub td.l{display:block;text-align:left;font-size:15px;font-weight:700;
+    padding:0 0 7px;margin-bottom:5px;border-bottom:1px solid var(--line-soft)}
+  .mx-table td.l::before,.mx-sub td.l::before{content:none}
+  .mx-noi{background:transparent!important;border-top:1px solid var(--line-soft)!important;
+    margin-top:5px;padding-top:8px!important;font-weight:700}
+  .mx-row.open{background:var(--red-tint)}
+  .mx-row.open td{background:transparent}
+  .mx-row:hover td{background:transparent}
+  .mx-tot{background:#f5f6f4}
+  .mx-tot td{font-weight:700}
+  .mx-exp{border:0!important;padding:0!important;margin:0 0 8px!important;background:none!important}
+  .mx-exp td{display:block;padding:0}
+  .mx-exp td::before{content:none}
+  .mx-inner{padding:0}
+  .mx-note{font-size:11px}
+  .mx-chev{display:none}
+}
+
 .mx-modes{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 12px}
 .mx-modes button{border:1px solid #dde3ec;background:#f2f6fb;color:#185fa5;font-family:inherit;
  font-size:12px;font-weight:600;padding:7px 11px;border-radius:7px;cursor:pointer}
@@ -1664,11 +1698,12 @@ function finDeptPanel(dept,y,p,seg,yLabel,prevLabel){
   const rows=FIN_KEYS.map(([k,name])=>{
     const now=finGet(y,dept,k,seg), then=finGet(p,dept,k,seg), d=now-then;
     const good=FIN_COSTS[k]?d<0:d>0;
-    return `<tr><td class="l">${name}</td><td>${finMoney(then)}</td><td><b>${finMoney(now)}</b></td>`+
-      `<td class="${then?(good?"mx-pos":"mx-neg"):""}">`+
+    return `<tr><td class="l">${name}</td><td data-l="${prevLabel}">${finMoney(then)}</td>`+
+      `<td data-l="${yLabel}"><b>${finMoney(now)}</b></td>`+
+      `<td data-l="Change" class="${then?(good?"mx-pos":"mx-neg"):""}">`+
       `${then?((d>0?"+":"\u2212")+"$"+finNum(Math.abs(d))):"&mdash;"}</td>`+
-      `<td>${rd?finCents(now/rd):"&mdash;"}</td>`+
-      `<td>${rev&&k!=="rev"?(now/rev*100).toFixed(1)+"%":"&mdash;"}</td></tr>`;
+      `<td data-l="Per round">${rd?finCents(now/rd):"&mdash;"}</td>`+
+      `<td data-l="% of revenue">${rev&&k!=="rev"?(now/rev*100).toFixed(1)+"%":"&mdash;"}</td></tr>`;
   }).join("");
   const parts=((FIN_DATA[y]||{})[dept]||{}).parts||{};
   let pt="";
@@ -1678,8 +1713,10 @@ function finDeptPanel(dept,y,p,seg,yLabel,prevLabel){
       Object.keys(parts).map(pn=>{
         const now=parts[pn][seg]||0, pp=(((FIN_DATA[p]||{})[dept]||{}).parts||{})[pn];
         const then=pp?(pp[seg]||0):null, d=then===null?null:now-then;
-        return `<tr><td class="l">${pn}</td><td>${then===null?"&mdash;":finMoney(then)}</td>`+
-          `<td><b>${finMoney(now)}</b></td><td class="${d===null?"":(d>0?"mx-pos":"mx-neg")}">`+
+        return `<tr><td class="l">${pn}</td><td data-l="${prevLabel}">`+
+          `${then===null?"&mdash;":finMoney(then)}</td>`+
+          `<td data-l="${yLabel}"><b>${finMoney(now)}</b></td>`+
+          `<td data-l="Change" class="${d===null?"":(d>0?"mx-pos":"mx-neg")}">`+
           `${d===null?"&mdash;":(d>0?"+":"\u2212")+"$"+finNum(Math.abs(d))}</td></tr>`;}).join("")+
       `</table></div>`;
   }
@@ -1717,20 +1754,14 @@ function detailFinancials(i){
   const yearRow=`<div class="fin-years"><span class="fin-yl">Year</span>`+ys.map(yy=>
       `<button type="button" data-fyear="${yy}" aria-pressed="${yy===y}">${yy}</button>`).join("")+`</div>`;
 
-  const tile=(v,p,label,money)=>{
-    const d=p?((v/p)-1)*100:0;
-    return `<div class="fin-tile"><div class="n">${money?finMoney(v):v}</div>`+
-      `<div class="d ${v>=p?"up":"dn"}">${isFirst?"&nbsp;":`${v>=p?"+":"\u2212"}${Math.abs(d).toFixed(0)}% vs ${prevLabel}`}</div>`+
-      `<div class="l">${label}</div></div>`;
-  };
-
   const mode = FIN_MODES.some(m=>m[0]===state.finMode)?state.finMode:"amt";
   const openDept = FIN_DEPTS.indexOf(state.finOpen)>-1 ? state.finOpen : "";
   const mxRows=FIN_DEPTS.map(dn=>{
     let h=`<tr class="mx-row${openDept===dn?" open":""}" data-fopen="${dn}">`+
       `<td class="l"><span class="mx-chev">&#8250;</span> ${dn}`+
       `${FIN_NOTE[dn]?`<span class="mx-note">${FIN_NOTE[dn]}</span>`:""}</td>`+
-      FIN_KEYS.map(([k])=>`<td${k==="noi"?' class="mx-noi"':''}>${finCell(y,prev,dn,k,seg,mode)}</td>`).join("")+
+      FIN_KEYS.map(([k,n])=>`<td data-l="${n}"${k==="noi"?' class="mx-noi"':''}>`+
+        `${finCell(y,prev,dn,k,seg,mode)}</td>`).join("")+
       `</tr>`;
     if(openDept===dn) h+=`<tr class="mx-exp"><td colspan="6">`+
       finDeptPanel(dn,y,prev,seg,yLabel,prevLabel)+`</td></tr>`;
@@ -1748,8 +1779,9 @@ function detailFinancials(i){
     const now=(mix[k]||{})[seg]||0, then=(mixPrev[k]||{})[seg]||0;
     const share=totalRd?now/totalRd*100:0;
     return `<tr><td class="l">${k==="Guest/Outside"?"Guest / outside":k}</td>`+
-      `<td>${finNum(then)}</td><td><b>${finNum(now)}</b>${share?`<div class="fin-pct">${share.toFixed(0)}%</div>`:""}</td>`+
-      `<td>${finChg(now,then,true)}</td></tr>`;
+      `${isFirst?"":`<td>${finNum(then)}</td>`}`+
+      `<td><b>${finNum(now)}</b>${share?`<div class="fin-pct">${share.toFixed(0)}%</div>`:""}</td>`+
+      `${isFirst?"":`<td>${finChg(now,then,true)}</td>`}</tr>`;
   }).join("");
 
   const trendCard = (()=>{
@@ -1805,14 +1837,6 @@ function detailFinancials(i){
     ` \u00b7 to net operating income</div></div>`+
     `<div class="detail-body is-wide">`+
       sw+(tab==="trend" ? trendCard+readCard : yearRow+
-      `<div class="fin-strip">`+
-        tile(rev,pRev,"Revenue",true)+tile(lab,pLab,"Labor & benefits",true)+
-        tile(noi,pNoi,"Net operating income",true)+
-        `<div class="fin-tile"><div class="n">${margin.toFixed(1)}%</div>`+
-        `<div class="d ${margin>=pMargin?"up":"dn"}">${isFirst?"&nbsp;":
-          `${margin>=pMargin?"+":"\u2212"}${Math.abs(margin-pMargin).toFixed(1)} pts vs ${prevLabel}`}</div>`+
-        `<div class="l">Operating margin</div></div>`+
-      `</div>`+
       `<div class="fin-card"><h4 class="fin-h">By department</h4>`+
         `<p class="fin-subh">${mxSub} \u00b7 ${FIN_SEG[seg]}. Tap a department to open it.</p>`+
         `<div class="mx-modes">`+FIN_MODES.map(([k,l])=>
@@ -1821,16 +1845,20 @@ function detailFinancials(i){
         `<tr><th class="l">Department</th>`+FIN_KEYS.map(([k,n])=>`<th>${n}</th>`).join("")+`</tr>`+
         mxRows+
         `<tr class="mx-tot"><td class="l">${FIN_SEG[seg]}</td>`+
-        FIN_KEYS.map(([k])=>`<td${k==="noi"?' class="mx-noi"':''}>${finCell(y,prev,"__total__",k,seg,mode)}</td>`).join("")+
+        FIN_KEYS.map(([k,n])=>`<td data-l="${n}"${k==="noi"?' class="mx-noi"':''}>`+
+          `${finCell(y,prev,"__total__",k,seg,mode)}</td>`).join("")+
         `</tr></table></div></div>`+
       `<div class="fin-cols">`+
         `<div class="fin-card"><h4 class="fin-h">Operating ratios</h4>`+
         `<p class="fin-subh">Where the needle actually moves.</p>`+
-        `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${yLabel}</th><th>vs ${prevLabel}</th></tr>`+
+        `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${yLabel}</th>`+
+        `<th>${isFirst?"&nbsp;":"vs "+prevLabel}</th></tr>`+
         finRatios(y,seg,prev)+`</table></div>`+
         `<div class="fin-card"><h4 class="fin-h">Rounds</h4>`+
         `<p class="fin-subh">${finNum(totalRd)} played in ${yLabel}.</p>`+
-        `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${prevLabel}</th><th>${yLabel}</th><th>Change</th></tr>`+
+        `<table class="fin-table"><tr><th class="l">&nbsp;</th>`+
+        `${isFirst?"":`<th>${prevLabel}</th>`}<th>${yLabel}</th>`+
+        `${isFirst?"":`<th>Change</th>`}</tr>`+
         mixRows+`</table></div>`+
       `</div>`)+
       `<p class="fin-foot">Figures are year-end actuals from the department profit and loss reports. `+
