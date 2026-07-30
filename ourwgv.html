@@ -257,6 +257,62 @@ a{color:inherit}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
 /* ---- Financials ---- */
+/* ---- Year Detail report ---- */
+.yd-r{display:grid;grid-template-columns:minmax(0,1fr) 152px 176px 152px;align-items:center;
+ width:100%;border:0;background:none;font-family:inherit;padding:0;text-align:left;border-radius:8px;
+ font-variant-numeric:tabular-nums}
+.yd-r > *{text-align:right;padding:8px 14px}
+.yd-r > *:first-child{text-align:left;padding-left:8px}
+.yd-head > *{padding-top:6px;padding-bottom:8px;font-size:8.5px;font-weight:700;letter-spacing:.11em;
+ text-transform:uppercase;color:#a9a9a1}
+.yd-head > *.yd-a{color:var(--ink);font-size:9.5px}
+button.yd-r{cursor:pointer}
+button.yd-r:hover{background:#faf9f5}
+.yd-grp{margin:0}
+.yd-grp.open{border:1px solid #c9d6e6;border-radius:11px;overflow:hidden;
+ box-shadow:0 2px 6px rgba(23,50,90,.07);margin:7px 0 11px}
+.yd-grp.open > button.yd-r{border-radius:0;background:#eaf1fa;border-bottom:1px solid #c9d6e6;
+ box-shadow:inset 3px 0 0 var(--navy)}
+.yd-grp.open > button.yd-r > *:first-child{padding-left:14px}
+.yd-grp.open .yd-nm{font-size:16px;font-weight:700;color:var(--navy)}
+.yd-grp.open > button.yd-r .yd-u .yd-n{color:#7f8a99}
+.yd-grp.open > button.yd-r .yd-big .yd-n{color:var(--navy)}
+.yd-nm{display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:600;color:var(--ink)}
+.yd-dot{width:6px;height:6px;border-radius:50%;background:#dedbd2;flex:none}
+.yd-grp.open .yd-dot{background:var(--navy);box-shadow:0 0 0 3px rgba(23,50,90,.12)}
+.yd-note2{font-size:11px;font-weight:400;color:#a9a9a1}
+.yd-u{line-height:1.1}
+.yd-u .yd-n{display:block;font-size:15px;font-weight:400;color:#a9a9a1;white-space:nowrap}
+.yd-v{display:block;font-size:10px;font-style:italic;font-weight:600;white-space:nowrap;margin-top:1px}
+.yd-big .yd-n{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.015em}
+.yd-pos{color:#7d9b6a}.yd-neg{color:#bd8b8b}.yd-nil{color:#d3d1c8}
+.yd-panel{padding:5px 0 7px;background:#fff}
+.yd-pl > *{padding:6px 14px}
+.yd-pl > *:first-child{padding-left:30px}
+.yd-pl + .yd-pl{border-top:1px solid #f2f0ea}
+.yd-nm2{font-size:13.5px;font-weight:500;color:#66665e;display:flex;align-items:baseline;gap:8px}
+.yd-pl .yd-n{font-size:13.5px}
+.yd-pl .yd-big .yd-n{font-size:16.5px}
+.yd-pl .yd-v{font-size:9.5px}
+.yd-side{font-size:10px;color:#a9a9a1;font-weight:600;background:#fff;border:1px solid #e8e5dc;
+ border-radius:999px;padding:1px 7px}
+.yd-sub{margin:22px 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+ color:#a9a9a1}
+.yd-grand > button.yd-r{background:#fdfaf8;cursor:default}
+.yd-grand.open{border-color:#f0e2da}
+.yd-grand.open > button.yd-r{background:#fdf4ef;border-bottom-color:#f0e2da;
+ box-shadow:inset 3px 0 0 var(--red)}
+.yd-grand.open .yd-nm{color:var(--ink)}
+.yd-grand.open > button.yd-r .yd-big .yd-n{color:var(--ink)}
+.yd-m{display:none}
+@media (max-width:860px){
+  .yd-r{grid-template-columns:minmax(0,1fr) auto}
+  .yd-head,.yd-r > *:nth-child(2),.yd-r > *:nth-child(4){display:none}
+  .yd-big .yd-m{display:block;font-size:10px;color:#a9a9a1;font-weight:400;margin-top:2px;
+    font-style:normal;white-space:normal}
+  .yd-pl > *:first-child{padding-left:16px}
+}
+
 /* ---- department matrix ---- */
 /* ---- the matrix becomes a stack of cards on a phone ----
    Five money columns cannot be read at 390px, so each row turns into a card and
@@ -1725,6 +1781,137 @@ function finDeptPanel(dept,y,p,seg,yLabel,prevLabel){
     `<th>Per round</th><th>% of rev</th></tr>${rows}</table>${pt}</div>`;
 }
 
+/* ---------- Year Detail: the department report ----------
+   One row definition drives the header, every department row and every panel
+   row, so alignment cannot drift. Backgrounds and rules live on the ROW, never
+   on a cell: a grid cell is only as tall as its own contents, so per-cell
+   painting steps up and down across a row. */
+const YD = {"2018":{"depts":{"Pro Shop / Outside Serv":[["Revenues",1929141,null,null,1932886,null,null],["Cost of Sales",10404,null,null,7960,null,null],["Employee Related",390850,null,null,261316,null,null],["Operating Expenses",217031,null,null,374438,null,null],["NOI",1310856,null,null,1289172,null,null]],"Merchandise":[["Revenues",379532,null,null,371812,null,null],["Cost of Sales",197080,null,null,191098,null,null],["Employee Related",0,null,null,0,null,null],["Operating Expenses",0,null,null,0,null,null],["NOI",182452,null,null,180714,null,null]],"Restaurant":[["Revenues",678017,null,null,587379,null,null],["Cost of Sales",210906,null,null,215249,null,null],["Employee Related",297006,null,null,290769,null,null],["Operating Expenses",83626,null,null,81728,null,null],["NOI",86479,null,null,-367,null,null]],"Golf Course Maintenance":[["Revenues",0,null,null,0,null,null],["Cost of Sales",0,null,null,0,null,null],["Employee Related",471497,null,null,483922,null,null],["Operating Expenses",366871,null,null,347584,null,null],["NOI",-838368,null,null,-831506,null,null]],"Golf Academy":[["Revenues",32400,null,null,0,null,null],["Cost of Sales",0,null,null,0,null,null],["Employee Related",21225,null,null,0,null,null],["Operating Expenses",10760,null,null,0,null,null],["NOI",415,null,null,0,null,null]],"General Administrative":[["Revenues",0,null,null,0,null,null],["Cost of Sales",0,null,null,0,null,null],["Employee Related",268399,null,null,187755,null,null],["Operating Expenses",561992,null,null,489000,null,null],["NOI",-830391,null,null,-676755,null,null]],"Membership":[["Revenues",639390.0,null,null,639390.0,null,null],["Cost of Sales",0.0,null,null,0.0,null,null],["Employee Related",40511.5,null,null,40511.5,null,null],["Operating Expenses",45409.5,null,null,45409.5,null,null],["NOI",553469.0,null,null,553469.0,null,null]],"Marketing":[["Revenues",0.0,null,null,0.0,null,null],["Cost of Sales",0.0,null,null,0.0,null,null],["Employee Related",46567.0,null,null,46567.0,null,null],["Operating Expenses",110389.0,null,null,110389.0,null,null],["NOI",-156956,null,null,-156956,null,null]]},"rounds":{"lines":[["Guest / outside",22988.0,null,null,18000.0,null,null],["Member",6416.0,null,null,10043.0,null,null],["Complimentary",1999.0,null,null,2659.0,null,null]],"total":["Rounds",31403.0,null,null,30702.0,null,null]},"totals":[["Rounds",31403.0,null,null,30702.0,null,null],["Revenues",3658480.0,null,null,3531467.0,null,null],["Cost of Sales",418390.0,null,null,414307.0,null,null],["Employee Related",1536055.5,null,null,1310840.5,null,null],["Operating Expenses",1396078.5,null,null,1448548.5,null,null],["NOI",307956.0,null,null,357771.0,null,null]]},"2019":{"depts":{"Pro Shop / Outside Serv":[["Revenues",1919789.0,1929141,null,1896150.0,1932886,null],["Cost of Sales",4506.0,10404,null,6193.0,7960,null],["Employee Related",400856.0,390850,null,434865.0,261316,null],["Operating Expenses",222341.0,217031,null,211364.0,374438,null],["NOI",1292086.0,1310856,null,1243728.0,1289172,null]],"Merchandise":[["Revenues",367393,379532,null,341338,371812,null],["Cost of Sales",188862,197080,null,175802,191098,null],["Employee Related",0,0,null,0,0,null],["Operating Expenses",0,0,null,0,0,null],["NOI",178531,182452,null,165536,180714,null]],"Restaurant":[["Revenues",817604.0,678017,null,583240.0,587379,null],["Cost of Sales",257935.0,210906,null,214083.0,215249,null],["Employee Related",418258.0,297006,null,362693.0,290769,null],["Operating Expenses",102936.0,83626,null,74581.0,81728,null],["NOI",38475.0,86479,null,-68117.0,-367,null]],"Golf Course Maintenance":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",485063.0,471497,null,516932.0,483922,null],["Operating Expenses",332605.0,366871,null,359305.0,347584,null],["NOI",-817668.0,-838368,null,-876237.0,-831506,null]],"Golf Academy":[["Revenues",32400.0,32400,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",21228.0,21225,null,0,0,null],["Operating Expenses",9418.0,10760,null,0,0,null],["NOI",1754.0,415,null,0,0,null]],"General Administrative":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",284975.0,268399,null,239393.0,187755,null],["Operating Expenses",570253.0,561992,null,485407.0,489000,null],["NOI",-855228.0,-830391,null,-724800.0,-676755,null]],"Membership":[["Revenues",646147.0,639390.0,null,646147.0,639390.0,null],["Cost of Sales",0,0.0,null,0,0.0,null],["Employee Related",34697.0,40511.5,null,34697.0,40511.5,null],["Operating Expenses",36882.0,45409.5,null,36882.0,45409.5,null],["NOI",574568.0,553469.0,null,574568.0,553469.0,null]],"Marketing":[["Revenues",0,0.0,null,0,0.0,null],["Cost of Sales",0,0.0,null,0,0.0,null],["Employee Related",63144.0,46567.0,null,63144.0,46567.0,null],["Operating Expenses",68189.0,110389.0,null,68189.0,110389.0,null],["NOI",-131333.0,-156956,null,-131333.0,-156956,null]]},"rounds":{"lines":[["Guest / outside",22245,22988.0,null,17828,18000.0,null],["Member",7117,6416.0,null,11665,10043.0,null],["Complimentary",2120,1999.0,null,2061,2659.0,null]],"total":["Rounds",31482.0,31403.0,null,31554.0,30702.0,null]},"totals":[["Rounds",31482.0,31403.0,null,31554.0,30702.0,null],["Revenues",3783333.0,3658480.0,null,3466875.0,3531467.0,null],["Cost of Sales",451303.0,418390.0,null,396078.0,414307.0,null],["Employee Related",1708221.0,1536055.5,null,1651724.0,1310840.5,null],["Operating Expenses",1342624.0,1396078.5,null,1235728.0,1448548.5,null],["NOI",281186.0,307956.0,null,183346.0,357771.0,null]]},"2020":{"depts":{"Pro Shop / Outside Serv":[["Revenues",1755867.0,1919789.0,null,1746705.0,1896150.0,null],["Cost of Sales",0.0,4506.0,null,0.0,6193.0,null],["Employee Related",334799.0,400856.0,null,384923.0,434865.0,null],["Operating Expenses",203048.0,222341.0,null,182891.0,211364.0,null],["NOI",1218020.0,1292086.0,null,1178891.0,1243728.0,null]],"Merchandise":[["Revenues",268818.0,367393,null,274287.0,341338,null],["Cost of Sales",137100.0,188862,null,141978.0,175802,null],["Employee Related",0,0,null,0,0,null],["Operating Expenses",0,0,null,0,0,null],["NOI",131718.0,178531,null,132309.0,165536,null]],"Restaurant":[["Revenues",513061.0,817604.0,null,581951.0,583240.0,null],["Cost of Sales",161717.0,257935.0,null,192482.0,214083.0,null],["Employee Related",328213.0,418258.0,null,429967.0,362693.0,null],["Operating Expenses",51465.0,102936.0,null,82168.0,74581.0,null],["NOI",-28334.0,38475.0,null,-122666.0,-68117.0,null]],"Golf Course Maintenance":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",493869.0,485063.0,null,488312.0,516932.0,null],["Operating Expenses",322206.0,332605.0,null,320890.0,359305.0,null],["NOI",-816075.0,-817668.0,null,-809202.0,-876237.0,null]],"Golf Academy":[["Revenues",29700.0,32400.0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",21228.0,21228.0,null,0,0,null],["Operating Expenses",9947.0,9418.0,null,0,0,null],["NOI",-1475.0,1754.0,null,0,0,null]],"General Administrative":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",262656.0,284975.0,null,227034.0,239393.0,null],["Operating Expenses",660233.0,570253.0,null,579116.0,485407.0,null],["NOI",-922889.0,-855228.0,null,-806150.0,-724800.0,null]],"Membership":[["Revenues",667027.0,646147.0,null,667027.0,646147.0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",22734.0,34697.0,null,22734.0,34697.0,null],["Operating Expenses",23434.0,36882.0,null,23434.0,36882.0,null],["NOI",620859.0,574568.0,null,620859.0,574568.0,null]],"Marketing":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",30063.0,63144.0,null,30063.0,63144.0,null],["Operating Expenses",60243.0,68189.0,null,60243.0,68189.0,null],["NOI",-90306.0,-131333.0,null,-90306.0,-131333.0,null]]},"rounds":{"lines":[["Guest / outside",22952,22245,null,17369,17828,null],["Member",7916,7117,null,15264,11665,null],["Complimentary",1665,2120,null,1569,2061,null]],"total":["Rounds",30411.0,31482.0,null,34838.0,31554.0,null]},"totals":[["Rounds",30411.0,31482.0,null,34838.0,31554.0,null],["Revenues",3234473.0,3783333.0,null,3269970.0,3466875.0,null],["Cost of Sales",298817.0,451303.0,null,334460.0,396078.0,null],["Employee Related",1493562.0,1708221.0,null,1583033.0,1651724.0,null],["Operating Expenses",1330576.0,1342624.0,null,1248742.0,1235728.0,null],["NOI",111519.0,281186.0,null,103736.0,183346.0,null]]},"2021":{"depts":{"Pro Shop / Outside Serv":[["Rev - Green Fees",2041422.0,1408880.0,1705667.0,2345348.0,1385520.0,1658784.0],["Rev - Cart Fee/Trail Fee",191714.0,273841.0,130217.0,235989.0,324971.0,161865.0],["Rev - Handicap Fees/Other",86960.0,73146.0,53813.0,48937.0,36214.0,22835.0],["Rev - Merchandise",403696.0,268818.0,359157.0,441546.0,274287.0,353457.0],["COS - Merchandise",212489.0,137100.0,190354.0,237784.0,141978.0,190868.0],["Employee Related",355103.0,334799.0,376290.0,496461.0,384923.0,481974.0],["Operating Expenses",250317.0,203048.0,224158.0,232916.0,182891.0,224350.0],["NOI",1905883.0,1349738.0,1458052.0,2104659.0,1311200.0,1299749.0]],"Restaurant":[["Revenues",544454.0,379023.0,599833.0,861230.0,452305.0,628811.0],["COS",177658.0,125591.0,202349.0,311141.0,156346.0,205790.0],["Employee Related",373154.0,323395.0,329714.0,470030.0,428024.0,485807.0],["Operating Expenses",58905.0,50596.0,69750.0,91846.0,80704.0,73301.0],["NOI",-65263.0,-120559.0,-1980.0,-11787.0,-212769.0,-136087.0]],"Beverage Cart":[["Revenues",156284.0,134038.0,128782.0,199816.0,129646.0,106915.0],["COS",41443.0,36126.0,37837.0,60961.0,36136.0,31840.0],["Employee Related",6649.0,4818.0,14555.0,6140.0,1943.0,16331.0],["Operating Expenses",3151.0,869.0,4900.0,6230.0,1464.0,5200.0],["NOI",105041.0,92225.0,71490.0,126485.0,90103.0,53544.0]],"Golf Course Maintenance":[["Employee Related",525077.0,493869.0,539793.0,530721.0,488312.0,555185.0],["Operating Expenses",336848.0,322206.0,346080.0,345888.0,320890.0,350283.0],["NOI",861925.0,816075.0,885873.0,876609.0,809202.0,905468.0]],"Golf Academy":[["Revenues",32400.0,29700.0,32400.0,null,null,null],["Employee Related",21081.0,21228.0,20796.0,null,null,null],["Operating Expenses",8357.0,9947.0,8377.0,null,null,null],["NOI",2962.0,-1475.0,3227.0,null,null,null]],"General Administrative":[["Employee Related",289721.0,262656.0,288190.0,234280.0,227034.0,219082.0],["Operating Expenses",638111.0,660233.0,646898.0,565953.0,579116.0,596401.0],["NOI",927832.0,922889.0,935088.0,800233.0,806150.0,815483.0]],"Membership":[["Revenues(Dues)",760351.0,589867.0,697219.0,760351.0,589867.0,697219.0],["Revenues(Initiation Fees)",85193.0,77160.0,92825.0,85193.0,77160.0,92825.0],["Employee Related",32655.0,22734.0,23696.0,32655.0,22734.0,23696.0],["Operating Expenses",37175.0,23434.0,41478.0,37175.0,23434.0,41478.0],["NOI",775714.0,620860.0,724871.0,775714.0,620860.0,724871.0]],"Marketing":[["Employee Related",31142.0,30063.0,30438.0,31142.0,30063.0,30438.0],["Operating Expenses",76088.0,60243.0,71612.0,76088.0,60243.0,71612.0],["NOI",107230.0,90306.0,102050.0,107230.0,90306.0,102050.0]]},"rounds":{"lines":[["Guest / outside",24674,22952,null,25962,17369,null],["Member",10026,7916,null,15656,15264,null],["Complimentary",2134,1665,null,1359,1569,null]],"total":["Rounds",36252.0,30411.0,30964.0,41901.0,34838.0,30871.0]},"totals":[["Rounds",36252.0,30411.0,30964.0,41901.0,34838.0,30871.0],["Revenues",4302474.0,3234473.0,3799913.0,4992001.0,3269970.0,3793988.0],["Cost of Sales",431590.0,298817.0,430540.0,614779.0,334460.0,452155.0],["Employee Related",1634582.0,1493562.0,1623472.0,1810221.0,1583033.0,1830358.0],["Operating Expenses",1408951.0,1330576.0,1413253.0,1356354.0,1248742.0,1365625.0],["NOI",827351.0,111519.0,332649.0,1210647.0,103736.0,145851.0]]},"2022":{"depts":{"Pro Shop / Outside Serv":[["Revenues",2736361.0,2320096.0,null,2894183.0,2630274.0,null],["Cost of Sales",0.0,0.0,null,0.0,0.0,null],["Employee Related",403630.0,355103.0,null,590472.0,496461.0,null],["Operating Expenses",272694.0,250317.0,null,261140.0,232916.0,null],["NOI",2060037.0,1714676.0,null,2042571.0,1900897.0,null]],"Merchandise":[["Revenues",532854.0,403696.0,null,482390.0,441546.0,null],["Cost of Sales",307453.0,212489.0,null,261483.0,237784.0,null],["Employee Related",0,0,null,0,0,null],["Operating Expenses",0,0,null,0,0,null],["NOI",225401.0,191207.0,null,220907.0,203762.0,null]],"Restaurant":[["Revenues",748441.0,700738.0,null,939493.0,1061046.0,null],["Cost of Sales",225782.0,219101.0,null,403977.0,372102.0,null],["Employee Related",315250.0,379803.0,null,537510.0,476170.0,null],["Operating Expenses",86018.0,62056.0,null,108077.0,98076.0,null],["NOI",121391.0,39778.0,null,-110071.0,114698.0,null]],"Golf Course Maintenance":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",553052.0,525077.0,null,530130.0,530721.0,null],["Operating Expenses",376511.0,336848.0,null,394437.0,345888.0,null],["NOI",-929563.0,-861925.0,null,-924567.0,-876609.0,null]],"Golf Academy":[["Revenues",32400.0,32400.0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",20796.0,21081.0,null,0,0,null],["Operating Expenses",6517.0,8357.0,null,0,0,null],["NOI",5087.0,2962.0,null,0,0,null]],"General Administrative":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",396183.0,289721.0,null,311781.0,234280.0,null],["Operating Expenses",686538.0,638111.0,null,658547.0,565953.0,null],["NOI",-1082721.0,-927832.0,null,-970328.0,-800233.0,null]],"Membership":[["Revenues",1032862.0,845544.0,null,1032862.0,845544.0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",38443.0,32655.0,null,38443.0,32655.0,null],["Operating Expenses",41008.0,37175.0,null,41008.0,37175.0,null],["NOI",953411.0,775714.0,null,953411.0,775714.0,null]],"Marketing":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",33242.0,31142.0,null,33242.0,31142.0,null],["Operating Expenses",95871.0,76088.0,null,95871.0,76088.0,null],["NOI",-129113.0,-107230.0,null,-129113.0,-107230.0,null]]},"rounds":{"lines":[["Guest / outside",27257.0,24674,null,26065.0,25962,null],["Member",11056.0,10026,null,14565.0,15656,null],["Complimentary",2947.0,2134,null,1543.0,1359,null]],"total":["Rounds",41260.0,36252.0,null,42173.0,41901.0,null]},"totals":[["Rounds",41260.0,36252.0,null,42173.0,41901.0,null],["Revenues",5082917.0,4302474.0,null,5352594.0,4992001.0,null],["Cost of Sales",533235.0,431590.0,null,666835.0,614779.0,null],["Employee Related",1760596.0,1634582.0,null,2041578.0,1810221.0,null],["Operating Expenses",1565157.0,1408951.0,null,1559080.0,1356354.0,null],["NOI",1223930.0,827351.0,null,1085102.0,1210647.0,null]]},"2023":{"depts":{"Pro Shop / Outside Serv":[["Rev - Green Fees",2508125.0,2511985.0,2644811.0,2753021.0,2707419.0,2905142.0],["Rev - Cart Fee/Trail Fee",106000.0,114446.0,118500.0,106000.0,112780.0,118500.0],["Rev - Handicap Fees/Other",106938.0,109930.0,101426.0,63207.0,73984.0,59664.0],["Rev - Merchandise",503009.0,532854.0,519921.0,514013.0,482390.0,471003.0],["COS - Merchandise",293524.0,307453.0,291158.0,305776.0,261483.0,259051.0],["Employee Related",415275.0,403630.0,441348.0,605622.0,590472.0,588496.0],["Operating Expenses",261862.0,272694.0,261110.0,240703.0,261140.0,254946.0],["NOI",2253411.0,2285438.0,2391042.0,2284140.0,2263478.0,2451816.0]],"Restaurant":[["Revenues",632656.0,599845.0,622415.0,855210.0,786316.0,869063.0],["COS",178366.0,183600.0,197611.0,307996.0,354613.0,327324.0],["Employee Related",409311.0,315250.0,375694.0,550294.0,522062.0,494103.0],["Operating Expenses",81555.0,86005.0,66443.0,80826.0,108067.0,70575.0],["NOI",-36576.0,14990.0,-17333.0,-83906.0,-198426.0,-22939.0]],"Beverage Cart":[["Revenues",137399.0,148596.0,188100.0,164780.0,153177.0,203274.0],["COS",35810.0,42182.0,49905.0,46240.0,49364.0,70251.0],["Employee Related",183.0,0.0,23078.0,15295.0,15448.0,27423.0],["Operating Expenses",821.0,13.0,5450.0,1912.0,10.0,5350.0],["NOI",100585.0,106401.0,109667.0,101333.0,88355.0,100250.0]],"Golf Course Maintenance":[["Employee Related",606626.0,553052.0,636516.0,626622.0,530130.0,627916.0],["Operating Expenses",383563.0,376511.0,382572.0,409063.0,394437.0,383365.0],["NOI",990189.0,929563.0,1019088.0,1035685.0,924567.0,1011281.0]],"Golf Academy":[["Revenues",32400.0,32400.0,32400.0,null,null,null],["Employee Related",20796.0,20796.0,20796.0,null,null,null],["Operating Expenses",7477.0,6517.0,8910.0,null,null,null],["NOI",4127.0,5087.0,2694.0,null,null,null]],"General Administrative":[["Resort Fee Revenue",41464.0,0.0,0.0,45151.0,0.0,0.0],["Employee Related",390564.0,396183.0,353001.0,275314.0,311781.0,269731.0],["Operating Expenses",784728.0,686538.0,818961.0,792931.0,658547.0,780753.0],["NOI",1133828.0,1082721.0,1171962.0,1068245.0,970328.0,1050484.0]],"Membership":[["Revenues(Dues)",938767.0,920660.0,1021773.0,938767.0,920660.0,1021773.0],["Revenues(Initiation Fees)",126900.0,112202.0,121893.0,126900.0,112202.0,121893.0],["Employee Related",31631.0,38443.0,28901.0,31631.0,38443.0,28901.0],["Operating Expenses",46453.0,41008.0,43715.0,46453.0,41008.0,43715.0],["NOI",987584.0,953412.0,1071051.0,987584.0,953412.0,1071051.0]],"Marketing":[["Employee Related",33652.0,33242.0,30211.0,33652.0,33242.0,30211.0],["Operating Expenses",74771.0,95871.0,94456.0,74771.0,95871.0,94456.0],["NOI",108423.0,129113.0,124666.0,108423.0,129113.0,124666.0]]},"rounds":{"lines":[["Guest / outside",23836,27257.0,null,24207,26065.0,null],["Member",11060,11056.0,null,16073,14565.0,null],["Complimentary",2975,2947.0,null,2537,1543.0,null]],"total":["Rounds",38752.0,41260.0,39224.0,41145.0,42173.0,40983.0]},"totals":[["Rounds",38752.0,41260.0,39224.0,41145.0,42173.0,40983.0],["Revenues",5133658.0,5082917.0,5371239.0,5567050.0,5352594.0,5770312.0],["Cost of Sales",507700.0,533235.0,538674.0,660012.0,666835.0,656626.0],["Employee Related",1908038.0,1760596.0,1909544.0,2138430.0,2041578.0,2066780.0],["Operating Expenses",1641230.0,1565157.0,1681617.0,1646659.0,1559080.0,1633160.0],["NOI",1076690.0,1223930.0,1241405.0,1121949.0,1085102.0,1413747.0]]},"2024":{"depts":{"Pro Shop / Outside Serv":[["Revenues",2961787.0,2721063.0,null,2148693.0,2922228.0,null],["Cost of Sales",0.0,0.0,null,0.0,0.0,null],["Employee Related",469106.0,415275.0,null,496939.0,605622.0,null],["Operating Expenses",268142.0,261862.0,null,211769.0,240703.0,null],["NOI",2224539.0,2043926.0,null,1439985.0,2075903.0,null]],"Merchandise":[["Revenues",544583.0,503009.0,null,326630.0,514013.0,null],["Cost of Sales",322547.0,293524.0,null,183656.0,305776.0,null],["Employee Related",0,0,null,0,0,null],["Operating Expenses",0,0,null,0,0,null],["NOI",222036.0,209485.0,null,142974.0,208237.0,null]],"Restaurant":[["Revenues",701353.0,770055.0,null,851090.0,1019990.0,null],["Cost of Sales",239429.0,214176.0,null,322326.0,354236.0,null],["Employee Related",492615.0,409494.0,null,455436.0,565589.0,null],["Operating Expenses",91200.0,82376.0,null,77460.0,82738.0,null],["NOI",-121891.0,64009.0,null,-4132.0,17427.0,null]],"Golf Course Maintenance":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",630916.0,606626.0,null,714337.0,626622.0,null],["Operating Expenses",365373.0,383563.0,null,372470.0,409063.0,null],["NOI",-996289.0,-990189.0,null,-1086807.0,-1035685.0,null]],"Golf Academy":[["Revenues",32400.0,32400.0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",20796.0,20796.0,null,0,0,null],["Operating Expenses",9003.0,7477.0,null,0,0,null],["NOI",2601.0,4127.0,null,0,0,null]],"General Administrative":[["Revenues",0,41464.0,null,0,45151.0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",421224.0,390564.0,null,309544.0,275314.0,null],["Operating Expenses",838506.0,784728.0,null,783878.0,792931.0,null],["NOI",-1259730.0,-1133828.0,null,-1093422.0,-1023094.0,null]],"Membership":[["Revenues",1049134.0,1065667.0,null,1049134.0,1065667.0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",37175.0,31631.0,null,37175.0,31631.0,null],["Operating Expenses",31590.0,46453.0,null,31590.0,46453.0,null],["NOI",980369.0,987583.0,null,980369.0,987583.0,null]],"Marketing":[["Revenues",0,0,null,0,0,null],["Cost of Sales",0,0,null,0,0,null],["Employee Related",36171.0,33652.0,null,36171.0,33652.0,null],["Operating Expenses",77334.0,74771.0,null,77334.0,74771.0,null],["NOI",-113505.0,-108423.0,null,-113505.0,-108423.0,null]]},"rounds":{"lines":[["Guest / outside",25769.0,23836,null,15300.0,24207,null],["Member",14548.0,11060,null,10827.0,16073,null],["Complimentary",2349.0,2975,null,1376.0,2537,null]],"total":["Rounds",42665.0,38752.0,null,27503.0,41145.0,null]},"totals":[["Rounds",42665.0,38752.0,null,27503.0,41145.0,null],["Revenues",5289258.0,5133658.0,null,4375547.0,5567050.0,null],["Cost of Sales",561976.0,507700.0,null,505981.0,660012.0,null],["Employee Related",2108003.0,1908038.0,null,2049602.0,2138430.0,null],["Operating Expenses",1681148.0,1641230.0,null,1554501.0,1646659.0,null],["NOI",938132.0,1076690.0,null,265464.0,1121949.0,null]]},"2025":{"depts":{"Pro Shop / Outside Serv":[["Rev - Green Fees",2626209.0,2613954.0,2625090.0,2809431.0,1918907.0,2857097.0],["Rev - Cart Fee/Trail Fee",52192.0,67454.0,58675.0,52192.0,67454.0,58675.0],["Rev - Handicap Fees/Other",338077.0,280379.0,328845.0,271167.0,162332.0,283442.0],["Rev - Merchandise",402033.0,544583.0,519116.0,460974.0,326630.0,542789.0],["COS - Merchandise",220547.0,322547.0,290705.0,264837.0,183656.0,298534.0],["Employee Related",467405.0,469106.0,567471.0,630531.0,496939.0,661445.0],["Operating Expenses",291030.0,268142.0,289071.0,264067.0,211769.0,271622.0],["NOI",2439528.0,2446576.0,2394256.0,2434329.0,1582959.0,2510402.0]],"Restaurant":[["Revenues",502557.0,534423.0,671482.0,874002.0,722132.0,889494.0],["COS",160794.0,190611.0,206854.0,330029.0,286492.0,329055.0],["Employee Related",449214.0,458953.0,436532.0,469864.0,433207.0,514188.0],["Operating Expenses",95426.0,89331.0,85209.0,85483.0,73118.0,81604.0],["NOI",-202877.0,-204472.0,-57113.0,-11374.0,-70684.0,-35353.0]],"Beverage Cart":[["Revenues",180948.0,166930.0,137050.0,192443.0,128958.0,179390.0],["COS",46772.0,48818.0,37361.0,51881.0,35834.0,50014.0],["Employee Related",30145.0,33662.0,30153.0,34371.0,22229.0,32107.0],["Operating Expenses",1963.0,1869.0,3436.0,2047.0,4342.0,4936.0],["NOI",102068.0,82581.0,82100.0,104144.0,66554.0,92333.0]],"Golf Course Maintenance":[["Employee Related",615539.0,630916.0,707038.0,693916.0,714337.0,823238.0],["Operating Expenses",479055.0,365373.0,414591.0,435876.0,372470.0,417122.0],["NOI",1094594.0,996289.0,1121629.0,1129792.0,1086807.0,1240360.0]],"Golf Academy":[["Revenues",32400.0,32400.0,29700.0,null,null,null],["Employee Related",20796.0,20796.0,20796.0,null,null,null],["Operating Expenses",9457.0,9003.0,4500.0,null,null,null],["NOI",2147.0,2601.0,7104.0,null,null,null]],"General Administrative":[["Employee Related",429443.0,421224.0,425963.0,347646.0,309544.0,350957.0],["Operating Expenses",852723.0,838506.0,847352.0,775784.0,783878.0,828653.0],["NOI",1282166.0,1259730.0,1273315.0,1123430.0,1093422.0,1179610.0]],"Membership":[["Revenues(Dues)",989756.0,916572.0,1023986.0,989756.0,916572.0,1023986.0],["Revenues(Initiation Fees)",143556.0,132562.0,145478.0,143556.0,132562.0,145478.0],["Employee Related",34107.0,37175.0,37349.0,34107.0,37175.0,37349.0],["Operating Expenses",21860.0,31590.0,30000.0,21860.0,31590.0,30000.0],["NOI",1077346.0,980369.0,1102115.0,1077346.0,980369.0,1102115.0]],"Marketing":[["Employee Related",33963.0,36171.0,35352.0,33963.0,36171.0,35352.0],["Operating Expenses",58765.0,77334.0,75425.0,58765.0,77334.0,75425.0],["NOI",92728.0,113505.0,110777.0,92728.0,113505.0,110777.0]]},"rounds":{"lines":[["Guest / outside",26485.0,25769.0,null,25156.0,15300.0,null],["Member",8454.0,14548.0,null,15525.0,10827.0,null],["Complimentary",1627.0,2349.0,null,2260.0,1376.0,null]],"total":["Rounds",36566.0,42665.0,39200.0,42941.0,27503.0,40385.0]},"totals":[["Rounds",36566.0,42665.0,39200.0,42941.0,27503.0,40385.0],["Revenues",5267727.0,5289258.0,5567899.0,5793521.0,4375547.0,5980351.0],["Cost of Sales",428113.0,561976.0,534920.0,646747.0,505981.0,677603.0],["Employee Related",2080612.0,2108003.0,2260654.0,2244398.0,2049602.0,2454636.0],["Operating Expenses",1810279.0,1681148.0,1749584.0,1643882.0,1554501.0,1709362.0],["NOI",948724.0,938132.0,1022741.0,1258494.0,265464.0,1138750.0]]},"2026 YTD":{"depts":{"Pro Shop / Outside Serv":[["Rev - Green Fees",1691204,1442868,1445706,1849105,1697146,1778768],["Rev - Cart Fee/Trail Fee",50775,42292,70800,50775,42292,70800],["Rev - Handicap Fees/Other",186788,177098,172318,166598,148405,150015],["Rev - Merchandise",227025,215040,246680,278848,257668,334848],["COS - Merchandise",126841,117250,138141,149967,157229,184166],["Employee Related",292997,215972,303247,340989,329494,338291],["Operating Expenses",167216,151717,153434,168752,131538,161009],["NOI",1568738,1392358,1340682,1685618,1527250,1650965]],"Restaurant":[["Revenues",253709,283705,321323,440940,492660,525032],["COS",78321,86886,101919,166013,181881,199594],["Employee Related",194737,250451,211306,287923,227499,264837],["Operating Expenses",40975,45858,45736,49122,47254,52199],["NOI",-60324,-99490,-37638,-62118,36026,8402]],"Beverage Cart":[["Revenues",103782,92806,93900,106978,114109,118245],["COS",24982,20590,22922,30754,26808,32966],["Employee Related",18205,14926,17330,20706,18152,18041],["Operating Expenses",804,1171,2104,804,1171,2604],["NOI",59791,56119,51544,54714,67978,64634]],"Golf Course Maintenance":[["Employee Related",371188,305656,394399,360028,343910,402845],["Operating Expenses",251909,258551,266008,257644,263221,268601],["NOI",-623097,-564207,-660407,-617672,-607131,-671446]],"Golf Academy":[["Revenues",16200,16200,16200,0,0,0],["Employee Related",10398,10398,10398,0,0,0],["Operating Expenses",2553,7133,2250,0,0,0],["NOI",3249,-1331,3552,0,0,0]],"General Administrative":[["Employee Related",205173,215051,241968,183746,170949,202285],["Operating Expenses",380370,449406,399655,369181,411709,377924],["NOI",-585543,-664457,-641623,-552927,-582658,-580209]],"Membership":[["Revenues (Dues)",599424,523273,644995,599424,523273,644995],["Revenues (Initiation Fees)",68949,70319,69633,68949,70319,69633],["Employee Related",16566,17406,17695,16566,17406,17695],["Operating Expenses",27417,10486,31000,27417,10486,31000],["NOI",624390,565700,665934,624390,565700,665934]],"Marketing":[["Employee Related",17541,19443,17486,17541,19443,17486],["Operating Expenses",40722,32102,49650,40722,32102,49650],["NOI",-58263,-51545,-67136,-58263,-51545,-67136]]},"rounds":{"lines":[["Guest / outside",15997,13325,13539,14829,14210,14275],["Member",4646,4358,4424,7883,8941,8941],["Complimentary",715,818,838,1141,1232,1184]],"total":["Total rounds",21358,18501,18800,23853,24383,24400]},"totals":[["Rounds",21358,18501,18800,23853,24383,24400],["Revenues",3197855,2863600,3081555,3561617,3345871,3692336],["Cost of Sales",230144,224726,262982,346734,365918,416726],["Employee Related",1126804,1049303,1213829,1227498,1126853,1261480],["Operating Expenses",911966,956423,949837,913642,897480,942987],["NOI",928941,633148,654908,1073743,955620,1071144]]}};
+const YD_DEPTS=["Pro Shop / Outside Serv","Merchandise","Restaurant","Beverage Cart","Food Truck",
+  "Golf Course Maintenance","Golf Academy","General Administrative","Membership","Marketing"];
+const YD_COST=/Employee Related|Operating Expenses|^COS|Cost of Sales/;
+const YD_NOTE={"Membership":"split evenly between the courses",
+  "Marketing":"split evenly between the courses",
+  "Merchandise":"revenue and cost of sales only"};
+
+function ydPick(l,seg){
+  const g=(a,b)=>seg==="ss"?a:seg==="kb"?b:((a==null&&b==null)?null:(a||0)+(b||0));
+  return [g(l[1],l[4]), g(l[2],l[5]), g(l[3],l[6])];
+}
+const ydMoney=n=>n==null?null:(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
+const ydNum=n=>n==null?null:Math.round(n).toLocaleString();
+
+function ydVar(val,ref,isNum,goodUp){
+  if(ref==null||val==null) return '<span class="yd-v yd-nil">&nbsp;</span>';
+  const d=val-ref;
+  if(!d) return '<span class="yd-v yd-nil">&mdash;</span>';
+  const cls=(goodUp?d>0:d<0)?"yd-pos":"yd-neg";
+  return `<span class="yd-v ${cls}">${d>0?"+":"\u2212"}`+
+    `${isNum?ydNum(Math.abs(d)):"$"+ydNum(Math.abs(d))}</span>`;
+}
+/* three figure columns: prior with its variance beneath, actual, budget with its variance beneath */
+function ydCells(a,p,b,isNum,goodUp){
+  const f=x=>x==null?'<span class="yd-nil">&mdash;</span>':(isNum?ydNum(x):ydMoney(x));
+  return `<div class="yd-u"><span class="yd-n">${f(p)}</span>${ydVar(a,p,isNum,goodUp)}</div>`+
+    `<div class="yd-u yd-big"><span class="yd-n">${f(a)}</span>`+
+      `<span class="yd-m">prior ${f(p)} &middot; budget ${f(b)}</span></div>`+
+    `<div class="yd-u"><span class="yd-n">${f(b)}</span>${ydVar(a,b,isNum,goodUp)}</div>`;
+}
+function ydPanelRows(rows,seg){
+  return rows.map(l=>{
+    const [a,p,b]=ydPick(l,seg);
+    return `<div class="yd-r yd-pl"><span class="yd-nm2">${l[0]}</span>`+
+      ydCells(a,p,b,l[0]==="Rounds",!YD_COST.test(l[0]))+`</div>`;
+  }).join("");
+}
+
+function detailYearReport(i,seg,period,prevLabel,periodLabel){
+  const P=YD[period]||{};
+  const open=state.finOpen||"";
+  let h=`<div class="yd-r yd-head"><span>&nbsp;</span><span>Prior year</span>`+
+    `<span class="yd-a">Actual</span><span>Budget</span></div>`;
+
+  if(P.rounds){
+    const T=ydPick(P.rounds.total,seg);
+    h+=`<div class="yd-grp${open==="__rounds__"?" open":""}">`+
+      `<button type="button" class="yd-r" data-fopen="__rounds__">`+
+        `<span class="yd-nm"><i class="yd-dot"></i>Rounds</span>`+ydCells(T[0],T[1],T[2],true,true)+
+      `</button><div class="yd-panel">`+
+      P.rounds.lines.map(l=>{
+        const [a,p,b]=ydPick(l,seg);
+        const sh=T[0]&&a!=null?`<span class="yd-side">${(a/T[0]*100).toFixed(0)}%</span>`:"";
+        return `<div class="yd-r yd-pl"><span class="yd-nm2">${l[0]}${sh}</span>`+
+          ydCells(a,p,b,true,true)+`</div>`;}).join("")+
+      `</div></div>`;
+  }
+
+  YD_DEPTS.forEach(dn=>{
+    const rows=(P.depts||{})[dn];
+    if(!rows) return;
+    const noi=rows.find(l=>l[0]==="NOI");
+    const [a,p,b]=noi?ydPick(noi,seg):[null,null,null];
+    const empty=!a&&!p&&!b;
+    const inner=rows.filter(l=>l[0]!=="NOI");
+    h+=`<div class="yd-grp${open==="d:"+dn?" open":""}">`+
+      `<button type="button" class="yd-r" data-fopen="d:${dn}">`+
+        `<span class="yd-nm"><i class="yd-dot"></i>${dn}`+
+        `${YD_NOTE[dn]?`<span class="yd-note2">${YD_NOTE[dn]}</span>`:""}</span>`+
+        (empty?`<div></div><div class="yd-u yd-big"><span class="yd-n yd-nil">not operated here</span></div><div></div>`
+              :ydCells(a,p,b,false,true))+
+      `</button>`+(empty?"":`<div class="yd-panel">${ydPanelRows(inner,seg)}</div>`)+`</div>`;
+  });
+
+  if(P.totals && P.totals.length){
+    const tn=P.totals.find(l=>l[0]==="NOI");
+    const TT=tn?ydPick(tn,seg):[null,null,null];
+    h+=`<div class="yd-sub">${FIN_SEG[seg]} total</div>`+
+      `<div class="yd-grp yd-grand open"><button type="button" class="yd-r">`+
+      `<span class="yd-nm">Net operating income</span>`+ydCells(TT[0],TT[1],TT[2],false,true)+
+      `</button><div class="yd-panel">`+
+      ydPanelRows(P.totals.filter(l=>l[0]!=="NOI"),seg)+`</div></div>`;
+  }
+  return h;
+}
+
+/* The Annual Trend tab: the chart and the generated read-out. */
+function ydTrendCards(seg){
+  const ys=finFullYears();
+  const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
+  const dept = (state.finDept==="__all__"||FIN_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
+  const per = state.finPer==="round";
+  const T=finTrend(seg,metric,dept,per);
+  const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
+  const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
+  const noted=T.ys.filter(yy=>FIN_NOTES[yy]);
+  const R=finRead(seg,metric,dept);
+  const li=a=>a.map(t=>`<li>${t}</li>`).join("");
+  return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
+    `<div class="fin-pick"><div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
+      `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+`</div>`+
+    `<label class="fin-sel"><span>Department</span><select data-fdept>`+
+      `<option value="__all__"${dept==="__all__"?" selected":""}>All departments</option>`+
+      FIN_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
+    `</select></label>`+
+    `<div class="fin-mrow fin-per">`+
+      `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
+      `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div></div>`+
+    `<p class="fin-subh">${mname}${per?" per round":""} \u00b7 ${dept==="__all__"?"all departments":dept} `+
+    `\u00b7 ${FIN_SEG[seg]}. ${finMoney(T.first)} in ${T.ys[0]} to <b>${finMoney(T.last)}</b> `+
+    `in ${T.ys[T.ys.length-1]} \u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
+    T.svg+
+    (noted.length?`<div class="fin-notes"><h5>What was happening</h5><ul>`+
+      noted.map(yy=>`<li><b>${yy}</b> ${FIN_NOTES[yy]}</li>`).join("")+`</ul></div>`:"")+
+    `</div>`+
+    `<div class="fin-card dt-full"><h4 class="fin-h">What this says</h4>`+
+    `<p class="fin-subh">${R.mname} at ${R.dname}, ${FIN_SEG[seg]}.</p>`+
+    `<div class="fin-cols">`+
+      `<div class="fin-read good"><h5>Working well</h5>`+
+        (R.good.length?`<ul>${li(R.good)}</ul>`:`<p class="fin-none">Nothing stands out on this measure.</p>`)+`</div>`+
+      `<div class="fin-read work"><h5>Room to improve</h5>`+
+        (R.work.length?`<ul>${li(R.work)}</ul>`:`<p class="fin-none">No concerns on this measure.</p>`)+`</div>`+
+    `</div></div>`;
+}
+
 function detailFinancials(i){
   const [y,seg,ys]=finPick();
   const isFirst = ys.indexOf(y)===0 && !FIN_PRIOR_OF[y];
@@ -1754,80 +1941,6 @@ function detailFinancials(i){
   const yearRow=`<div class="fin-years"><span class="fin-yl">Year</span>`+ys.map(yy=>
       `<button type="button" data-fyear="${yy}" aria-pressed="${yy===y}">${yy}</button>`).join("")+`</div>`;
 
-  const mode = FIN_MODES.some(m=>m[0]===state.finMode)?state.finMode:"amt";
-  const openDept = FIN_DEPTS.indexOf(state.finOpen)>-1 ? state.finOpen : "";
-  const mxRows=FIN_DEPTS.map(dn=>{
-    let h=`<tr class="mx-row${openDept===dn?" open":""}" data-fopen="${dn}">`+
-      `<td class="l"><span class="mx-chev">&#8250;</span> ${dn}`+
-      `${FIN_NOTE[dn]?`<span class="mx-note">${FIN_NOTE[dn]}</span>`:""}</td>`+
-      FIN_KEYS.map(([k,n])=>`<td data-l="${n}"${k==="noi"?' class="mx-noi"':''}>`+
-        `${finCell(y,prev,dn,k,seg,mode)}</td>`).join("")+
-      `</tr>`;
-    if(openDept===dn) h+=`<tr class="mx-exp"><td colspan="6">`+
-      finDeptPanel(dn,y,prev,seg,yLabel,prevLabel)+`</td></tr>`;
-    return h;
-  }).join("");
-  const mxSub = mode==="amt" ? `Figures for ${yLabel}`
-    : mode==="chg" ? `Change against ${prevLabel}`
-    : mode==="per" ? `Divided by ${finNum(finTot(y,"rounds",seg))} rounds`
-    : `Each line as a share of that department's own revenue`;
-
-  const mix=(FIN_DATA[y]||{}).__mix__||{};
-  const mixPrev=(FIN_DATA[prev]||{}).__mix__||{};
-  const totalRd=finTot(y,"rounds",seg);
-  const mixRows=["Member","Guest/Outside","Complimentary"].map(k=>{
-    const now=(mix[k]||{})[seg]||0, then=(mixPrev[k]||{})[seg]||0;
-    const share=totalRd?now/totalRd*100:0;
-    return `<tr><td class="l">${k==="Guest/Outside"?"Guest / outside":k}</td>`+
-      `${isFirst?"":`<td>${finNum(then)}</td>`}`+
-      `<td><b>${finNum(now)}</b>${share?`<div class="fin-pct">${share.toFixed(0)}%</div>`:""}</td>`+
-      `${isFirst?"":`<td>${finChg(now,then,true)}</td>`}</tr>`;
-  }).join("");
-
-  const trendCard = (()=>{
-        const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
-        const dept = (state.finDept==="__all__"||FIN_TREND_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
-        const per = state.finPer==="round";
-        const T=finTrend(seg,metric,dept,per);
-        const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
-        const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
-        return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
-        `<div class="fin-pick">`+
-          `<div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
-            `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+
-          `</div>`+
-          `<label class="fin-sel"><span>Department</span><select data-fdept>`+
-            `<option value="__all__"${dept==="__all__"?" selected":""}>All departments</option>`+
-            FIN_TREND_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
-          `</select></label>`+
-          `<div class="fin-mrow fin-per">`+
-            `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
-            `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button>`+
-          `</div>`+
-        `</div>`+
-        `<p class="fin-subh">${mname}${per?" per round":""} \u00b7 ${dept==="__all__"?"all departments":dept} `+
-        `\u00b7 ${FIN_SEG[seg]}. ${finMoney(T.first)} in ${T.ys[0]} to <b>${finMoney(T.last)}</b> `+
-        `in ${T.ys[T.ys.length-1]} \u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
-        T.svg+
-        (()=>{const have=T.ys.filter(yy=>FIN_NOTES[yy]);
-          return have.length?`<div class="fin-notes"><h5>What was happening</h5><ul>`+
-            have.map(yy=>`<li><b>${yy}</b> ${FIN_NOTES[yy]}</li>`).join("")+`</ul></div>`:"";})()+
-        `</div>`;})();
-  const readCard = (()=>{
-        const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
-        const dept = (state.finDept==="__all__"||FIN_TREND_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
-        const R=finRead(seg,metric,dept);
-        const li=arr=>arr.map(t=>`<li>${t}</li>`).join("");
-        return `<div class="fin-card dt-full"><h4 class="fin-h">What this says</h4>`+
-        `<p class="fin-subh">${R.mname} at ${R.dname}, ${FIN_SEG[seg]}.</p>`+
-        `<div class="fin-cols">`+
-          `<div class="fin-read good"><h5>Working well</h5>`+
-            (R.good.length?`<ul>${li(R.good)}</ul>`:`<p class="fin-none">Nothing stands out on this measure.</p>`)+
-          `</div>`+
-          `<div class="fin-read work"><h5>Room to improve</h5>`+
-            (R.work.length?`<ul>${li(R.work)}</ul>`:`<p class="fin-none">No concerns on this measure.</p>`)+
-          `</div>`+
-        `</div></div>`;})();
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
     `<div class="detail-sub">${FIN_SEG[seg]} \u00b7 `+
@@ -1836,31 +1949,9 @@ function detailFinancials(i){
          : "year ended 31 December "+y+(isFirst?" \u00b7 earliest year on record":" \u00b7 against "+prev))}`+
     ` \u00b7 to net operating income</div></div>`+
     `<div class="detail-body is-wide">`+
-      sw+(tab==="trend" ? trendCard+readCard : yearRow+
-      `<div class="fin-card"><h4 class="fin-h">By department</h4>`+
-        `<p class="fin-subh">${mxSub} \u00b7 ${FIN_SEG[seg]}. Tap a department to open it.</p>`+
-        `<div class="mx-modes">`+FIN_MODES.map(([k,l])=>
-          `<button type="button" data-fmode="${k}" aria-pressed="${k===mode}">${l}</button>`).join("")+`</div>`+
-        `<div class="mx-scroll"><table class="mx-table">`+
-        `<tr><th class="l">Department</th>`+FIN_KEYS.map(([k,n])=>`<th>${n}</th>`).join("")+`</tr>`+
-        mxRows+
-        `<tr class="mx-tot"><td class="l">${FIN_SEG[seg]}</td>`+
-        FIN_KEYS.map(([k,n])=>`<td data-l="${n}"${k==="noi"?' class="mx-noi"':''}>`+
-          `${finCell(y,prev,"__total__",k,seg,mode)}</td>`).join("")+
-        `</tr></table></div></div>`+
-      `<div class="fin-cols">`+
-        `<div class="fin-card"><h4 class="fin-h">Operating ratios</h4>`+
-        `<p class="fin-subh">Where the needle actually moves.</p>`+
-        `<table class="fin-table"><tr><th class="l">&nbsp;</th><th>${yLabel}</th>`+
-        `<th>${isFirst?"&nbsp;":"vs "+prevLabel}</th></tr>`+
-        finRatios(y,seg,prev)+`</table></div>`+
-        `<div class="fin-card"><h4 class="fin-h">Rounds</h4>`+
-        `<p class="fin-subh">${finNum(totalRd)} played in ${yLabel}.</p>`+
-        `<table class="fin-table"><tr><th class="l">&nbsp;</th>`+
-        `${isFirst?"":`<th>${prevLabel}</th>`}<th>${yLabel}</th>`+
-        `${isFirst?"":`<th>Change</th>`}</tr>`+
-        mixRows+`</table></div>`+
-      `</div>`)+
+      sw+(tab==="trend" ? ydTrendCards(seg) : yearRow+
+      detailYearReport(i,seg,y,prevLabel,yLabel))+
+
       `<p class="fin-foot">Figures are year-end actuals from the department profit and loss reports. `+
       `Membership and Marketing are property-wide and split evenly between the courses, so course-level `+
       `figures for those two carry an assumption rather than a measurement.</p>`+
