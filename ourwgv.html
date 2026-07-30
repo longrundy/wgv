@@ -306,10 +306,11 @@ a{color:inherit}
 .mg-tile.food .mg-tv{color:var(--red-dark)}
 .mg-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:3px}
 .mg-say{font-size:13.5px;color:#3d3d3a;line-height:1.5;margin:0 0 6px}
-.mg-grid{display:grid;gap:5px;align-items:center;margin-bottom:5px}
+.mg-grid{display:grid;gap:0 8px;align-items:center;margin-bottom:6px}
 .mg-gh{font-size:11px;color:#b4b2a9;text-align:center}
-.mg-en{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mg-cell{font-family:inherit;font-size:13px;font-weight:700;padding:7px 0;border:0;border-radius:6px;cursor:pointer;width:100%}
+.mg-en{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg-cell{font-family:inherit;font-size:13.5px;font-weight:700;text-align:center;padding:9px 0;
+ border:0;border-radius:7px;cursor:pointer;width:100%}
 .mg-cell:hover{outline:2px solid var(--navy);outline-offset:-2px}
 .mg-back{display:inline-flex;align-items:center;gap:7px;border:1px solid #dde3ec;background:#fff;
  color:var(--ink);font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;
@@ -3091,10 +3092,6 @@ function mgTone(v){
   if(v>=80) return ["#fbf4ec","#8a5a12"];
   return ["#fdeeee","#a32d2d"];
 }
-function mgLine(vals,lo,hi,x0,x1,y0,y1){
-  const n=vals.length, dx=(x1-x0)/(n-1);
-  return vals.map((v,k)=>`${k?"L":"M"}${(x0+k*dx).toFixed(1)} ${(y1-(v-lo)/(hi-lo)*(y1-y0)).toFixed(1)}`).join(" ");
-}
 function mgOverview(){
   const Y=MEMBER_GOLF.years, T=MEMBER_GOLF.tot, last=Y[Y.length-1];
   const col=k=>Y.map(y=>T[y][k]);
@@ -3107,12 +3104,12 @@ function mgOverview(){
     return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${k===vals.length-1?4.5:3.5}" fill="${c}"></circle>`;
   }).join("");
   const tiles=[["mg-tile","Golf",T[last][0],"5-year average "+avg(g).toFixed(1)],
-               ["mg-tile food","Dining",T[last][1],"5-year average "+avg(f).toFixed(1)],
+               ["mg-tile food","Food & Beverage",T[last][1],"5-year average "+avg(f).toFixed(1)],
                ["mg-tile","Overall",T[last][2],"5-year average "+avg(o).toFixed(1)]]
     .map(([c,l,v,sub])=>`<div class="${c}"><div class="mg-tn">${v}</div>`+
       `<div class="mg-tv">${sub}</div><div class="mg-tl">${l.toUpperCase()}</div></div>`).join("");
 
-  const cols=`grid-template-columns:minmax(0,1fr) repeat(${Y.length},58px)`;
+  const cols=`grid-template-columns:minmax(0,190px) repeat(${Y.length},minmax(0,1fr))`;
   const head=`<div class="mg-grid" style="${cols}"><span></span>`+
     Y.map(y=>`<span class="mg-gh">${y}</span>`).join("")+`</div>`;
   const grid=MEMBER_GOLF.order.map(k=>{
@@ -3122,32 +3119,13 @@ function mgOverview(){
       const [bg,fg]=mgTone(e.o);
       return `<button type="button" class="mg-cell" data-mg="${k}" data-mgy="${y}" `+
         `style="background:${bg};color:${fg}" title="${MEMBER_GOLF.names[k]} ${y} \u2014 tap for detail">`+
-        `${Math.round(e.o)}</button>`;
+        `${Math.round(e.o)}%</button>`;
     }).join("");
     return `<div class="mg-grid" style="${cols}"><span class="mg-en">${MEMBER_GOLF.names[k]}</span>${cells}</div>`;
   }).join("");
 
   return `<div class="mg-tiles">${tiles}</div>`+
-    `<p class="mg-say">Golf has not dropped below <b>${Math.min.apply(null,g)}</b> in five years. `+
-    `Dining has not reached <b>${Math.ceil(Math.max.apply(null,f))}</b>. The gap averages <b>${gap} points</b>.</p>`+
-    `<svg viewBox="0 0 640 250" style="width:100%;height:auto;display:block" role="img" `+
-    `aria-label="Golf, dining and overall scores by year">`+
-      [20,74,128,182].map(y=>`<line x1="60" x2="612" y1="${y}" y2="${y}" stroke="#f0eee8"></line>`).join("")+
-      [[20,95],[74,80],[128,65],[182,50]].map(([y,v])=>
-        `<text x="52" y="${y+4}" font-size="10" fill="#b4b2a9" text-anchor="end">${v}</text>`).join("")+
-      `<path d="${mgLine(o,lo,hi,x0,x1,y0,y1)}" fill="none" stroke="#a9b4c4" stroke-width="2" stroke-dasharray="4 3"></path>`+
-      `<path d="${mgLine(g,lo,hi,x0,x1,y0,y1)}" fill="none" stroke="var(--navy)" stroke-width="2.5"></path>`+
-      `<path d="${mgLine(f,lo,hi,x0,x1,y0,y1)}" fill="none" stroke="var(--red)" stroke-width="2.5"></path>`+
-      `<g fill="var(--navy)">${dots(g,"#17325a")}</g><g fill="var(--red)">${dots(f,"#c8161d")}</g>`+
-      Y.map((y,k)=>`<text x="${(x0+k*((x1-x0)/(Y.length-1))).toFixed(1)}" y="212" font-size="11.5" `+
-        `fill="#5f5e5a" text-anchor="middle">${y}</text>`).join("")+
-      `<g font-size="11.5" fill="#5f5e5a">`+
-        `<rect x="60" y="228" width="11" height="3" fill="#17325a"></rect><text x="78" y="233">Golf</text>`+
-        `<rect x="128" y="228" width="11" height="3" fill="#c8161d"></rect><text x="146" y="233">Dining</text>`+
-        `<rect x="204" y="228" width="11" height="3" fill="#a9b4c4"></rect><text x="222" y="233">Overall</text>`+
-      `</g>`+
-    `</svg>`+
-    `<h3 class="sv-h">Overall score by event &mdash; tap any year for the detail</h3>`+
+    `<h3 class="sv-h">Overall satisfaction by event &mdash; tap any year for the detail</h3>`+
     head+grid;
 }
 function mgEvent(){
