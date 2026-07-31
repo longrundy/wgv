@@ -619,8 +619,35 @@ a{color:inherit}
 /* Uses the house layout: wx-head / wx-strip / wx-card / dt-cols, so this page
    fills the pane the same way Weather and Financials do. No max-width here. */
 .ec-secs{margin-bottom:18px}
-.ec-lead{border-left-color:var(--navy);background:#fbfcfe;max-width:none}
-.ec-lead h3{color:var(--navy)}
+/* KPI strip across the top, then a single insight line, then content, then a
+   closing band. Keeps the page wide at the start and finished at the end. */
+.ec-kpis{display:grid;gap:12px;margin-bottom:16px}
+.ec-kpis.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ec-kpis.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ec-kpi{border:1px solid #e5e2da;border-top:3px solid var(--navy);border-radius:12px;
+  background:#fff;padding:15px 17px}
+.ec-kn{font-size:31px;font-weight:700;color:var(--navy);line-height:1.05;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ec-kl{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#8a8a84;
+  font-weight:700;margin-top:7px}
+.ec-kd{font-size:11.5px;color:#5f5e5a;margin-top:5px}
+.ec-say{font-size:15.5px;line-height:1.55;color:var(--ink);font-weight:600;
+  margin:0 0 20px;padding-left:14px;border-left:4px solid var(--red)}
+.ec-band{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 26px;
+  background:var(--navy);border-radius:14px;padding:20px 24px;margin-top:22px}
+.ec-band>div{padding-right:26px;border-right:1px solid rgba(255,255,255,.16)}
+.ec-band>div:last-child{border-right:0;padding-right:0}
+.ec-band h4{margin:0 0 6px;font-size:12.5px;font-weight:700;color:#fff;line-height:1.35}
+.ec-band p{margin:0;font-size:12px;color:#b9c8de;line-height:1.55}
+.ec-dwrap{display:flex;align-items:center;gap:20px;margin-top:6px}
+.ec-donut{width:140px;height:140px;flex:none}
+.ec-dbig{font-size:22px;font-weight:700;fill:var(--navy)}
+.ec-dsm{font-size:9px;fill:#8a8a84;text-transform:uppercase;letter-spacing:.07em}
+.ec-dkey{flex:1;min-width:0}
+.ec-krow{display:grid;grid-template-columns:11px minmax(0,1fr) 62px 38px;gap:0 9px;
+  align-items:center;padding:6px 0;font-size:12px;color:#3d3d3a;border-bottom:1px solid #f7f6f2}
+.ec-krow:last-child{border-bottom:0}
+.ec-krow i{width:11px;height:11px;border-radius:3px;display:block}
 .ec-chg{font-style:normal;font-weight:700}
 .ec-chg.up{color:var(--green)} .ec-chg.down{color:var(--red-dark)}
 .ec-row{display:grid;grid-template-columns:minmax(0,1fr) 90px 62px 38px;gap:0 10px;
@@ -765,6 +792,15 @@ button.emp-srow:hover{background:#fafbfd}
   .ec-row{grid-template-columns:minmax(0,1fr) 60px 34px}
   .ec-row .ec-bar{display:none}
   .ec-adrow{grid-template-columns:1fr 1fr;gap:12px}
+  .ec-kpis.c4,.ec-kpis.c3{grid-template-columns:1fr 1fr}
+  .ec-kn{font-size:25px}
+  .ec-say{font-size:14px}
+  .ec-band{grid-template-columns:1fr;gap:16px;padding:17px 18px}
+  .ec-band>div{padding-right:0;border-right:0;padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.16)}
+  .ec-band>div:last-child{padding-bottom:0;border-bottom:0}
+  .ec-dwrap{flex-direction:column;align-items:stretch;gap:14px}
+  .ec-donut{align-self:center}
   .emp-two{grid-template-columns:1fr;gap:20px}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
@@ -4479,6 +4515,18 @@ const ECOM={
 };
 
 const ECOM_COPY={
+  siteSay:"More people are finding us, rather than the same people coming back more often \u2014 new users grew almost twice as fast as sessions.",
+  siteBand:[["Search does the heavy lifting","62% of all sessions arrive through organic search. Paid and referral together are under a tenth."],
+            ["Growth is in new faces","New users +24.8% against sessions +13.0%."],
+            ["Florida, then the Southeast","Florida alone is 24,188 users. Georgia, New York, Virginia and North Carolina follow."]],
+  callSay:"The call center is the smallest booking channel and the second most valuable per golfer \u2014 almost everything it touches is a full-rate guest.",
+  callBand:[["Small, and disproportionately valuable","One golfer in ten, one revenue dollar in six."],
+            ["Almost no discounted play","98% of its rounds pay a guest rate rather than a member, employee or complimentary one."],
+            ["Lead time is what moves the average","Four or more days ahead is worth about $29 a round on the same card."]],
+  teeSay:"Online tee times grew on both counts \u2014 10.5% more rounds, and 7.9% more money per round.",
+  teeBand:[["Close to half the money","38.5% of golfers, 47.3% of green-fee revenue."],
+           ["Third party is taking a bigger share","GolfNow went from 8% of online revenue to 18%, at $31 less per golfer."],
+           ["Booking ease is still unmeasured","The engine reports bookings, not the journey to them."]],
   siteHead:"The website is growing on every measure, and growing fastest where it matters.",
   siteLead:"New users are up <b>24.8%</b> against the first half of 2025 while sessions are up <b>13.0%</b> \u2014 more people are finding us, rather than the same people visiting more often. Search brings roughly six of every ten visits.",
   callHead:"The call center books one golfer in ten and brings in one revenue dollar in six.",
@@ -4521,34 +4569,64 @@ const ecNum=n=>Math.round(n).toLocaleString();
 const ecPc=(a,b)=>((a/b-1)*100);
 const ecChg=v=>`<em class="ec-chg ${v>=0?"up":"down"}">${v>=0?"+":"\u2212"}${Math.abs(v).toFixed(0)}%</em>`;
 
-function ecTile(n,l){ return `<div class="wx-tile"><div class="n">${n}</div><div class="l">${l}</div></div>`; }
-function ecHead(head,lead,tiles){
-  return `<div class="wx-head"><div class="wx-lead ec-lead"><h3>${head}</h3><p>${lead}</p></div>`+
-    `<div class="wx-strip">${tiles}</div></div>`;
+/* A strip of KPI cards across the top, the way the marketing piece opens.
+   Full width, so the page starts wide instead of a tall card beside a short
+   stack of tiles with dead air between them. */
+function ecKpi(n,l,d){
+  return `<div class="ec-kpi"><div class="ec-kn">${n}</div>`+
+    `<div class="ec-kl">${l}</div>${d?`<div class="ec-kd">${d}</div>`:""}</div>`;
+}
+function ecKpis(cards){ return `<div class="ec-kpis c${cards.length}">${cards.join("")}</div>`; }
+function ecSay(t){ return `<p class="ec-say">${t}</p>`; }
+function ecBand(points){
+  return `<div class="ec-band">`+points.map(([h,p])=>
+    `<div><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join("")+`</div>`;
+}
+
+const EC_WHEEL=["#17325a","#3a6ea5","#8fa6c4","#639922","#c8161d"];
+function ecDonut(items){
+  const tot=items.reduce((z,x)=>z+x[1],0), r=52, circ=2*Math.PI*r;
+  let off=0;
+  const segs=items.map((x,k)=>{
+    const len=x[1]/tot*circ;
+    const seg=`<circle cx="70" cy="70" r="${r}" fill="none" stroke="${EC_WHEEL[k%EC_WHEEL.length]}" `+
+      `stroke-width="24" stroke-dasharray="${len.toFixed(2)} ${(circ-len).toFixed(2)}" `+
+      `stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 70 70)"></circle>`;
+    off+=len; return seg;
+  }).join("");
+  return `<svg viewBox="0 0 140 140" class="ec-donut" role="img" `+
+    `aria-label="Sessions by channel, ${items.map(x=>x[0]+" "+Math.round(x[1]/tot*100)+"%").join(", ")}">`+
+    `${segs}<text x="70" y="66" text-anchor="middle" class="ec-dbig">${Math.round(items[0][1]/tot*100)}%</text>`+
+    `<text x="70" y="82" text-anchor="middle" class="ec-dsm">organic</text></svg>`;
 }
 
 /* ------------------------------------------------------------- the website */
 function ecomSite(){
-  const s=ECOM.site, tot=s.channels.reduce((a,c)=>a+c[1],0), top=s.channels[0][1];
-  const rows=s.channels.map(([n,v])=>
-    `<div class="ec-row"><span class="ec-n">${esc(n)}</span>`+
-    `<span class="ec-bar"><i style="width:${(v/top*100).toFixed(0)}%"></i></span>`+
-    `<span class="ec-v">${ecNum(v)}</span><span class="ec-p">${(v/tot*100).toFixed(0)}%</span></div>`).join("");
+  const s=ECOM.site, tot=s.channels.reduce((a,c)=>a+c[1],0);
+  const key=s.channels.map(([n,v],k)=>
+    `<div class="ec-krow"><i style="background:${EC_WHEEL[k%EC_WHEEL.length]}"></i>`+
+    `<span class="ec-n">${esc(n)}</span><span class="ec-v">${ecNum(v)}</span>`+
+    `<span class="ec-p">${(v/tot*100).toFixed(0)}%</span></div>`).join("");
   const mtop=s.markets[0][1];
   const mk=s.markets.map(([n,v],i)=>
     `<div class="ec-row"><span class="ec-n"><em class="ec-rank">${i+1}</em>${esc(n)}</span>`+
     `<span class="ec-bar"><i style="width:${(v/mtop*100).toFixed(0)}%"></i></span>`+
-    `<span class="ec-v">${ecNum(v)}</span><span class="ec-p"></span></div>`).join("");
-  return ecHead(ECOM_COPY.siteHead, ECOM_COPY.siteLead,
-      ecTile(ecNum(s.sessions),"Sessions &middot; "+ecChg(s.sessionsChg))+
-      ecTile(ecNum(s.active),"Active users &middot; "+ecChg(s.activeChg))+
-      ecTile(ecNum(s.newUsers),"New users &middot; "+ecChg(s.newChg)))+
+    `<span class="ec-v">${ecNum(v)}</span></div>`).join("");
+  return ecKpis([
+      ecKpi(ecNum(s.sessions),"Website sessions",ecChg(s.sessionsChg)+" on 2025"),
+      ecKpi(ecNum(s.active),"Active users",ecChg(s.activeChg)+" on 2025"),
+      ecKpi(ecNum(s.newUsers),"New users",ecChg(s.newChg)+" on 2025"),
+      ecKpi((s.channels[0][1]/tot*100).toFixed(0)+"%","From organic search",ecNum(s.channels[0][1])+" sessions")
+    ])+
+    ecSay(ECOM_COPY.siteSay)+
     `<div class="dt-cols">`+
       `<div class="wx-card"><h3 class="wx-h">Where the traffic comes from</h3>`+
-        `<p class="wx-sub">Sessions by channel</p>${rows}</div>`+
+        `<p class="wx-sub">Sessions by channel</p>`+
+        `<div class="ec-dwrap">${ecDonut(s.channels)}<div class="ec-dkey">${key}</div></div></div>`+
       `<div class="wx-card"><h3 class="wx-h">Top five states</h3>`+
         `<p class="wx-sub">Users, first half of 2026</p>${mk}</div>`+
-    `</div>`;
+    `</div>`+
+    ecBand(ECOM_COPY.siteBand);
 }
 
 /* ------------------------------------------------------------ call center */
@@ -4563,20 +4641,24 @@ function ecomCall(){
     .map(([n,g,r,a,on])=>`<div class="ec-crow${on?" is-on":""}">`+
       `<span class="ec-n">${esc(n)}</span>`+
       `<span class="ec-v">${ecNum(g)}</span><span class="ec-p">${(g/p.golfers*100).toFixed(1)}%</span>`+
-      `<span class="ec-bar"><i style="width:${(r/max*100).toFixed(0)}%;background:${on?"var(--red)":"var(--navy)"}"></i></span>`+
+      `<span class="ec-bar"><i style="width:${(r/max*100).toFixed(0)}%;background:${on?"var(--navy)":"#8fa6c4"}"></i></span>`+
       `<span class="ec-v">${ecMoney(r)}</span><span class="ec-p">${(r/p.revenue*100).toFixed(1)}%</span>`+
       `<span class="ec-v">$${a.toFixed(2)}</span></div>`).join("");
-  return ecHead(ECOM_COPY.callHead, ECOM_COPY.callLead,
-      ecTile(ecNum(c.golfers),"Golfers booked &middot; "+(c.golfers/p.golfers*100).toFixed(1)+"% of play")+
-      ecTile(ecMoney(c.revenue),"Revenue &middot; "+(c.revenue/p.revenue*100).toFixed(1)+"% of green fees")+
-      ecTile("$"+c.avgFee.toFixed(2),"Average fee &middot; property is $"+p.avgFee.toFixed(2)))+
+  return ecKpis([
+      ecKpi(ecNum(c.golfers),"Golfers booked",(c.golfers/p.golfers*100).toFixed(1)+"% of all play"),
+      ecKpi(ecMoney(c.revenue),"Revenue",(c.revenue/p.revenue*100).toFixed(1)+"% of green fees"),
+      ecKpi("$"+c.avgFee.toFixed(2),"Average fee","property is $"+p.avgFee.toFixed(2)),
+      ecKpi("98%","Full-rate guests","member and comp play is 2%")
+    ])+
+    ecSay(ECOM_COPY.callSay)+
     `<div class="wx-card"><h3 class="wx-h">How every golfer booked</h3>`+
       `<p class="wx-sub">All ${ecNum(p.golfers)} rounds played, first half of 2026</p>`+
       `<div class="ec-crow ec-chead"><span class="ec-n">CHANNEL</span>`+
         `<span class="ec-v">GOLFERS</span><span class="ec-p">SHARE</span><span></span>`+
         `<span class="ec-v">REVENUE</span><span class="ec-p">SHARE</span>`+
         `<span class="ec-v">AVG FEE</span></div>${rows}</div>`+
-    ecomRateMix();
+    ecomRateMix()+
+    ecBand(ECOM_COPY.callBand);
 }
 
 /* The reason the channel averages are so far apart: rate mix and lead time,
@@ -4618,10 +4700,14 @@ function ecomTee(){
   }).join("");
   const third=ECOM.pages.filter(x=>x.third);
   const t26=third.reduce((z,x)=>z+x.rev,0), t25=third.reduce((z,x)=>z+x.wasR,0);
-  return ecHead(ECOM_COPY.teeHead, ECOM_COPY.teeLead,
-      ecTile(ecNum(i.golfers.now),"Rounds booked &middot; "+ecChg(gc))+
-      ecTile(ecMoney(i.revenue.now),"Revenue &middot; "+ecChg(rc))+
-      ecTile("$"+i.avgFee.now.toFixed(2),"Average fee &middot; "+ecChg(ac)))+
+  return ecKpis([
+      ecKpi(ecNum(i.golfers.now),"Rounds booked online",ecChg(gc)+" on 2025"),
+      ecKpi(ecMoney(i.revenue.now),"Revenue",ecChg(rc)+" on 2025"),
+      ecKpi("$"+i.avgFee.now.toFixed(2),"Average fee",ecChg(ac)+" on 2025"),
+      ecKpi((i.revenue.now/p.revenue*100).toFixed(1)+"%","Of green-fee revenue",
+            (i.golfers.now/p.golfers*100).toFixed(1)+"% of golfers")
+    ])+
+    ecSay(ECOM_COPY.teeSay)+
     `<div class="wx-card"><h3 class="wx-h">Where the bookings came from</h3>`+
       `<p class="wx-sub">Revenue by booking page, against the same six months of 2025</p>`+
       `<div class="ec-crow ec-prow ec-chead"><span class="ec-n">BOOKING PAGE</span><span></span>`+
@@ -4646,7 +4732,8 @@ function ecomTee(){
         `<div><span class="ec-av">${a.clickRate.toFixed(2)}%</span><span class="ec-al">click rate &middot; hospitality average ${a.hospitalityRate}%</span></div>`+
         `<div><span class="ec-av">${ecNum(a.purchases)}</span><span class="ec-al">purchases</span></div>`+
         `<div><span class="ec-av">${ecMoney(a.value)}</span><span class="ec-al">purchase value</span></div>`+
-      `</div></div>`;
+      `</div></div>`+
+    ecBand(ECOM_COPY.teeBand);
 }
 
 /* ------------------------------------------------------------------ shell */
