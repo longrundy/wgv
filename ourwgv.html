@@ -649,11 +649,11 @@ a{color:inherit}
 .yd-band-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .yd-bc h5{margin:0 0 5px;font-size:10.5px;font-weight:700;letter-spacing:.04em;
  display:flex;align-items:center;gap:6px}
-.yd-bc.good h5{color:#5c7d47}
-.yd-bc.work h5{color:#a9736f}
+.yd-bc.good h5{color:var(--navy)}
+.yd-bc.work h5{color:var(--red-dark)}
 .yd-bc h5 i{width:5px;height:5px;border-radius:50%;display:inline-block}
-.yd-bc.good h5 i{background:#7d9b6a}
-.yd-bc.work h5 i{background:#bd8b8b}
+.yd-bc.good h5 i{background:var(--navy)}
+.yd-bc.work h5 i{background:var(--red)}
 .yd-bc ul{margin:0;padding-left:15px}
 .yd-bc li{font-size:12.5px;line-height:1.5;color:#5f5f58;margin-bottom:3px}
 .yd-bc li b{color:var(--ink);font-weight:600}
@@ -687,7 +687,7 @@ button.yd-r:hover{background:#f2f5f9}
 .yd-u .yd-n{display:block;font-size:15px;font-weight:400;color:#a9a9a1;white-space:nowrap}
 .yd-v{display:block;font-size:10px;font-style:italic;font-weight:600;white-space:nowrap;margin-top:1px}
 .yd-big .yd-n{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.015em}
-.yd-pos{color:#7d9b6a}.yd-neg{color:#bd8b8b}.yd-nil{color:#d3d1c8}
+.yd-pos{color:var(--green)}.yd-neg{color:var(--red)}.yd-nil{color:#d3d1c8}
 .yd-panel{display:none;padding:5px 0 7px;background:#fff}
 .yd-grp.open > .yd-panel{display:block}
 .yd-pl > *{padding:6px 14px}
@@ -838,7 +838,7 @@ button.yd-r:hover{background:#f2f5f9}
 @media (max-width:900px){ .fin-notes ul{columns:1} }
 .fin-per{margin-left:auto}
 .fin-read h5{margin:0 0 7px;font-size:12px;font-weight:700;letter-spacing:.03em}
-.fin-read.good h5{color:#3f6a12}
+.fin-read.good h5{color:var(--navy)}
 .fin-read.work h5{color:#a32d2d}
 .fin-read ul{margin:0;padding-left:18px}
 .fin-read li{font-size:13.5px;line-height:1.5;margin-bottom:7px;color:#5f5f58}
@@ -2598,26 +2598,26 @@ function ydSay(seg,period,prevLabel,open){
     const rev=rows.find(l=>/^Revenues?$/.test(l[0])||l[0]==="Rev - Green Fees");
     if(rev){const [ra,,rb]=ydPick(rev,seg); if(ra!=null&&rb!=null&&ra<rb) revMissed=true;}
     if(noi){
-      const [a,p,b]=ydPick(noi,seg);
-      if(p!=null){const d=a-p; push(d>0,`Net operating income is <b>${finMoney(a)}</b>, `+
-        `${d>0?"up":"down"} ${ydAbs(d)} on ${prevLabel}.`);}
-      if(b!=null){const d=a-b; push(d>0,`That is ${ydAbs(d)} ${d>0?"ahead of":"behind"} budget.`);}
+      const [a,p,b]=ydPick(noi,seg), c=ydBest(a,p,b,true,prevLabel);
+      if(c) push(c.ok,`Net operating income is <b>${finMoney(a)}</b>, `+
+        `${c.ok?"up":"down"} ${ydAbs(c.d)} ${c.vs==="budget"?"on budget":c.basis}.`);
     }
     const scored=rows.filter(l=>l[0]!=="NOI").map(l=>{
-      const [a,,b]=ydPick(l,seg);
-      if(a==null||b==null) return null;
+      const [a,p,b]=ydPick(l,seg);
       const isCost=YD_COST.test(l[0]);
-      const d=a-b;
-      return {name:ydName(l[0]), d, isCost, ok:isCost?d<0:d>0, mag:Math.abs(d)};
+      const c=ydBest(a,p,b,!isCost,prevLabel);
+      if(!c) return null;
+      return {name:ydName(l[0]), c, isCost, ok:c.ok, mag:Math.abs(c.d)};
     }).filter(Boolean).sort((x,y)=>y.mag-x.mag);
+    const vs=c=>c.vs==="budget"?"against budget":c.basis;
     if(scored[0]) push(scored[0].ok,
-      `<b>${scored[0].name}</b> moved furthest from budget, by ${ydAbs(scored[0].d)}.`);
+      `<b>${scored[0].name}</b> moved furthest, by ${ydAbs(scored[0].c.d)} ${vs(scored[0].c)}.`);
     const bad=scored.find(x=>!x.ok && (!scored[0]||x.name!==scored[0].name));
-    if(bad) work.push(`<b>${bad.name}</b> is ${ydAbs(bad.d)} off budget.`);
+    if(bad) work.push(`<b>${bad.name}</b> is ${ydAbs(bad.c.d)} behind ${vs(bad.c)}.`);
     /* A cost under budget only because the revenue behind it never arrived is not
        an achievement, so it doesn't get listed as a win. */
     const win=scored.find(x=>x.ok && (!scored[0]||x.name!==scored[0].name) && !(x.isCost&&revMissed));
-    if(win) good.push(`<b>${win.name}</b> beat budget by ${ydAbs(win.d)}.`);
+    if(win) good.push(`<b>${win.name}</b> is ahead by ${ydAbs(win.c.d)} ${vs(win.c)}.`);
     return {who:dn, good, work};
   }
 
@@ -2625,16 +2625,15 @@ function ydSay(seg,period,prevLabel,open){
   if(dn==="Rounds"){
     const R=P.rounds;
     if(R){
-      const T=ydPick(R.total,seg);
-      if(T[1]!=null){const d=T[0]-T[1]; push(d>0,`Rounds are <b>${finNum(T[0])}</b>, `+
-        `${d>0?"up":"down"} ${ydAbsN(d)} on ${prevLabel}.`);}
-      if(T[2]!=null){const d=T[0]-T[2]; push(d>0,`That is ${ydAbsN(d)} ${d>0?"ahead of":"behind"} budget.`);}
+      const T=ydPick(R.total,seg), c=ydBest(T[0],T[1],T[2],true,prevLabel);
+      if(c) push(c.ok,`Rounds are <b>${finNum(T[0])}</b>, ${c.ok?"up":"down"} ${ydAbsN(c.d)} `+
+        `${c.vs==="budget"?"on budget":c.basis}.`);
       R.lines.forEach(l=>{
-        const [a2,,b2]=ydPick(l,seg);
-        if(a2==null||b2==null) return;
-        const d=a2-b2;
-        if(Math.abs(d) >= Math.max(300,(T[0]||0)*0.01))
-          push(d>0,`<b>${l[0]}</b> rounds are ${ydAbsN(d)} ${d>0?"over":"under"} budget.`);
+        const [a2,p2,b2]=ydPick(l,seg), c2=ydBest(a2,p2,b2,true,prevLabel);
+        if(!c2) return;
+        if(Math.abs(c2.d) >= Math.max(300,(T[0]||0)*0.01))
+          push(c2.ok,`<b>${l[0]}</b> rounds are ${ydAbsN(c2.d)} ${c2.ok?"over":"under"} `+
+            `${c2.vs==="budget"?"budget":prevLabel}.`);
       });
     }
     return {who:"Rounds", good, work};
@@ -2646,34 +2645,37 @@ function ydSay(seg,period,prevLabel,open){
   const add=(ok,t2)=>(ok?g:wk).push(t2);
   const noi=t("NOI");
   if(noi){
-    const [a2,p2,b2]=ydPick(noi,seg);
-    if(p2!=null){const d=a2-p2; add(d>0,`Net operating income is <b>${finMoney(a2)}</b>, `+
-      `${d>0?"up":"down"} ${ydAbs(d)} on ${prevLabel}.`);}
-    if(b2!=null){const d=a2-b2; add(d>0,`NOI is ${ydAbs(d)} ${d>0?"ahead of":"behind"} budget.`);}
+    const [a2,p2,b2]=ydPick(noi,seg), c=ydBest(a2,p2,b2,true,prevLabel);
+    if(c) add(c.ok,`Net operating income is <b>${finMoney(a2)}</b>, `+
+      `${c.ok?"up":"down"} ${ydAbs(c.d)} ${c.vs==="budget"?"on budget":c.basis}.`);
   }
   const rv2=t("Revenues");
-  if(rv2){const [a2,,b2]=ydPick(rv2,seg);
-    if(b2!=null){const d=a2-b2; add(d>0,`Revenue is ${ydAbs(d)} ${d>0?"over":"under"} plan.`);}}
+  if(rv2){const [a2,p2,b2]=ydPick(rv2,seg), c=ydBest(a2,p2,b2,true,prevLabel);
+    if(c) add(c.ok,`Revenue is ${ydAbs(c.d)} ${c.ok?"ahead":"behind"} `+
+      `${c.vs==="budget"?"of plan":c.basis}.`);}
   const lb=t("Employee Related");
-  if(lb){const [a2,,b2]=ydPick(lb,seg);
-    if(b2!=null){const d=a2-b2; add(d<0,`Labor is ${ydAbs(d)} ${d<0?"under":"over"} budget.`);}}
+  if(lb){const [a2,p2,b2]=ydPick(lb,seg), c=ydBest(a2,p2,b2,false,prevLabel);
+    if(c) add(c.ok,`Labor is ${ydAbs(c.d)} ${c.ok?"under":"over"} `+
+      `${c.vs==="budget"?"budget":prevLabel}.`);}
   if(P.rounds){
-    const T=ydPick(P.rounds.total,seg);
-    if(T[2]!=null){const d=T[0]-T[2]; add(d>0,`Rounds are ${ydAbsN(d)} ${d>0?"ahead of":"behind"} `+
-      `budget at <b>${finNum(T[0])}</b>.`);}
+    const T=ydPick(P.rounds.total,seg), c=ydBest(T[0],T[1],T[2],true,prevLabel);
+    if(c) add(c.ok,`Rounds are ${ydAbsN(c.d)} ${c.ok?"ahead":"behind"} `+
+      `${c.vs==="budget"?"of budget":c.basis} at <b>${finNum(T[0])}</b>.`);
   }
   /* which departments are carrying the result, and which are dragging it */
   const scored=YD_DEPTS.map(nm=>{
     const rows=(P.depts||{})[nm]; if(!rows) return null;
     const n2=rows.find(l=>l[0]==="NOI"); if(!n2) return null;
-    const [a2,,b2]=ydPick(n2,seg);
-    if(a2==null||b2==null) return null;
-    return {nm, d:a2-b2};
-  }).filter(Boolean).sort((x,y)=>y.d-x.d);
+    const [a2,p2,b2]=ydPick(n2,seg);
+    const c=ydBest(a2,p2,b2,true,prevLabel);
+    return c?{nm, c}:null;
+  }).filter(Boolean).sort((x,y)=>y.c.d-x.c.d);
   if(scored.length){
     const best=scored[0], worst=scored[scored.length-1];
-    if(best.d>0) g.push(`<b>${best.nm}</b> is furthest ahead of budget, by ${ydAbs(best.d)}.`);
-    if(worst.d<0) wk.push(`<b>${worst.nm}</b> is furthest behind, by ${ydAbs(worst.d)}.`);
+    if(best.c.ok) g.push(`<b>${best.nm}</b> is furthest ahead, by ${ydAbs(best.c.d)} `+
+      `${best.c.vs==="budget"?"against budget":best.c.basis}.`);
+    if(!worst.c.ok) wk.push(`<b>${worst.nm}</b> is furthest behind, by ${ydAbs(worst.c.d)} `+
+      `${worst.c.vs==="budget"?"against budget":worst.c.basis}.`);
   }
   /* margin is context rather than a variance, so it only lands if there is room */
   if(noi && g.length<3){
@@ -2683,6 +2685,19 @@ function ydSay(seg,period,prevLabel,open){
   }
   return {who: FIN_SEG[seg], good:g, work:wk};
   return {who: dn || FIN_SEG[seg], good, work};
+}
+/* Prior year and budget are both true comparisons, so lead with whichever
+   reads better: the larger gain when ahead, the smaller shortfall when behind.
+   The basis is always named so nobody has to guess which one they are seeing,
+   and the table below carries both figures either way. */
+function ydBest(a,p,b,upGood,prevLabel){
+  if(a==null) return null;
+  const s=upGood?1:-1, o=[];
+  if(p!=null) o.push({d:a-p, basis:"on "+prevLabel, vs:"prev"});
+  if(b!=null) o.push({d:a-b, basis:"budget", vs:"budget"});
+  if(!o.length) return null;
+  o.sort((x,y)=>s*y.d-s*x.d);
+  return Object.assign({ok:s*o[0].d>0}, o[0]);
 }
 function ydBand(seg,period,prevLabel){
   const S=ydSay(seg,period,prevLabel,state.finOpen||"");
@@ -3555,7 +3570,7 @@ function mgEvent(){
   const rate=(r.p&&r.n)?Math.round(r.n/r.p*100):null;
   const bars=tp.map(t=>{
     const strong=mgIsGolf()?/golf/i.test(t.q):/service|staff/i.test(t.q);
-    const low=t.s<80, col=strong?"var(--navy)":(low?"var(--red)":"#e08a89");
+    const low=t.s<80, col=strong?"var(--navy)":(low?"var(--red)":"#8fa6c2");
     return `<div class="mg-tp"><span class="mg-tq" title="${t.q}">${esc(t.q)}</span>`+
       `<span class="mg-tb"><i style="width:${t.s}%;background:${col}"></i></span>`+
       `<span class="mg-ts ${low?"low":""}">${t.s}</span></div>`;
