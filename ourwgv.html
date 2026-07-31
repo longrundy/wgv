@@ -3607,15 +3607,18 @@ const MEMBER_TA_YEARS={"2026":{"n":3,"o":5.0,"subs":[["Food",5.0],["Service",5.0
    their pages against automated requests, so nothing here refreshes itself.
    Each source carries the date it was read and flags itself past PV_STALE days.
 
-   GolfPass is shown on its Last 6 months window — the figure that reflects the
-   course as it plays now rather than two decades of history. "tot" is the
-   lifetime review count, used only for the link text.
+   GolfPass and Google both show their All time figure, so the two read the same
+   way: one rating, one review count, no window to explain.
 
-   FIRST QUARTERLY CHECK: these GolfPass blocks came from a cached copy of the
-   page. Re-read the Last 6 months panel for both courses and correct them.
+   FIRST QUARTERLY CHECK: King & Bear's 4.1 / 445 came off the live page and is
+   sound, but its recommend percentage, distribution and sub-ratings came from a
+   cached copy taken when the count was 435 — which is why the five distribution
+   figures add to 435 rather than 445. Slammer & Squire's whole block is from the
+   same cached copy. Re-read both All time panels and correct them.
 --------------------------------------------------------------------------- */
 const PV_STALE=100;
-const PV={"asOf":"2026-07-30","stale":100,"prod":[{"id":"kb","name":"King & Bear","kind":"golf","src":[{"k":"gp","n":"GolfPass","d":"2026-07-30","win":"Last 6 months","u":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village","r":4.3,"c":23,"tot":445,"rec":83,"dist":[13,6,2,1,1],"subs":[["Layout",4.7],["Friendliness",4.7],["Conditions",4.4],["Amenities",4.2],["Pace",4.0],["Value",3.8]]},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg","r":4.3,"c":477}]},{"id":"ss","name":"Slammer & Squire","kind":"golf","src":[{"k":"gp","n":"GolfPass","d":"2026-07-30","win":"Last 6 months","u":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village","r":4.4,"c":27,"tot":461,"rec":85,"dist":[16,7,3,1,0],"subs":[["Layout",4.6],["Friendliness",4.4],["Conditions",4.2],["Amenities",4.2],["Pace",4.0],["Value",4.0]]},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I","r":4.1,"c":336}]},{"id":"aj","name":"AJ's Kitchen","kind":"dining","src":[{"k":"ta","n":"TableAgent","d":"2026-07-30","u":"https://tableagent.com/jacksonville/king-and-bear/","years":true,"r":4.68,"c":592},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8","r":4.3,"c":74}]},{"id":"lg","name":"Legends Grille","kind":"dining","src":[{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0","r":4.4,"c":119}]}]};
+const PV={"asOf":"2026-07-30","stale":100,"prod":[{"id":"kb","name":"King & Bear","kind":"golf","src":[{"k":"gp","n":"GolfPass","d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village","r":4.1,"c":445,"rec":71,"dist":[272,104,40,14,5],"subs":[["Layout",4.6],["Friendliness",4.4],["Conditions",4.1],["Amenities",4.1],["Pace",3.7],["Value",3.3]]},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg","r":4.3,"c":477}]},{"id":"ss","name":"Slammer & Squire","kind":"golf","src":[{"k":"gp","n":"GolfPass","d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village","r":4.0,"c":461,"rec":74,"dist":[247,146,41,20,7],"subs":[["Layout",4.6],["Friendliness",4.2],["Amenities",4.0],["Conditions",3.8],["Pace",3.8],["Value",3.4]]},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I","r":4.1,"c":336}]},{"id":"aj","name":"AJ's Kitchen","kind":"dining","src":[{"k":"ta","n":"TableAgent","d":"2026-07-30","u":"https://tableagent.com/jacksonville/king-and-bear/","years":true,"r":4.68,"c":592},{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8","r":4.3,"c":74}]},{"id":"lg","name":"Legends Grille","kind":"dining","src":[{"k":"gg","n":"Google","d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0","r":4.4,"c":119}]}]};
+
 
 const PV_KINDS=[["golf","Golf"],["dining","Dining"]];
 const pvKind=()=>PV_KINDS.some(k=>k[0]===state.pvKind)?state.pvKind:"golf";
@@ -3636,7 +3639,7 @@ function pvStars(r,cls){
 }
 /* Figures for the chosen source. TableAgent swaps by year; the rest are fixed. */
 function pvView(p,sr){
-  if(sr.win) return {r:sr.r,c:sr.c,rec:sr.rec,dist:sr.dist,subs:sr.subs,win:sr.win};
+  if(sr.dist) return {r:sr.r,c:sr.c,rec:sr.rec,dist:sr.dist,subs:sr.subs};
   if(sr.years){
     const y=(state.pvYear||{})[p.id];
     if(!y) return {r:sr.r,c:sr.c,
@@ -3654,7 +3657,7 @@ function pvPanel(p){
     const on=x.k===sr.k;
     return `<button type="button" class="pv-src${on?" is-on":""}" data-pvs="${p.id}|${x.k}" aria-pressed="${on}">`+
       `<span class="pv-sh"><b>${x.n}</b><em>${x.r.toFixed(x.r*10%1?2:1)}</em></span>`+
-      `<span class="pv-sm">${pvStars(x.r,"pv-star")}<i>${(x.win?x.c:x.c).toLocaleString()}</i></span></button>`;
+      `<span class="pv-sm">${pvStars(x.r,"pv-star")}<i>${x.c.toLocaleString()}</i></span></button>`;
   }).join("");
   const years=sr.years
     ? `<div class="pv-yrs">`+[["","All"]].concat(Object.keys(MEMBER_TA_YEARS).sort().reverse().map(y=>[y,y]))
@@ -3684,13 +3687,12 @@ function pvPanel(p){
       `<div class="pv-top"><div class="pv-big">`+
         `<div class="pv-bn">${v.r!=null?v.r.toFixed(v.r*10%1?2:1):"\u2014"}</div>`+
         `<div class="pv-bs">${v.r!=null?pvStars(v.r,"pv-star lg"):""}</div>`+
-        `<div class="pv-bc">${v.c!=null?v.c.toLocaleString()+" reviews":""}`+
-        `${v.win?`<em> &middot; ${v.win.toLowerCase()}</em>`:""}</div>`+
+        `<div class="pv-bc">${v.c!=null?v.c.toLocaleString()+" reviews":""}</div>`+
         (v.rec!=null?`<div class="pv-brec">${v.rec}% recommend</div>`:"")+
       `</div>`+(dist||`<div class="pv-nodist">${v.note||""}</div>`)+`</div>`+
       subs+
       `<div class="pv-foot"><a href="${sr.u}" target="_blank" rel="noopener">`+
-      `All ${(sr.tot||sr.c).toLocaleString()} on ${sr.n} <span aria-hidden="true">&#8599;</span></a>`+
+      `All ${sr.c.toLocaleString()} on ${sr.n} <span aria-hidden="true">&#8599;</span></a>`+
       `<span class="pv-when${stale?" stale":""}">${stale?"\u26a0 ":""}${pvWhen(sr.d)}</span></div>`+
     `</div>${revs}</div>`;
 }
