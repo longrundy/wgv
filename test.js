@@ -88,7 +88,7 @@ t('no CultureMonkey vocabulary reaches the screen', () => {
                   'Work Environment', 'Social Connection', 'Growth & Development', 'Rewards',
                   'FB Front of House', 'FB Back of House'];
   ['summary', 'detail'].forEach(sec => {
-    ['topics', 'teams', 'rec', 'wrote'].forEach(det => {
+    ['topics', 'teams', 'rec'].forEach(det => {
       state.empSec = sec; state.empDet = det; state.empDept = null;
       G('detailEmployee')(item);
       const txt = $('.detail-body').textContent;
@@ -103,10 +103,9 @@ t('prose counts still match the data', () => {
   ok(Math.abs(EMP_COPY.counts.payroll - payroll) <= 1, 'payroll prose vs implied');
 });
 
-t('deptNote and courseNote keys all resolve', () => {
-  const names = EMP.depts.map(d => d.n), ids = EMP.courses.map(c => c.id);
+t('deptNote keys all resolve to real teams', () => {
+  const names = EMP.depts.map(d => d.n);
   Object.keys(EMP_COPY.deptNote).forEach(k => ok(names.includes(k), 'orphan deptNote ' + k));
-  Object.keys(EMP_COPY.courseNote).forEach(k => ok(ids.includes(k), 'orphan courseNote ' + k));
 });
 
 // ------------------------------------------------- the correction that mattered
@@ -235,11 +234,11 @@ t('a thin team carries its caution inside the card', () => {
 });
 
 // ---------------------------------------------------------------- detail
-t('detail offers four sub-sections', () => {
+t('detail offers three sub-sections, no themes page', () => {
   state.empSec = 'detail'; G('detailEmployee')(item);
-  const subs = $$('[data-empdet]').map(b => b.dataset.empdet);
-  eq(subs.join(','), 'topics,teams,rec,wrote');
+  eq($$('[data-empdet]').map(b => b.dataset.empdet).join(','), 'topics,teams,rec');
   eq($$('[data-empdet][aria-pressed="true"]').length, 1);
+  ok(!html.includes('empWrote'), 'themes renderer removed');
 });
 
 t('all twelve topics render per course, highest score first', () => {
@@ -256,7 +255,7 @@ t('all twelve topics render per course, highest score first', () => {
 
 t('impact is shown as dots, never as a coefficient', () => {
   state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
-  const dots = $$('.emp-dots');
+  const dots = $$('.emp-trow .emp-dots');
   eq(dots.length, 24, 'one per topic per course');
   dots.forEach(d => ok(/^\u25cf{1,3}$/.test(d.textContent), 'dots only: ' + d.textContent));
   ok(!$('.detail-body').textContent.includes('0.99'), 'no raw coefficient on screen');
@@ -284,23 +283,60 @@ t('recommending shows both courses with the eleven-row spread', () => {
   cols.forEach(c => eq(c.querySelectorAll('.emp-drow').length, 11));
 });
 
-t('the +34 / +35 caveat appears only under Slammer & Squire', () => {
-  state.empSec = 'detail'; state.empDet = 'rec'; G('detailEmployee')(item);
-  const cols = $$('.emp-two > .emp-col');
-  eq(cols[0].querySelectorAll('.emp-note.flag').length, 0);
-  const f = cols[1].querySelector('.emp-note.flag');
-  ok(f, 'caveat present');
-  ['+34', '+35', 'heatmap export', 'location report'].forEach(x => has(f.textContent, x));
+t('no note points at a headline that is no longer rendered', () => {
+  // +34 was the old eNPS headline; it left the screen when the jargon did
+  ['summary', 'detail'].forEach(sec => {
+    ['topics', 'teams', 'rec'].forEach(det => {
+      state.empSec = sec; state.empDet = det; G('detailEmployee')(item);
+      ok(!$('.detail-body').textContent.includes('+34'), sec + '/' + det + ' still cites +34');
+    });
+  });
 });
 
-t('what people wrote reports King & Bear as missing, not blank', () => {
-  state.empSec = 'detail'; state.empDet = 'wrote'; G('detailEmployee')(item);
-  has($$('.emp-two > .emp-col')[0].textContent, 'Not available');
-  has($$('.emp-two > .emp-col')[1].textContent, 'What to keep doing');
+t('the recommending page is symmetrical across both courses', () => {
+  state.empSec = 'detail'; state.empDet = 'rec'; G('detailEmployee')(item);
+  const cols = $$('.emp-two > .emp-col');
+  eq(cols.length, 2);
+  const shape = c => [c.querySelectorAll('.emp-split').length, c.querySelectorAll('.emp-key').length,
+                      c.querySelectorAll('.emp-drow').length, c.querySelectorAll('.emp-note').length].join(',');
+  eq(shape(cols[0]), shape(cols[1]), 'both columns have the same elements');
+});
+
+t('the dot scale has a real legend, not just a sentence', () => {
+  state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
+  const key = $('.emp-dotkey');
+  ok(key, 'legend present');
+  eq(key.querySelectorAll('span').length, 3, 'one entry per dot count');
+  has(key.textContent, 'barely moves overall');
+  has(key.textContent, 'moves it a lot');
+  eq(key.querySelectorAll('i')[0].textContent.length, 1);
+  eq(key.querySelectorAll('i')[2].textContent.length, 3);
+});
+
+t('every team row carries a rating bar so the row is not mostly white space', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const rows = $$('.emp-srow:not(.emp-shead)');
+  eq(rows.length, EMP.depts.length);
+  rows.forEach(r => ok(r.querySelector('.emp-rbar'), 'bar present'));
+  ok($('.emp-rbar b'), 'property-average marker present');
+});
+
+t('content width is re-asserted against the is-wide override', () => {
+  has(html, '.detail-body.is-wide .emp-wide{max-width:');
+});
+
+t('the selected-row inset bar does not sit under the text', () => {
+  const i = html.indexOf('.emp-srow.is-on{');
+  has(html.slice(i, i + 120), 'padding-left', 'selected row pads past its inset bar');
+});
+
+t('summary content is grouped into panels', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  ok($$('.emp-panel').length >= 2, 'stats and teams both panelled');
 });
 
 t('paired panels keep two columns with a divider', () => {
-  has(html, '.emp-two>.emp-col:first-child{padding-right:24px;border-right:1px solid');
+  has(html, '.emp-two>.emp-col:first-child{padding-right:22px;border-right:1px solid');
 });
 
 // ---------------------------------------------------------------- scroll preservation
