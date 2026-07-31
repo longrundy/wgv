@@ -458,6 +458,78 @@ t('all five departments render as rows', () => {
   eq($$('.emp-dept:not(.emp-rhead)').length, EMP.depts.length);
 });
 
+// ---------------------------------------------------------------- rail mark
+t('the rail carries the animated webp mark', () => {
+  const img = $('.brand .brand-mark');
+  ok(img, 'brand-mark img present in the rail');
+  ok(/^data:image\/webp;base64,/.test(img.getAttribute('src')), 'rail mark is a webp data URI');
+  eq(img.getAttribute('alt'), 'World Golf Village', 'alt text kept');
+});
+
+t('the rail mark declares its intrinsic size so the rail does not jump', () => {
+  const img = $('.brand .brand-mark');
+  eq(img.getAttribute('width'), '188');
+  eq(img.getAttribute('height'), '225');
+});
+
+t('the rail mark is a real animated webp with an alpha channel', () => {
+  const b64 = $('.brand .brand-mark').getAttribute('src').split(',')[1];
+  const buf = Buffer.from(b64, 'base64');
+  eq(buf.slice(0, 4).toString('latin1'), 'RIFF', 'RIFF container');
+  eq(buf.slice(8, 12).toString('latin1'), 'WEBP', 'webp payload');
+  const head = buf.slice(0, 4096).toString('latin1');
+  ok(head.includes('VP8X'), 'extended format header');
+  ok(head.includes('ANIM'), 'animation chunk');
+  const frames = (buf.toString('latin1').match(/ANMF/g) || []).length;
+  ok(frames > 10, 'has multiple frames, got ' + frames);
+  // VP8X feature byte: bit 4 = alpha, bit 1 = animation
+  const flags = buf[buf.indexOf('VP8X', 0, 'latin1') + 8];
+  ok(flags & 0x10, 'alpha flag set');
+  ok(flags & 0x02, 'animation flag set');
+});
+
+t('the gate and mobile topbar keep the original still logo', () => {
+  const gate = $('.gate img'), bar = $('.topbar img');
+  ok(gate, 'gate logo present');
+  ok(/^data:image\/png;base64,/.test(gate.getAttribute('src')), 'gate logo untouched');
+  ok(bar, 'topbar logo present');
+  ok(/^data:image\/png;base64,/.test(bar.getAttribute('src')), 'topbar logo untouched');
+});
+
+t('exactly one of the three logo copies was replaced', () => {
+  // the file also holds an unrelated webp (the hours signpost photo), so count
+  // the logo images specifically rather than every webp data URI
+  const railSrc = $('.brand .brand-mark').getAttribute('src');
+  eq(html.split(railSrc).length - 1, 1, 'animated mark appears once');
+  const png = $('.gate img').getAttribute('src');
+  eq(html.split(png).length - 1, 2, 'still PNG logo remains on the gate and topbar only');
+});
+
+t('a still frame is served under prefers-reduced-motion', () => {
+  const i = html.indexOf('@media (prefers-reduced-motion:reduce)');
+  ok(i > -1, 'media query present');
+  const rule = html.slice(i, i + 400);
+  has(rule, '.brand-mark');
+  has(rule, 'content:url("data:image/webp;base64,');
+});
+
+t('the reduced-motion still is a static webp, not the animation again', () => {
+  const m = html.match(/prefers-reduced-motion:reduce\)\{\s*\.brand-mark\{content:url\("data:image\/webp;base64,([A-Za-z0-9+/=]+)"\)\}/);
+  ok(m, 'still frame extracted');
+  const buf = Buffer.from(m[1], 'base64');
+  eq(buf.slice(8, 12).toString('latin1'), 'WEBP', 'webp payload');
+  eq((buf.toString('latin1').match(/ANMF/g) || []).length, 0, 'still frame carries no animation frames');
+  const anim = Buffer.from($('.brand .brand-mark').getAttribute('src').split(',')[1], 'base64');
+  ok(buf.length < anim.length / 4, 'still is much smaller than the animation');
+});
+
+t('the rail mark sits inside the existing public-site link', () => {
+  const a = $('.brand .brand-link');
+  ok(a, 'link preserved');
+  has(a.getAttribute('href'), 'golfwgv.com');
+  ok(a.contains($('.brand-mark')), 'mark is inside the link');
+});
+
 // ---------------------------------------------------------------- report
 console.log('\n' + '-'.repeat(58));
 console.log('  passed ' + pass + '   failed ' + fail);
