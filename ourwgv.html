@@ -646,6 +646,10 @@ a{color:inherit}
 .ec-crow.ec-prow{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) 104px 56px}
 .ec-3p{font-style:normal;font-size:9.5px;color:#8a6a2a;background:#faf2e2;
   padding:1px 7px;border-radius:999px;margin-left:7px;white-space:nowrap}
+.ec-crow.ec-mrow{grid-template-columns:minmax(0,1.6fr) 66px minmax(0,.8fr) 54px minmax(0,.8fr) 62px 74px}
+.ec-sub{font-style:normal;font-size:10.5px;color:#b4b2a9;margin-left:7px;white-space:nowrap}
+.ec-why{margin-top:22px}
+.ec-why-read{margin-top:14px;padding-top:13px;border-top:1px solid #f2f0ea}
 .ec-body{margin:0 0 11px;font-size:13px;color:#3d3d3a;line-height:1.65}
 .ec-body.last{margin-bottom:0}
 .ec-body b{color:var(--ink);font-weight:600}
@@ -755,6 +759,8 @@ button.emp-srow:hover{background:#fafbfd}
   .ec-crow{grid-template-columns:minmax(0,1fr) 58px 78px;gap:0 8px}
   .ec-crow .ec-p,.ec-crow .ec-bar{display:none}
   .ec-crow.ec-prow{grid-template-columns:minmax(0,1fr) 84px 46px}
+  .ec-crow.ec-mrow{grid-template-columns:minmax(0,1fr) 52px 56px 66px}
+  .ec-crow.ec-mrow .ec-v:first-of-type{display:none}
   .ec-crow.ec-prow .ec-p{display:block}
   .ec-row{grid-template-columns:minmax(0,1fr) 60px 34px}
   .ec-row .ec-bar{display:none}
@@ -4454,13 +4460,31 @@ const ECOM={
   ],
 
   ads:{spend:1357, reach:22034, clickRate:3.95, hospitalityRate:2.8,
-       purchases:138, value:27698}
+       purchases:138, value:27698},
+
+  /* Why the channel averages differ. Read off the reservation-type rows under
+     each booking group in Rounds Report #15a.
+       full = share of that channel's rounds paying a guest rate rather than an
+              affiliate, employee, prepaid or complimentary rate
+       adv  = share booked four or more days ahead, which carries a higher rate
+              on the same card. null where the channel has no such split. */
+  rateMix:[
+    {n:"Troon Digital",        g:7252,  avg:143.51, full:100, adv:70},
+    {n:"Call center",          g:4297,  avg:127.64, full:98,  adv:48, on:true},
+    {n:"GolfNow",              g:2718,  avg:112.31, full:100, adv:null,
+       note:"a single wholesale rate"},
+    {n:"Walk-up and in-house", g:22932, avg:55.55,  full:57,  adv:4}
+  ],
+  advSpread:{early:145.29, late:116.25}
 };
 
 const ECOM_COPY={
   siteHead:"The website is growing on every measure, and growing fastest where it matters.",
   siteLead:"New users are up <b>24.8%</b> against the first half of 2025 while sessions are up <b>13.0%</b> \u2014 more people are finding us, rather than the same people visiting more often. Search brings roughly six of every ten visits.",
   callHead:"The call center books one golfer in ten and brings in one revenue dollar in six.",
+  mixWhyHead:"Why the averages differ",
+  mixWhyLead:"The four largest channels. Every one sells off the same rate card \u2014 what separates them is who they carry, and how far ahead those golfers book.",
+  mixWhyRead:"Booking four or more days ahead is worth about <b>$29</b> a round \u2014 $145.29 against $116.25 on the call center's own rates. Troon Digital carries the highest average because <b>70%</b> of its rounds are booked that far out. Walk-up and in-house carries the lowest because <b>43%</b> of its play is affiliate member, employee or complimentary, which is where that play is meant to sit.",
   callLead:"At <b>$127.64</b> a round it earns 63% more per golfer than the property average and a third more than an online booking. It is the smallest channel by volume and the most valuable per head.",
   teeHead:"Online tee times grew on both counts \u2014 more rounds, and more money per round.",
   teeLead:"<b>17,391</b> rounds booked online, up 10.5% on the first half of 2025, worth <b>$1.67m</b>, up 19.2%. That is 38.5% of everyone who played and 47.3% of green-fee revenue \u2014 close to half the money from under two golfers in five.",
@@ -4551,7 +4575,30 @@ function ecomCall(){
       `<div class="ec-crow ec-chead"><span class="ec-n">CHANNEL</span>`+
         `<span class="ec-v">GOLFERS</span><span class="ec-p">SHARE</span><span></span>`+
         `<span class="ec-v">REVENUE</span><span class="ec-p">SHARE</span>`+
-        `<span class="ec-v">AVG FEE</span></div>${rows}</div>`;
+        `<span class="ec-v">AVG FEE</span></div>${rows}</div>`+
+    ecomRateMix();
+}
+
+/* The reason the channel averages are so far apart: rate mix and lead time,
+   not one channel charging more than another. */
+function ecomRateMix(){
+  const rows=ECOM.rateMix.map(x=>
+    `<div class="ec-crow ec-mrow${x.on?" is-on":""}">`+
+      `<span class="ec-n">${esc(x.n)}`+
+        `${x.note?` <em class="ec-sub">${esc(x.note)}</em>`:""}</span>`+
+      `<span class="ec-v">${ecNum(x.g)}</span>`+
+      `<span class="ec-bar"><i style="width:${x.full}%"></i></span>`+
+      `<span class="ec-v">${x.full}%</span>`+
+      `<span class="ec-bar"><i style="width:${x.adv===null?0:x.adv}%;background:var(--green)"></i></span>`+
+      `<span class="ec-v">${x.adv===null?"\u2014":x.adv+"%"}</span>`+
+      `<span class="ec-v">$${x.avg.toFixed(2)}</span></div>`).join("");
+  return `<div class="wx-card ec-why"><h3 class="wx-h">${esc(ECOM_COPY.mixWhyHead)}</h3>`+
+    `<p class="wx-sub">${esc(ECOM_COPY.mixWhyLead)}</p>`+
+    `<div class="ec-crow ec-mrow ec-chead"><span class="ec-n">CHANNEL</span>`+
+      `<span class="ec-v">GOLFERS</span><span></span><span class="ec-v">FULL RATE</span>`+
+      `<span></span><span class="ec-v">4+ DAYS OUT</span>`+
+      `<span class="ec-v">AVG FEE</span></div>${rows}`+
+    `<p class="ec-body last ec-why-read">${ECOM_COPY.mixWhyRead}</p></div>`;
 }
 
 /* -------------------------------------------------------- online tee times */
