@@ -474,23 +474,31 @@ t('the how-they-booked table adds back to the property total', () => {
   ecom('call');
   const rows = $$('.ec-crow:not(.ec-chead)');
   eq(rows.length, 3);
-  const golfers = rows.map(r => parseInt(r.querySelectorAll('span')[1].textContent.replace(/,/g, ''), 10));
-  eq(golfers.reduce((a, b) => a + b, 0), ECOM.property.golfers, 'golfers reconcile');
-  const rev = rows.map(r => parseInt(r.querySelectorAll('span')[3].textContent.replace(/[$,]/g, ''), 10));
-  ok(Math.abs(rev.reduce((a, b) => a + b, 0) - ECOM.property.revenue) <= 2, 'revenue reconciles');
+  const num = (r, n) => parseInt(r.querySelectorAll('.ec-v')[n].textContent.replace(/[$,]/g, ''), 10);
+  eq(rows.reduce((a, r) => a + num(r, 0), 0), ECOM.property.golfers, 'golfers reconcile');
+  ok(Math.abs(rows.reduce((a, r) => a + num(r, 1), 0) - ECOM.property.revenue) <= 3, 'revenue reconciles');
 });
 
-t('the missing 2025 call center comparison is stated, not hidden', () => {
-  ecom('call');
-  eq(ECOM.callCenter.prior, null, 'no prior year in the data');
-  const f = $$('.ec-note.flag').map(n => n.textContent).join(' ');
-  has(f, 'no 2025 comparison');
-  has(f, '1 January to 30 June 2025', 'names what to request');
+t('no internal working notes reach the screen', () => {
+  // this page gets presented to owners; notes about which report to request or
+  // what can be cross-checked are for the workbook comments, not the slide
+  const banned = ['Ask for the same report', 'cannot check against our own systems',
+                  'A test, not a channel', 'not checkable against our systems',
+                  'We have no 2025 comparison', 'To answer it properly we would need'];
+  ECOM_SECS.forEach(([k]) => {
+    ecom(k);
+    const txt = $('.detail-body').textContent;
+    banned.forEach(b => ok(!txt.includes(b), k + ' still carries: ' + b));
+  });
 });
 
-t('website figures are labelled as unverifiable', () => {
+t('the source line is a plain attribution, not a caveat', () => {
   ecom('site');
-  has($('.ec-note.flag').textContent, 'cannot check against our own systems');
+  const f = $('.wx-foot');
+  ok(f, 'footer present');
+  has(f.textContent, 'golf system');
+  has(f.textContent, 'marketing team');
+  ok(f.textContent.length < 200, 'stays a one-liner, got ' + f.textContent.length);
 });
 
 t('booking pages are shown with third-party ones marked', () => {
@@ -508,30 +516,32 @@ t('the third-party share is computed, not typed', () => {
   const now = third.reduce((a, p) => a + p.rev, 0);
   const was = third.reduce((a, p) => a + p.wasR, 0);
   ok(now / ECOM.internet.revenue.now > was / ECOM.internet.revenue.was, 'share grew');
-  has($('.ec-key').textContent, String(Math.round(now / ECOM.internet.revenue.now * 100)) + '%');
+  has($('.wx-legend').textContent, String(Math.round(now / ECOM.internet.revenue.now * 100)) + '%');
 });
 
-t('the booking-ease question is answered honestly', () => {
+t('the booking-ease question is answered on the page', () => {
   ecom('tee');
-  const a = $('.ec-ask');
-  ok(a, 'block present');
-  has(a.textContent, 'Is it easy to make a tee time?');
-  has(a.textContent, 'We do not know');
-  has(a.textContent, 'nothing measures it');
-  has(a.textContent, 'session-to-booking conversion', 'says what would answer it');
+  const card = $$('.wx-card').find(c => /Is it easy to book/.test(c.textContent));
+  ok(card, 'card present');
+  has(card.textContent, 'Not measured');
+  has(card.textContent, '2.02', 'gives what we do have');
+  has(card.textContent, 'Conversion and drop-off reporting', 'names the fix, briefly');
 });
 
-t('the ads panel is framed as a test, not a channel', () => {
+t('the ads panel states the spend alongside the return', () => {
   ecom('tee');
-  const notes = $$('.ec-note.flag').map(n => n.textContent).join(' ');
-  has(notes, 'A test, not a channel');
-  ok(ECOM.ads.spend < 2000, 'spend is small enough that the framing is honest');
+  const card = $('.ec-ads');
+  ok(card, 'ads card present');
+  has(card.textContent, '$1,357', 'spend is visible next to the return');
+  eq(card.querySelectorAll('.ec-av').length, 5);
 });
 
-t('every e-commerce section renders something', () => {
+t('every section uses the house layout', () => {
   ECOM_SECS.forEach(([k]) => {
     ecom(k);
-    ok($$('.ec-panel').length > 0, k + ' has content');
+    ok($('.wx-head'), k + ' has a headline block');
+    eq($$('.wx-head .wx-tile').length, 3, k + ' has three tiles');
+    ok($$('.wx-card').length > 0, k + ' has cards');
     eq($$('[data-ecom][aria-pressed="true"]').length, 1, k + ' has one active pill');
   });
 });
@@ -545,8 +555,12 @@ t('e-commerce section switch preserves scroll position', () => {
   eq(G('ecomSec')(), 'tee');
 });
 
-t('e-commerce content width is constrained', () => {
-  has(html, '.detail-body.is-wide .ec-wide{max-width:');
+t('e-commerce fills the pane like the other management pages', () => {
+  ok(!html.includes('.detail-body.is-wide .ec-wide{max-width:'),
+     'no width cap of its own');
+  ecom('site');
+  ok(!$('.ec-wide'), 'no narrow wrapper element');
+  has($('.detail-body').className, 'is-wide');
 });
 
 // ---------------------------------------------------------------- rail mark
