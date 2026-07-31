@@ -416,6 +416,112 @@ t('all five teams render as rows', () => {
   eq($$('.emp-srow:not(.emp-shead)').length, EMP.depts.length);
 });
 
+// ---------------------------------------------------------------- e-commerce
+const ECOM = G('ECOM'), ECOM_SECS = G('ECOM_SECS');
+const ecomItem = { t: 'E-commerce', ecom: true };
+function ecom(sec) { state.ecomSec = sec; G('detailEcom')(ecomItem); return $('#detail').innerHTML; }
+
+t('E-commerce sits in the Management section', () => {
+  const items = G('S').management.items.map(x => x.t);
+  ok(items.includes('E-commerce'), 'nav item present, got ' + items.join(','));
+  ok(G('ecomItem')().ecom, 'factory flags the item');
+});
+
+t('the three sections match the agenda', () => {
+  ecom('site');
+  eq(ECOM_SECS.map(x => x[0]).join(','), 'site,call,tee');
+  eq($$('[data-ecom]').map(b => b.textContent).join(' | '),
+     'The website | Call center | Online tee times');
+});
+
+t('rounds figures reconcile against the property total', () => {
+  const p = ECOM.property, c = ECOM.callCenter, i = ECOM.internet;
+  ok(c.golfers + i.golfers.now < p.golfers, 'channels fit inside the total');
+  eq(Math.round(i.golfers.now / p.golfers * 1000) / 10, 38.5, 'internet share of golfers');
+  eq(Math.round(i.revenue.now / p.revenue * 1000) / 10, 47.3, 'internet share of revenue');
+  eq(Math.round(i.revenue.now / i.golfers.now * 100) / 100, i.avgFee.now, 'internet avg fee');
+  eq(Math.round(c.revenue / c.golfers * 100) / 100, c.avgFee, 'call center avg fee');
+});
+
+t('the how-they-booked table adds back to the property total', () => {
+  ecom('call');
+  const rows = $$('.ec-crow:not(.ec-chead)');
+  eq(rows.length, 3);
+  const golfers = rows.map(r => parseInt(r.querySelectorAll('span')[1].textContent.replace(/,/g, ''), 10));
+  eq(golfers.reduce((a, b) => a + b, 0), ECOM.property.golfers, 'golfers reconcile');
+  const rev = rows.map(r => parseInt(r.querySelectorAll('span')[3].textContent.replace(/[$,]/g, ''), 10));
+  ok(Math.abs(rev.reduce((a, b) => a + b, 0) - ECOM.property.revenue) <= 2, 'revenue reconciles');
+});
+
+t('the missing 2025 call center comparison is stated, not hidden', () => {
+  ecom('call');
+  eq(ECOM.callCenter.prior, null, 'no prior year in the data');
+  const f = $$('.ec-note.flag').map(n => n.textContent).join(' ');
+  has(f, 'no 2025 comparison');
+  has(f, '1 January to 30 June 2025', 'names what to request');
+});
+
+t('website figures are labelled as unverifiable', () => {
+  ecom('site');
+  has($('.ec-note.flag').textContent, 'cannot check against our own systems');
+});
+
+t('booking pages are shown with third-party ones marked', () => {
+  ecom('tee');
+  const rows = $$('.ec-prow:not(.ec-chead)');
+  eq(rows.length, ECOM.pages.length);
+  const marked = rows.filter(r => r.querySelector('.ec-3p')).length;
+  eq(marked, ECOM.pages.filter(p => p.third).length, 'third-party count');
+  has($('.ec-prow:not(.ec-chead)').textContent, 'Troon Digital', 'largest first');
+});
+
+t('the third-party share is computed, not typed', () => {
+  ecom('tee');
+  const third = ECOM.pages.filter(p => p.third);
+  const now = third.reduce((a, p) => a + p.rev, 0);
+  const was = third.reduce((a, p) => a + p.wasR, 0);
+  ok(now / ECOM.internet.revenue.now > was / ECOM.internet.revenue.was, 'share grew');
+  has($('.ec-key').textContent, String(Math.round(now / ECOM.internet.revenue.now * 100)) + '%');
+});
+
+t('the booking-ease question is answered honestly', () => {
+  ecom('tee');
+  const a = $('.ec-ask');
+  ok(a, 'block present');
+  has(a.textContent, 'Is it easy to make a tee time?');
+  has(a.textContent, 'We do not know');
+  has(a.textContent, 'nothing measures it');
+  has(a.textContent, 'session-to-booking conversion', 'says what would answer it');
+});
+
+t('the ads panel is framed as a test, not a channel', () => {
+  ecom('tee');
+  const notes = $$('.ec-note.flag').map(n => n.textContent).join(' ');
+  has(notes, 'A test, not a channel');
+  ok(ECOM.ads.spend < 2000, 'spend is small enough that the framing is honest');
+});
+
+t('every e-commerce section renders something', () => {
+  ECOM_SECS.forEach(([k]) => {
+    ecom(k);
+    ok($$('.ec-panel').length > 0, k + ' has content');
+    eq($$('[data-ecom][aria-pressed="true"]').length, 1, k + ' has one active pill');
+  });
+});
+
+t('e-commerce section switch preserves scroll position', () => {
+  ecom('site');
+  const pane = $('#detail'), read = instrument(pane);
+  pane.scrollTop = 275;
+  $$('[data-ecom]').find(b => b.dataset.ecom === 'tee').click();
+  eq(read(), 275, 'scroll restored');
+  eq(G('ecomSec')(), 'tee');
+});
+
+t('e-commerce content width is constrained', () => {
+  has(html, '.detail-body.is-wide .ec-wide{max-width:');
+});
+
 // ---------------------------------------------------------------- rail mark
 t('the rail carries the animated webp mark', () => {
   const img = $('.brand .brand-mark');

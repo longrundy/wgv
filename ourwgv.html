@@ -615,6 +615,62 @@ a{color:inherit}
 .emp-none{font-size:12.5px;color:#5f5e5a;line-height:1.55;border:1px dashed #dfe3e9;
  border-radius:10px;background:#fcfcfd;padding:12px 14px;margin:12px 0 0}
 .emp-none b{color:var(--ink)}
+/* ---- E-commerce ---- */
+.detail-body.is-wide .ec-wide{max-width:900px}
+.ec-meta{font-size:11.5px;color:#b4b2a9;margin:0 0 12px}
+.ec-secs{margin-bottom:16px}
+.ec-lead{font-size:13.5px;color:#5f5e5a;line-height:1.65;margin:0 0 14px}
+.ec-hh{font-size:10.5px;letter-spacing:.08em;color:#8a8a84;font-weight:700;
+  text-transform:uppercase;margin:22px 0 7px}
+.ec-panel{border:1px solid #e5e2da;border-radius:12px;background:#fff;padding:16px 18px;margin-bottom:12px}
+.ec-two{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.ec-two>.ec-col:first-child{padding-right:22px;border-right:1px solid #e5e2da}
+.ec-three{display:grid;grid-template-columns:repeat(3,1fr);gap:0 20px}
+.ec-three>.ec-stat{padding-right:20px;border-right:1px solid #e5e2da}
+.ec-three>.ec-stat:last-child{border-right:0;padding-right:0}
+.ec-sl{font-size:10px;letter-spacing:.07em;color:#8a8a84;font-weight:700;
+  text-transform:uppercase;margin:0 0 5px}
+.ec-sv{margin:0;font-size:26px;font-weight:700;color:var(--ink);line-height:1.1}
+.ec-ss{margin:5px 0 0;font-size:11.5px;color:#8a8a84;line-height:1.45}
+.ec-chg{font-style:normal;font-weight:700}
+.ec-chg.up{color:var(--green)} .ec-chg.down{color:var(--red-dark)}
+.ec-h{font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 9px}
+.ec-brow{display:grid;grid-template-columns:minmax(0,1fr) 70px 54px 34px;gap:0 9px;
+  align-items:center;padding:6px 0;font-size:11.5px;color:#3d3d3a}
+.ec-bar{display:block;height:7px;background:#f2f0ea;border-radius:4px;overflow:hidden}
+.ec-bar i{display:block;height:100%;background:var(--navy);border-radius:4px}
+.ec-bv{text-align:right;font-size:12px;font-weight:700;color:var(--ink)}
+.ec-bp{text-align:right;font-size:11px;color:#8a8a84}
+.ec-bp.up{color:var(--green);font-weight:700} .ec-bp.down{color:var(--red-dark);font-weight:700}
+.ec-mrow{display:grid;grid-template-columns:20px minmax(0,1fr) 62px;gap:0 9px;align-items:center;
+  padding:6px 0;font-size:11.5px;color:#3d3d3a;border-bottom:1px solid #f7f6f2}
+.ec-mrow:last-child{border-bottom:0}
+.ec-mi{color:#b4b2a9;font-size:10.5px}
+.ec-crow{display:grid;grid-template-columns:minmax(0,1fr) 62px 48px 86px 48px 66px;gap:0 10px;
+  align-items:center;padding:10px 0;font-size:12px;color:#3d3d3a;border-bottom:1px solid #f7f6f2}
+.ec-crow:last-child{border-bottom:0}
+.ec-crow.ec-chead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;
+  border-bottom-color:#e5e2da;padding:0 0 7px}
+.ec-crow.is-on{background:#f2f6fb;box-shadow:inset 3px 0 0 var(--navy);padding-left:10px;border-radius:6px}
+.ec-prow{display:grid;grid-template-columns:minmax(0,1fr) 130px 92px 52px;gap:0 12px;
+  align-items:center;padding:9px 0;font-size:12px;color:#3d3d3a;border-bottom:1px solid #f7f6f2}
+.ec-prow:last-child{border-bottom:0}
+.ec-prow.ec-chead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;
+  border-bottom-color:#e5e2da;padding:0 0 7px}
+.ec-3p{font-style:normal;font-size:9.5px;color:#8a6a2a;background:#faf2e2;
+  padding:1px 6px;border-radius:999px;margin-left:6px}
+.ec-key{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px;padding-top:10px;
+  border-top:1px solid #f2f0ea}
+.ec-key span{display:flex;align-items:center;gap:6px;font-size:11px;color:#8a8a84}
+.ec-key i{width:9px;height:9px;border-radius:2px;display:block;flex:none}
+.ec-ask{border-color:#dfe3e9;background:#fcfcfd}
+.ec-ap{margin:0 0 10px;font-size:13px;color:#3d3d3a;line-height:1.65}
+.ec-an{margin:0;font-size:11.5px;color:#6f7885;line-height:1.55;padding-left:11px;
+  border-left:2px solid #e5e2da}
+.ec-note{font-size:11.5px;color:#6f7885;line-height:1.6;margin:0 0 12px;
+  padding-left:11px;border-left:2px solid #e5e2da}
+.ec-note.flag{border-left-color:var(--amber);background:#faf2e2;padding:10px 12px;
+  border-radius:0 8px 8px 0}
 /* ---- plain-language employee feedback ---- */
 /* .detail-body.is-wide > * kills max-width by specificity, so re-assert it
    here. Without this the team rows stretch the full pane and the name and
@@ -713,6 +769,12 @@ button.emp-srow:hover{background:#fafbfd}
   .emp-grid{grid-template-columns:1fr;gap:20px}
   .emp-grid>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
+  .ec-two,.ec-three{grid-template-columns:1fr;gap:16px}
+  .ec-two>.ec-col:first-child,.ec-three>.ec-stat{padding-right:0;border-right:0}
+  .ec-crow{grid-template-columns:minmax(0,1fr) 62px 66px}
+  .ec-crow .ec-bp{display:none}
+  .ec-prow{grid-template-columns:minmax(0,1fr) 80px 46px}
+  .ec-prow .ec-bar{display:none}
   .emp-two{grid-template-columns:1fr;gap:20px}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
@@ -1567,7 +1629,7 @@ recognition:{title:"Recognition", sub:"Team news and milestones", items:[
 
 resources:{title:"Resources", sub:"Handbooks, benefits, and helpful info", items:[handbookItem(), parkingItem()].concat(troonItems())},
 
-management:{title:"Management", sub:"Management only", items:[surveysItem(), histWeatherItem(), financialsItem(), membershipsItem()]},
+management:{title:"Management", sub:"Management only", items:[surveysItem(), histWeatherItem(), financialsItem(), ecomItem(), membershipsItem()]},
 
 requests:{title:"Requests / Forms", sub:"Pick a form to fill out", items:[
   {t:"Time off", m:"Request time off — goes to your supervisor.", s:"Form", c:"f-flat", a:"", d:{sub:"Request time off — goes to your supervisor.", url:"https://docs.google.com/forms/d/e/1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ/viewform"}},
@@ -1980,6 +2042,7 @@ function detail(i){
   if(i.langDocs){ detailLangDocs(i); return; }
   if(i.memb){ detailMemberships(i); return; }
   if(i.fin){ detailFinancials(i); return; }
+  if(i.ecom){ detailEcom(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
   if(i.surveys){
     if(svAud()==="member"){ detailMemberGolf(i); return; }
@@ -4337,6 +4400,233 @@ function detailEmployee(i){
     hold(()=>{ state.empDet=b.dataset.empdet; })));
   el("#detail").querySelectorAll("[data-empd]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.empDept=state.empDept===b.dataset.empd?null:b.dataset.empd; })));
+}
+
+/* ---------------------------------------------------------------------------
+   E-COMMERCE — website, call center and online tee times, 1H 2026
+
+   Three sources, and they are not equally solid. Keep them apart:
+
+   1. ROUNDS   — the golf system's own reports (Rounds Report #15a and the
+      Internet Rounds Report, both courses plus both 10th-tee sheets,
+      1 Jan to 30 Jun). Every figure under channels{}, callCenter{},
+      internet{} and pages{} was read straight off those exports and
+      reconciles: internet golfers / property golfers = 38.5%, internet
+      revenue / property revenue = 47.3%.
+
+   2. SITE     — Google Analytics, supplied by the marketing manager as a
+      finished graphic. NOT verifiable from anything we hold. Flagged as
+      such on the page, because a number nobody can check should say so.
+
+   3. ADS      — Meta ads manager, same caveat as SITE, and on $1,357 of
+      spend it is a test rather than a channel.
+
+   WHAT IS MISSING, and stated on the page rather than quietly omitted:
+     - no 2025 call center comparison. The all-rounds report we hold covers
+       2026 only. Request the same report for 1 Jan - 30 Jun 2025 and the
+       growth line can be filled in.
+     - nothing measures whether booking a tee time is actually easy. There
+       is no funnel, no abandonment rate, no session-to-booking conversion.
+
+   UPDATE THIS at the next reporting period. Nothing here self-refreshes.
+--------------------------------------------------------------------------- */
+const ECOM={
+  period:"1 January to 30 June 2026",
+  prior:"the same six months of 2025",
+
+  /* Google Analytics, from the marketing manager. Not verifiable here. */
+  site:{
+    sessions:122000, sessionsChg:13.0,
+    active:79000,    activeChg:24.8,
+    newUsers:76000,  newChg:24.2,
+    channels:[["Organic search",75630],["Direct",28586],["Unassigned",8203],
+              ["Referral",7954],["Other",838]],
+    markets:[["Florida",24188],["Georgia",6728],["New York",6081],
+             ["Virginia",4314],["North Carolina",4118]]
+  },
+
+  /* Rounds Report #15a, both courses, 1H 2026. */
+  property:{golfers:45167, revenue:3528268, avgFee:78.12},
+
+  callCenter:{golfers:4297, revenue:548456, avgFee:127.64, prior:null},
+
+  /* Internet Rounds Report, 1H 2026 against 1H 2025. */
+  internet:{
+    golfers:{now:17391, was:15741},
+    revenue:{now:1669661, was:1401164},
+    avgFee:{now:96.01, was:89.01},
+    confirms:{now:8608, was:7933}
+  },
+
+  /* Booking page, by revenue. was = same page, 1H 2025. */
+  pages:[
+    {n:"Troon Digital",            golfers:7252, rev:1040751, wasG:5548, wasR:737542, third:false},
+    {n:"GolfNow",                  golfers:2718, rev:305264,  wasG:1191, wasR:113034, third:true},
+    {n:"WGV full affiliate member",golfers:4053, rev:125269,  wasG:3783, wasR:118764, third:false},
+    {n:"WGV wholesaler",           golfers:776,  rev:107054,  wasG:929,  wasR:133659, third:false},
+    {n:"WGV best available",       golfers:228,  rev:32914,   wasG:1766, wasR:248708, third:false},
+    {n:"Troon Advantage GNBE",     golfers:149,  rev:16488,   wasG:105,  wasR:11361,  third:true},
+    {n:"Access Premium",           golfers:104,  rev:11881,   wasG:58,   wasR:6267,   third:false}
+  ],
+
+  ads:{spend:1357, reach:22034, clickRate:3.95, hospitalityRate:2.8,
+       purchases:138, value:27698}
+};
+
+const ECOM_COPY={
+  siteSrc:"Google Analytics, supplied by the marketing team. These are the only figures on this page we cannot check against our own systems.",
+  siteRead:"Search brings in roughly six of every ten visits, and new users grew faster than sessions \u2014 more people are finding us, not the same people coming back more often.",
+  callLead:"The call center is small in volume and worth a lot more per golfer than anything else except Troon Digital.",
+  callGap:"We have no 2025 comparison for the call center. The all-rounds report we hold covers 2026 only, so there is nothing here to say whether it is growing. Ask for the same report for 1 January to 30 June 2025 and this line can be answered properly.",
+  teeLead:"Online tee times are growing on both counts \u2014 more rounds and more money per round.",
+  mixLead:"Where those bookings came from matters as much as how many there were.",
+  mixRead:"GolfNow went from 8% of internet revenue to 18%. Its rounds average $112.31 against Troon Digital's $143.51 \u2014 about $31 less per golfer, or roughly $85,000 across the 2,718 golfers it brought. The growth is real; a rising share of it is coming through our least valuable digital channel.",
+  bestAvail:"WGV best available fell 87%, almost certainly because it was folded into Troon Digital, which would explain that channel's 41% rise. Worth confirming rather than assuming.",
+  easeTitle:"Is it easy to make a tee time?",
+  ease:"We do not know, because nothing measures it. There is no funnel, no abandonment rate, and no session-to-booking conversion for the tee-time engine. The only related figures we hold are that 8,608 bookings produced 17,391 golfers \u2014 2.02 per booking, up from 1.98 \u2014 and neither tells you whether the process is easy.",
+  easeNext:"To answer it properly we would need session-to-booking conversion out of the tee-time engine, and a record of where people drop out.",
+  adsNote:"A test, not a channel. The return looks extraordinary because the spend is tiny \u2014 $1,357 over six months. Treat it as evidence the channel is worth trying at scale, not as a result."
+};
+
+const ECOM_SECS=[["site","The website"],["call","Call center"],["tee","Online tee times"]];
+const ecomSec=()=>ECOM_SECS.some(x=>x[0]===state.ecomSec)?state.ecomSec:"site";
+/* a declaration, not a const arrow: the nav structure is built before this
+   point in the file and const bindings are not hoisted */
+function ecomItem(){ return {t:"E-commerce", m:"", s:"", c:"f-flat", a:"", ecom:true}; }
+
+const ecMoney=n=>"$"+Math.round(n).toLocaleString();
+const ecNum=n=>Math.round(n).toLocaleString();
+const ecPc=(a,b)=>((a/b-1)*100);
+const ecChg=v=>`<em class="ec-chg ${v>=0?"up":"down"}">${v>=0?"+":"\u2212"}${Math.abs(v).toFixed(0)}%</em>`;
+
+function ecStat(label,value,sub){
+  return `<div class="ec-stat"><p class="ec-sl">${label}</p>`+
+    `<p class="ec-sv">${value}</p><p class="ec-ss">${sub}</p></div>`;
+}
+
+/* ------------------------------------------------------------- the website */
+function ecomSite(){
+  const s=ECOM.site, tot=s.channels.reduce((a,c)=>a+c[1],0);
+  const rows=s.channels.map(([n,v])=>
+    `<div class="ec-brow"><span>${esc(n)}</span>`+
+    `<span class="ec-bar"><i style="width:${(v/s.channels[0][1]*100).toFixed(0)}%"></i></span>`+
+    `<span class="ec-bv">${ecNum(v)}</span><span class="ec-bp">${(v/tot*100).toFixed(0)}%</span></div>`).join("");
+  const mk=s.markets.map(([n,v],i)=>
+    `<div class="ec-mrow"><span class="ec-mi">${i+1}</span><span>${esc(n)}</span>`+
+    `<span class="ec-bv">${ecNum(v)}</span></div>`).join("");
+  return `<div class="ec-panel ec-three">`+
+      ecStat("Sessions",ecNum(s.sessions),`${ecChg(s.sessionsChg)} on ${ECOM.prior}`)+
+      ecStat("Active users",ecNum(s.active),`${ecChg(s.activeChg)} on ${ECOM.prior}`)+
+      ecStat("New users",ecNum(s.newUsers),`${ecChg(s.newChg)} on ${ECOM.prior}`)+
+    `</div>`+
+    `<p class="ec-note">${ECOM_COPY.siteRead}</p>`+
+    `<div class="ec-panel ec-two">`+
+      `<div class="ec-col"><p class="ec-h">Where the traffic comes from</p>${rows}</div>`+
+      `<div class="ec-col"><p class="ec-h">Top five states by users</p>${mk}</div>`+
+    `</div>`+
+    `<p class="ec-note flag">${ECOM_COPY.siteSrc}</p>`;
+}
+
+/* ------------------------------------------------------------ call center */
+function ecomCall(){
+  const c=ECOM.callCenter, p=ECOM.property, i=ECOM.internet;
+  const rows=[["Call center",c.golfers,c.revenue,c.avgFee,true],
+              ["Online tee times",i.golfers.now,i.revenue.now,i.avgFee.now,false],
+              ["Everything else",p.golfers-c.golfers-i.golfers.now,
+                                 p.revenue-c.revenue-i.revenue.now,
+                                 (p.revenue-c.revenue-i.revenue.now)/(p.golfers-c.golfers-i.golfers.now),false]]
+    .map(([n,g,r,a,on])=>`<div class="ec-crow${on?" is-on":""}"><span>${esc(n)}</span>`+
+      `<span class="ec-bv">${ecNum(g)}</span><span class="ec-bp">${(g/p.golfers*100).toFixed(1)}%</span>`+
+      `<span class="ec-bv">${ecMoney(r)}</span><span class="ec-bp">${(r/p.revenue*100).toFixed(1)}%</span>`+
+      `<span class="ec-bv">$${a.toFixed(2)}</span></div>`).join("");
+  return `<p class="ec-lead">${ECOM_COPY.callLead}</p>`+
+    `<div class="ec-panel ec-three">`+
+      ecStat("Golfers booked",ecNum(c.golfers),`${(c.golfers/p.golfers*100).toFixed(1)}% of everyone who played`)+
+      ecStat("Revenue",ecMoney(c.revenue),`${(c.revenue/p.revenue*100).toFixed(1)}% of green-fee revenue`)+
+      ecStat("Average fee","$"+c.avgFee.toFixed(2),`property average is $${p.avgFee.toFixed(2)}`)+
+    `</div>`+
+    `<div class="ec-panel">`+
+      `<div class="ec-crow ec-chead"><span>HOW THEY BOOKED</span><span class="ec-bv">GOLFERS</span>`+
+        `<span class="ec-bp">SHARE</span><span class="ec-bv">REVENUE</span><span class="ec-bp">SHARE</span>`+
+        `<span class="ec-bv">AVG FEE</span></div>${rows}`+
+    `</div>`+
+    `<p class="ec-note flag">${ECOM_COPY.callGap}</p>`;
+}
+
+/* -------------------------------------------------------- online tee times */
+function ecomTee(){
+  const i=ECOM.internet, p=ECOM.property;
+  const gc=ecPc(i.golfers.now,i.golfers.was), rc=ecPc(i.revenue.now,i.revenue.was),
+        ac=ecPc(i.avgFee.now,i.avgFee.was);
+  const max=Math.max.apply(null,ECOM.pages.map(x=>x.rev));
+  const rows=ECOM.pages.map(x=>{
+    const chg=x.wasR?ecPc(x.rev,x.wasR):null;
+    return `<div class="ec-prow"><span>${esc(x.n)}${x.third?' <em class="ec-3p">third party</em>':""}</span>`+
+      `<span class="ec-bar"><i style="width:${(x.rev/max*100).toFixed(0)}%;`+
+        `background:${x.third?"var(--amber)":"var(--navy)"}"></i></span>`+
+      `<span class="ec-bv">${ecMoney(x.rev)}</span>`+
+      `<span class="ec-bp ${chg>=0?"up":"down"}">${chg===null?"\u2014":(chg>=0?"+":"\u2212")+Math.abs(chg).toFixed(0)+"%"}</span></div>`;
+  }).join("");
+  const third=ECOM.pages.filter(x=>x.third), own=ECOM.pages.filter(x=>!x.third);
+  const t26=third.reduce((a,x)=>a+x.rev,0), t25=third.reduce((a,x)=>a+x.wasR,0);
+  const o26=own.reduce((a,x)=>a+x.rev,0),   o25=own.reduce((a,x)=>a+x.wasR,0);
+  return `<p class="ec-lead">${ECOM_COPY.teeLead}</p>`+
+    `<div class="ec-panel ec-three">`+
+      ecStat("Rounds booked",ecNum(i.golfers.now),`${ecChg(gc)} \u00b7 was ${ecNum(i.golfers.was)}`)+
+      ecStat("Revenue",ecMoney(i.revenue.now),`${ecChg(rc)} \u00b7 was ${ecMoney(i.revenue.was)}`)+
+      ecStat("Average fee","$"+i.avgFee.now.toFixed(2),`${ecChg(ac)} \u00b7 was $${i.avgFee.was.toFixed(2)}`)+
+    `</div>`+
+    `<p class="ec-note">Online tee times are ${(i.golfers.now/p.golfers*100).toFixed(1)}% of everyone who played and `+
+      `${(i.revenue.now/p.revenue*100).toFixed(1)}% of green-fee revenue \u2014 close to half the money, from `+
+      `under two in five golfers.</p>`+
+    `<p class="ec-hh">${ECOM_COPY.mixLead}</p>`+
+    `<div class="ec-panel">`+
+      `<div class="ec-prow ec-chead"><span>BOOKING PAGE</span><span></span>`+
+        `<span class="ec-bv">REVENUE</span><span class="ec-bp">VS 2025</span></div>${rows}`+
+      `<div class="ec-key"><span><i style="background:var(--navy)"></i>ours</span>`+
+        `<span><i style="background:var(--amber)"></i>third party \u2014 ${ecMoney(t26)} this year, `+
+        `${ecMoney(t25)} last, now ${(t26/i.revenue.now*100).toFixed(0)}% of internet revenue</span></div>`+
+    `</div>`+
+    `<p class="ec-note flag">${ECOM_COPY.mixRead}</p>`+
+    `<p class="ec-note">${ECOM_COPY.bestAvail}</p>`+
+    `<div class="ec-panel ec-ask">`+
+      `<p class="ec-h">${ECOM_COPY.easeTitle}</p>`+
+      `<p class="ec-ap">${ECOM_COPY.ease}</p>`+
+      `<p class="ec-an">${ECOM_COPY.easeNext}</p>`+
+    `</div>`+
+    `<p class="ec-hh">Meta ads</p>`+
+    `<div class="ec-panel ec-three">`+
+      ecStat("Spent",ecMoney(ECOM.ads.spend),`over six months`)+
+      ecStat("Purchases",ecNum(ECOM.ads.purchases),`${ecMoney(ECOM.ads.value)} of value`)+
+      ecStat("Click rate",ECOM.ads.clickRate.toFixed(2)+"%",`hospitality average is ${ECOM.ads.hospitalityRate}%`)+
+    `</div>`+
+    `<p class="ec-note flag">${ECOM_COPY.adsNote}</p>`;
+}
+
+/* ------------------------------------------------------------------ shell */
+function detailEcom(i){
+  const sec=ecomSec();
+  const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
+    ECOM_SECS.map(([k,l])=>`<button type="button" data-ecom="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
+    `</div>`;
+  const body=sec==="site"?ecomSite():sec==="call"?ecomCall():ecomTee();
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+      `<div class="detail-sub">Management only</div></div>`+
+    `<div class="detail-body is-wide">`+
+      `<p class="ec-meta">${ECOM.period} &middot; both courses</p>`+
+      pills+`<div class="ec-wide">${body}</div>`+
+      `<p class="emp-src2">Rounds and revenue from the golf system's own reports. `+
+      `Website and ads figures are supplied by the marketing team and are not `+
+      `checkable against our systems.</p>`+
+    `</div>`;
+  const hold=fn=>()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    fn(); detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+  };
+  el("#detail").querySelectorAll("[data-ecom]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.ecomSec=b.dataset.ecom; })));
 }
 
 function detailSurveyPending(i){
