@@ -36,8 +36,8 @@ const $ = s => doc.querySelector(s);
 const $$ = s => Array.from(doc.querySelectorAll(s));
 
 const EMP = G('EMP'), EMP_COPY = G('EMP_COPY'), EMP_SECS = G('EMP_SECS'), state = G('state');
-const empThin = G('empThin'), empThinWhy = G('empThinWhy'), empSec = G('empSec');
-const empFix = G('empFix'), EMP_LEV = G('EMP_LEV');
+const empThin = G('empThin'), empSec = G('empSec');
+const EMP_PLAIN = G('EMP_PLAIN');
 const EMP_MIN_N = G('EMP_MIN_N'), EMP_MIN_PART = G('EMP_MIN_PART');
 
 // unlock the gate and put the app into the employee feedback view
@@ -46,6 +46,7 @@ if ($('#gate')) $('#gate').setAttribute('hidden', '');
 state.svAud = 'employee';
 const item = { t: 'Feedback', surveys: true };
 function render(sec) { state.empSec = sec; G('detailEmployee')(item); return $('#detail').innerHTML; }
+const EMP_SECS_KEYS = EMP_SECS.map(x => x[0]);
 
 // ---------------------------------------------------------------- structural
 t('document parses and titles correctly', () => has(doc.title, 'OurWGV'));
@@ -75,321 +76,231 @@ t('no new pink or dusty rose introduced', () => {
 t('password gate exists in the markup', () => ok($('#gate'), 'gate element'));
 
 // ---------------------------------------------------------------- copy block
-t('EMP_COPY covers every panel and every tile', () => {
-  ok(EMP_COPY, 'EMP_COPY defined');
-  ['overview', 'drivers', 'depts', 'adv', 'themes'].forEach(k =>
-    ok(EMP_COPY.intro[k] && EMP_COPY.intro[k].length > 20, 'intro.' + k));
-  ['Overall', 'eNPS', 'Participation', 'Responses'].forEach(k =>
-    ok(EMP_COPY.tile[k], 'tile.' + k));
-  ['overviewCalls', 'overviewFoot', 'driversList', 'driversQs', 'advSplit',
-   'themes', 'deptsTable', 'deptsPrio'].forEach(k =>
-    ok(EMP_COPY.note[k] && EMP_COPY.note[k].length > 30, 'note.' + k));
-});
-
-t('deptNote keys all match real departments', () => {
-  const names = EMP.depts.map(d => d.n);
-  Object.keys(EMP_COPY.deptNote).forEach(k => ok(names.includes(k), 'orphan deptNote key ' + k));
-});
-
-t('prose counts still match the data', () => {
-  eq(EMP_COPY.counts.responses, EMP.propN, 'responses quoted in prose vs propN');
-  const payroll = Math.round(EMP.propN / (EMP.propPart / 100));
-  ok(Math.abs(EMP_COPY.counts.payroll - payroll) <= 1, 'payroll prose ' + EMP_COPY.counts.payroll + ' vs implied ' + payroll);
-  eq(EMP_COPY.counts.part, Math.round(EMP.propPart) + '%', 'participation prose');
-});
-
-t('courseNote keys all resolve to a real course', () => {
-  const ids = EMP.courses.map(c => c.id);
-  Object.keys(EMP_COPY.courseNote).forEach(k => ok(ids.includes(k), 'orphan courseNote key ' + k));
-});
-
-// ---------------------------------------------------------------- thresholds
-t('empThin flags exactly the two soft departments', () => {
-  eq(EMP.depts.filter(empThin).map(d => d.n).sort().join('|'),
-     'FB Back of House|FB Front of House');
-});
-
-t('thresholds are the documented ones', () => { eq(EMP_MIN_N, 8); eq(EMP_MIN_PART, 40); });
-
-t('empThinWhy states the real arithmetic', () => {
-  has(empThinWhy(EMP.depts.find(d => d.n === 'FB Back of House')), '4 of 6 answered');
-  has(empThinWhy(EMP.depts.find(d => d.n === 'FB Front of House')), '6 of 19 answered');
-});
-
-t('healthy departments are not flagged', () => {
-  ['Golf', 'Agronomy', 'Golf OS Services'].forEach(n =>
-    ok(!empThin(EMP.depts.find(d => d.n === n)), n + ' should not be flagged'));
-});
-
-// ---------------------------------------------------------------- sections
-t('section pills are the five panels, no Start here', () => {
-  eq(EMP_SECS.length, 5, 'five pills');
-  eq(EMP_SECS.map(x => x[0]).join(','), 'overview,drivers,depts,adv,themes');
-  ok(!EMP_SECS.some(x => x[1] === 'Start here'), 'guide pill removed');
-});
-
-t('default section is Overview', () => {
-  const keep = state.empSec; state.empSec = undefined;
-  eq(empSec(), 'overview'); state.empSec = keep;
-});
-
-t('no orphaned guide markup or styles remain', () => {
-  ['emp-guide', 'emp-gpair', 'emp-gsteps', 'empGuide', 'Start here'].forEach(x =>
-    ok(!html.includes(x), 'leftover: ' + x));
-});
-
-// ---------------------------------------------------------------- intros stay short
-['overview', 'drivers', 'depts', 'adv', 'themes'].forEach(sec => {
-  t('intro line on ' + sec + ' is one short sentence', () => {
-    render(sec);
-    const p = $('.emp-intro');
-    ok(p, 'intro present');
-    const txt = p.textContent.trim();
-    ok(txt.length > 20, 'has content');
-    ok(txt.length < 140, 'stays short, got ' + txt.length + ' chars');
+t('every topic has a plain-language name', () => {
+  Object.keys(EMP.avg).forEach(k => {
+    ok(EMP_PLAIN[k], 'no plain name for ' + k);
+    ok(EMP_PLAIN[k] === EMP_PLAIN[k].toLowerCase(), EMP_PLAIN[k] + ' should be lower case');
   });
 });
 
-t('intro sits between the pill strip and the body', () => {
-  render('overview');
-  const bar = $('.emp-secs'), intro = $('.emp-intro'), grid = $('.emp-grid');
-  ok(bar && intro && grid, 'all three present');
-  ok(bar.compareDocumentPosition(intro) & window.Node.DOCUMENT_POSITION_FOLLOWING, 'intro after pills');
-  ok(intro.compareDocumentPosition(grid) & window.Node.DOCUMENT_POSITION_FOLLOWING, 'body after intro');
-});
-
-// ---------------------------------------------------------------- tiles carry their own scale
-t('every headline tile states its own scale', () => {
-  render('overview');
-  $$('.emp-grid > .emp-col').forEach(col => {
-    const tiles = Array.from(col.querySelectorAll('.emp-tile'));
-    eq(tiles.length, 4, 'four tiles');
-    tiles.forEach(tile => {
-      const g = tile.querySelector('.emp-tg');
-      ok(g && g.textContent.trim().length > 3, 'tile ' + tile.querySelector('.emp-tl').textContent + ' has a gloss');
+t('no CultureMonkey vocabulary reaches the screen', () => {
+  const banned = ['eNPS', 'Driver', 'driver', 'leverage', 'Leverage', 'Purpose Alignment',
+                  'Work Environment', 'Social Connection', 'Growth & Development', 'Rewards',
+                  'FB Front of House', 'FB Back of House'];
+  ['summary', 'detail'].forEach(sec => {
+    ['topics', 'teams', 'rec', 'wrote'].forEach(det => {
+      state.empSec = sec; state.empDet = det; state.empDept = null;
+      G('detailEmployee')(item);
+      const txt = $('.detail-body').textContent;
+      banned.forEach(b => ok(!txt.includes(b), sec + '/' + det + ' leaks "' + b + '"'));
     });
   });
 });
 
-t('the eNPS tile says it is not a percent, right in the tile', () => {
-  render('overview');
-  const tile = $$('.emp-tile').find(x => x.querySelector('.emp-tl').textContent === 'ENPS');
-  ok(tile, 'eNPS tile found');
-  has(tile.querySelector('.emp-tg').textContent, 'not a percent');
-  has(tile.querySelector('.emp-tg').textContent, '\u2212100 to +100');
+t('prose counts still match the data', () => {
+  eq(EMP_COPY.counts.responses, EMP.propN);
+  const payroll = Math.round(EMP.propN / (EMP.propPart / 100));
+  ok(Math.abs(EMP_COPY.counts.payroll - payroll) <= 1, 'payroll prose vs implied');
 });
 
-t('the overall tile names the 0 to 10 scale', () => {
-  render('overview');
-  const tile = $$('.emp-tile').find(x => x.querySelector('.emp-tl').textContent === 'OVERALL');
-  has(tile.querySelector('.emp-tg').textContent, '0\u201310');
+t('deptNote and courseNote keys all resolve', () => {
+  const names = EMP.depts.map(d => d.n), ids = EMP.courses.map(c => c.id);
+  Object.keys(EMP_COPY.deptNote).forEach(k => ok(names.includes(k), 'orphan deptNote ' + k));
+  Object.keys(EMP_COPY.courseNote).forEach(k => ok(ids.includes(k), 'orphan courseNote ' + k));
 });
 
-t('tile gloss keys all match real tile labels', () => {
-  render('overview');
-  const labels = new Set($$('.emp-tile .emp-tl').map(e => e.textContent));
-  Object.keys(EMP_COPY.tile).forEach(k => ok(labels.has(k.toUpperCase()), 'orphan tile key ' + k));
-});
-
-// ---------------------------------------------------------------- notes sit in place
-t('overview explains the picking rule under the call-out cards', () => {
-  render('overview');
-  $$('.emp-grid > .emp-col').forEach(col => {
-    const note = col.querySelector('.emp-note');
-    ok(note, 'note present in column');
-    has(note.textContent, '0.60', 'states the impact bar');
-    has(note.textContent, 'Drivers', 'points at the next panel');
-    const calls = col.querySelectorAll('.emp-call');
-    ok(calls[calls.length - 1].compareDocumentPosition(note) & window.Node.DOCUMENT_POSITION_FOLLOWING,
-       'note sits after the cards');
+// ------------------------------------------------- the correction that mattered
+t('each team is shown its OWN lowest score, not an impact-weighted pick', () => {
+  EMP.depts.forEach(dp => {
+    const lo = G('empLowest')(dp);
+    const trueMin = Math.min.apply(null, Object.keys(dp.s).map(k => dp.s[k]));
+    eq(lo.score, trueMin, dp.n + ' lowest score');
   });
 });
 
-t('the picking rule in prose matches EMP_LEV in code', () => {
-  render('overview');
-  has($('.emp-note').textContent, EMP_LEV.toFixed(2));
+t('Agronomy surfaces pay at 5.7, not autonomy', () => {
+  const ag = EMP.depts.find(d => d.n === 'Agronomy');
+  const lo = G('empLowest')(ag);
+  eq(lo.k, 'Rewards', 'Agronomy lowest topic');
+  eq(lo.score, 5.7);
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const row = $$('.emp-srow').find(r => r.textContent.includes('Agronomy'));
+  has(row.textContent, 'pay and benefits');
+  has(row.textContent, '5.7');
+  ok(!row.textContent.includes('trusted'), 'must not name autonomy');
 });
 
-t('overview carries the anonymity and headcount footnote once', () => {
-  render('overview');
-  const w = $$('.emp-note.wide');
-  eq(w.length, 1, 'one footnote');
-  has(w[0].textContent, 'anonymous');
-  has(w[0].textContent, 'works back to', 'headcount flagged as derived');
+t('Golf OS Services surfaces progression at 6.7, not working conditions', () => {
+  const g = EMP.depts.find(d => d.n === 'Golf OS Services');
+  eq(G('empLowest')(g).score, 6.7);
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const row = $$('.emp-srow').find(r => r.textContent.includes('Golf OS Services'));
+  has(row.textContent, 'chances to learn and move up');
 });
 
-t('other panels do not carry the overview footnote', () => {
-  ['drivers', 'depts', 'adv', 'themes'].forEach(sec => {
-    render(sec);
-    eq($$('.emp-note.wide').length, 0, sec + ' should not show the overview footnote');
+t('a gap inside the noise band reads as level, not as a difference', () => {
+  const golf = EMP.depts.find(d => d.n === 'Golf');
+  const lo = G('empLowest')(golf);
+  ok(Math.abs(lo.gap) <= G('EMP_NOISE'), 'Golf lowest gap is within noise');
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const row = $$('.emp-srow').find(r => r.textContent.trim().startsWith('Golf') &&
+                                        !r.textContent.includes('OS Services'));
+  has(row.textContent, 'level with the property');
+});
+
+// ---------------------------------------------------------------- summary
+t('summary separates rating from recommending', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const cols = $$('.emp-two > .emp-col');
+  eq(cols.length, 2, 'two labelled columns');
+  has(cols[0].textContent, 'rate working here');
+  has(cols[0].querySelector('.emp-kbig').textContent, EMP.propOverall.toFixed(1));
+  has(cols[1].textContent, 'recommend');
+  ok(cols[1].querySelector('.emp-split'), 'recommend shown as a bar');
+  has(cols[1].textContent, 'can rate us well and still not recommend');
+});
+
+t('the recommend bar uses real counts from the data', () => {
+  state.empSec = 'summary'; G('detailEmployee')(item);
+  const segs = $$('.emp-split > div').map(d => parseInt(d.textContent, 10));
+  const pro = EMP.courses.reduce((a, c) => a + c.adv.pro, 0);
+  const pas = EMP.courses.reduce((a, c) => a + c.adv.pas, 0);
+  const det = EMP.courses.reduce((a, c) => a + c.adv.det, 0);
+  eq(segs.join(','), [pro, pas, det].join(','));
+});
+
+t('teams are ordered largest first, not by score', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  const counts = $$('.emp-srow:not(.emp-shead) .emp-sa')
+    .map(e => parseInt(e.textContent, 10));
+  for (let i = 1; i < counts.length; i++) ok(counts[i] <= counts[i - 1], 'descending by headcount');
+  const first = $$('.emp-srow:not(.emp-shead)')[0];
+  has(first.textContent, 'Golf OS Services', 'biggest team leads');
+});
+
+t('recommending is worded, with the number kept alongside', () => {
+  state.empSec = 'summary'; G('detailEmployee')(item);
+  const words = $$('.emp-srow:not(.emp-shead) .emp-sr').map(e => e.textContent);
+  ok(words.some(x => x.includes('mixed')), 'mixed present');
+  ok(words.some(x => x.includes('strongly positive')), 'strongly positive present');
+  ok(words.some(x => x.includes('negative')), 'negative present');
+  words.forEach(x => ok(/[+\u2212-]?\d+/.test(x), 'number retained: ' + x));
+});
+
+t('thin teams say so instead of naming a priority', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  EMP.depts.filter(G('empThin')).forEach(dp => {
+    const row = $$('.emp-srow').find(r => r.textContent.includes(G('empTeam')(dp.n)));
+    has(row.textContent, 'too few to read', dp.n);
   });
 });
 
-t('drivers explains the impact ordering right under the list', () => {
-  render('drivers');
-  $$('.emp-grid > .emp-col').forEach(col => {
-    const notes = Array.from(col.querySelectorAll('.emp-note'));
-    ok(notes.length >= 2, 'list note and questions note');
-    has(notes[0].textContent, 'Rewards', 'names the low scorer');
-    has(notes[0].textContent, '6.8');
-    has(notes[0].textContent, '0.19');
-    const rows = col.querySelectorAll('.emp-row:not(.emp-rhead)');
-    ok(rows[rows.length - 1].compareDocumentPosition(notes[0]) & window.Node.DOCUMENT_POSITION_FOLLOWING,
-       'note follows the twelve rows');
+t('departments are renamed for humans', () => {
+  state.empSec = 'summary'; G('detailEmployee')(item);
+  const txt = $('.detail-body').textContent;
+  has(txt, 'Front of house'); has(txt, 'Kitchen');
+});
+
+// ---------------------------------------------------------------- leader card
+t('clicking a team opens its card', () => {
+  state.empSec = 'summary'; state.empDept = null; G('detailEmployee')(item);
+  eq($$('.emp-card').length, 0, 'no card until asked');
+  $$('[data-empd]').find(b => b.dataset.empd === 'Agronomy').click();
+  const c = $('.emp-card');
+  ok(c, 'card opened');
+  has(c.textContent, 'Agronomy');
+  has(c.textContent, '8.4 out of 10');
+  has(c.textContent, 'Strongest');
+  has(c.textContent, 'Rated lowest');
+  has(c.textContent, 'pay and benefits');
+});
+
+t('clicking the same team again closes the card', () => {
+  state.empSec = 'summary'; state.empDept = 'Agronomy'; G('detailEmployee')(item);
+  $$('[data-empd]').find(b => b.dataset.empd === 'Agronomy').click();
+  eq($$('.emp-card').length, 0);
+});
+
+t('the card states the team against the property, in words', () => {
+  state.empSec = 'summary'; state.empDept = 'Golf OS Services'; G('detailEmployee')(item);
+  has($('.emp-cline').textContent, 'below the property');
+  has($('.emp-cline').textContent, EMP.propOverall.toFixed(1));
+});
+
+t('a thin team carries its caution inside the card', () => {
+  state.empSec = 'summary'; state.empDept = 'FB Back of House'; G('detailEmployee')(item);
+  ok($('.emp-card .emp-caution'), 'caution present');
+  has($('.emp-card').textContent, '4 of 6 answered');
+  has($('.emp-card').textContent, "AJ's", 'restaurant note travels with the card');
+});
+
+// ---------------------------------------------------------------- detail
+t('detail offers four sub-sections', () => {
+  state.empSec = 'detail'; G('detailEmployee')(item);
+  const subs = $$('[data-empdet]').map(b => b.dataset.empdet);
+  eq(subs.join(','), 'topics,teams,rec,wrote');
+  eq($$('[data-empdet][aria-pressed="true"]').length, 1);
+});
+
+t('all twelve topics render per course, highest score first', () => {
+  state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
+  const cols = $$('.emp-two > .emp-col');
+  eq(cols.length, 2);
+  cols.forEach((c, i) => {
+    const rows = Array.from(c.querySelectorAll('.emp-trow:not(.emp-thead)'));
+    eq(rows.length, 12, 'column ' + i);
+    const v = rows.map(r => parseFloat(r.querySelector('.emp-tsc').textContent));
+    for (let k = 1; k < v.length; k++) ok(v[k] <= v[k - 1], 'descending by score');
   });
 });
 
-t('the drivers header says IMPACT rather than LEVERAGE', () => {
-  render('drivers');
-  has($('.emp-rhead').textContent, 'BY IMPACT');
-  ok(!$('.emp-rhead').textContent.includes('LEVERAGE'), 'jargon removed from the header');
+t('impact is shown as dots, never as a coefficient', () => {
+  state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
+  const dots = $$('.emp-dots');
+  eq(dots.length, 24, 'one per topic per course');
+  dots.forEach(d => ok(/^\u25cf{1,3}$/.test(d.textContent), 'dots only: ' + d.textContent));
+  ok(!$('.detail-body').textContent.includes('0.99'), 'no raw coefficient on screen');
 });
 
-t('advocacy explains the eNPS arithmetic under the split bar', () => {
-  render('adv');
-  $$('.emp-grid > .emp-col').forEach(col => {
-    const n = col.querySelector('.emp-note');
-    ok(n, 'note present');
-    has(n.textContent, 'promoter share minus the detractor share');
-    ok(col.querySelector('.emp-split').compareDocumentPosition(n) & window.Node.DOCUMENT_POSITION_FOLLOWING,
-       'note follows the bar');
-  });
+t('pay gets one dot on both courses', () => {
+  state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
+  const payRows = $$('.emp-trow').filter(r => r.textContent.includes('pay and benefits'));
+  eq(payRows.length, 2);
+  payRows.forEach(r => eq(r.querySelector('.emp-dots').textContent, '\u25cf'));
 });
 
-t('the +34 / +35 caveat appears only in the Slammer & Squire column', () => {
-  render('adv');
-  const cols = $$('.emp-grid > .emp-col');
-  eq(cols[0].querySelectorAll('.emp-note.flag').length, 0, 'King & Bear has no caveat');
+t('each team detail still shows the full twelve-topic comparison', () => {
+  state.empSec = 'detail'; state.empDet = 'teams'; state.empDept = 'Agronomy';
+  G('detailEmployee')(item);
+  ok($('.emp-gapsvg'), 'gap chart present');
+  const labels = $$('.emp-gapsvg text').map(t => t.textContent);
+  Object.keys(EMP.avg).forEach(k => ok(labels.includes(EMP_PLAIN[k]), 'missing ' + EMP_PLAIN[k]));
+});
+
+t('recommending shows both courses with the eleven-row spread', () => {
+  state.empSec = 'detail'; state.empDet = 'rec'; G('detailEmployee')(item);
+  const cols = $$('.emp-two > .emp-col');
+  eq(cols.length, 2);
+  cols.forEach(c => eq(c.querySelectorAll('.emp-drow').length, 11));
+});
+
+t('the +34 / +35 caveat appears only under Slammer & Squire', () => {
+  state.empSec = 'detail'; state.empDet = 'rec'; G('detailEmployee')(item);
+  const cols = $$('.emp-two > .emp-col');
+  eq(cols[0].querySelectorAll('.emp-note.flag').length, 0);
   const f = cols[1].querySelector('.emp-note.flag');
-  ok(f, 'Slammer & Squire caveat present');
-  ['+34', '+35', 'heatmap export', 'location report', '29', '31'].forEach(x => has(f.textContent, x));
-  ok(!f.textContent.includes('a day apart'), 'no invented explanation');
+  ok(f, 'caveat present');
+  ['+34', '+35', 'heatmap export', 'location report'].forEach(x => has(f.textContent, x));
 });
 
-t('themes explains that the numbers are counts, not scores', () => {
-  render('themes');
-  const n = $$('.emp-note').find(x => x.textContent.includes('count, not a score'));
-  ok(n, 'counts note present');
-  has(n.textContent, 'open-text');
+t('what people wrote reports King & Bear as missing, not blank', () => {
+  state.empSec = 'detail'; state.empDet = 'wrote'; G('detailEmployee')(item);
+  has($$('.emp-two > .emp-col')[0].textContent, 'Not available');
+  has($$('.emp-two > .emp-col')[1].textContent, 'What to keep doing');
 });
 
-t('themes still reports King & Bear as missing rather than blank', () => {
-  render('themes');
-  has($$('.emp-grid > .emp-col')[0].textContent, 'Not available');
-});
-
-t('departments notes the three unreported responses under the table', () => {
-  render('depts');
-  const n = $$('.emp-note').find(x => x.textContent.includes('57 of the 60'));
-  ok(n, 'reconciliation note present');
-});
-
-t('the department priority card admits its own limitation', () => {
-  state.empDept = 'Golf OS Services'; render('depts');
-  const sn = $('.emp-subnote');
-  ok(sn, 'subnote present');
-  has(sn.textContent, 'property-wide impact');
-  has(sn.textContent, 'has not sent it');
-  ok($('.emp-call.act').contains(sn), 'sits inside the priority card');
-});
-
-t('no panel is left without an explanatory note', () => {
-  ['overview', 'drivers', 'depts', 'adv', 'themes'].forEach(sec => {
-    render(sec);
-    ok($$('.emp-note').length > 0, sec + ' has at least one note');
-  });
-});
-
-// ---------------------------------------------------------------- pairing convention
 t('paired panels keep two columns with a divider', () => {
-  ['overview', 'drivers', 'adv', 'themes'].forEach(sec => {
-    render(sec);
-    const cols = $$('.emp-grid > .emp-col');
-    eq(cols.length, 2, sec + ' column count');
-    eq(cols[0].querySelector('.emp-cn').textContent, 'King & Bear', sec + ' first column');
-    eq(cols[1].querySelector('.emp-cn').textContent, 'Slammer & Squire', sec + ' second column');
-  });
-});
-
-t('the divider rule still targets the first column', () => {
-  has(html, '.emp-grid>.emp-col:first-child{padding-right:22px;border-right:1px solid');
-});
-
-// ---------------------------------------------------------------- department flags
-t('departments panel marks the thin rows and only those', () => {
-  render('depts');
-  eq($$('.emp-dept .emp-dc.warn').map(e => e.closest('.emp-dept').querySelector('.emp-dn').textContent).sort().join('|'),
-     'FB Back of House|FB Front of House');
-});
-
-t('the asterisk legend appears once and explains itself', () => {
-  render('depts');
-  eq($$('.emp-legend').length, 1, 'one legend');
-  has($('.emp-legend').textContent, 'one person moves it');
-  has($('.emp-legend').textContent, String(EMP_MIN_N));
-});
-
-t('selecting a thin department shows the caution band', () => {
-  state.empDept = 'FB Back of House'; render('depts');
-  ok($('.emp-caution'), 'caution shown');
-  has($('.emp-caution').textContent, '4 of 6 answered');
-});
-
-t('selecting a healthy department shows no caution band', () => {
-  state.empDept = 'Golf'; render('depts');
-  eq($$('.emp-caution').length, 0, 'no caution for Golf');
-});
-
-t('F&B departments carry the restaurant note', () => {
-  state.empDept = 'FB Front of House'; render('depts');
-  ok($('.emp-dnote'), 'note present');
-  has($('.emp-dnote').textContent, "AJ's");
-  has($('.emp-dnote').textContent, 'Legends');
-});
-
-t('non-F&B departments carry no restaurant note', () => {
-  state.empDept = 'Agronomy'; render('depts');
-  eq($$('.emp-dnote').length, 0);
-});
-
-// ---------------------------------------------------------------- existing behaviour
-t('overview still shows four tiles per course', () => {
-  render('overview');
-  $$('.emp-grid > .emp-col').forEach(c => eq(c.querySelectorAll('.emp-tile').length, 4));
-});
-
-t('drivers still lists twelve rows per course, ordered by impact', () => {
-  render('drivers');
-  $$('.emp-grid > .emp-col').forEach((c, i) => {
-    const rows = Array.from(c.querySelectorAll('.emp-row:not(.emp-rhead)'));
-    eq(rows.length, 12, 'column ' + i + ' row count');
-    const v = rows.map(r => parseFloat(r.querySelector('.emp-di').textContent));
-    for (let k = 1; k < v.length; k++) ok(v[k] <= v[k - 1], 'impact descending in column ' + i);
-  });
-});
-
-t('where-to-act still picks a soft high-leverage driver', () => {
-  EMP.courses.forEach(c => {
-    const f = empFix(c);
-    ok(f, c.name + ' has a fix');
-    ok(f[1] < c.o, c.name + ' fix is below course overall');
-    ok(f[2] >= EMP_LEV, c.name + ' fix is at or above the leverage bar');
-  });
-});
-
-t('themes still reports King & Bear as missing rather than blank', () => {
-  render('themes');
-  has($$('.emp-grid > .emp-col')[0].textContent, 'Not available');
-});
-
-t('advocacy still renders eleven distribution rows per course', () => {
-  render('adv');
-  $$('.emp-grid > .emp-col').forEach(c => eq(c.querySelectorAll('.emp-drow').length, 11));
-});
-
-t('department count still reconciles the way the guide claims', () => {
-  eq(EMP.depts.reduce((a, d) => a + d.cnt, 0), 57, 'departments account for 57');
-  eq(EMP.propN, 60, 'property total');
+  has(html, '.emp-two>.emp-col:first-child{padding-right:24px;border-right:1px solid');
 });
 
 // ---------------------------------------------------------------- scroll preservation
@@ -409,16 +320,17 @@ function instrument(pane) {
 }
 
 t('section switch preserves scroll position', () => {
-  render('overview');
+  render('summary');
   const pane = $('#detail'), read = instrument(pane);
   pane.scrollTop = 420;
-  $$('[data-emp]').find(b => b.dataset.emp === 'drivers').click();
+  $$('[data-emp]').find(b => b.dataset.emp === 'detail').click();
   eq(read(), 420, 'scroll restored after re-render');
-  eq(empSec(), 'drivers', 'section actually changed');
+  eq(empSec(), 'detail', 'section actually changed');
 });
 
-t('department row click preserves scroll position', () => {
-  render('depts');
+t('team row click preserves scroll position', () => {
+  state.empDept = null;
+  render('summary');
   const pane = $('#detail'), read = instrument(pane);
   pane.scrollTop = 260;
   $$('[data-empd]').find(b => b.dataset.empd === 'Agronomy').click();
@@ -427,8 +339,17 @@ t('department row click preserves scroll position', () => {
 });
 
 // ---------------------------------------------------------------- wiring
+t('sub-section pills preserve scroll too', () => {
+  state.empSec = 'detail'; state.empDet = 'topics'; G('detailEmployee')(item);
+  const pane = $('#detail'), read = instrument(pane);
+  pane.scrollTop = 300;
+  $$('[data-empdet]').find(b => b.dataset.empdet === 'teams').click();
+  eq(read(), 300, 'scroll restored');
+  eq(G('empDet')(), 'teams');
+});
+
 t('every section pill is clickable and switches state', () => {
-  render('overview');
+  render('summary');
   EMP_SECS.forEach(([k]) => {
     const b = $$('[data-emp]').find(x => x.dataset.emp === k);
     ok(b, 'pill ' + k + ' present');
@@ -447,15 +368,16 @@ t('aria-pressed tracks the active pill', () => {
 });
 
 t('department names survive the round trip into data attributes', () => {
-  render('depts');
+  state.empSec = 'summary';
+  render('summary');
   const names = $$('[data-empd]').map(b => b.dataset.empd);
   ok(names.includes('FB Back of House'), 'name present');
   ok(names.every(n => EMP.depts.some(d => d.n === n)), 'no mangled names');
 });
 
-t('all five departments render as rows', () => {
-  render('depts');
-  eq($$('.emp-dept:not(.emp-rhead)').length, EMP.depts.length);
+t('all five teams render as rows', () => {
+  state.empDept = null; render('summary');
+  eq($$('.emp-srow:not(.emp-shead)').length, EMP.depts.length);
 });
 
 // ---------------------------------------------------------------- rail mark

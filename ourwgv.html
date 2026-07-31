@@ -615,36 +615,81 @@ a{color:inherit}
 .emp-none{font-size:12.5px;color:#5f5e5a;line-height:1.55;border:1px dashed #dfe3e9;
  border-radius:10px;background:#fcfcfd;padding:12px 14px;margin:12px 0 0}
 .emp-none b{color:var(--ink)}
-/* ---- the explanatory layer: notes sit against the thing they explain ---- */
-.emp-intro{font-size:12.5px;color:#7c8593;line-height:1.6;margin:0 0 14px}
+/* ---- plain-language employee feedback ---- */
+.emp-lead{font-size:13.5px;color:#5f5e5a;line-height:1.65;margin:0 0 18px;max-width:820px}
+.emp-two{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin-bottom:6px}
+.emp-two>.emp-col:first-child{padding-right:24px;border-right:1px solid #e5e2da}
+.emp-klbl{font-size:10.5px;letter-spacing:.06em;color:#8a8a84;font-weight:700;
+  text-transform:uppercase;margin:0 0 4px}
+.emp-kbig{margin:0 0 6px;font-size:30px;font-weight:700;color:var(--ink);line-height:1}
+.emp-kbig em{font-style:normal;font-size:14px;font-weight:400;color:#8a8a84;margin-left:6px}
+.emp-ksub{margin:7px 0 0;font-size:12px;color:#5f5e5a;line-height:1.55}
+.emp-call.warn{border-color:var(--amber);background:#faf2e2}
+.emp-call.warn h5{color:#8a6a2a}
+.emp-slbl{font-size:11px;letter-spacing:.08em;color:#8a8a84;font-weight:700;margin:22px 0 4px}
+.emp-srow{display:grid;grid-template-columns:minmax(0,1fr) 66px 52px 96px;gap:10px;
+  align-items:center;width:100%;padding:11px 0;border-bottom:1px solid #f2f0ea;
+  text-align:left;font-family:inherit;background:none;border-left:0;border-right:0;border-top:0}
+.emp-srow.emp-shead{font-size:10.5px;color:#b4b2a9;border-bottom-color:#e5e2da;
+  cursor:default;padding:0 0 7px}
+button.emp-srow{cursor:pointer}
+button.emp-srow:hover{background:#fafbfd}
+.emp-srow.is-on{background:#f2f6fb;box-shadow:inset 3px 0 0 var(--navy)}
+.emp-st{font-size:13.5px;color:var(--ink);font-weight:600;min-width:0}
+.emp-sn{font-size:11.5px;color:#8a8a84;font-weight:400}
+.emp-sn.bad{color:var(--red-dark)}
+.emp-sn.warn{color:#8a6a2a}
+.emp-sa{font-size:11.5px;color:#8a8a84}
+.emp-ss{font-size:16px;font-weight:700;color:var(--ink);text-align:right}
+.emp-ss.low{color:var(--red-dark)}
+.emp-sr{font-size:12px;color:#8a8a84;text-align:right;line-height:1.3}
+.emp-sr.good{color:var(--green)} .emp-sr.bad{color:var(--red-dark)}
+.emp-sr em{display:block;font-style:normal;font-size:10.5px;color:#b4b2a9}
+.emp-card{border:1px solid #dfe3e9;border-radius:12px;background:#fcfcfd;padding:14px 16px;margin-top:14px}
+.emp-chead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:7px}
+.emp-cname{font-size:15px;font-weight:700;color:var(--ink)}
+.emp-cmeta{font-size:11.5px;color:#b4b2a9}
+.emp-cline{margin:0 0 11px;font-size:13px;color:#3d3d3a;line-height:1.6}
+.emp-cline b{color:var(--ink)}
+.emp-cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px}
+.emp-cl{display:block;font-size:10px;letter-spacing:.06em;color:#8a8a84;font-weight:700;
+  text-transform:uppercase;margin-bottom:2px}
+.emp-cv{font-size:12.5px;color:#3d3d3a;line-height:1.5}
+.emp-subs{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 16px}
+.emp-subs button{border:1px solid #e5e2da;background:#fff;color:#5f5e5a;font-family:inherit;
+  font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer}
+.emp-subs button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.emp-trow{display:grid;grid-template-columns:minmax(0,1fr) 32px 36px;gap:0 8px;align-items:center;
+  padding:5px 0;border-bottom:1px solid #f7f6f2;font-size:11.5px;color:#3d3d3a}
+.emp-trow.emp-thead{font-size:9.5px;color:#b4b2a9;border-bottom-color:#e5e2da}
+.emp-trow.is-fix{color:var(--red-dark);font-weight:600}
+.emp-tsc{text-align:right;font-size:12px;font-weight:700;color:var(--ink)}
+.emp-trow.is-fix .emp-tsc{color:var(--red-dark)}
+.emp-dots{text-align:right;letter-spacing:1px;font-size:10px}
+.emp-dots.d3{color:var(--green)} .emp-dots.d2{color:#8fb46a} .emp-dots.d1{color:#d3d1c8}
+.emp-note.flagline{border-left-color:var(--red)}
+.emp-gaplbl{font-size:10.5px;letter-spacing:.06em;color:#8a8a84;font-weight:700;margin:16px 0 5px;text-transform:uppercase}
+.emp-intro{font-size:12.5px;color:#5f5e5a;line-height:1.6;margin:0 0 10px;max-width:840px}
+.emp-intro b{color:var(--ink);font-weight:600}
 .emp-note{font-size:11.5px;color:#6f7885;line-height:1.6;margin:11px 0 0;
   padding-left:11px;border-left:2px solid #e5e2da}
 .emp-note b{color:#4a5568;font-weight:700}
-.emp-note.tight{margin:-3px 0 10px}
-.emp-note.wide{max-width:820px;margin-top:20px}
-/* a caveat about this course's own numbers, not a general explanation */
-.emp-note.flag{border-left-color:var(--amber);background:#faf2e2;
-  padding:9px 11px;border-radius:0 8px 8px 0}
-.emp-subnote{font-size:11px;color:#7a7368;line-height:1.55;margin:7px 0 0;
-  padding-top:7px;border-top:1px solid rgba(200,22,29,.14)}
-.emp-tg{font-size:9.5px;color:#a8a69e;line-height:1.35;margin-top:3px}
-.emp-tile.watch .emp-tg{color:#b58f8d}
-.emp-dc.warn{color:var(--red-dark);font-weight:700}
-.emp-legend{font-size:11px;color:#8a8a84;line-height:1.6;margin:10px 0 0;max-width:760px}
-.emp-legend b{color:var(--red-dark)}
-.emp-dnote{font-size:11.5px;color:#8a8a84;line-height:1.5;margin:6px 0 0}
-.emp-caution{border-left:3px solid var(--amber);border-radius:0 8px 8px 0;background:#faf2e2;
-  padding:10px 12px;margin:10px 0 0}
+.emp-note.flag{border-left-color:var(--amber);background:#faf2e2;padding:9px 11px;border-radius:0 8px 8px 0}
+.emp-dnote{font-size:11.5px;color:#8a8a84;line-height:1.5;margin:9px 0 0}
+.emp-caution{border-left:3px solid var(--amber);border-radius:0;background:#faf2e2;
+  padding:10px 12px;margin:11px 0 0}
 .emp-caution h5{margin:0 0 3px;font-size:10px;letter-spacing:.05em;font-weight:700;color:#8a6a2a}
 .emp-caution p{margin:0;font-size:12.5px;color:#3d3d3a;line-height:1.5}
 @media (max-width:980px){
   .emp-grid{grid-template-columns:1fr;gap:20px}
   .emp-grid>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
-  .emp-dept{grid-template-columns:minmax(0,1fr) 42px 34px}
-  .emp-dept .emp-bar,.emp-dept .emp-tag{display:none}
-  /* the response count keeps its place on a phone: it is what the * hangs off */
-  .emp-dept .emp-dc{display:block}
+  .emp-two{grid-template-columns:1fr;gap:20px}
+  .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
+    border-bottom:1px solid #e5e2da}
+  .emp-srow{grid-template-columns:minmax(0,1fr) 46px 78px}
+  .emp-srow .emp-sa{display:none}
+  .emp-cgrid{grid-template-columns:1fr}
   .emp-note{font-size:11px}
 }
 .sv-soon{border:1px solid #dfe3e9;border-radius:13px;background:#fff;padding:30px 24px;
@@ -3914,218 +3959,251 @@ const EMP={"survey":"Our Experience @ Troon","period":"2026 Q2","courses":[{"id"
 
 
 /* ---------------------------------------------------------------------------
-   EMPLOYEE FEEDBACK — the plain-English layer
+   EMPLOYEE FEEDBACK — the plain-language layer
 
-   Every sentence a department leader reads on these panels is here, in one
-   block, because none of it can be derived from the reports. CultureMonkey
-   exports scores and coefficients; it does not export what a coefficient
-   means, why the lowest score is not automatically the priority, or which of
-   our departments are too small to trust. That is judgement about our
-   property, so it is written by hand and it does not self-refresh.
+   The survey ships in CultureMonkey's vocabulary: drivers, leverage
+   coefficients, eNPS. None of that survives to the screen. Everything a
+   leader or an owner reads is written here, by hand, because none of it can
+   be derived from the export.
 
-   UPDATE THIS when the survey period changes. Specifically:
-     - counts.* below are quoted in prose (60 responses, 55%, 110 on payroll).
-       They are written out rather than computed so the wording stays natural;
-       if the numbers move and this block does not, the prose will contradict
-       the tiles. Check it every round.
-     - cant[] lists what is missing from THIS round's exports. When the
-       per-department driver cut or the King & Bear thematic arrives, delete
-       the matching entry — a stale caveat is worse than no caveat.
-     - deptNote{} keys must match department names in EMP.depts exactly.
+   Two things this layer deliberately does NOT do, both learned the hard way:
+
+   1. It never tells a team their priority is something other than what they
+      scored lowest. The impact weighting is real, but applying it per team
+      told Agronomy their issue was autonomy (8.2) while burying pay at 5.7,
+      the lowest number in the survey. Impact decides PROPERTY priorities.
+      A team's own lowest score is what that team gets shown.
+
+   2. It never presents a near-tie as a finding. Where two topics are within
+      noise of each other, say so or say nothing.
+
+   UPDATE THIS when the survey period changes:
+     - counts.* are quoted in prose and are checked against EMP by the tests
+     - headline.* are judgements about this round; rewrite them, don't patch
+     - plain{} must cover every key in EMP.avg or the tests fail
 --------------------------------------------------------------------------- */
+
+/* CultureMonkey's topic names -> what people actually call them. */
+const EMP_PLAIN={
+  "Purpose Alignment":"knowing your work matters",
+  "Autonomy":"being trusted to get on with it",
+  "Management":"your direct manager",
+  "Wellness":"workload and wellbeing",
+  "Communication":"being kept informed",
+  "Leadership":"senior leaders",
+  "Social Connection":"getting on with your team",
+  "Work Environment":"day-to-day working conditions",
+  "Involvement":"having a say",
+  "Recognition":"being thanked for good work",
+  "Growth & Development":"chances to learn and move up",
+  "Rewards":"pay and benefits"
+};
+const empPlain=k=>EMP_PLAIN[k]||k;
+
+/* Department names as staff would say them, not as the export writes them. */
+const EMP_TEAM={"FB Front of House":"Front of house","FB Back of House":"Kitchen"};
+const empTeam=n=>EMP_TEAM[n]||n;
+
 const EMP_COPY={
-  counts:{responses:60,part:"55%",payroll:110},
-
-  /* One line under the pill strip. Deliberately short \u2014 the explaining is
-     done by note{} below, sitting against the thing being explained. */
-  intro:{
-    overview:"Where each course stands, and the one driver worth working on.",
-    drivers:"All twelve drivers, and the questions underneath them.",
-    depts:"Every department against the property average. Click a row to open it.",
-    adv:"The recommend question on its own.",
-    themes:"What people wrote in their own words."
+  counts:{responses:60,payroll:110},
+  lead:"Sixty of roughly a hundred and ten staff answered. The survey asks two different things, and they do not move together.",
+  rateLbl:"How they rate working here",
+  rateSub:"Averaged across twelve topics, from pay to whether your work feels worthwhile.",
+  recLbl:"Would they recommend us",
+  recSub:"A separate question \u2014 a team can rate us well and still not recommend us.",
+  headline:{
+    weightTitle:"Where the weight is",
+    weight:"Golf OS Services is about forty people, more than a third of the property. It rates us lowest at 7.9 and is the most lukewarm about recommending us. Its people rate chances to learn and move up at 6.7.",
+    payTitle:"Pay, and what the statistics say about it",
+    pay:"Pay is the lowest-scoring topic property-wide at 6.8, and Agronomy rates it 5.7 \u2014 the lowest number in this survey. The survey company's analysis says lifting pay would move overall satisfaction less than other topics would. That is worth knowing when setting property priorities. It is not a reason to tell Agronomy their issue is something else."
   },
-
-  /* Third line inside each headline tile, so the scale is readable without
-     leaving the tile. Keys must match the tile labels in empTiles(). */
-  tile:{
-    "Overall":"average of the 12 drivers, 0\u201310",
-    "eNPS":"\u2212100 to +100, not a percent",
-    "Participation":"share of the team who answered",
-    "Responses":"people"
+  teamsLbl:"Each team, largest first",
+  recFoot:"Recommending is the second question, scored from \u2212100 to +100: how many more people would recommend us than would not, per hundred. We only get the net figure per team, not the breakdown.",
+  detail:{
+    topics:"Every topic the survey asked about, highest first. <b>Moves overall</b> is how much that topic tends to shift how people feel about working here \u2014 three dots means it really does, one dot means it barely does.",
+    topicsPay:"Pay sits last on both courses with one dot. That is the whole reason it is not the property priority.",
+    teams:"Every team against the property average on all twelve topics. Click a row to open it.",
+    rec:"The recommend question on its own, course by course. Promoters answered 9 or 10, passives 7 or 8, detractors 0 to 6.",
+    wrote:"Three open-text questions, sorted into themes by CultureMonkey. The number is how many responses mentioned each theme \u2014 a count, not a score."
   },
-
-  /* Notes sit directly beneath the block they explain. Each one has to make
-     sense to a leader who arrived on this panel and nowhere else. */
-  note:{
-    overviewCalls:"Picked by crossing score with impact: a driver is flagged when it scores below this course's overall <b>and</b> carries impact of 0.60 or higher. Work the flagged one \u2014 open <b>Drivers</b> for the questions behind it, then tell your team what you picked and why.",
-    overviewFoot:"Responses are anonymous, and any team small enough that answers could be traced back to an individual is not broken out separately. Sixty people answered across both courses \u2014 about 55%, which works back to roughly 110 on the payroll when the survey went out.",
-    driversList:"Ordered by <b>impact</b>, not by score. Impact is how much overall engagement moves for each point gained on that driver. It is why <b>Rewards</b> sits at the bottom despite carrying the lowest score on the property at 6.8 \u2014 its impact is 0.19, so lifting it changes little else. The red row is the one flagged for action.",
-    driversQs:"The individual questions carrying the most weight in this course's result. These are the concrete behaviours the drivers are made of, and they are the part you can actually change.",
-    advSplit:"eNPS is the promoter share minus the detractor share, on a \u2212100 to +100 scale. It is not a percentage, and it does not compare to the 0\u201310 scores on the other panels.",
-    themes:"Three open-text questions, sorted into themes by CultureMonkey. The number beside each theme is how many responses mentioned it \u2014 a count, not a score.",
-    deptsTable:"The departments listed account for 57 of the 60 responses. Three sit in teams too small to report on their own.",
-    deptsPrio:"Worked out from the property-wide impact of each driver, not this team's own \u2014 CultureMonkey holds the per-department breakdown and has not sent it. Read it as a starting point rather than a verdict."
-  },
-
-  /* Caveats that belong to one course only, shown in that course's column. */
-  courseNote:{
-    ss:{adv:"The headline reads +34 while the spread below works out to +35. The headline comes from the heatmap export, which counted 29 responses here; the spread comes from the location report, which counted 31. We have not been told why the two differ, so both are shown as they arrived rather than reconciled to each other."}
-  },
-
-  /* Keys must match department names in EMP.depts exactly. */
+  /* Keys must match names in EMP.depts / ids in EMP.courses exactly. */
   deptNote:{
     "FB Back of House":"Kitchen staff across both AJ's and Legends, reported together under King & Bear. The survey does not separate the two restaurants.",
     "FB Front of House":"Servers and bar staff across both AJ's and Legends, reported together under King & Bear. The survey does not separate the two restaurants."
-  }
+  },
+  courseNote:{
+    ss:{rec:"The headline reads +34 while this spread works out to +35. The headline comes from the heatmap export, which counted 29 responses here; the spread comes from the location report, which counted 31. We have not been told why the two differ, so both are shown as they arrived."}
+  },
+  thinNote:n=>`only ${n} answered \u2014 too few to read much into`,
+  levelNote:"level with the property",
+  aboveNote:"above the property average"
 };
 
-/* A department below either line is reported, but flagged. The thresholds are
-   ours, not Troon's: eight responses is roughly where one person stops being
-   able to swing the average by half a point, and 40% participation is where
-   who answered starts to matter as much as what they said. */
+/* A team below either line is shown, but its numbers are not leaned on. */
 const EMP_MIN_N=8;
 const EMP_MIN_PART=40;
-
-const EMP_SECS=[["overview","Overview"],["drivers","Drivers"],["depts","Departments"],
-                ["adv","Advocacy"],["themes","Themes"]];
-const empSec=()=>EMP_SECS.some(x=>x[0]===state.empSec)?state.empSec:"overview";
-/* Soft against its own course AND high leverage. */
+/* Gaps smaller than this are noise on a ten-point scale and are reported as
+   "level with", not as a difference. Golf's lowest topic sits 0.1 above the
+   property average; calling that "above" reads as a finding when it is not. */
+const EMP_NOISE=0.15;
+/* Course-level flag: soft against its own course AND high-moving. */
 const EMP_LEV=0.60;
+
+const EMP_SECS=[["summary","Summary"],["detail","The detail"]];
+const EMP_DETS=[["topics","All twelve topics"],["teams","Each team"],
+                ["rec","Recommending"],["wrote","What people wrote"]];
+const empSec=()=>EMP_SECS.some(x=>x[0]===state.empSec)?state.empSec:"summary";
+const empDet=()=>EMP_DETS.some(x=>x[0]===state.empDet)?state.empDet:"topics";
+
+function empThin(dp){ return dp.cnt<EMP_MIN_N||dp.part<EMP_MIN_PART; }
+function empHead(dp){ return Math.round(dp.cnt/(dp.part/100)); }
+function empThinWhy(dp){
+  const few=dp.cnt<EMP_MIN_N, lowp=dp.part<EMP_MIN_PART;
+  return `${dp.cnt} of ${empHead(dp)} answered`+
+    (few&&lowp?", which is both a small group and a low share of the team"
+      :few?", which is a small group":", which is a low share of the team")+
+    ". Treat the figures above as a reason to go and talk to people rather than as a result.";
+}
+/* What this team scored lowest. Not weighted, not adjusted \u2014 the plain
+   bottom of their own list, which is what they would tell you themselves. */
+function empLowest(dp){
+  let k=null;
+  Object.keys(dp.s).forEach(x=>{ if(k===null||dp.s[x]<dp.s[k]) k=x; });
+  return {k:k,score:dp.s[k],gap:+(dp.s[k]-(EMP.avg[k]||0)).toFixed(1)};
+}
+function empRecWord(e){
+  if(e>=60) return ["strongly positive","good"];
+  if(e>=30) return ["positive","good"];
+  if(e>=10) return ["mixed",""];
+  if(e>=0)  return ["flat",""];
+  return ["negative","bad"];
+}
+function empDots(imp){
+  const n=imp>=0.75?3:(imp>=0.55?2:1);
+  const cls=n===3?"d3":(n===2?"d2":"d1");
+  return `<span class="emp-dots ${cls}" title="moves overall: ${imp.toFixed(2)}">`+
+         "\u25cf".repeat(n)+`</span>`;
+}
 function empFix(c){
   return c.drivers.filter(d=>d[1]<c.o&&d[2]>=EMP_LEV).sort((a,b)=>b[2]-a[2])[0]||null;
 }
-function empBest(c){ return c.drivers.slice().sort((a,b)=>b[2]-a[2])[0]; }
-function empRank(c,name,by){
-  const l=c.drivers.slice().sort((a,b)=>b[by]-a[by]);
-  return l.findIndex(d=>d[0]===name)+1;
-}
-const empOrd=n=>["","first","second","third","fourth","fifth","sixth","seventh","eighth",
-                 "ninth","tenth","eleventh","twelfth"][n]||n;
-function empBar(v,lo,hi,col){
-  return `<span class="emp-bar"><i style="width:${((v-lo)/(hi-lo)*100).toFixed(0)}%;background:${col}"></i></span>`;
-}
-function empTiles(c){
-  return [["Overall",c.o.toFixed(1),false],["eNPS","+"+c.enps,false],
-          ["Participation",c.part+"%",c.partWatch],["Responses",c.n,false]]
-    .map(([l,v,w])=>`<div class="emp-tile${w?" watch":""}"><div class="emp-tn">${v}</div>`+
-      `<div class="emp-tl">${l.toUpperCase()}</div>`+
-      `<div class="emp-tg">${EMP_COPY.tile[l]||""}</div></div>`).join("");
-}
-function empOverview(c){
-  const fix=empFix(c), best=empBest(c);
-  return `<div class="emp-tiles">${empTiles(c)}</div>`+
-    (fix?`<div class="emp-call act"><h5>WHERE TO ACT &middot; WHOLE COURSE</h5>`+
-      `<p><b>${fix[0]}</b> \u2014 scores ${fix[1].toFixed(1)}, `+
-      `${empOrd(empRank(c,fix[0],1))} of ${c.drivers.length} on score, but `+
-      `${empOrd(empRank(c,fix[0],2))} on leverage at ${fix[2].toFixed(2)}. `+
-      `Soft and high-leverage.</p></div>`
-     :`<div class="emp-call act"><h5>WHERE TO ACT</h5><p>No driver is both below `+
-      `${c.o.toFixed(1)} and high-leverage. Hold the line.</p></div>`)+
-    `<div class="emp-call keep"><h5>WHAT TO PROTECT</h5>`+
-    `<p><b>${best[0]}</b> \u2014 scores ${best[1].toFixed(1)} and is the strongest lever `+
-    `at ${best[2].toFixed(2)}.</p></div>`+
-    `<p class="emp-note">${EMP_COPY.note.overviewCalls}</p>`;
-}
-function empDrivers(c){
-  const fix=empFix(c), lo=6, hi=10;
-  const rows=c.drivers.slice().sort((a,b)=>b[2]-a[2]).map(d=>{
-    const on=fix&&d[0]===fix[0], soft=d[2]>=EMP_LEV;
-    return `<div class="emp-row${on?" is-fix":""}">`+
-      `<span class="emp-dn">${esc(d[0])}</span>`+
-      empBar(d[1],lo,hi,on?"var(--red)":"var(--navy)")+
-      `<span class="emp-ds">${d[1].toFixed(1)}</span>`+
-      `<span class="emp-di${soft?" hi":""}">${d[2].toFixed(2)}</span></div>`;
-  }).join("");
-  return `<div class="emp-row emp-rhead"><span>DRIVER &middot; BY IMPACT</span><span></span>`+
-    `<span class="emp-ds">SCORE</span><span class="emp-di">IMPACT</span></div>${rows}`+
-    `<p class="emp-note">${EMP_COPY.note.driversList}</p>`+
-    `<h3 class="sv-h">The questions that move it most</h3>`+
-    `<p class="emp-note tight">${EMP_COPY.note.driversQs}</p>`+
-    c.qs.slice(0,5).map((q,k)=>`<div class="emp-q${k<2?" top":""}">`+
-      `<span class="emp-qn">${k+1}</span><span><b>${esc(q[0])}</b>`+
-      `<em>${q[1].toUpperCase()}</em></span>`+
-      `<span class="emp-qv">+${q[2].toFixed(2)}</span></div>`).join("");
-}
-function empAdv(c){
-  const a=c.adv, tot=a.pro+a.pas+a.det, max=Math.max.apply(null,a.dist);
-  const seg=[[a.pro,"var(--green)","#fff"],[a.pas,"#c9c5b8","#5f5e5a"],[a.det,"var(--red)","#fff"]]
+
+/* ---------------------------------------------------------------- summary */
+function empSummary(){
+  const C=EMP_COPY;
+  const pro=EMP.courses.reduce((a,c)=>a+c.adv.pro,0);
+  const pas=EMP.courses.reduce((a,c)=>a+c.adv.pas,0);
+  const det=EMP.courses.reduce((a,c)=>a+c.adv.det,0);
+  const tot=pro+pas+det;
+  const bar=[[pro,"var(--green)","#fff"],[pas,"#c9c5b8","#4a4a45"],[det,"var(--red)","#fff"]]
     .map(([n,bg,fg])=>`<div style="width:${(n/tot*100).toFixed(2)}%;background:${bg};color:${fg}">${n}</div>`).join("");
-  const key=[["Promoters",a.pro,"9\u201310","var(--green)"],["Passives",a.pas,"7\u20138","#c9c5b8"],
-             ["Detractors",a.det,"0\u20136","var(--red)"]]
-    .map(([l,n,r,col])=>`<div class="emp-key"><i style="background:${col}"></i>`+
-      `<span>${l}</span><em>${r}</em><b>${n}</b><u>${Math.round(n/tot*100)}%</u></div>`).join("");
-  const dist=a.dist.map((n,v)=>{
-    const col=v>=9?"var(--green)":(v>=7?"#c9c5b8":"var(--red)");
-    return `<div class="emp-drow"><span>${v}</span>`+
-      `<span class="emp-bar">${n?`<i style="width:${(n/max*100).toFixed(0)}%;background:${col}"></i>`:""}</span>`+
-      `<span class="${n?"":"nil"}">${n}</span></div>`;
+
+  const rows=EMP.depts.slice().sort((a,b)=>b.cnt-a.cnt).map(dp=>{
+    const thin=empThin(dp), lo=empLowest(dp), [word,wc]=empRecWord(dp.e);
+    const note=thin
+      ? `<span class="emp-sn warn">${esc(C.thinNote(`${dp.cnt} of ${empHead(dp)}`))}</span>`
+      : `<span class="emp-sn${lo.gap<-EMP_NOISE?" bad":""}">${esc(empPlain(lo.k))} \u2014 ${lo.score.toFixed(1)}`+
+        (lo.gap<-EMP_NOISE?"":`, ${esc(lo.gap>EMP_NOISE?C.aboveNote:C.levelNote)}`)+`</span>`;
+    return `<button type="button" class="emp-srow${dp.n===state.empDept?" is-on":""}" data-empd="${esc(dp.n)}">`+
+      `<span class="emp-st">${esc(empTeam(dp.n))}<br>${note}</span>`+
+      `<span class="emp-sa">${dp.cnt} of ~${empHead(dp)}</span>`+
+      `<span class="emp-ss${dp.o<EMP.propOverall?" low":""}">${dp.o.toFixed(1)}</span>`+
+      `<span class="emp-sr ${thin?"":wc}">${word}<em>${dp.e>0?"+":""}${dp.e}</em></span>`+
+    `</button>`;
   }).join("");
-  const cn=(EMP_COPY.courseNote[c.id]||{}).adv;
-  return `<div class="emp-eh"><span class="emp-en">+${c.enps}</span><em>eNPS</em></div>`+
-    `<p class="emp-src">Rating spread from the 2026 Q2 location report &middot; ${c.advN} responses</p>`+
-    `<div class="emp-split">${seg}</div>${key}`+
-    `<p class="emp-note">${EMP_COPY.note.advSplit}</p>`+
-    (cn?`<p class="emp-note flag">${cn}</p>`:"")+
-    `<h3 class="sv-h">Every rating, 0 to 10</h3>${dist}`;
+
+  const sel=EMP.depts.find(d=>d.n===state.empDept);
+
+  return `<p class="emp-lead">${C.lead}</p>`+
+    `<div class="emp-two">`+
+      `<div class="emp-col">`+
+        `<p class="emp-klbl">${C.rateLbl}</p>`+
+        `<p class="emp-kbig">${EMP.propOverall.toFixed(1)}<em>out of 10</em></p>`+
+        `<p class="emp-ksub">${C.rateSub}</p>`+
+      `</div>`+
+      `<div class="emp-col">`+
+        `<p class="emp-klbl">${C.recLbl}</p>`+
+        `<div class="emp-split">${bar}</div>`+
+        `<p class="emp-ksub">${pro} would, ${pas} are neutral, ${det} would not. ${C.recSub}</p>`+
+      `</div>`+
+    `</div>`+
+    `<div class="emp-call act"><h5>${esc(C.headline.weightTitle).toUpperCase()}</h5>`+
+      `<p>${C.headline.weight}</p></div>`+
+    `<div class="emp-call warn"><h5>${esc(C.headline.payTitle).toUpperCase()}</h5>`+
+      `<p>${C.headline.pay}</p></div>`+
+    `<p class="emp-slbl">${esc(C.teamsLbl).toUpperCase()}</p>`+
+    `<div class="emp-srow emp-shead"><span>TEAM &middot; AND WHAT THEY RATE LOWEST</span>`+
+      `<span class="emp-sa">ANSWERED</span><span class="emp-ss">RATING</span>`+
+      `<span class="emp-sr">RECOMMEND</span></div>${rows}`+
+    (sel?empLeaderCard(sel):"")+
+    `<p class="emp-note">${C.recFoot}</p>`;
 }
-function empThemes(c){
-  if(!c.themes) return `<p class="emp-none"><b>Not available.</b> The thematic analysis for `+
-    `${c.name} exported without its content \u2014 section headings only, no theme counts. `+
-    `A clean export from CultureMonkey will fill this in.</p>`;
-  const T=c.themes;
-  const block=(t,d,cls)=>{
-    const max=Math.max.apply(null,d.items.map(x=>x[1]));
-    return `<h3 class="sv-h">${t} <span class="emp-sub">${d.n} responses</span></h3>`+
-      d.items.map(([l,n])=>`<div class="emp-th ${cls}"><span>${esc(l)}</span>`+
-        `<span class="emp-bar"><i style="width:${(n/max*100).toFixed(0)}%"></i></span>`+
-        `<span class="emp-tv">${n}</span></div>`).join("");
-  };
-  return block("Keep doing",T["continue"],"good")+block("Asks",T.improve,"work")+
-    block("Open floor",T.open,"nil")+
-    `<p class="emp-note">${EMP_COPY.note.themes}</p>`;
+
+/* One card per team, for handing to that team's leader. */
+function empLeaderCard(dp){
+  const thin=empThin(dp), lo=empLowest(dp), [word]=empRecWord(dp.e);
+  let hi=null; Object.keys(dp.s).forEach(k=>{ if(hi===null||dp.s[k]>dp.s[hi]) hi=k; });
+  const vs=dp.o>EMP.propOverall?"above":(dp.o<EMP.propOverall?"below":"level with");
+  return `<div class="emp-card">`+
+    `<div class="emp-chead"><span class="emp-cname">${esc(empTeam(dp.n))}</span>`+
+      `<span class="emp-cmeta">${dp.cnt} of about ${empHead(dp)} answered</span></div>`+
+    `<p class="emp-cline"><b>They rate working here ${dp.o.toFixed(1)} out of 10.</b> `+
+      `That is ${vs} the property, which sits at ${EMP.propOverall.toFixed(1)}. `+
+      `On recommending us they are ${word}.</p>`+
+    `<div class="emp-cgrid">`+
+      `<div><span class="emp-cl">Strongest</span>`+
+        `<span class="emp-cv">${esc(empPlain(hi))} \u2014 ${dp.s[hi].toFixed(1)}</span></div>`+
+      `<div><span class="emp-cl">Rated lowest</span>`+
+        `<span class="emp-cv">${esc(empPlain(lo.k))} \u2014 ${lo.score.toFixed(1)}`+
+        `${lo.gap<-EMP_NOISE?`, ${Math.abs(lo.gap).toFixed(1)} below the property`:", level with the property"}</span></div>`+
+    `</div>`+
+    (thin?`<div class="emp-caution"><h5>READ THIS ONE LIGHTLY</h5><p>${esc(empThinWhy(dp))}</p></div>`:"")+
+    (EMP_COPY.deptNote&&EMP_COPY.deptNote[dp.n]?`<p class="emp-dnote">${esc(EMP_COPY.deptNote[dp.n])}</p>`:"")+
+  `</div>`;
 }
-/* Each department's own priority: the gap below the property average, weighted
-   by that driver's leverage. Raw gap alone would send every team after Rewards,
-   which moves engagement least of the twelve. */
-function empPrio(dp){
-  let best=null;
-  Object.keys(EMP.avg).forEach(k=>{
-    const gap=dp.s[k]-EMP.avg[k];
-    if(gap>=-0.05) return;
-    const opp=-gap*(EMP.lev[k]||0.5);
-    if(!best||opp>best.opp) best={k,gap:+gap.toFixed(1),opp};
-  });
-  return best;
+
+/* ------------------------------------------------- detail: twelve topics */
+function empTopics(){
+  const cols=EMP.courses.map(c=>{
+    const fix=empFix(c);
+    const rows=c.drivers.slice().sort((a,b)=>b[1]-a[1]).map(d=>{
+      const on=fix&&d[0]===fix[0];
+      return `<div class="emp-trow${on?" is-fix":""}">`+
+        `<span>${esc(empPlain(d[0]))}</span>`+
+        `<span class="emp-tsc">${d[1].toFixed(1)}</span>`+
+        empDots(d[2])+`</div>`;
+    }).join("");
+    return `<div class="emp-col">`+
+      `<p class="emp-cn">${esc(c.name)}</p>`+
+      `<p class="emp-cmeta">${c.n} answered &middot; rates us ${c.o.toFixed(1)}</p>`+
+      `<div class="emp-trow emp-thead"><span>TOPIC</span><span class="emp-tsc">SCORE</span>`+
+        `<span>MOVES</span></div>${rows}`+
+      (fix?`<p class="emp-note flagline"><b>${esc(empPlain(fix[0]))}</b> is the one to work on here: `+
+        `below this course's average of ${c.o.toFixed(1)}, and a topic that moves everything else.</p>`
+       :`<p class="emp-note">Nothing here is both below the course average and high-moving.</p>`)+
+    `</div>`;
+  }).join("");
+  return `<p class="emp-intro">${EMP_COPY.detail.topics}</p>`+
+    `<p class="emp-note">${EMP_COPY.detail.topicsPay}</p>`+
+    `<div class="emp-two">${cols}</div>`;
 }
-/* Thin means either too few answers or too small a share of the team. Both
-   land in the same place: the number is real but one person can move it. */
-function empThin(dp){ return dp.cnt<EMP_MIN_N||dp.part<EMP_MIN_PART; }
-function empThinWhy(dp){
-  const head=Math.round(dp.cnt/(dp.part/100));
-  const few=dp.cnt<EMP_MIN_N, lowp=dp.part<EMP_MIN_PART;
-  return `${dp.cnt} of ${head} answered`+
-    (few&&lowp?", which is both a small group and a low share of the team"
-      :few?", which is a small group"
-      :", which is a low share of the team")+
-    ". Treat the figures above as a reason to go and talk to people rather than as a result.";
-}
+
+/* ------------------------------------------------------- detail: each team */
 function empDeptSel(){
-  const d=EMP.depts.find(x=>x.n===state.empDept);
-  return d||EMP.depts.slice().sort((x,y)=>x.o-y.o)[0];
+  return EMP.depts.find(x=>x.n===state.empDept)||EMP.depts.slice().sort((x,y)=>y.cnt-x.cnt)[0];
 }
 function empDeptGaps(dp){
   const keys=Object.keys(EMP.avg).sort((x,y)=>(dp.s[x]-EMP.avg[x])-(dp.s[y]-EMP.avg[y]));
-  const pr=empPrio(dp), W=640, CX=300, SC=150, H=keys.length*26+26;
+  const lo=empLowest(dp), W=640, CX=300, SC=150, H=keys.length*26+26;
   let g=`<svg viewBox="0 0 ${W} ${H}" class="emp-gapsvg" role="img" `+
-    `aria-label="Driver gaps against the property average">`+
+    `aria-label="How ${esc(empTeam(dp.n))} compares with the property average on each topic">`+
     `<line x1="${CX}" y1="8" x2="${CX}" y2="${keys.length*26+6}" stroke="#cfd6e0"></line>`+
     `<text x="${CX}" y="${keys.length*26+22}" text-anchor="middle" font-size="10" fill="#b4b2a9">property average</text>`;
   keys.forEach((k,i)=>{
     const gap=+(dp.s[k]-EMP.avg[k]).toFixed(1), y=i*26+18;
-    const w=Math.abs(gap)*SC, neg=gap<0, on=pr&&k===pr.k;
+    const w=Math.abs(gap)*SC, neg=gap<0, on=k===lo.k;
     g+=`<text x="${CX-158}" y="${y+4}" text-anchor="end" font-size="11.5" `+
-       `font-weight="${on?700:400}" fill="${on?"#a32d2d":(neg?"#55554e":"#7c8593")}">${k}</text>`;
+       `font-weight="${on?700:400}" fill="${on?"#a32d2d":(neg?"#55554e":"#7c8593")}">${esc(empPlain(k))}</text>`;
     if(Math.abs(gap)>0.001)
       g+=`<rect x="${neg?CX-w:CX}" y="${y-7}" width="${w}" height="14" rx="2" `+
          `fill="${on?"#c8161d":(neg?"#d9615f":"#8fb46a")}"></rect>`;
@@ -4135,69 +4213,102 @@ function empDeptGaps(dp){
   });
   return g+`</svg>`;
 }
-function empDepts(){
-  const sel=empDeptSel(), pr=empPrio(sel);
-  const rows=EMP.depts.slice().sort((a,b)=>b.o-a.o).map(dp=>{
-    const p=empPrio(dp), low=dp.o<EMP.propOverall, on=dp.n===sel.n;
-    const thin=empThin(dp);
-    return `<button type="button" class="emp-dept${on?" is-on":""}" data-empd="${esc(dp.n)}">`+
-      `<span class="emp-dn">${dp.n}</span>`+
-      `<span class="emp-dc${thin?" warn":""}">${dp.cnt}${thin?"\u2009*":""}</span>`+
-      `<span class="emp-de${dp.e<0?" neg":(dp.e>=50?" pos":"")}">${dp.e>0?"+":""}${dp.e}</span>`+
-      empBar(dp.o,6,10,low?"var(--red)":"var(--navy)")+
-      `<span class="emp-ds${low?" low":""}">${dp.o.toFixed(1)}</span>`+
-      `<span class="emp-tag ${p?"act":"strong"}">${p?esc(p.k):"Nothing below average"}</span></button>`;
+function empTeams(){
+  const sel=empDeptSel();
+  const rows=EMP.depts.slice().sort((a,b)=>b.cnt-a.cnt).map(dp=>{
+    const thin=empThin(dp), lo=empLowest(dp), [word,wc]=empRecWord(dp.e);
+    return `<button type="button" class="emp-srow${dp.n===sel.n?" is-on":""}" data-empd="${esc(dp.n)}">`+
+      `<span class="emp-st">${esc(empTeam(dp.n))}<br>`+
+        `<span class="emp-sn${thin?" warn":(lo.gap<-EMP_NOISE?" bad":"")}">`+
+        `${thin?esc(EMP_COPY.thinNote(dp.cnt+" of "+empHead(dp))):esc(empPlain(lo.k))+" \u2014 "+lo.score.toFixed(1)}`+
+        `</span></span>`+
+      `<span class="emp-sa">${dp.cnt} of ~${empHead(dp)}</span>`+
+      `<span class="emp-ss${dp.o<EMP.propOverall?" low":""}">${dp.o.toFixed(1)}</span>`+
+      `<span class="emp-sr ${thin?"":wc}">${word}<em>${dp.e>0?"+":""}${dp.e}</em></span>`+
+    `</button>`;
   }).join("");
-  const split=[["King & Bear",sel.kb],["Slammer & Squire",sel.ss]]
-    .map(([n,v])=>`<span>${n} <b>${v==null?"\u2014":v.toFixed(1)}</b></span>`).join("");
-  const anyThin=EMP.depts.some(empThin);
-  return `<div class="emp-dept emp-rhead"><span>DEPARTMENT</span><span class="emp-dc">n</span>`+
-    `<span class="emp-de">eNPS</span><span></span><span class="emp-ds">SCORE</span>`+
-    `<span>PRIORITY</span></div>${rows}`+
-    (anyThin?`<p class="emp-legend"><b>*</b> Fewer than ${EMP_MIN_N} responses, or under `+
-      `${EMP_MIN_PART}% of the team. The score is still shown, but it is thin enough that one `+
-      `person moves it \u2014 read those rows as a prompt to go and ask, not as a measurement.</p>`:"")+
-    `<p class="emp-note">${EMP_COPY.note.deptsTable}</p>`+
-    `<div class="emp-dcard"><div class="emp-dhead"><span class="emp-cn">${sel.n}</span>`+
-      `<span class="emp-dmeta">${sel.cnt} responses &middot; ${sel.part}% participation `+
-      `&middot; eNPS ${sel.e>0?"+":""}${sel.e}</span></div>`+
-      `<div class="emp-dsplit">${split}<em>by course, from the location reports</em></div>`+
-      (EMP_COPY.deptNote[sel.n]?`<p class="emp-dnote">${esc(EMP_COPY.deptNote[sel.n])}</p>`:"")+
-      (empThin(sel)?`<div class="emp-caution"><h5>READ THIS ONE LIGHTLY</h5><p>`+
-        `${esc(empThinWhy(sel))}</p></div>`:"")+
-      (pr?`<div class="emp-call act"><h5>THIS DEPARTMENT&rsquo;S PRIORITY</h5>`+
-        `<p><b>${pr.k}</b> sits <b>${Math.abs(pr.gap).toFixed(1)}</b> below property and is `+
-        `one of the higher-leverage drivers at ${(EMP.lev[pr.k]||0).toFixed(2)}.</p>`+
-        `<p class="emp-subnote">${EMP_COPY.note.deptsPrio}</p></div>`
-       :`<div class="emp-call keep"><h5>NOTHING TO CHASE</h5>`+
-        `<p>${sel.n} is at or above the property average on all twelve drivers.</p></div>`)+
-      `<p class="emp-gaplbl">ALL TWELVE, AGAINST THE PROPERTY AVERAGE</p>`+
-      empDeptGaps(sel)+`</div>`;
+  return `<p class="emp-intro">${EMP_COPY.detail.teams}</p>`+
+    `<div class="emp-srow emp-shead"><span>TEAM &middot; AND WHAT THEY RATE LOWEST</span>`+
+      `<span class="emp-sa">ANSWERED</span><span class="emp-ss">RATING</span>`+
+      `<span class="emp-sr">RECOMMEND</span></div>${rows}`+
+    `<div class="emp-dcard">`+
+      empLeaderCard(sel)+
+      `<p class="emp-gaplbl">ALL TWELVE TOPICS, AGAINST THE PROPERTY AVERAGE</p>`+
+      empDeptGaps(sel)+
+    `</div>`;
 }
+
+/* --------------------------------------------------- detail: recommending */
+function empRec(c){
+  const a=c.adv, tot=a.pro+a.pas+a.det, max=Math.max.apply(null,a.dist);
+  const seg=[[a.pro,"var(--green)","#fff"],[a.pas,"#c9c5b8","#4a4a45"],[a.det,"var(--red)","#fff"]]
+    .map(([n,bg,fg])=>`<div style="width:${(n/tot*100).toFixed(2)}%;background:${bg};color:${fg}">${n}</div>`).join("");
+  const key=[["Would recommend",a.pro,"9\u201310","var(--green)"],["Neutral",a.pas,"7\u20138","#c9c5b8"],
+             ["Would not",a.det,"0\u20136","var(--red)"]]
+    .map(([l,n,r,col])=>`<div class="emp-key"><i style="background:${col}"></i>`+
+      `<span>${l}</span><em>${r}</em><b>${n}</b><u>${Math.round(n/tot*100)}%</u></div>`).join("");
+  const dist=a.dist.map((n,v)=>{
+    const col=v>=9?"var(--green)":(v>=7?"#c9c5b8":"var(--red)");
+    return `<div class="emp-drow"><span>${v}</span>`+
+      `<span class="emp-bar">${n?`<i style="width:${(n/max*100).toFixed(0)}%;background:${col}"></i>`:""}</span>`+
+      `<span class="${n?"":"nil"}">${n}</span></div>`;
+  }).join("");
+  const cn=(EMP_COPY.courseNote[c.id]||{}).rec;
+  return `<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+    `<p class="emp-cmeta">${c.advN} answered this question</p>`+
+    `<div class="emp-split">${seg}</div>${key}`+
+    (cn?`<p class="emp-note flag">${cn}</p>`:"")+
+    `<p class="emp-gaplbl">EVERY RATING, 0 TO 10</p>${dist}</div>`;
+}
+function empWrote(c){
+  if(!c.themes) return `<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+    `<p class="emp-none"><b>Not available.</b> The thematic export for ${esc(c.name)} came back with `+
+    `its section headings and no content. This panel is empty because the data is missing, not `+
+    `because nobody wrote anything.</p></div>`;
+  const T=c.themes;
+  const block=(t,d,cls)=>{
+    const max=Math.max.apply(null,d.items.map(x=>x[1]));
+    return `<p class="emp-gaplbl">${t} <span class="emp-sub">${d.n} responses</span></p>`+
+      d.items.map(([l,n])=>`<div class="emp-th ${cls}"><span>${esc(l)}</span>`+
+        `<span class="emp-bar"><i style="width:${(n/max*100).toFixed(0)}%"></i></span>`+
+        `<span class="emp-tv">${n}</span></div>`).join("");
+  };
+  return `<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+    block("What to keep doing",T["continue"],"good")+
+    block("What they are asking for",T.improve,"work")+
+    block("Anything else",T.open,"nil")+`</div>`;
+}
+
+/* ------------------------------------------------------------------ shell */
 function detailEmployee(i){
-  const sec=empSec();
-  const bar=`<div class="mg-yrs emp-secs" role="group" aria-label="Section">`+
+  const sec=empSec(), det=empDet();
+  const pills=`<div class="mg-yrs emp-secs" role="group" aria-label="View">`+
     EMP_SECS.map(([k,l])=>`<button type="button" data-emp="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
-  const intro=EMP_COPY.intro[sec]
-    ? `<p class="emp-intro">${EMP_COPY.intro[sec]}</p>` : "";
-  const body=sec==="depts"
-    ? `<div class="emp-wide">${empDepts()}</div>`
-    : `<div class="emp-grid">`+EMP.courses.map((c,k)=>{
-        const inner=sec==="overview"?empOverview(c):sec==="drivers"?empDrivers(c)
-          :sec==="adv"?empAdv(c):empThemes(c);
-        return `<div class="emp-col"><div class="emp-cn">${c.name}</div>${inner}</div>`;
-      }).join("")+`</div>`;
+  let body;
+  if(sec==="summary"){
+    body=`<div class="emp-wide">${empSummary()}</div>`;
+  }else{
+    const sub=`<div class="emp-subs" role="group" aria-label="Section">`+
+      EMP_DETS.map(([k,l])=>`<button type="button" data-empdet="${k}" aria-pressed="${k===det}">${l}</button>`).join("")+
+      `</div>`;
+    const inner=det==="topics"?empTopics()
+      :det==="teams"?empTeams()
+      :det==="rec"?`<p class="emp-intro">${EMP_COPY.detail.rec}</p>`+
+        `<div class="emp-two">${EMP.courses.map(empRec).join("")}</div>`
+      :`<p class="emp-intro">${EMP_COPY.detail.wrote}</p>`+
+        `<div class="emp-two">${EMP.courses.map(empWrote).join("")}</div>`;
+    body=`<div class="emp-wide">${sub}${inner}</div>`;
+  }
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
     `<div class="detail-body is-wide">`+
       `<p class="emp-meta">${EMP.survey} &middot; ${EMP.period} &middot; `+
       `${EMP.courses.reduce((a,c)=>a+c.n,0)} responses</p>`+
-      bar+intro+body+
-      (sec==="overview"?`<p class="emp-note wide">${EMP_COPY.note.overviewFoot}</p>`:"")+
-      `<p class="emp-src2">Headline figures from the heatmap export (later). Rating spreads and `+
-      `the by-course department scores are from the 2026 Q2 location reports, which counted `+
-      `two more responses at Slammer &amp; Squire.</p>`+
+      pills+body+
+      `<p class="emp-src2">Headline figures from the heatmap export. Rating spreads and the `+
+      `by-course team scores are from the 2026 Q2 location reports, which counted two more `+
+      `responses at Slammer &amp; Squire.</p>`+
     `</div>`;
   svAudWire(i);
   const hold=fn=>()=>{
@@ -4207,8 +4318,10 @@ function detailEmployee(i){
   };
   el("#detail").querySelectorAll("[data-emp]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.empSec=b.dataset.emp; })));
+  el("#detail").querySelectorAll("[data-empdet]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.empDet=b.dataset.empdet; })));
   el("#detail").querySelectorAll("[data-empd]").forEach(b=>b.addEventListener("click",
-    hold(()=>{ state.empDept=b.dataset.empd; })));
+    hold(()=>{ state.empDept=state.empDept===b.dataset.empd?null:b.dataset.empd; })));
 }
 
 function detailSurveyPending(i){
