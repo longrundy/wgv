@@ -343,7 +343,11 @@ a{color:inherit}
   .gh-card{padding:13px 14px 14px}
 }
 @media (max-width:820px){.gh-tiles{grid-template-columns:1fr 1fr}}
-.mg-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:0 0 14px}
+.mg-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:9px;margin:0 0 14px}
+.mg-tile.plain{background:#f7f9fc;border-color:#dde3ec}
+.mg-tile.plain .mg-tn{color:var(--navy-2)}
+.mg-rate{font-size:12.5px;color:#5f5e5a;line-height:1.5;margin:0 0 12px}
+.mg-rate b{color:var(--ink)}
 .mg-tile{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
 .mg-tile.food{border-color:#f3dcdc;background:#fdf7f7}
 .mg-tn{font-size:22px;font-weight:700;color:var(--ink);line-height:1.15}
@@ -377,6 +381,10 @@ a{color:inherit}
 .mg-cols>div:first-child{padding-right:20px;border-right:1px solid #e5e2da}
 .mg-cols>div:last-child{padding-left:20px}
 .mg-row{display:grid;grid-template-columns:minmax(0,1fr) 58px 58px 62px;gap:0 8px;align-items:center}
+.mg-row.has-p{grid-template-columns:minmax(0,1fr) 60px 52px 52px 58px}
+.mg-play{font-size:13px;font-weight:700;color:var(--navy)}
+.mg-play em{font-style:normal;font-size:10.5px;font-weight:600;color:var(--green);margin-left:3px}
+.mg-nosurv{color:#cfcdc5;font-weight:400;background:transparent!important}
 .mg-rhead{padding-bottom:6px;border-bottom:1px solid #e5e2da;font-size:10.5px;
  letter-spacing:.05em;color:#b4b2a9}
 .mg-rhead .mg-ov{color:#5f5e5a;font-weight:700}
@@ -502,6 +510,7 @@ a{color:inherit}
   .mg-kind button{flex:1;padding:7px 8px;font-size:12.5px}
   /* the two supporting scores fall away; name and overall are what matter */
   .mg-row{grid-template-columns:minmax(0,1fr) 62px}
+  .mg-row.has-p{grid-template-columns:minmax(0,1fr) 50px 58px}
   .mg-row .mg-sub{display:none}
   .mg-tp{grid-template-columns:minmax(0,1fr) 56px 30px}
 }
@@ -3417,15 +3426,29 @@ function mgYr(){
   return Y.indexOf(state.mgYear)>-1?state.mgYear:Y[0];
 }
 /* Both kinds reduce to the same row: name, two supporting scores, overall. */
+/* Participants per event, supplied by the golf shop. Separate from survey
+   responses: the ratio of the two is the response rate. Coquina caps at 108,
+   so its figure is a full field rather than demand. */
+const MG_PART={"2021":{"acm":88,"coq":84,"cc":53,"pnc":60},"2022":{"acm":70,"coq":96,"cc":66,"pnc":53},"2023":{"acm":62,"coq":108,"cc":39,"pnc":50},"2024":{"acm":56,"coq":96,"cc":38,"pnc":61},"2025":{"acm":51,"coq":108,"cc":25,"pnc":48},"2026":{"acm":40}};
+/* Coquina 2026 is sold out at 108 with 24 on the wait list, but the event has
+   not been played yet, so it is held back until there is a result to show.
+   Add "coq":108 above and "2026":{"coq":24} below once it has run. */
+const MG_WAIT={};
 function mgRows(y){
   if(mgIsGolf()){
-    const E=MEMBER_GOLF.ev[y]||{};
-    return MEMBER_GOLF.order.filter(k=>E[k]).map(k=>({
-      id:k, e:MEMBER_GOLF.names[k], a:E[k].g, f:E[k].f, o:E[k].o, n:E[k].n,
-      tp:E[k].tp, cm:E[k].cm })).sort((x,z)=>z.o-x.o);
+    const E=MEMBER_GOLF.ev[y]||{}, P=MG_PART[y]||{}, W=MG_WAIT[y]||{};
+    // An event counts if it was surveyed OR we know its field size, so a
+    // played-but-unsurveyed event still shows its turnout.
+    return MEMBER_GOLF.order.filter(k=>E[k]||P[k]).map(k=>({
+      id:k, e:MEMBER_GOLF.names[k],
+      a:E[k]?E[k].g:null, f:E[k]?E[k].f:null, o:E[k]?E[k].o:null,
+      n:E[k]?E[k].n:0, p:P[k]!=null?P[k]:null, w:W[k]!=null?W[k]:null,
+      tp:E[k]?E[k].tp:[], cm:E[k]?E[k].cm:[] }))
+      .sort((x,z)=>(z.o==null?-1:z.o)-(x.o==null?-1:x.o));
   }
   return ((MEMBER_SOCIAL.y[y]||{}).ev||[]).map((e,i)=>({
-    id:"s"+i, e:e.e, a:e.sv, f:e.f, o:e.o, n:e.n, tp:e.tp, cm:e.cm }));
+    id:"s"+i, e:e.e, a:e.sv, f:e.f, o:e.o, n:e.n, p:null, w:null,
+    tp:e.tp, cm:e.cm }));
 }
 function mgYearAvg(y){
   return mgIsGolf() ? (MEMBER_GOLF.tot[y]||[])[2] : (MEMBER_SOCIAL.y[y]||{tot:[]}).tot[2];
@@ -3450,17 +3473,24 @@ function mgYearBar(){
 function mgOverview(){
   const y=mgYr(), rows=mgRows(y), avg=mgYearAvg(y);
   const midLbl=mgIsGolf()?"GOLF":"SERVICE";
-  const head=`<div class="mg-row mg-rhead"><span>EVENT</span>`+
+  const hasP=rows.some(r=>r.p!=null);
+  const head=`<div class="mg-row${hasP?" has-p":""} mg-rhead"><span>EVENT</span>`+
+    (hasP?`<span class="mg-num">PLAYED</span>`:"")+
     `<span class="mg-num">${midLbl}</span><span class="mg-num">FOOD</span>`+
     `<span class="mg-num mg-ov">OVERALL</span></div>`;
   const row=r=>{
-    const [bg,fg]=mgTone(r.o), on=(state.mgEv===r.id&&state.mgYear===y);
-    return `<button type="button" class="mg-row mg-item${on?" is-on":""}" data-mg="${r.id}" `+
-      `data-mgy="${y}" aria-expanded="${on}">`+
+    const [bg,fg]=r.o!=null?mgTone(r.o):["",""], on=(state.mgEv===r.id&&state.mgYear===y);
+    return `<button type="button" class="mg-row${hasP?" has-p":""} mg-item${on?" is-on":""}" `+
+      `data-mg="${r.id}" data-mgy="${y}" aria-expanded="${on}">`+
       `<span class="mg-en" title="${r.e}">${esc(r.e)}</span>`+
+      (hasP?`<span class="mg-num mg-play">${r.p!=null?r.p:"\u2014"}`+
+        (r.w?`<em title="${r.w} on the wait list">+${r.w}</em>`:"")+`</span>`:"")+
       `<span class="mg-num mg-sub">${r.a!=null?Math.round(r.a)+"%":"\u2014"}</span>`+
       `<span class="mg-num mg-sub" style="color:${mgTone(r.f)[1]}">${r.f!=null?Math.round(r.f)+"%":"\u2014"}</span>`+
-      `<span class="mg-num mg-ov" style="background:${bg};color:${fg}">${Math.round(r.o)}%</span></button>`;
+      (r.o!=null
+        ? `<span class="mg-num mg-ov" style="background:${bg};color:${fg}">${Math.round(r.o)}%</span>`
+        : `<span class="mg-num mg-ov mg-nosurv" title="No survey results">\u2014</span>`)+
+      `</button>`;
   };
   // Two columns from four events up, same split as Market Position: rule down
   // the middle, taller half on the left. Below four there is nothing to split,
@@ -3477,10 +3507,14 @@ function mgOverview(){
   // roster changes yearly, so the current season just says how far along it is.
   const total=MEMBER_GOLF.order.length;
   const now=String(new Date().getFullYear());
+  // Played and surveyed are different counts: an event can run without a survey.
+  const surveyed=rows.filter(r=>r.o!=null).length;
   const partial=mgIsGolf()
-    ? (rows.length<total
-        ? `<p class="mg-note">${y} is in progress \u2014 ${rows.length} of ${total} events played, `+
-          `so the season average covers only those.</p>` : "")
+    ? (rows.length<total||surveyed<rows.length
+        ? `<p class="mg-note">${y} is in progress \u2014 ${rows.length} of ${total} events played`+
+          (surveyed<rows.length
+            ? `, ${surveyed} surveyed so far. The season average covers the ${surveyed} surveyed.</p>`
+            : `, so the season average covers only those.</p>`) : "")
     : (y===now
         ? `<p class="mg-note">${y} is in progress \u2014 ${rows.length} events so far, `+
           `so the season average covers only those.</p>` : "");
@@ -3499,9 +3533,13 @@ function mgEvent(){
   const worst=tp.length?tp[tp.length-1]:null;
   const shown=state.mgCm||14;
   const midLbl=mgIsGolf()?"Golf":"Service";
-  const tiles=[["mg-tile",midLbl,r.a],["mg-tile food","Food & Beverage",r.f],["mg-tile","Overall",r.o]]
-    .map(([c,l,v])=>`<div class="${c}"><div class="mg-tn">${v!=null?v+"%":"\u2014"}</div>`+
+  const tiles=[["mg-tile",midLbl,r.a,"%"],["mg-tile food","Food & Beverage",r.f,"%"],
+               ["mg-tile","Overall",r.o,"%"]]
+    .concat(r.p!=null?[["mg-tile plain","Participants",r.p,""]]:[])
+    .map(([c,l,v,u])=>`<div class="${c}"><div class="mg-tn">${v!=null?v+u:"\u2014"}</div>`+
       `<div class="mg-tl">${l.toUpperCase()}</div></div>`).join("");
+  // Responses against field size: how much of the room the survey actually heard from.
+  const rate=(r.p&&r.n)?Math.round(r.n/r.p*100):null;
   const bars=tp.map(t=>{
     const strong=mgIsGolf()?/golf/i.test(t.q):/service|staff/i.test(t.q);
     const low=t.s<80, col=strong?"var(--navy)":(low?"var(--red)":"#e08a89");
@@ -3518,6 +3556,10 @@ function mgEvent(){
 
     `<button type="button" class="mg-close" id="mgClose" aria-label="Close detail" title="Close">&times;</button></div>`+
     (worst?`<p class="mg-say">Lowest scoring touchpoint was <b>${esc(worst.q)}</b> at <b>${worst.s}</b>.</p>`:"")+
+    (rate?`<p class="mg-rate"><b>${r.n}</b> of <b>${r.p}</b> players responded (${rate}%)`+
+      (r.w?` &middot; <b>${r.w}</b> more on the wait list`:"")+`.</p>`
+      :(r.p!=null&&!r.n?`<p class="mg-rate"><b>${r.p}</b> played`+
+        (r.w?`, <b>${r.w}</b> more on the wait list`:"")+`. No survey results recorded.</p>`:""))+
     `<div class="mg-tiles">${tiles}</div>`+
     (tp.length||r.cm.length
       ? `<div class="dt-cols">`+
