@@ -390,31 +390,56 @@ a{color:inherit}
 .mg-sub{font-size:12.5px;color:#5f5e5a;font-weight:500}
 .mg-ov{font-size:13.5px;font-weight:700;padding:5px 0;border-radius:6px;text-align:center}
 .mg-note{font-size:12.5px;color:var(--muted);line-height:1.55;margin:12px 0 0}
-/* public reviews */
-.pv-per{margin-top:-6px}
-.pv-card{border:1px solid #dfe3e9;border-radius:12px;background:#fff;padding:13px 15px 14px;margin:0 0 10px}
-.pv-card.is-snap{border-color:#e9e7e0;background:#fcfcfb}
-.pv-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.pv-name{font-size:14.5px;font-weight:700;color:var(--ink)}
-.pv-tag{font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:20px}
-.pv-tag.by{color:var(--green);background:#eef5e6}
-.pv-tag.snap{color:#8a6a2a;background:#faf2e2}
-.pv-score{margin-left:auto;display:flex;align-items:baseline;gap:8px}
-.pv-score b{font-size:22px;font-weight:700;color:var(--ink);line-height:1.1}
-.pv-score span{font-size:12px;color:#7c8593}
-.pv-note{font-size:11.5px;color:#8a8a84;margin-top:3px;line-height:1.5}
-.pv-subs{display:grid;gap:0 8px;margin-top:11px;padding-top:10px;border-top:1px solid #f0eee8}
-.pv-sn{font-size:14px;font-weight:700}
-.pv-sl{font-size:10px;letter-spacing:.03em;color:#8a8a84;margin-top:1px}
-.pv-subs>div{text-align:center}
-.pv-drop{border:1px dashed #e0ddd4;border-radius:12px;background:#fcfcfb;padding:16px;
- text-align:center;font-size:12.5px;color:#5f5e5a;line-height:1.55}
-.pv-drop b{color:var(--ink)}
-.pv-gap{font-size:12.5px;color:var(--muted);line-height:1.55;margin:0}
-.pv-note b{color:var(--ink)}
-.pv-h-note{font-weight:400;text-transform:none;letter-spacing:0;color:#b4b2a9;font-size:11.5px}
-.pv-revs{margin-top:2px}
+/* reputation scoreboard */
+.rp-bar{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rp-lbl{font-size:11px;letter-spacing:.05em;color:#8a8a84}
+.rp-when{margin-left:auto;font-size:11.5px;color:#b4b2a9}
+.rp-when b{color:var(--ink)}
+.rp-intro{font-size:12px;color:#8a8a84;margin:3px 0 14px;line-height:1.55;max-width:760px}
+.rp-due{color:var(--red-dark)}
+.rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rp-card{border:1px solid #e5e2da;border-radius:12px;padding:13px 15px 14px;background:#fff}
+.rp-head{display:flex;align-items:baseline;gap:8px;margin-bottom:9px}
+.rp-name{font-size:14.5px;font-weight:700;color:var(--ink)}
+.rp-kind{font-size:10.5px;letter-spacing:.04em;color:#b4b2a9}
+.rp-row{display:grid;grid-template-columns:minmax(0,1fr) 46px 62px 14px;gap:0 8px;align-items:center;
+ padding:7px 0;border-top:1px solid #f4f3ef;text-decoration:none}
+.rp-row:hover{background:#fafbfd}
+.rp-src b{display:block;font-size:12.5px;font-weight:600;color:#33507a}
+.rp-src em{display:block;font-style:normal;font-size:10.5px;color:#b4b2a9}
+.rp-src em.stale{color:var(--red-dark);font-weight:600}
+.rp-num{font-size:17px;font-weight:700;color:var(--ink);text-align:right}
+.rp-meta{text-align:right}
+.rp-meta em{display:block;font-style:normal;font-size:10.5px;color:#7c8593}
+.rp-stars{display:inline-flex;gap:1px}
+.rp-star{position:relative;display:inline-block;width:11px;color:#e2ded4;font-size:11px;line-height:1}
+.rp-star i{position:absolute;left:0;top:0;overflow:hidden;color:#e8a33d;font-style:normal}
+.rp-go{font-size:12px;color:var(--wet);text-align:right}
+.rp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid #f4f3ef}
+.rp-chips span{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.rp-chips .good{color:var(--green);background:#eef5e6}
+.rp-chips .bad{color:var(--red-dark);background:#fdeeee}
+.rp-chips .none{font-weight:400;color:#b4b2a9;padding-left:0}
+.rp-hist{margin-top:20px;padding-top:15px;border-top:1px solid #f0eee8}
+.rp-hist .sv-h{margin-top:0}
+.rp-sub{font-size:12px;color:#8a8a84;margin:0 0 10px;line-height:1.5}
+.rp-yr{display:grid;grid-template-columns:58px minmax(0,1fr) 40px 84px;gap:0 10px;align-items:center;
+ width:100%;text-align:left;font-family:inherit;border:0;border-bottom:1px solid #f7f6f2;
+ background:transparent;cursor:pointer;padding:8px 0}
+.rp-yr:hover{background:#fafbfd}
+.rp-yr.is-on{background:#f2f6fb}
+.rp-yn{font-size:13px;font-weight:700;color:var(--ink)}
+.rp-yb{display:block;height:9px;background:#f2f0ea;border-radius:5px;overflow:hidden}
+.rp-yb i{display:block;height:100%;border-radius:5px}
+.rp-yv{font-size:13px;font-weight:700;text-align:right}
+.rp-yc{font-size:11.5px;color:#7c8593;text-align:right}
+.rp-revs{border:1px solid #dfe3e9;border-radius:12px;background:#fff;padding:12px 15px 6px;margin-top:12px}
+.rp-revh{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.rp-revh b{font-size:14px;color:var(--ink)}
+@media (max-width:900px){.rp-grid{grid-template-columns:1fr}}
+/* shared review rows */
 .pv-rev{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #f4f3ef}
+.pv-rev:last-child{border-bottom:0}
 .pv-rev>i{flex:none;display:block;width:3px;align-self:stretch;border-radius:2px;background:var(--green)}
 .pv-rev.bad>i{background:var(--red)}
 .pv-rev>div{min-width:0;flex:1}
@@ -423,7 +448,6 @@ a{color:inherit}
 .pv-star{position:relative;display:inline-block;width:12px;color:#e5e2da;font-size:12px;line-height:1}
 .pv-star i{position:absolute;left:0;top:0;overflow:hidden;color:#e8a33d;font-style:normal}
 .pv-rsub{color:#b4b2a9}
-.pv-rt{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
 .pv-rx{font-size:12.5px;color:#55554e;line-height:1.55}
 .pv-open{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-size:12.5px;
  font-weight:600;color:var(--wet);text-decoration:none}
@@ -1630,7 +1654,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvProd:"kb",pvPeriod:"all",pvShow:8,mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvYear:null,mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -3518,152 +3542,112 @@ function detailMemberGolf(i){
 }
 
 const PVTEXT={"ta":[{"d":"2026-03-02","r":5.0,"x":"Good food and excellent service. We were traveling from out of town and loved the food, service, and cocktails. Would go there again!","s":[["Food",5.0],["Service",5.0],["Ambience",3.0],["Value",5.0]]},{"d":"2026-01-26","r":5.0,"x":"Cecilia and Abraham took great care of us.","s":[["Food",5.0],["Service",5.0],["Ambience",4.5],["Value",5.0]]},{"d":"2026-01-26","r":5.0,"x":"So good! The staff and food is incredible. I love the variety of the menu and the live music on Saturdays really makes for a great dining experience.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2025-09-15","r":5.0,"x":"Everything was excellent. Staff was attentive and everything to make dinner a wonderful experience.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2025-02-26","r":4.5,"x":"We mainly went for the live music which was wonderful! The drinks were delicious. The service was perfect. Food was just not good! We both had salad. Not much in the salad. A couple of shrimp & lettuce. We also got the filet bits but they were cooked very well done, & they were too chewy with no flavor. The menu is very limited.","s":[["Food",0.5],["Service",5.0],["Ambience",4.0],["Value",2.5]]},{"d":"2025-02-18","r":4.0,"x":"2 of the 3 delivered meals to the table were not meals that were ordered. We received a gruyere chicken melt instead of the ordered chipotle chicken bacon wrap. We also received what seemed like a French Dip Sandwich instead of the ordered Philly Steak Sandwich.","s":[["Food",2.5],["Service",4.0],["Ambience",4.0],["Value",2.0]]},{"d":"2024-12-27","r":5.0,"x":"Great friendly experienced service. Wonderful atmosphere. Delicious food and nicely made cocktails. A King & Bear must.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-08-11","r":5.0,"x":"Enjoyed the dinner. Service was great and so was the lasagna. Only negative is that the American flag on the flagpole outside the front door is torn and needs to be replaced.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-07-30","r":5.0,"x":"Excellent as always!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-07-28","r":5.0,"x":"Bartender Brandy was amazing entertainment was fabulous. Love this place!!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-07-28","r":5.0,"x":"Everything was great","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-06-22","r":5.0,"x":"Great food exceptional service!!!","s":[["Food",4.5],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-05-26","r":5.0,"x":"Great time - love our server but can't remember her name!","s":[["Food",4.5],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-04-30","r":5.0,"x":"AJ's Kitchen has a lovely view of the golf course. The food and drinks were very good. The staff was friendly and attentive, giving us prompt service. We will be back.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",4.5]]},{"d":"2024-04-17","r":5.0,"x":"Very nice place to dine, warm and relaxing environment, with great service and a variety of good food to eat. Awesome location really makes it a great experience.","s":[["Food",4.0],["Service",5.0],["Ambience",5.0],["Value",4.5]]},{"d":"2024-03-09","r":5.0,"x":"Had a great time. Loved the ambience. Food and drinks were perfect. The staff was very accommodating when we asked to sit outside and even brought out a cake for my friend for his birthday!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-01-26","r":3.5,"x":"I am giving an honest review. I don't know if they were understaffed or not but the service was extremely slow. My wife and I dined there for the first time so I don't have a comparison. All of the servers who stopped by our table were extremely pleasant and apologetic. One server made a point to say it is not normally like this. They took our salad off of our bill as a courtesy for the slow service without our asking them to do so. We will try AJ's kitchen again and we hope to see a much improved process.","s":[["Food",4.5],["Service",3.5],["Ambience",4.0],["Value",4.0]]},{"d":"2024-01-19","r":5.0,"x":"We enjoyed a wonderful experience at AJ's! The staff is warm and welcoming and they were very accommodating to dietary restrictions. We will eagerly return! Thank you","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-01-13","r":5.0,"x":"All good, service, food and team was excellent. Don't loose your A-team staff over the summer closure. I.e Erin, Cecilia,","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2024-01-04","r":5.0,"x":"We all enjoyed our experience! My family wants to return when next they visit.","s":[["Food",5.0],["Service",4.5],["Ambience",5.0],["Value",4.5]]},{"d":"2023-11-15","r":5.0,"x":"The bartender/waitress was fantastic. We enjoyed her service and food. I know we overstayed the closing time (really didn't realize everyone has left)... felt terrible but she was very kind.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-09-11","r":5.0,"x":"Excellent!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-08-28","r":5.0,"x":"Our Server, Taylor Roy, was outstanding. The food, atmosphere and music on Saturday evening made an overall pleasant experience. Thank You!","s":[["Food",5.0],["Service",5.0],["Ambience",4.5],["Value",5.0]]},{"d":"2023-08-12","r":4.5,"x":"Our server, Cecilia made the experience exceptional. Love the new menu but my ratatouille was undercooked (the dough wasn't done in places) and needed more seasoning. The chicken stroganoff has a wonderful flavor but we felt it should be chopped and served over pasta, or on a bed of rice with more sauce. It was warm in the dining room and would have been so nice to have some music. It feels like AJ's is caught between a lunch golf/sports club and a nice place to dine. It could be both but it needs definition from day to evening. We are great fans of AJ's and want very much for it to succeed.","s":[["Food",3.0],["Service",5.0],["Ambience",2.5],["Value",3.0]]},{"d":"2023-07-18","r":3.5,"x":"Our drinks and appetizers were excellent. Our meals, however, were not. Crabcakes were bland, lacked flavor. “Prawns” were regular shrimp. Not pleased with our meals. Very short staffed.","s":[["Food",1.5],["Service",3.5],["Ambience",3.0],["Value",2.5]]},{"d":"2023-07-17","r":5.0,"x":"Best meal I have had in a long time. The service was excellent. My server was attentive and pleasant and patient. The drinks were very good. We will be back soon.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-07-10","r":4.0,"x":"Liked the concept of smaller options, maybe a bit too much fried. Shrimp & onion rings were fine, pickles lacked flavor","s":[["Food",3.5],["Service",5.0],["Ambience",4.5],["Value",4.0]]},{"d":"2023-06-05","r":5.0,"x":"We all had a great time and Anthony did a spectacular job!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",3.5]]},{"d":"2023-05-30","r":4.5,"x":"Server was fantastic, food was very good, atmosphere friendly, loud but happy AJ's was very busy","s":[["Food",4.5],["Service",5.0],["Ambience",4.5],["Value",4.0]]},{"d":"2023-05-11","r":5.0,"x":"Initially, I was disappointed as I had made a reservation online that was confirmed. We were celebrating my friend's 85th birthday, as noted on the reservation. When I arrived with the birthday girl, we were told that the restaurant was closed because of a special event. However, I showed a copy of my confirmed reservation and was asked to wait while they checked to see what could be done. We were quickly seated on the outdoor patio (our preference) and introduced to our server (Cece) who took great care of us. We were treated royally, including a complimentary dessert to honor the birthday girl. We were very pleased with our experience and will definitely return!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-04-11","r":3.5,"x":"Very disappointed in food, not much variety, bacon almost raw. Not sure I will go to another buffet","s":[["Food",1.5],["Service",2.5],["Ambience",4.0],["Value",1.0]]},{"d":"2023-04-10","r":4.5,"x":"We had a wonderful time at the Easter Brunch. The food was good and service was great. If I were to suggest something that may have added to the experience would be an omelette/pancake station and a little background music. However, I would do this again without a second thought!","s":[["Food",4.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-04-03","r":4.0,"x":"Music was a little loud now that they have moved inside.","s":[["Food",4.0],["Service",5.0],["Ambience",3.5],["Value",3.5]]},{"d":"2023-03-30","r":4.5,"x":"I ordered the turkey wrap; wish I had ordered the chicken salad. Another mistake I made was asking for the mayo to be separate, forgetting it was a wrap and not a sandwich. Consequently, I didn't enjoy my meal as much as I could have.","s":[["Food",3.5],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2023-02-26","r":3.5,"x":"We picked this restaurant because of the menu, but half of the items were not on the menu we were presented, and even on that menu, they were out of some items. Ordered a filet mignon medium rare and it came out so rare that even with a sharp knife you couldn't cut it. Will not recommend this place.","s":[["Food",1.5],["Service",4.5],["Ambience",4.5],["Value",2.5]]},{"d":"2023-01-30","r":4.0,"x":"Ordered steak and risotto no steak to be found all risotto which wasn't all that good mostly mushrooms for the price of the meal it was disappointing. Not many people there and the service was very slow.","s":[["Food",2.5],["Service",5.0],["Ambience",4.0],["Value",2.5]]},{"d":"2023-01-02","r":5.0,"x":"Food was excellent service as well","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-12-29","r":4.0,"x":"This spot is great for a nice, quiet dinner on the golf course. Beautiful views and outdoor fire pits. The service was great but the food is really why the rating is lower and mainly because we were told that the head chef was in the house preparing the food. This may have set a higher level of expectation that wasn't met. The Beef carpaccio was decent but the pretzel charcuterie was not good. The shrimp plate and lobster ravioli were fantastic but the other plates were over done or over spiced.","s":[["Food",3.5],["Service",4.0],["Ambience",4.0],["Value",4.5]]},{"d":"2022-11-19","r":5.0,"x":"Our meals and the service were superb! Definitely will be back.","s":[["Food",5.0],["Service",5.0],["Ambience",3.5],["Value",5.0]]},{"d":"2022-10-30","r":4.0,"x":"Food and Drink excellent again. Newer server, Anthony, hustled and complied with all requests. He will improve when he anticipates requests. Steak Knife with steak, bread/rolls earlier, anticipation of refills on cocktails, etc. The 'Stroll' setup at the entrance was a little off putting clogging entry to restaurant. That said, we will be back!","s":[["Food",5.0],["Service",4.0],["Ambience",3.0],["Value",4.5]]},{"d":"2022-10-09","r":5.0,"x":"We went with two other couples and everything was perfect! Stephanie and CeeCee were, as always, the best! Food was excellent! It was a great evening in every way, and we are all planning a repeat soon","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-10-09","r":5.0,"x":"We had a delightful evening, from start to finish. Our service was top-notch, as usual. All four of us ordered different items from the menu and we were all four completely happy with our choices.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-09-13","r":5.0,"x":"Wait staff is superb. Looking forward to trying more of the new menu.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-09-10","r":4.5,"x":"This was the first night for the new chef. Overall everything was very good. The service and presentation of the food was flawless. Only thing missed was we asked for the filet mignon to be butterflied and it was not so it was a little rarer than expected. However it was corrected immediately after we notified the server.","s":[["Food",5.0],["Service",5.0],["Ambience",4.5],["Value",4.5]]},{"d":"2022-07-27","r":5.0,"x":"Tried some of the new menu items and they were all very good. New, more organized wine and cocktail menu. Of course Cecelia did a great job...always friendly, knowledgeable and efficient!","s":[["Food",4.5],["Service",5.0],["Ambience",5.0],["Value",4.0]]},{"d":"2022-07-11","r":5.0,"x":"Great food, great service, we close the place down.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-07-06","r":5.0,"x":"Great restaurant, service and menu and chef","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-05-07","r":5.0,"x":"Melinda seems to be making a difference already. Swordfish was outstanding and nice to be offered a special for dinner. Wine served chilled and in correct glass. Service - could not ask for better!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-05-02","r":5.0,"x":"My wife and I love it there.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-04-23","r":4.0,"x":"The service was great, the quality of the food was good, the menu was a little funny for Easter","s":[["Food",2.5],["Service",5.0],["Ambience",4.0],["Value",3.0]]},{"d":"2022-04-19","r":4.5,"x":"Everything was great except for the temperature of the food. My Salmon and Grits were a little too cool. The grits were undercooked a bit also. Other than that everything else was good.","s":[["Food",3.5],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2022-01-23","r":5.0,"x":"It was a little dark","s":[["Food",5.0],["Service",5.0],["Ambience",3.5],["Value",5.0]]},{"d":"2022-01-15","r":5.0,"x":"AJ's is always awesome! Love it","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-12-20","r":4.5,"x":"First and foremost: Cece provides the BEST service...always! The Gumbo was great...how about adding a little andouille sausage to it?! The salmon was a bit bland and the pork chop was good but maybe a bit tough. If a salad or a cup of soup was included with dinner that would improve the value of the dishes.","s":[["Food",4.0],["Service",5.0],["Ambience",4.5],["Value",3.5]]},{"d":"2021-12-04","r":5.0,"x":"Another great night of food, drink, and atmosphere. We eat here often and have never been disappointed.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-11-28","r":5.0,"x":"We love going to AJs. It reminds me of a mountain lodge but in Florida. The menu is always updated but consistently great. The best perk is the excellent entertainment.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-11-27","r":3.5,"x":"Live music was performed well but 50% too loud; disrupted dinner conversation with guests. Fish (Grouper) slightly overcooked. But good flavors overall. No view of golf course - why not spotlight the two greens? View that was available was through dirty windows. Service was very good.","s":[["Food",3.5],["Service",5.0],["Ambience",1.5],["Value",3.5]]},{"d":"2021-10-30","r":5.0,"x":"You would have to really search to find something wrong with this lovely restaurant. From the friendly greeting at the entrance to the 'Come see us again' as we departed, the evening was top notch. There were eight of us in our party and we were all thrilled.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-10-05","r":5.0,"x":"Great service and wonderful food! Will definitely go back","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-07-16","r":4.5,"x":"I love AJ's. Come here often. Love the location, the personal touches, most know my name, food is excellent, service always superb. Definitely one of my favs!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-07-11","r":5.0,"x":"Big 10! John the bartender mixed a wonderful drink so I could adhere to my diet. Jordan packs bread for our son because we don't eat it. We love AJs. Beautiful setting, excellent food, professional staff who know their job and take great pride in doing that job well.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-06-23","r":5.0,"x":"We've been back to AJ's two weekends in a row after we discovered the brunch menu!! Outstanding! We love it. Excellent food, choices and service.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-06-19","r":5.0,"x":"Loved it, great service, great food!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-06-12","r":5.0,"x":"We love AJs, it is one of our favorite places!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-05-15","r":5.0,"x":"AJs has become our favorite restaurant. We've had both lunch and dinner there; we've taken friends and relatives. We have never had a bad meal; never had less-than-wonderful service.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-05-15","r":5.0,"x":"We had a group of 10 service was Fantastic. The food was good as well","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-05-09","r":5.0,"x":"Always a great experience. Love having a nice place nearby.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-05-08","r":5.0,"x":"Exceptional service by David and exceptional food! EVERYTHING was excellent!","s":[["Food",5.0],["Service",5.0],["Ambience",4.0],["Value",4.0]]},{"d":"2021-04-09","r":5.0,"x":"Dinner and service was wonderful! Actually everything was amazing and we can't wait to come back!!!","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-04-03","r":4.5,"x":"Food tasted great. Service was a little spotty, but the manager checked on us about 3 times and was super friendly. Can't wait to see how far it comes.","s":[["Food",4.5],["Service",3.5],["Ambience",4.5],["Value",4.0]]},{"d":"2021-03-20","r":4.0,"x":"Portion sizes were small, with lots of potatoes and not much meat. A member of our party ordered a second dinner because she was still hungry after eating the first dinner served.","s":[["Food",3.5],["Service",5.0],["Ambience",5.0],["Value",4.0]]},{"d":"2021-03-19","r":5.0,"x":"Your Chef is excellent.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-03-19","r":5.0,"x":"EXCELLENT AS ALWAYS! Cecilia did a wonderful job! She is such an asset to AJ's!","s":[["Food",4.5],["Service",5.0],["Ambience",5.0],["Value",4.5]]},{"d":"2021-03-19","r":3.5,"x":"Corned beef was tough but very good flavor.","s":[["Food",3.0],["Service",4.0],["Ambience",3.0],["Value",4.0]]},{"d":"2021-03-13","r":5.0,"x":"Great experience. Eat there all the time.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-03-08","r":4.0,"x":"Grouper was a little dried out. Scallop meal was not hot. Took longer than expected to get meals but overall we would still come again.","s":[["Food",4.5],["Service",4.5],["Ambience",5.0],["Value",5.0]]},{"d":"2021-03-07","r":4.0,"x":"Ambience was amazing and we had a wonderful time with friends. Drinks at bar before dinner and a friendly bartender. Fireplaces going inside and out. After we placed our orders (a few of us ordered the special) were told they were out of it. Our steak was over cooked but flavorful.","s":[["Food",4.0],["Service",4.5],["Ambience",5.0],["Value",4.0]]},{"d":"2021-02-27","r":5.0,"x":"It is always a '10' experience at AJs. Food well prepared, fresh and innovative; service over the top perfect-professional but friendly; best value. Guess only thing we'd like is to see a changed menu.","s":[["Food",5.0],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-02-22","r":4.0,"x":"Overall our experience was good. But, on my reservation I indicated it was my husband's birthday, so it would have been nice to have been offered a free dessert or something. We had a group of 10, and we stayed after our checks. It wasn't crowded at all, and it would have been nice if the server had brought us more water. The food was good, but the portions are pretty small for the price.","s":[["Food",4.0],["Service",4.0],["Ambience",4.5],["Value",3.5]]},{"d":"2021-02-14","r":5.0,"x":"Everything is great--the food, atmosphere, staff and service. A fun place to be. The staff are always so friendly. A thoroughly pleasant dining experience.","s":[["Food",5.0],["Service",5.0],["Ambience",3.5],["Value",5.0]]},{"d":"2021-02-08","r":5.0,"x":"Great wait staff, great food.","s":[["Food",4.5],["Service",5.0],["Ambience",5.0],["Value",5.0]]},{"d":"2021-02-05","r":4.5,"x":"Staff was very attentive - We are planning on returning.","s":[["Food",4.0],["Service",4.5],["Ambience",4.0],["Value",4.5]]}],"kb":[{"d":"2026-05-03","r":5,"t":"Very nice experience","x":"Staff could not find me on the tee sheet for the first few minutes, I got very nervous but they got it all squared away, staff inside and out were professional and polite and happy, very helpful, paired with 2 very nice guys from Canada. Overall we all had a great time and the course was in excellent condition. Will be coming back.","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Good"]]},{"d":"2026-05-03","r":5,"t":"Over charged","x":"I set the reservation through GolfNow and it said I would owe $197.34 at the course after paying $41 up front. But I got charged $213.13 at the course when I paid in the pro shop??","s":[["Conditions","Good"],["Value","Excellent"],["Pace","Average"]]},{"d":"2026-04-23","r":3,"t":"King and bear","x":"Over priced for overall quality. Greens are excellent to be fair but a little shabby around the edges. Course staff were outstanding. 3h45mins","s":[["Conditions","Average"],["Value","Fair"],["Pace","Excellent"]]},{"d":"2026-04-21","r":1,"t":"","x":"","s":[["Conditions","Poor"],["Value","Fair"],["Amenities","Poor"]]},{"d":"2026-04-17","r":3,"t":"","x":"","s":[["Conditions","Good"],["Value","Fair"],["Pace","Poor"]]},{"d":"2026-04-12","r":4,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Good"]]},{"d":"2026-04-10","r":2,"t":"Disappointed","x":"Not sure why the course would allow 250 reservations in one day. We didn't get to finish the round and we started at 3:13pm. We left at 8:00pm because there was a line on 17 and 18. I placed this reservation in February in hopes of them not overbooking near my party's tee time. Tee times ended up being 5 minutes apart and it was unorganized.","s":[["Conditions","Good"],["Value","Fair"],["Pace","Poor"]]},{"d":"2026-04-05","r":5,"t":"Great challenging course","x":"Course is in great condition. Greens are fast but whole course has its challenges. Great facilities and staff is great!","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Excellent"]]},{"d":"2026-04-03","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Good"]]},{"d":"2026-03-30","r":4,"t":"Nice place to play","x":"Course was in nice condition. Greens were perfect. Newer greens so we were told they would be firm, which they were but nothing to be concerned about. The only poor item was the hole cutting, some cups were barely below the surface and most were raised edges, not my expectation for such an expensive course.","s":[["Conditions","Good"],["Value","Average"],["Pace","Excellent"]]},{"d":"2026-03-30","r":5,"t":"Nice course","x":"The course is very nice but they charge you a resort fee of $10 per person plus 3% extra if you use credit card. Finally it comes very expensive.","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-03-27","r":4,"t":"Pace of Play","x":"First off I played as a single on a busy day and knew I had to be very patient. Front 9 was played in 2:05 (excellent). Back nine 2:30 (poor), for total time over 4:30. No Marshall in sight. Sorry but too much waiting.","s":[["Conditions","Good"],["Value","Average"],["Pace","Poor"]]},{"d":"2026-03-08","r":5,"t":"Good course layout and playtime pace","x":"Great layout and course care at this time of year.","s":[["Conditions","Good"],["Value","Good"],["Pace","Good"]]},{"d":"2026-03-02","r":5,"t":"Perfect winter conditions","x":"Weather has been colder than normal in Jax but K&B was in impeccable shape. Greens ran true & fairways were in spring form. Staff & experience was great!","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-02-27","r":4,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-02-14","r":5,"t":"Great Course!","x":"Greens looked and rolled amazing! It's a long course regardless of what tees you play from.","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Excellent"]]}],"ss":[{"d":"2026-06-28","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Average"]]},{"d":"2026-06-23","r":4,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Average"]]},{"d":"2026-06-05","r":5,"t":"Just punched and sanded","x":"Beautiful course, everything is fantastic but shouldn't have paid full price for a freshly punched and sanded course","s":[["Conditions","Poor"],["Value","Excellent"],["Pace","Excellent"]]},{"d":"2026-05-17","r":2,"t":"Very disappointed - an overpriced and very poorly managed resort","x":"Starting with the golf shop my experience was poor. On Sunday morning we were advised they were adding a fourth to our group. Driving range in poor condition. I had to hunt for grass to hit range balls. Many tee boxes were in poor shape. Greens needed to be rolled as they were very inconsistent. The restaurant did not open to 11 and they were out of complimentary coffee in the pro shop. Overall, for the $178 fees I paid to play and a 5hr 40-minute round (ranger said he couldn't ask anyone to move faster) me and my two friends were deeply disappointed.","s":[["Conditions","Average"],["Value","Poor"],["Pace","Poor"]]},{"d":"2026-05-09","r":3,"t":"Meh","x":"Arrived early to warm up. Starter was friendly and picked me and my bag up in the parking lot. Nice touch! Then I paid with a debit card and still was charged the 3% processing fee. Driving range was nice. Course was in good shape. Greens need to be rolled to smooth out bumps from plugging previous pin positions.","s":[["Conditions","Fair"],["Value","Fair"],["Pace","Average"]]},{"d":"2026-05-07","r":4,"t":"Great Layout","x":"I really enjoyed playing the course. It's one of those what you see is what you get layouts. We paid $94 per tee time, which I think is somewhat above the value received. However, as I said, we enjoyed it and will return to play the King-Bear course on our next visit to St. Augustine.","s":[["Conditions","Good"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-04-30","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Excellent"]]},{"d":"2026-04-25","r":3,"t":"Over-hyped","x":"The clubhouse and pro shop were extremely hot and everything was disorganized. The staff inside were pleasant enough. The starter was a complete jackwad and made our group of 8 immediately question our decision to play this course. His speech took like 15 minutes and we almost missed our tee time. The course was in below average condition, especially compared to King & Bear. Price was good but pace of play was very slow.","s":[["Conditions","Fair"],["Value","Excellent"],["Pace","Fair"]]},{"d":"2026-04-23","r":5,"t":"Great course, slow play","x":"The course and the layout were excellent. However the pace of play was extremely disappointing and greatly affected our experience. Better course management by rangers is really needed as well as the lack of on course concessions.","s":[["Conditions","Good"],["Value","Excellent"],["Pace","Fair"]]},{"d":"2026-04-17","r":4,"t":"","x":"","s":[["Conditions","Good"],["Value","Average"],["Pace","Average"]]},{"d":"2026-04-10","r":4,"t":"Good St Augustine option","x":"This is a good option in St. Augustine. Greens were in good shape but slow. Hard to predict the break. Slowed down at the end with some slow groups in front of us. Staff was extremely friendly!","s":[["Conditions","Good"],["Value","Good"],["Pace","Average"]]},{"d":"2026-04-03","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-04-02","r":5,"t":"One of my favorite golf outings","x":"Exceptional service with check-in and getting on the course.","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Excellent"]]},{"d":"2026-03-29","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Excellent"],["Pace","Excellent"]]},{"d":"2026-03-23","r":3,"t":"Underwhelmed for the cost","x":"The course is in decent condition for March - greens were fine. Found it difficult to see the greens and they have many sharp edges. Surprised there was no GPS on the cart but found out after that there was an app. We got a long briefing before hitting off about irrelevant stuff and no mention of the app. We had a few holes free ahead of us on tee-off but quickly caught up on 3rd hole and waited all day. Over 4:30 hours. Do not appreciate the 3 pct credit card fee that is not advertised when you book.","s":[["Conditions","Excellent"],["Value","Average"],["Pace","Fair"]]},{"d":"2026-03-20","r":5,"t":"In great shape","x":"Played March 20th 2026 and the greens were in the best shape I've ever seen them.","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-03-13","r":5,"t":"Great day","x":"Course was in great shape. Pace of play was good. I will be back again soon.","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]},{"d":"2026-03-08","r":4,"t":"Nice but overpriced","x":"While this is a nice and challenging golf course, the price tag does not match. When this was attached to the world golf hall of fame I could understand tourist pricing, but now you have a golf course without GPS on the carts that is just way higher priced than courses of equal quality in the area.","s":[["Conditions","Excellent"],["Value","Average"],["Pace","Excellent"]]},{"d":"2026-03-03","r":5,"t":"","x":"","s":[["Conditions","Excellent"],["Value","Good"],["Pace","Excellent"]]}],"goog":{"kb":["King and Bear is by far the best and most beautiful golf course in the WHOLE WIDE WORLD (golf village). World class amenities and service you've got to experience and see to believe!","Great hospitality!! The course is lush and in great condition. The fairways, tee boxes, and approaches are still green. The greens are rolling at about a 9-10 on the stimp meter. Highly recommended!!!","The course was pleasant, and the staff was friendly. However, the most disappointing aspect was the no-show caddy service for our tee times. We never received any confirmation regarding the cancellation, which was disappointing because our entire trip was based on having a caddy at this golf course.","We paid decent money to play it and it would have received a four star review if only the course conditions mattered. From our perspective, the pace of play was horrible for the first 9 holes and the ranger was downright rude.","Beautiful course that was both challenging and fun to play. The greens were so fast! Best destination course I've played. The staff were friendly and helpful - from the starting crew to the pro shop to the restaurant. Appreciated that range balls were included and our carts were stocked with ice and water."],"ss":["Came here while on vacation and enjoyed the round. The course was in great shape. The greens were fast and in good shape. The cart paths are wide and smooth. No gimmicks on the course which is nice.","We are decent golfers - a 4 and 10 handicap. To say the least, we were very disappointed with the conditions of the course. Specifically, the tee boxes were in awful condition and you could see the last fifty or so cup holes in each green.","We had a fun time overall. The course itself was clean, well-maintained, and really beautiful. Unfortunately, our first impression wasn't great - the older gentleman behind the counter was quite rude when we arrived, and the rest of the staff at check-in didn't seem very welcoming either.","Pretty mid. Disappointing. It's not BAD, but for $175 in February it's a rip off. Bathrooms are dirty. No GPS in the cart. For the most part the staff was nice.","The course was great and in good shape. We did have an issue with one of our golf carts and we couldn't get anyone on the phone at the clubhouse to come and get us, so we were stranded for awhile in the middle of our round."],"aj":["Found this place after reading reviews and wanted to try it. They were nice enough to accommodate us with a seat overlooking the patio and golf course. The view was wonderful. Our server was great and we ordered a couple of recommended cocktails.","Stopped here after our first lunch option was closed and could not have been happier. The food was hot, very tasty, and the staff was amazing. A great beer selection with awesome views of the golf course.","Thought we would try something different. AJs was a nice change. Food was really good, really nice outside seating with gas fire pits. We had music on Saturday night. Service was great. Will be back again!","We went for lunch at AJ's today. Amanda is a joy! She is professional and friendly and lovely to deal with! The food is as usual very good but I go to a restaurant with great service!","The food was good and the place is very nice. I wish we found out about this sooner, but glad we found this place."],"lg":["It was lunch when we came in. We were not greeted. We were left standing at the entrance wondering if we should seat ourselves or wait. After a few moments we decided to let the bartender know we were there.","False advertising. Google searches and the business website state they serve breakfast and are open at 6:30 am until 5:30 pm. They in fact do NOT serve breakfast and don't open until 11:30 am.","Quite a hidden gem on site of the hotel. Staff was nice, it was super clean. Food was pretty good too.","Great place to eat. A short walk from the hotel, reasonable prices and exceptional atmosphere. We just casually walked in and were greeted by a server quickly like we belonged. It was a good view of the golf course and good food.","Delicious vegetarian nachos coupled with great customer service, definitely coming back! I also liked the atmosphere and the ease of parking."]}};
-const PUBREV={"asOf":"July 30, 2026","gp":{"kb":{"name":"King & Bear","periods":{"all":{"label":"All time","o":3.9,"n":435,"rec":70.9,"subs":[["Layout",4.6],["Friendliness",4.4],["Conditions",4.1],["Amenities",4.1],["Pace",3.7],["Value",3.3]]},"12":{"label":"Last 12 months","o":4.1,"n":31,"rec":71.0,"subs":[["Layout",4.6],["Friendliness",4.8],["Conditions",4.2],["Amenities",4.2],["Pace",4.0],["Value",3.5]]},"6":{"label":"Last 6 months","o":4.3,"n":23,"rec":82.6,"subs":[["Layout",4.7],["Friendliness",4.7],["Conditions",4.4],["Amenities",4.2],["Pace",4.0],["Value",3.8]]}}},"ss":{"name":"Slammer & Squire","periods":{"all":{"label":"All time","o":4.0,"n":461,"rec":73.5,"subs":[["Layout",4.6],["Friendliness",4.2],["Conditions",3.8],["Amenities",4.0],["Pace",3.8],["Value",3.4]]},"12":{"label":"Last 12 months","o":4.2,"n":41,"rec":80.5,"subs":[["Layout",4.5],["Friendliness",4.3],["Conditions",4.2],["Amenities",4.1],["Pace",3.9],["Value",3.7]]},"6":{"label":"Last 6 months","o":4.4,"n":27,"rec":85.2,"subs":[["Layout",4.6],["Friendliness",4.4],["Conditions",4.2],["Amenities",4.2],["Pace",4.0],["Value",4.0]]}}}},"ta":{"2026":{"n":3,"o":5.0,"subs":[["Food",5.0],["Service",5.0],["Ambience",4.17],["Value",5.0]]},"2025":{"n":3,"o":4.5,"subs":[["Food",2.67],["Service",4.67],["Ambience",4.33],["Value",3.17]]},"2024":{"n":14,"o":4.89,"subs":[["Food",4.82],["Service",4.86],["Ambience",4.93],["Value",4.82]]},"2023":{"n":17,"o":4.44,"subs":[["Food",3.79],["Service",4.74],["Ambience",4.41],["Value",3.91]]},"2022":{"n":16,"o":4.75,"subs":[["Food",4.62],["Service",4.88],["Ambience",4.53],["Value",4.72]]},"2021":{"n":29,"o":4.69,"subs":[["Food",4.62],["Service",4.83],["Ambience",4.64],["Value",4.64]]},"all":{"n":592,"o":4.68,"subs":[["Food",4.43],["Service",4.82],["Ambience",4.59],["Value",4.49]]}},"prod":[{"id":"kb","name":"King & Bear","kind":"Golf","tracked":{"src":"GolfPass","type":"gp","key":"kb","url":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village"},"snap":[["Google",4.3,477,"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg"]]},{"id":"ss","name":"Slammer & Squire","kind":"Golf","tracked":{"src":"GolfPass","type":"gp","key":"ss","url":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village"},"snap":[["Google",4.1,336,"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I"]]},{"id":"aj","name":"AJ's Kitchen","kind":"Dining","tracked":{"src":"TableAgent","type":"ta","url":"https://tableagent.com/jacksonville/king-and-bear/"},"snap":[["Google",4.3,74,"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8"]]},{"id":"lg","name":"Legends Grille","kind":"Dining","tracked":null,"snap":[["Google",4.4,119,"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0"]]}]};
+/* AJ's TableAgent, aggregated from the 82 dated written reviews. */
+const MEMBER_TA_YEARS={"2026":{"n":3,"o":5.0,"subs":[["Food",5.0],["Service",5.0],["Ambience",4.17],["Value",5.0]]},"2025":{"n":3,"o":4.5,"subs":[["Food",2.67],["Service",4.67],["Ambience",4.33],["Value",3.17]]},"2024":{"n":14,"o":4.89,"subs":[["Food",4.82],["Service",4.86],["Ambience",4.93],["Value",4.82]]},"2023":{"n":17,"o":4.44,"subs":[["Food",3.79],["Service",4.74],["Ambience",4.41],["Value",3.91]]},"2022":{"n":16,"o":4.75,"subs":[["Food",4.62],["Service",4.88],["Ambience",4.53],["Value",4.72]]},"2021":{"n":29,"o":4.69,"subs":[["Food",4.62],["Service",4.83],["Ambience",4.64],["Value",4.64]]}};
+
 /* Public reviews. Product first, then period: a manager asks how King & Bear
    is doing, not how Yelp is doing. Platforms that publish dated reviews carry
    a period; the rest publish one lifetime average and are logged as snapshots. */
-const pvProd=()=>PUBREV.prod.find(p=>p.id===state.pvProd)||PUBREV.prod[0];
-function pvPeriods(p){
-  if(!p.tracked) return [["all","All time"]];
-  // Explicit order: keys like "6" and "12" are integer-like, so Object.keys
-  // would sort them ahead of "all".
-  if(p.tracked.type==="gp")
-    return ["all","12","6"].map(k=>[k,PUBREV.gp[p.tracked.key].periods[k].label]);
-  return [["all","All time"]].concat(Object.keys(PUBREV.ta).filter(y=>y!=="all")
-    .sort().reverse().map(y=>[y,y]));
+/* ---------------------------------------------------------------------------
+   REPUTATION SCOREBOARD
+
+   Read off each platform by hand and typed in below. These sites cache their
+   pages and block automated access, so nothing here refreshes itself — that is
+   why every row carries the date it was logged, and why anything older than
+   REP_STALE_DAYS flags itself in red. To update: open the listing, read the
+   rating and count, change the numbers and the "d" date. Nothing else.
+--------------------------------------------------------------------------- */
+const REP_STALE_DAYS=45;
+const REP={"asOf":"July 30, 2026","prod":[{"id":"kb","name":"King & Bear","kind":"Golf","rows":[{"s":"GolfPass","r":4.1,"c":445,"d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village"},{"s":"Google","r":4.3,"c":477,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg"}],"best":["Layout",4.7],"weak":["Value",3.8]},{"id":"ss","name":"Slammer & Squire","kind":"Golf","rows":[{"s":"GolfPass","r":4.0,"c":461,"d":"2026-06-02","u":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village"},{"s":"Google","r":4.1,"c":336,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I"}],"best":["Layout",4.5],"weak":["Value",3.7]},{"id":"aj","name":"AJ's Kitchen","kind":"Dining","rows":[{"s":"TableAgent","r":4.68,"c":592,"d":"2026-07-30","u":"https://tableagent.com/jacksonville/king-and-bear/"},{"s":"Google","r":4.3,"c":74,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8"}],"best":["Service",4.8],"weak":["Food",4.4]},{"id":"lg","name":"Legends Grille","kind":"Dining","rows":[{"s":"Google","r":4.4,"c":119,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0"}],"best":null,"weak":null,"note":"Google publishes no sub-ratings"}]};
+
+function repDays(d){
+  const t=new Date(d+"T00:00:00");
+  return isNaN(t)?0:Math.round((Date.now()-t)/86400000);
 }
-const pvPeriod=p=>pvPeriods(p).some(x=>x[0]===state.pvPeriod)?state.pvPeriod:"all";
-function pvTone(v){ return v==null?"#8a8a84":(v>=4.4?"var(--green)":(v<3.8?"var(--red)":"var(--ink)")); }
-function pvCard(o){
-  const subs=o.subs&&o.subs.length
-    ? `<div class="pv-subs" style="grid-template-columns:repeat(${o.subs.length},1fr)">`+
-      o.subs.map(([k,v])=>`<div><div class="pv-sn" style="color:${pvTone(v)}">${v.toFixed(1)}</div>`+
-        `<div class="pv-sl">${k.toUpperCase()}</div></div>`).join("")+`</div>` : "";
-  return `<div class="pv-card${o.tracked?"":" is-snap"}">`+
-    `<div class="pv-head"><span class="pv-name">${o.src}</span>`+
-    `<span class="pv-tag ${o.tracked?"by":"snap"}">${o.tracked?"BY PERIOD":"SNAPSHOT"}</span>`+
-    `<span class="pv-score"><b>${o.o!=null?o.o.toFixed(1):"\u2014"}</b>`+
-    `<span>${o.n!=null?o.n+" reviews":"count not published"}</span></span></div>`+
-    (o.note?`<div class="pv-note">${o.note}</div>`:"")+subs+
-    (o.url?`<a class="pv-open" href="${o.url}" target="_blank" rel="noopener">`+
-      `${o.link} <span aria-hidden="true">&#8599;</span></a>`:"")+`</div>`;
+function repDate(d){
+  const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const p=d.split("-");
+  return `${M[+p[1]-1]} ${+p[2]}`;
 }
-/* The reviews themselves. Averages tell you something is wrong; only the
-   text tells you what. */
-function pvStars(r){
-  let out="";
-  for(let k=1;k<=5;k++){
-    const f=r>=k?1:(r>k-1?r-(k-1):0);
-    out+=`<span class="pv-star"><i style="width:${(f*100).toFixed(0)}%">\u2605</i>\u2605</span>`;
-  }
-  return out;
-}
-function pvDate(d){
+function repFullDate(d){
   const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const p=d.split("-");
   return `${M[+p[1]-1]} ${+p[2]}, ${p[0]}`;
 }
-function pvBlock(src,list,note,shown){
-  if(!list.length) return "";
-  const rows=list.slice(0,shown).map(r=>{
-    const bad=r.r!=null&&r.r<=3.5;
-    return `<div class="pv-rev${bad?" bad":""}"><i></i><div>`+
-      `<div class="pv-rmeta">`+
-        (r.r!=null?`<span class="pv-stars">${pvStars(r.r)}</span>`:"")+
-        (r.d?`<span>${pvDate(r.d)}</span>`:"")+
-        (r.s?`<span class="pv-rsub">`+r.s.map(([k,v])=>`${k} ${v}`).join(" &middot; ")+`</span>`:"")+
-      `</div>`+
-      (r.t?`<div class="pv-rt">${esc(r.t)}</div>`:"")+
-      `<div class="pv-rx">${esc(r.x)}</div></div></div>`;
-  }).join("");
-  const more=list.length>shown
-    ? `<button type="button" class="mg-more" id="pvMore">Show ${Math.min(10,list.length-shown)} more `+
-      `of ${list.length}</button>` : "";
-  return `<h3 class="sv-h">${src} <span class="pv-h-note">${note}</span></h3>`+
-    `<div class="pv-revs">${rows}</div>${more}`;
+function repStars(r){
+  let o="";
+  for(let k=1;k<=5;k++){
+    const f=r>=k?1:(r>k-1?r-(k-1):0);
+    o+=`<span class="rp-star"><i style="width:${(f*100).toFixed(0)}%">\u2605</i>\u2605</span>`;
+  }
+  return o;
 }
-function pvReviews(p,per){
-  const shown=state.pvShow||8;
-  let out="";
-  if(p.tracked&&p.tracked.type==="gp"){
-    let l=(PVTEXT[p.tracked.key]||[]).filter(r=>r.x&&r.x.length>2);
-    if(per==="12") l=l.filter(r=>r.d>="2025-07-30");
-    if(per==="6")  l=l.filter(r=>r.d>="2026-01-30");
-    l.sort((a,b)=>b.d.localeCompare(a.d));
-    out+=pvBlock("GolfPass",l,`\u2014 ${l.length} most recent held here, of ${
-      PUBREV.gp[p.tracked.key].periods[per].n} on GolfPass`,shown);
-  } else if(p.tracked&&p.tracked.type==="ta"){
-    const l=PVTEXT.ta.filter(r=>r.x&&(per==="all"||r.d.slice(0,4)===per))
-      .sort((a,b)=>b.d.localeCompare(a.d));
-    out+=pvBlock("TableAgent",l,per==="all"
-      ? `\u2014 all ${l.length} written reviews, 2021 to 2026`
-      : `\u2014 all ${l.length} written review${l.length===1?"":"s"} from ${per}`,shown);
-  }
-  if(per==="all"){
-    const g=(PVTEXT.goog[p.id]||[]).map(x=>({x}));
-    out+=pvBlock("Google",g,"\u2014 the 5 Google releases; the rest are readable on Google only",5);
-  }
-  return out||`<p class="pv-gap">No written reviews for this period.</p>`;
+function repCard(p){
+  const rows=p.rows.map(r=>{
+    const stale=repDays(r.d)>REP_STALE_DAYS;
+    return `<a class="rp-row" href="${r.u}" target="_blank" rel="noopener">`+
+      `<span class="rp-src"><b>${r.s}</b>`+
+      `<em class="${stale?"stale":""}">${stale?"\u26a0 last checked ":"logged "}${repDate(r.d)}</em></span>`+
+      `<span class="rp-num">${r.r.toFixed(r.r%1?(r.r*10%1?2:1):1)}</span>`+
+      `<span class="rp-meta"><span class="rp-stars">${repStars(r.r)}</span>`+
+      `<em>${r.c.toLocaleString()}</em></span>`+
+      `<span class="rp-go" aria-hidden="true">&#8599;</span></a>`;
+  }).join("");
+  const chips=p.best
+    ? `<div class="rp-chips"><span class="good">Best: ${p.best[0]} ${p.best[1]}</span>`+
+      `<span class="bad">Weakest: ${p.weak[0]} ${p.weak[1]}</span></div>`
+    : `<div class="rp-chips"><span class="none">${p.note||""}</span></div>`;
+  return `<div class="rp-card"><div class="rp-head"><span class="rp-name">${p.name}</span>`+
+    `<span class="rp-kind">${p.kind.toUpperCase()}</span></div>${rows}${chips}</div>`;
 }
 function detailPublicReviews(i){
-  const p=pvProd(), per=pvPeriod(p);
-  const prodBar=`<div class="mg-yrs" role="group" aria-label="Product">`+
-    PUBREV.prod.map(x=>`<button type="button" data-pvp="${x.id}" aria-pressed="${x.id===p.id}">${x.name}</button>`).join("")+
-    `</div>`;
-  const perBar=`<div class="mg-yrs pv-per" role="group" aria-label="Period">`+
-    pvPeriods(p).map(([k,l])=>`<button type="button" data-pvper="${k}" aria-pressed="${k===per}">${l}</button>`).join("")+
-    `</div>`;
-  let cards="", hidden=false;
-  if(p.tracked){
-    if(p.tracked.type==="gp"){
-      const d=PUBREV.gp[p.tracked.key].periods[per]||PUBREV.gp[p.tracked.key].periods.all;
-      const have=(PVTEXT[p.tracked.key]||[]).filter(r=>r.x&&(
-        per==="all"||(per==="12"&&r.d>="2025-07-30")||(per==="6"&&r.d>="2026-01-30"))).length;
-      cards+=pvCard({src:"GolfPass",tracked:true,o:d.o,n:d.n,subs:d.subs,url:p.tracked.url,
-        link:`Read all ${d.n} on GolfPass`,
-        note:`${d.rec}% would recommend this course. Rating and breakdown cover all ${d.n} reviews; `+
-             `<b>${have}</b> review${have===1?"":"s"} ${have===1?"is":"are"} held in the portal to read below.`});
-    } else {
-      const d=PUBREV.ta[per]||PUBREV.ta.all;
-      const written=PVTEXT.ta.filter(r=>per==="all"||r.d.slice(0,4)===per).length;
-      cards+=pvCard({src:"TableAgent",tracked:true,o:d.o,url:p.tracked.url,
-        link:"Open on TableAgent",
-        n:per==="all"?d.n:written,
-        note:per==="all"
-          ? `The 4.68 is TableAgent's average across all ${d.n} ratings submitted. `+
-            `Only <b>${written}</b> of those carry a written review and a date, so the `+
-            `year breakdowns and the scores below are drawn from those ${written}.`
-          : `${written} written review${written===1?"":"s"} from ${per}.`,
-        subs:d.subs});
-    }
-  }
-  if(per==="all"){
-    cards+=p.snap.map(([src,o,n,url])=>pvCard({src,tracked:false,o,n,url,
-      link:`Open on ${src}`,
-      note:`Lifetime average of all ${n} reviews, logged ${PUBREV.asOf}. `+
-        `Google releases only 5 reviews at a time, so the 5 below are all that can be shown here.`})).join("");
-  } else hidden=true;
-  if(!p.tracked) cards+=`<p class="pv-gap">No platform publishes dated reviews for ${p.name}, `+
-    `so there is no period breakdown \u2014 only the lifetime average above.</p>`;
-  cards+=pvReviews(p,per);
-  const drop=hidden?`<div class="pv-drop">`+
-    p.snap.map(x=>x[0]).join(", ")+` publishes one lifetime average, so it has no figure for `+
-    `this period. Switch to <b>All time</b> to see it.</div>`:"";
+  const listings=REP.prod.reduce((a,p)=>a+p.rows.length,0);
+  const stale=REP.prod.reduce((a,p)=>a+p.rows.filter(r=>repDays(r.d)>REP_STALE_DAYS).length,0);
+  const Y=Object.keys(MEMBER_TA_YEARS).sort().reverse();
+  const hist=Y.map(y=>{
+    const d=MEMBER_TA_YEARS[y], low=d.o<4.6, on=state.pvYear===y;
+    return `<button type="button" class="rp-yr${on?" is-on":""}" data-rpy="${y}">`+
+      `<span class="rp-yn">${y}</span>`+
+      `<span class="rp-yb"><i style="width:${(d.o/5*100).toFixed(1)}%;background:${low?"#e08a89":"var(--navy)"}"></i></span>`+
+      `<span class="rp-yv" style="color:${low?"var(--red-dark)":"var(--ink)"}">${d.o.toFixed(1)}</span>`+
+      `<span class="rp-yc">${d.n} review${d.n===1?"":"s"} ${on?"\u203a":"\u203a"}</span></button>`;
+  }).join("");
+  const sel=state.pvYear;
+  const revs=sel
+    ? (()=>{ const l=PVTEXT.ta.filter(r=>r.x&&r.d.slice(0,4)===sel).sort((a,b)=>b.d.localeCompare(a.d));
+        return `<div class="rp-revs"><div class="rp-revh"><b>${sel}</b>`+
+          `<button type="button" class="mg-close" id="rpClose" aria-label="Close">&times;</button></div>`+
+          l.map(r=>`<div class="pv-rev${r.r<=3.5?" bad":""}"><i></i><div>`+
+            `<div class="pv-rmeta"><span class="pv-stars">${repStars(r.r)}</span>`+
+            `<span>${repFullDate(r.d)}</span>`+
+            `<span class="pv-rsub">`+r.s.map(([k,v])=>`${k} ${v}`).join(" &middot; ")+`</span></div>`+
+            `<div class="pv-rx">${esc(r.x)}</div></div></div>`).join("")+`</div>`;
+      })() : "";
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
-    `<div class="detail-body is-wide">`+prodBar+perBar+cards+drop+`</div>`;
+    `<div class="detail-body is-wide">`+
+      `<div class="rp-bar"><span class="rp-lbl">REPUTATION</span>`+
+      `<span class="rp-when">${REP.prod.length} products &middot; ${listings} listings &middot; `+
+      `last checked <b>${REP.asOf}</b></span></div>`+
+      `<p class="rp-intro">Read off each platform once a month and typed in here. `+
+      `These sites cache their pages and block automated access, so the portal cannot refresh them itself. `+
+      `Tap any rating to open the live listing.`+
+      (stale?` <b class="rp-due">${stale} listing${stale===1?"":"s"} due a check.</b>`:"")+`</p>`+
+      `<div class="rp-grid">`+REP.prod.map(repCard).join("")+`</div>`+
+      `<div class="rp-hist"><h3 class="sv-h">AJ&rsquo;s Kitchen &mdash; TableAgent by year</h3>`+
+      `<p class="rp-sub">The one set held in full: 82 dated reviews, 2021 to 2026. Tap a year to read them.</p>`+
+      hist+revs+`</div>`+
+    `</div>`;
   svAudWire(i);
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
     const after=el("#detail"); if(after) after.scrollTop=keep;
   };
-  el("#detail").querySelectorAll("[data-pvp]").forEach(b=>b.addEventListener("click",
-    hold(()=>{ state.pvProd=b.dataset.pvp; state.pvPeriod="all"; state.pvShow=8; })));
-  el("#detail").querySelectorAll("[data-pvper]").forEach(b=>b.addEventListener("click",
-    hold(()=>{ state.pvPeriod=b.dataset.pvper; state.pvShow=8; })));
-  const more=document.getElementById("pvMore");
-  if(more) more.addEventListener("click",hold(()=>{ state.pvShow=(state.pvShow||8)+10; }));
+  el("#detail").querySelectorAll("[data-rpy]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.pvYear=(state.pvYear===b.dataset.rpy)?null:b.dataset.rpy; })));
+  const c=document.getElementById("rpClose");
+  if(c) c.addEventListener("click",hold(()=>{ state.pvYear=null; }));
 }
 
 function detailSurveyPending(i){
