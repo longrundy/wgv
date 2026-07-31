@@ -420,10 +420,19 @@ a{color:inherit}
 .rp-chips .good{color:var(--green);background:#eef5e6}
 .rp-chips .bad{color:var(--red-dark);background:#fdeeee}
 .rp-chips .none{font-weight:400;color:#b4b2a9;padding-left:0}
-.rp-hist{margin-top:20px;padding-top:15px;border-top:1px solid #f0eee8}
-.rp-hist .sv-h{margin-top:0}
-.rp-sub{font-size:12px;color:#8a8a84;margin:0 0 10px;line-height:1.5}
-.rp-yr{display:grid;grid-template-columns:58px minmax(0,1fr) 40px 84px;gap:0 10px;align-items:center;
+/* AJ's expander: the only card with reviews held in the portal */
+.rp-more{display:flex;align-items:center;gap:7px;width:100%;justify-content:center;
+ font-family:inherit;font-size:12px;font-weight:600;color:var(--wet);background:#f4f7fb;
+ border:1px solid #dde3ec;border-radius:8px;padding:7px 10px;cursor:pointer;margin-top:10px}
+.rp-more:hover{background:#e9eef6}
+.rp-more.is-on{background:var(--navy);border-color:var(--navy);color:#fff}
+.rp-card.is-open{grid-column:1/-1}
+.rp-deep{margin-top:12px;padding-top:12px;border-top:1px solid #f0eee8;
+ display:grid;grid-template-columns:250px minmax(0,1fr);gap:0 20px;align-items:start}
+.rp-yrs{border-right:1px solid #f0eee8;padding-right:16px}
+.rp-hint{font-size:12.5px;color:#b4b2a9;margin:4px 0 0}
+.rp-revs{max-height:420px;overflow-y:auto}
+.rp-yr{display:grid;grid-template-columns:44px minmax(0,1fr) 34px 28px;gap:0 8px;align-items:center;
  width:100%;text-align:left;font-family:inherit;border:0;border-bottom:1px solid #f7f6f2;
  background:transparent;cursor:pointer;padding:8px 0}
 .rp-yr:hover{background:#fafbfd}
@@ -433,10 +442,12 @@ a{color:inherit}
 .rp-yb i{display:block;height:100%;border-radius:5px}
 .rp-yv{font-size:13px;font-weight:700;text-align:right}
 .rp-yc{font-size:11.5px;color:#7c8593;text-align:right}
-.rp-revs{border:1px solid #dfe3e9;border-radius:12px;background:#fff;padding:12px 15px 6px;margin-top:12px}
-.rp-revh{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.rp-revh b{font-size:14px;color:var(--ink)}
-@media (max-width:900px){.rp-grid{grid-template-columns:1fr}}
+.rp-yc{font-size:11px;color:#b4b2a9;text-align:right}
+@media (max-width:900px){
+  .rp-grid{grid-template-columns:1fr}
+  .rp-deep{grid-template-columns:1fr;gap:14px}
+  .rp-yrs{border-right:0;padding-right:0;border-bottom:1px solid #f0eee8;padding-bottom:10px}
+}
 /* shared review rows */
 .pv-rev{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #f4f3ef}
 .pv-rev:last-child{border-bottom:0}
@@ -1654,7 +1665,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvYear:null,mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvYear:null,pvOpen:null,mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -3558,7 +3569,8 @@ const MEMBER_TA_YEARS={"2026":{"n":3,"o":5.0,"subs":[["Food",5.0],["Service",5.0
    rating and count, change the numbers and the "d" date. Nothing else.
 --------------------------------------------------------------------------- */
 const REP_STALE_DAYS=45;
-const REP={"asOf":"July 30, 2026","prod":[{"id":"kb","name":"King & Bear","kind":"Golf","rows":[{"s":"GolfPass","r":4.1,"c":445,"d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village"},{"s":"Google","r":4.3,"c":477,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg"}],"best":["Layout",4.7],"weak":["Value",3.8]},{"id":"ss","name":"Slammer & Squire","kind":"Golf","rows":[{"s":"GolfPass","r":4.0,"c":461,"d":"2026-06-02","u":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village"},{"s":"Google","r":4.1,"c":336,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I"}],"best":["Layout",4.5],"weak":["Value",3.7]},{"id":"aj","name":"AJ's Kitchen","kind":"Dining","rows":[{"s":"TableAgent","r":4.68,"c":592,"d":"2026-07-30","u":"https://tableagent.com/jacksonville/king-and-bear/"},{"s":"Google","r":4.3,"c":74,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8"}],"best":["Service",4.8],"weak":["Food",4.4]},{"id":"lg","name":"Legends Grille","kind":"Dining","rows":[{"s":"Google","r":4.4,"c":119,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0"}],"best":null,"weak":null,"note":"Google publishes no sub-ratings"}]};
+const REP={"asOf":"July 30, 2026","prod":[{"id":"kb","name":"King & Bear","kind":"Golf","rows":[{"s":"GolfPass","r":4.1,"c":445,"d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/19048-king-and-bear-golf-course-at-world-golf-village"},{"s":"Google","r":4.3,"c":477,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJR1qnA6As5IgRPv9nMC7IZcg"}],"deep":false},{"id":"ss","name":"Slammer & Squire","kind":"Golf","rows":[{"s":"GolfPass","r":4.0,"c":461,"d":"2026-07-30","u":"https://www.golfpass.com/travel-advisor/courses/15888-slammer-and-squire-golf-course-at-world-golf-village"},{"s":"Google","r":4.1,"c":336,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJl8Hd6WEs5IgRGq8voFrYL9I"}],"deep":false},{"id":"aj","name":"AJ's Kitchen","kind":"Dining","rows":[{"s":"TableAgent","r":4.68,"c":592,"d":"2026-07-30","u":"https://tableagent.com/jacksonville/king-and-bear/"},{"s":"Google","r":4.3,"c":74,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJq3vsj6DV5YgRcauoYFhEdM8"}],"deep":true},{"id":"lg","name":"Legends Grille","kind":"Dining","rows":[{"s":"Google","r":4.4,"c":119,"d":"2026-07-30","u":"https://www.google.com/maps/place/?q=place_id:ChIJO8Hd6WEs5IgRSckWgL35yT0"}],"deep":false}]};
+
 
 function repDays(d){
   const t=new Date(d+"T00:00:00");
@@ -3593,36 +3605,40 @@ function repCard(p){
       `<em>${r.c.toLocaleString()}</em></span>`+
       `<span class="rp-go" aria-hidden="true">&#8599;</span></a>`;
   }).join("");
-  const chips=p.best
-    ? `<div class="rp-chips"><span class="good">Best: ${p.best[0]} ${p.best[1]}</span>`+
-      `<span class="bad">Weakest: ${p.weak[0]} ${p.weak[1]}</span></div>`
-    : `<div class="rp-chips"><span class="none">${p.note||""}</span></div>`;
-  return `<div class="rp-card"><div class="rp-head"><span class="rp-name">${p.name}</span>`+
-    `<span class="rp-kind">${p.kind.toUpperCase()}</span></div>${rows}${chips}</div>`;
+  // Only AJ's has review text held in the portal, so only its card opens.
+  const open=state.pvOpen===p.id;
+  const deep=p.deep
+    ? `<button type="button" class="rp-more${open?" is-on":""}" data-rpo="${p.id}">`+
+      `${open?"Hide":"Read"} 82 reviews, 2021&ndash;2026 <span aria-hidden="true">${open?"&#9650;":"&#9660;"}</span></button>`
+    : "";
+  return `<div class="rp-card${open?" is-open":""}"><div class="rp-head"><span class="rp-name">${p.name}</span>`+
+    `<span class="rp-kind">${p.kind.toUpperCase()}</span></div>${rows}${deep}`+
+    (open?repDeep():"")+`</div>`;
 }
-function detailPublicReviews(i){
-  const listings=REP.prod.reduce((a,p)=>a+p.rows.length,0);
-  const stale=REP.prod.reduce((a,p)=>a+p.rows.filter(r=>repDays(r.d)>REP_STALE_DAYS).length,0);
+function repDeep(){
   const Y=Object.keys(MEMBER_TA_YEARS).sort().reverse();
-  const hist=Y.map(y=>{
+  const rows=Y.map(y=>{
     const d=MEMBER_TA_YEARS[y], low=d.o<4.6, on=state.pvYear===y;
     return `<button type="button" class="rp-yr${on?" is-on":""}" data-rpy="${y}">`+
       `<span class="rp-yn">${y}</span>`+
       `<span class="rp-yb"><i style="width:${(d.o/5*100).toFixed(1)}%;background:${low?"#e08a89":"var(--navy)"}"></i></span>`+
       `<span class="rp-yv" style="color:${low?"var(--red-dark)":"var(--ink)"}">${d.o.toFixed(1)}</span>`+
-      `<span class="rp-yc">${d.n} review${d.n===1?"":"s"} ${on?"\u203a":"\u203a"}</span></button>`;
+      `<span class="rp-yc">${d.n}</span></button>`;
   }).join("");
   const sel=state.pvYear;
   const revs=sel
-    ? (()=>{ const l=PVTEXT.ta.filter(r=>r.x&&r.d.slice(0,4)===sel).sort((a,b)=>b.d.localeCompare(a.d));
-        return `<div class="rp-revs"><div class="rp-revh"><b>${sel}</b>`+
-          `<button type="button" class="mg-close" id="rpClose" aria-label="Close">&times;</button></div>`+
-          l.map(r=>`<div class="pv-rev${r.r<=3.5?" bad":""}"><i></i><div>`+
-            `<div class="pv-rmeta"><span class="pv-stars">${repStars(r.r)}</span>`+
-            `<span>${repFullDate(r.d)}</span>`+
-            `<span class="pv-rsub">`+r.s.map(([k,v])=>`${k} ${v}`).join(" &middot; ")+`</span></div>`+
-            `<div class="pv-rx">${esc(r.x)}</div></div></div>`).join("")+`</div>`;
-      })() : "";
+    ? PVTEXT.ta.filter(r=>r.x&&r.d.slice(0,4)===sel).sort((a,b)=>b.d.localeCompare(a.d))
+        .map(r=>`<div class="pv-rev${r.r<=3.5?" bad":""}"><i></i><div>`+
+          `<div class="pv-rmeta"><span class="pv-stars">${repStars(r.r)}</span>`+
+          `<span>${repFullDate(r.d)}</span>`+
+          `<span class="pv-rsub">`+r.s.map(([k,v])=>`${k} ${v}`).join(" &middot; ")+`</span></div>`+
+          `<div class="pv-rx">${esc(r.x)}</div></div></div>`).join("")
+    : `<p class="rp-hint">Tap a year to read its reviews.</p>`;
+  return `<div class="rp-deep"><div class="rp-yrs">${rows}</div><div class="rp-revs">${revs}</div></div>`;
+}
+function detailPublicReviews(i){
+  const listings=REP.prod.reduce((a,p)=>a+p.rows.length,0);
+  const stale=REP.prod.reduce((a,p)=>a+p.rows.filter(r=>repDays(r.d)>REP_STALE_DAYS).length,0);
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
     `<div class="detail-body is-wide">`+
@@ -3634,9 +3650,6 @@ function detailPublicReviews(i){
       `Tap any rating to open the live listing.`+
       (stale?` <b class="rp-due">${stale} listing${stale===1?"":"s"} due a check.</b>`:"")+`</p>`+
       `<div class="rp-grid">`+REP.prod.map(repCard).join("")+`</div>`+
-      `<div class="rp-hist"><h3 class="sv-h">AJ&rsquo;s Kitchen &mdash; TableAgent by year</h3>`+
-      `<p class="rp-sub">The one set held in full: 82 dated reviews, 2021 to 2026. Tap a year to read them.</p>`+
-      hist+revs+`</div>`+
     `</div>`;
   svAudWire(i);
   const hold=fn=>()=>{
@@ -3644,10 +3657,11 @@ function detailPublicReviews(i){
     fn(); detail(i);
     const after=el("#detail"); if(after) after.scrollTop=keep;
   };
+  el("#detail").querySelectorAll("[data-rpo]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ const o=state.pvOpen===b.dataset.rpo;
+      state.pvOpen=o?null:b.dataset.rpo; state.pvYear=null; })));
   el("#detail").querySelectorAll("[data-rpy]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.pvYear=(state.pvYear===b.dataset.rpy)?null:b.dataset.rpy; })));
-  const c=document.getElementById("rpClose");
-  if(c) c.addEventListener("click",hold(()=>{ state.pvYear=null; }));
 }
 
 function detailSurveyPending(i){
