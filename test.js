@@ -468,8 +468,8 @@ t('the rail carries the animated webp mark', () => {
 
 t('the rail mark declares its intrinsic size so the rail does not jump', () => {
   const img = $('.brand .brand-mark');
-  eq(img.getAttribute('width'), '188');
-  eq(img.getAttribute('height'), '225');
+  eq(img.getAttribute('width'), '170');
+  eq(img.getAttribute('height'), '203');
 });
 
 t('the rail mark is a real animated webp with an alpha channel', () => {
@@ -521,6 +521,21 @@ t('the reduced-motion still is a static webp, not the animation again', () => {
   eq((buf.toString('latin1').match(/ANMF/g) || []).length, 0, 'still frame carries no animation frames');
   const anim = Buffer.from($('.brand .brand-mark').getAttribute('src').split(',')[1], 'base64');
   ok(buf.length < anim.length / 4, 'still is much smaller than the animation');
+});
+
+t('the rail logo renders 10% smaller than before', () => {
+  const i = html.indexOf('.brand img{');
+  const rule = html.slice(i, i + 60);
+  has(rule, 'width:85px', 'was 94px');
+  ok(!rule.includes('width:94px'), 'old size gone');
+});
+
+t('the rail mark stays within its size budget', () => {
+  // the white-rim guarantee is asserted at build time in mkflag3.py, where the
+  // webp can actually be decoded; node only checks the byte budget here
+  const b64 = $('.brand .brand-mark').getAttribute('src').split(',')[1];
+  const kb = Buffer.from(b64, 'base64').length / 1024;
+  ok(kb < 60, 'mark is ' + kb.toFixed(1) + 'KB, budget 60KB');
 });
 
 t('the rail mark sits inside the existing public-site link', () => {
