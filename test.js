@@ -427,6 +427,33 @@ t('E-commerce sits in the Management section', () => {
   ok(G('ecomItem')().ecom, 'factory flags the item');
 });
 
+t('the pinned Management list is defined in exactly one place', () => {
+  // The Content workbook loader rebuilds S.management.items after the page
+  // paints. When that rebuild had its own hardcoded array, a new item showed
+  // for a second and then vanished. Both paths must use mgmtPinned().
+  const pinned = G('mgmtPinned')().map(x => x.t);
+  eq(pinned.join(','), 'Feedback,Weather,Financials,E-commerce,Memberships');
+  const literal = /\[\s*surveysItem\(\)\s*,\s*histWeatherItem\(\)\s*,\s*financialsItem\(\)/g;
+  eq((html.match(literal) || []).length, 1,
+     'the item array appears once, inside mgmtPinned()');
+  has(html, 'S.management.items = mgmtPinned()', 'the workbook loader reuses it');
+});
+
+t('the first paint and the post-workbook rebuild agree', () => {
+  const first = G('S').management.items.map(x => x.t);
+  const rebuilt = G('mgmtPinned')().map(x => x.t);
+  eq(first.slice(0, rebuilt.length).join(','), rebuilt.join(','),
+     'workbook rebuild would not drop anything');
+});
+
+t('a workbook row named E-commerce cannot duplicate the pinned item', () => {
+  const m = html.match(/const mgmtDrop = (\/.*?\/i);/);
+  ok(m, 'drop pattern found');
+  const re = new RegExp(m[1].slice(1, -2), 'i');
+  ['E-commerce', 'Ecommerce', 'E commerce', 'Financials', 'Feedback']
+    .forEach(t => ok(re.test(t), t + ' should be dropped from sheet rows'));
+});
+
 t('the three sections match the agenda', () => {
   ecom('site');
   eq(ECOM_SECS.map(x => x[0]).join(','), 'site,call,tee');
