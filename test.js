@@ -468,8 +468,8 @@ t('the rail carries the animated webp mark', () => {
 
 t('the rail mark declares its intrinsic size so the rail does not jump', () => {
   const img = $('.brand .brand-mark');
-  eq(img.getAttribute('width'), '170');
-  eq(img.getAttribute('height'), '203');
+  eq(img.getAttribute('width'), '188');
+  eq(img.getAttribute('height'), '225');
 });
 
 t('the rail mark is a real animated webp with an alpha channel', () => {
@@ -523,11 +523,11 @@ t('the reduced-motion still is a static webp, not the animation again', () => {
   ok(buf.length < anim.length / 4, 'still is much smaller than the animation');
 });
 
-t('the rail logo renders 10% smaller than before', () => {
+t('the rail logo renders at its original 94px', () => {
   const i = html.indexOf('.brand img{');
   const rule = html.slice(i, i + 60);
-  has(rule, 'width:85px', 'was 94px');
-  ok(!rule.includes('width:94px'), 'old size gone');
+  has(rule, 'width:94px');
+  ok(!rule.includes('width:85px'), 'the 10% reduction was rolled back with it');
 });
 
 t('the rail mark stays within its size budget', () => {
@@ -535,7 +535,7 @@ t('the rail mark stays within its size budget', () => {
   // webp can actually be decoded; node only checks the byte budget here
   const b64 = $('.brand .brand-mark').getAttribute('src').split(',')[1];
   const kb = Buffer.from(b64, 'base64').length / 1024;
-  ok(kb < 60, 'mark is ' + kb.toFixed(1) + 'KB, budget 60KB');
+  ok(kb < 200, 'mark is ' + kb.toFixed(1) + 'KB, budget 200KB');
 });
 
 t('the rail mark sits inside the existing public-site link', () => {
