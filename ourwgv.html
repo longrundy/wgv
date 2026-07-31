@@ -3448,6 +3448,19 @@ function mgRows(y){
     id:"s"+i, e:e.e, a:e.sv, f:e.f, o:e.o, n:e.n, p:null, w:null,
     tp:e.tp, cm:e.cm }));
 }
+/* Which event the detail card shows. Landing on a year opens its first event
+   so the page is never empty; MG_SHUT marks a deliberate close, which is why
+   it is a distinct value from "nothing picked yet". */
+const MG_SHUT="\u0000";
+function mgSel(){
+  const y=mgYr();
+  if(state.mgEv===MG_SHUT) return null;
+  const rows=mgRows(y);
+  if(!rows.length) return null;
+  if(state.mgEv&&state.mgYear===y&&rows.some(r=>r.id===state.mgEv))
+    return {id:state.mgEv,y};
+  return {id:rows[0].id,y};
+}
 function mgYearAvg(y){
   return mgIsGolf() ? (MEMBER_GOLF.tot[y]||[])[2] : (MEMBER_SOCIAL.y[y]||{tot:[]}).tot[2];
 }
@@ -3477,7 +3490,8 @@ function mgOverview(){
     `<span class="mg-num">${midLbl}</span><span class="mg-num">FOOD</span>`+
     `<span class="mg-num mg-ov">OVERALL</span></div>`;
   const row=r=>{
-    const [bg,fg]=r.o!=null?mgTone(r.o):["",""], on=(state.mgEv===r.id&&state.mgYear===y);
+    const sel=mgSel();
+    const [bg,fg]=r.o!=null?mgTone(r.o):["",""], on=!!sel&&sel.id===r.id&&sel.y===y;
     return `<button type="button" class="mg-row${hasP?" has-p":""} mg-item${on?" is-on":""}" `+
       `data-mg="${r.id}" data-mgy="${y}" aria-expanded="${on}">`+
       `<span class="mg-en" title="${r.e}">${esc(r.e)}</span>`+
@@ -3523,7 +3537,8 @@ function mgOverview(){
     body+partial;
 }
 function mgEvent(){
-  const y=state.mgYear, rows=mgRows(y), r=rows.find(x=>x.id===state.mgEv);
+  const sel=mgSel();
+  const y=sel?sel.y:mgYr(), rows=mgRows(y), r=sel?rows.find(x=>x.id===sel.id):null;
   if(!r) return `<div class="mg-card mg-rest"><h4>Event detail</h4>`+
     `<p>Tap any event above to see its scores, every touchpoint ranked, `+
     `and what members wrote.</p></div>`;
@@ -3582,12 +3597,13 @@ function detailMemberGolf(i){
   el("#detail").querySelectorAll(".mg-yrs button").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.mgYear=b.dataset.mgy2; state.mgEv=null; state.mgCm=14; })));
   el("#detail").querySelectorAll(".mg-item").forEach(b=>b.addEventListener("click",hold(()=>{
-    const same=(state.mgEv===b.dataset.mg&&state.mgYear===b.dataset.mgy);
-    if(same){ state.mgEv=null; }
+    const sel=mgSel();
+    const same=!!sel&&sel.id===b.dataset.mg&&sel.y===b.dataset.mgy;
+    if(same){ state.mgEv=MG_SHUT; }
     else { state.mgEv=b.dataset.mg; state.mgYear=b.dataset.mgy; state.mgCm=14; }
   })));
   const close=document.getElementById("mgClose");
-  if(close) close.addEventListener("click",hold(()=>{ state.mgEv=null; }));
+  if(close) close.addEventListener("click",hold(()=>{ state.mgEv=MG_SHUT; }));
   const more=document.getElementById("mgMore");
   if(more) more.addEventListener("click",hold(()=>{ state.mgCm=(state.mgCm||14)+20; }));
 }
