@@ -2627,7 +2627,7 @@ const MB_OPEN = {"Affiliate - Full":1};        /* the only category still sellin
 const MB_NOTE = {"2020":"*","2024":"**"};
 const MB_CATYRS = ["2020","2021","2022","2023","2024","2025","2026"];
 
-function membershipsItem(){ return {t:"Memberships", m:"", s:"", c:"f-flat", a:"", memb:true}; }
+function membershipsItem(){ return {t:"Membership", m:"", s:"", c:"f-flat", a:"", memb:true}; }
 
 const mbS = () => MB_DATA.series;
 const mbT = y => MB_DATA.memb.totals[String(y)];
@@ -4722,7 +4722,7 @@ const DGF_COPY={
 const DGF_SECS=[["chan","Booking channels"],["rate","Rate and demand"],
                 ["web","Our website"],["comp","The competition"],["value","Our value"]];
 const dgfSec=()=>DGF_SECS.some(x=>x[0]===state.dgfSec)?state.dgfSec:"chan";
-function dgfItem(){ return {t:"Daily Golf Fees", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
+function dgfItem(){ return {t:"Golf Fees and E-commerce", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
 
 const dgfRate=(r,v)=>r?v/r:0;
 
@@ -5670,7 +5670,7 @@ function applyContent(rows){
   if(S.management){
     // Customer Surveys is hard-coded and pinned to the top; a duplicate sheet
     // row is dropped so it can't appear twice.
-    const mgmtDrop = /^\s*((customer\s+)?surveys?|feedback|(historical\s+)?weather|financials?|e-?\s?commerce|daily\s+golf\s+fees|memberships?)\s*$/i;
+    const mgmtDrop = /^\s*((customer\s+)?surveys?|feedback|(historical\s+)?weather|financials?|e-?\s?commerce|(daily\s+)?golf\s+fees(\s+and\s+e-?\s?commerce)?|memberships?)\s*$/i;
     const mgmtRows = mgmt.filter(r=>!mgmtDrop.test((r.title||"").trim()));
     S.management.items = mgmtPinned().concat(mgmtRows.map(contentTypeToItem));
   }
