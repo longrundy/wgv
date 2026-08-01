@@ -312,6 +312,68 @@ a{color:inherit}
 .embed-card.is-wx iframe{height:70vh;min-height:520px}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
+
+/* ---- Native forms ----
+   Replaces the Google Forms iframe for any form defined in NATIVE_FORMS.
+   Posts to the same Google endpoint, so the sheet and notification email
+   behave exactly as before. Forms without a definition still use the iframe. */
+.nf-note{font-size:13px;color:#6a7a90;line-height:1.5;margin:0 0 18px;
+  padding-bottom:16px;border-bottom:1px solid var(--line-soft)}
+.nf-row{display:flex;align-items:stretch;margin-bottom:20px}
+.nf-col{flex:1 1 0;min-width:0}
+.nf-row .nf-col:first-child{padding-right:20px}
+.nf-row .nf-col:last-child{padding-left:20px}
+.nf-div{flex:0 0 1px;width:1px;background:var(--line-soft)}
+.nf-f{margin-bottom:20px}
+.nf-f label{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--navy);margin-bottom:7px}
+.nf-req{color:var(--red);margin-left:3px}
+.nf-hint{display:block;font-size:12px;font-weight:400;letter-spacing:0;
+  text-transform:none;color:var(--muted);margin-top:3px}
+.nf-f input,.nf-f select,.nf-f textarea{width:100%;font:inherit;font-size:14px;
+  line-height:1.5;color:#2c2c2a;background:#fff;border:1px solid #c3ddf4;
+  border-radius:10px;padding:11px 12px;box-sizing:border-box}
+.nf-f textarea{min-height:104px;resize:vertical}
+.nf-f select{appearance:none;-webkit-appearance:none;padding-right:34px;
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2317325a' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:11px}
+.nf-f input:focus,.nf-f select:focus,.nf-f textarea:focus{outline:none;
+  border-color:#7fb2e0;box-shadow:0 0 0 3px rgba(23,50,90,.10)}
+.nf-f.bad input,.nf-f.bad select,.nf-f.bad textarea{border-color:var(--red)}
+.nf-err{display:none;font-size:12px;color:var(--red);margin-top:6px}
+.nf-f.bad .nf-err{display:block}
+.nf-bar{display:flex;align-items:center;gap:16px;margin-top:24px;
+  padding-top:20px;border-top:1px solid var(--line-soft)}
+.nf-send{background:var(--red);color:#fff;border:0;border-radius:10px;
+  padding:13px 30px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.nf-send:active{background:var(--red-dark)}
+.nf-send[disabled]{opacity:.55;cursor:default}
+.nf-clear{background:none;border:0;padding:0;font-family:inherit;font-size:13px;
+  color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.nf-clear:active{color:var(--navy)}
+.nf-fail{display:none;margin-top:18px;padding:13px 15px;border:1px solid var(--red);
+  border-left-width:4px;border-radius:10px;font-size:13.5px;line-height:1.5;background:var(--red-wash)}
+.nf-fail.on{display:block}
+.nf-fail a{color:var(--navy)}
+.nf-done{padding:4px 0 2px}
+.nf-check{width:40px;height:40px;border-radius:50%;background:var(--green);
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.nf-done h3{font-size:18px;font-weight:600;color:var(--navy);margin:0 0 7px}
+.nf-done p{font-size:13.5px;color:#6a7a90;line-height:1.55;margin:0 0 20px}
+.nf-recap{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:22px}
+.nf-recap > div{display:flex;font-size:14px;border-bottom:1px solid var(--line-soft)}
+.nf-recap > div:last-child{border-bottom:0}
+.nf-recap b{flex:0 0 150px;padding:10px 14px;font-size:11.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--navy);
+  background:#fafbfc;border-right:1px solid var(--line-soft)}
+.nf-recap span{padding:10px 14px;color:#2c2c2a;word-break:break-word}
+@media (max-width:640px){
+  .nf-row{display:block;margin-bottom:0}
+  .nf-row .nf-col{padding:0 !important;margin-bottom:20px}
+  .nf-div{display:none}
+  .nf-recap > div{display:block}
+  .nf-recap b{border-right:0;border-bottom:1px solid var(--line-soft)}
+}
 /* ---- Financials ---- */
 /* ---- Year Detail report ---- */
 /* ---- Memberships ---- */
@@ -2021,6 +2083,199 @@ function render(){
   else detail(items[state.idx]);
 }
 
+/* ================= NATIVE FORMS =================
+   Forms listed here are drawn by the portal instead of embedding Google's
+   iframe. Submissions POST to the same Google endpoint, so the response
+   spreadsheet and the notification email work exactly as they always have.
+   Any form NOT listed here still falls back to the iframe.
+
+   To add a form: open it in the Google Forms editor, use the three-dot menu
+   -> "Get pre-filled link", fill every field with junk, copy the link, and
+   read the entry.NNNNNN numbers out of it.
+
+   dateFmt  "iso"   -> entry.123=2026-08-01            (newer forms)
+            "parts" -> entry.123_year / _month / _day  (older forms)
+            If a test submission lands with blank dates, switch this.
+
+   Field types: text | select | date | textarea
+   half:true pairs a field with the next one in a two-column row.
+   ================================================= */
+const NATIVE_FORMS = {
+  // Time off / vacation request — verified from pre-filled link, Aug 2026
+  "1FAIpQLSeeALGROjkszBSmCiR6oXqUx-ce7axAEz3e8allAOI4lsfyiQ": {
+    note: "Submitting this form does not guarantee approval or time off. Your supervisor will follow up.",
+    dateFmt: "iso",
+    doneMsg: "Your request has been recorded and the office has been notified. Your supervisor will follow up with you.",
+    fields: [
+      {k:"name",  e:"entry.1209251180", t:"text",   label:"Name", ph:"First and last name", req:true, half:true},
+      {k:"dept",  e:"entry.1602275645", t:"select", label:"Department", req:true, half:true,
+       opts:["Food & Beverage","Golf Operations","Golf Maintenance","General Administration"]},
+      {k:"start", e:"entry.1771277852", t:"date",   label:"First day off", req:true, half:true},
+      {k:"end",   e:"entry.436005901",  t:"date",   label:"Last day off",  req:true, half:true},
+      {k:"desc",  e:"entry.1191597510", t:"textarea", label:"Description of request", req:true,
+       hint:"Vacation, personal day, appointment — plus anything your supervisor should know.",
+       ph:"Tell us about your request"}
+    ],
+    // end date cannot precede start date
+    order: {after:"start", field:"end", msg:"The last day must come on or after the first day."}
+  }
+};
+
+function nativeFormFor(url){
+  if(!url) return null;
+  const m = url.match(/\/forms\/d\/e\/([^/]+)/);
+  if(!m) return null;
+  const cfg = NATIVE_FORMS[m[1]];
+  return cfg ? Object.assign({id:m[1]}, cfg) : null;
+}
+
+function nfPrettyDate(v){
+  if(!v) return "";
+  const p = v.split("-");
+  if(p.length !== 3) return v;
+  return new Date(+p[0], +p[1]-1, +p[2])
+    .toLocaleDateString("en-US",{weekday:"long", month:"long", day:"numeric", year:"numeric"});
+}
+
+function nfFieldHtml(f){
+  const req = f.req ? '<span class="nf-req">*</span>' : "";
+  const hint = f.hint ? `<span class="nf-hint">${f.hint}</span>` : "";
+  const ph = f.ph ? ` placeholder="${f.ph}"` : "";
+  let control;
+  if(f.t === "select"){
+    control = `<select id="nf-${f.k}"><option value="">Choose one</option>`+
+      f.opts.map(o=>`<option>${o}</option>`).join("")+`</select>`;
+  } else if(f.t === "textarea"){
+    control = `<textarea id="nf-${f.k}"${ph}></textarea>`;
+  } else if(f.t === "date"){
+    control = `<input type="date" id="nf-${f.k}">`;
+  } else {
+    control = `<input type="text" id="nf-${f.k}"${ph}>`;
+  }
+  return `<div class="nf-f" id="nfw-${f.k}">`+
+    `<label for="nf-${f.k}">${f.label} ${req}${hint}</label>`+
+    control+
+    `<span class="nf-err" id="nfe-${f.k}">${f.err || "This one's required."}</span>`+
+  `</div>`;
+}
+
+function detailNativeForm(i, d, cfg){
+  const viewUrl = d.url;
+  let body = "";
+  for(let n = 0; n < cfg.fields.length; n++){
+    const f = cfg.fields[n], g = cfg.fields[n+1];
+    if(f.half && g && g.half){
+      body += `<div class="nf-row"><div class="nf-col">${nfFieldHtml(f)}</div>`+
+              `<div class="nf-div"></div>`+
+              `<div class="nf-col">${nfFieldHtml(g)}</div></div>`;
+      n++;
+    } else {
+      body += nfFieldHtml(f);
+    }
+  }
+
+  el("#detail").innerHTML =
+    `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-sub">${d.sub||"&nbsp;"}</div></div>`+
+    `<a class="head-open" href="${viewUrl}" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open in new tab">&#8599;</a></div>`+
+    `<div class="detail-body"><div id="nfWrap">`+
+      (cfg.note ? `<p class="nf-note">${cfg.note}</p>` : "")+
+      body+
+      `<div class="nf-bar">`+
+        `<button type="button" class="nf-send" id="nfSend">Send request</button>`+
+        `<button type="button" class="nf-clear" id="nfClear">Clear form</button>`+
+      `</div>`+
+      `<div class="nf-fail" id="nfFail"><b>That didn't go through.</b> Check your connection and try again. `+
+      `If it keeps failing, use <a href="${viewUrl}" target="_blank" rel="noopener">the original form</a> so your request isn't lost.</div>`+
+    `</div></div>`;
+
+  const wrap = el("#nfWrap"), send = el("#nfSend"), fail = el("#nfFail");
+  const val = k => (el("#nf-"+k).value||"").trim();
+
+  cfg.fields.forEach(f=>{
+    el("#nf-"+f.k).addEventListener("input", ()=> el("#nfw-"+f.k).classList.remove("bad"));
+    el("#nf-"+f.k).addEventListener("change", ()=> el("#nfw-"+f.k).classList.remove("bad"));
+  });
+
+  function clearBad(){
+    cfg.fields.forEach(f=>{
+      el("#nfw-"+f.k).classList.remove("bad");
+      el("#nfe-"+f.k).textContent = f.err || "This one's required.";
+    });
+    fail.classList.remove("on");
+  }
+
+  el("#nfClear").addEventListener("click", ()=>{
+    cfg.fields.forEach(f=>{ el("#nf-"+f.k).value=""; });
+    clearBad();
+    el("#nf-"+cfg.fields[0].k).focus();
+  });
+
+  send.addEventListener("click", ()=>{
+    clearBad();
+    let firstBad = null;
+    cfg.fields.forEach(f=>{
+      if(f.req && !val(f.k)){
+        el("#nfw-"+f.k).classList.add("bad");
+        if(!firstBad) firstBad = f.k;
+      }
+    });
+    if(cfg.order){
+      const a = val(cfg.order.after), b = val(cfg.order.field);
+      if(a && b && b < a){
+        el("#nfw-"+cfg.order.field).classList.add("bad");
+        el("#nfe-"+cfg.order.field).textContent = cfg.order.msg;
+        if(!firstBad) firstBad = cfg.order.field;
+      }
+    }
+    if(firstBad){ el("#nf-"+firstBad).focus(); return; }
+
+    const fd = new FormData();
+    cfg.fields.forEach(f=>{
+      const v = val(f.k);
+      if(f.t === "date" && cfg.dateFmt === "parts"){
+        const p = v.split("-");
+        fd.append(f.e+"_year", p[0]);
+        fd.append(f.e+"_month", String(+p[1]));
+        fd.append(f.e+"_day", String(+p[2]));
+      } else {
+        fd.append(f.e, v);
+      }
+    });
+    fd.append("fvv","1");
+    fd.append("pageHistory","0");
+    fd.append("fbzx", String(-Math.floor(Math.random()*9e18)));
+
+    const recap = cfg.fields.map(f=>[f.label, f.t==="date" ? nfPrettyDate(val(f.k)) : val(f.k)]);
+
+    send.disabled = true;
+    send.textContent = "Sending\u2026";
+
+    /* Google blocks cross-origin reads, so the response is opaque by design.
+       A resolved promise means the POST left the browser and was accepted. */
+    fetch("https://docs.google.com/forms/d/e/"+cfg.id+"/formResponse",
+          {method:"POST", mode:"no-cors", body:fd})
+      .then(()=>{
+        wrap.innerHTML =
+          `<div class="nf-done"><div class="nf-check">`+
+          `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`+
+          `</div><h3>Request sent</h3><p>${cfg.doneMsg||"Your request has been recorded."}</p>`+
+          `<div class="nf-recap">`+
+            recap.map(r=>`<div><b>${r[0]}</b><span></span></div>`).join("")+
+          `</div><button type="button" class="nf-send" id="nfAgain">Send another request</button></div>`;
+        // set values as text, never HTML — staff type free-form content
+        const cells = wrap.querySelectorAll(".nf-recap span");
+        recap.forEach((r,n)=>{ if(cells[n]) cells[n].textContent = r[1]; });
+        el("#nfAgain").addEventListener("click", ()=> detail(i));
+      })
+      .catch(()=>{
+        send.disabled = false;
+        send.textContent = "Send request";
+        fail.classList.add("on");
+      });
+  });
+}
+
 function detail(i){
   const d=i.d||{};
   if(i.langs){ detailLang(i); return; }
@@ -2080,7 +2335,10 @@ function detail(i){
         `<div class="detail-body"><div class="doc-card"><img src="${img}" alt="${i.t}" onerror="this.parentNode.innerHTML='<div class=\\'doc-fallback\\'>Preview unavailable. Use the button in the corner to open it.</div>'"></div></div>`;
       return;
     }
-    // Forms: interactive, must stay an embed.
+    // Forms: use our own styled form when we have a definition for it,
+    // otherwise fall back to Google's embed.
+    const nf = isFormItem ? nativeFormFor(d.url) : null;
+    if(nf){ detailNativeForm(i, d, nf); return; }
     let src = d.url.indexOf("?")>-1 ? d.url+"&embedded=true" : d.url+"?embedded=true";
     el("#detail").innerHTML=
       `<div class="detail-head has-open"><div class="dh-text"><div class="detail-title">${i.t}</div>`+
