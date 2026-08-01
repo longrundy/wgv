@@ -254,6 +254,17 @@ a{color:inherit}
 }
 .detail-title{font-size:22px;font-weight:600;margin:0;color:#17325a}
 .detail-sub{font-size:13px;color:#6a7a90;margin:5px 0 0;line-height:1.5}
+/* Financials header: title on the left, course switch on the right, both
+   staying put while the report scrolls under them. */
+.fin-head{display:flex;align-items:center;justify-content:space-between;gap:18px;
+  flex-wrap:wrap;padding-top:16px;padding-bottom:14px;min-height:0}
+.fin-hseg{flex:0 1 380px;min-width:260px}
+.fin-hseg .svsplit{width:100%}
+.fin-hseg .svsplit button{padding:7px 10px;font-size:12.5px}
+@media (max-width:820px){
+  .fin-head{gap:10px}
+  .fin-hseg{flex:1 1 100%;min-width:0}
+}
 .card{background:#fff;border-radius:0;padding:2px 0 0;border:0}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{background:#f4f6fa;border-radius:10px;padding:11px 13px}
@@ -3212,11 +3223,12 @@ function detailFinancials(i){
   /* Segment means the same thing on both tabs, so it sits above them and holds
      its value when you switch. Year and the metric pickers belong to one tab
      each and move inside. */
-  const sw=`<div class="svsw"><div class="svgrp fin-seg">`+
-    `<div class="svsplit">`+["all","ss","kb"].map(k=>
+  /* The course switch lives in the sticky header now, so it stays reachable
+     while the report scrolls. Only the tabs remain in the body. */
+  const segSwitch=`<div class="fin-hseg"><div class="svsplit">`+["all","ss","kb"].map(k=>
       `<button type="button" data-fseg="${k}" aria-pressed="${k===seg}">${FIN_SEG[k]}</button>`).join("")+
-    `</div></div></div>`+
-    `<div class="fin-tabs" role="tablist">`+
+    `</div></div>`;
+  const sw=`<div class="fin-tabs" role="tablist">`+
       `<button type="button" role="tab" data-ftab="year" aria-selected="${tab==="year"}">Year Detail</button>`+
       `<button type="button" role="tab" data-ftab="trend" aria-selected="${tab==="trend"}">Annual Trend</button>`+
       `<span class="fin-hint">${tab==="trend"
@@ -3227,13 +3239,11 @@ function detailFinancials(i){
   const yearRow=`<div class="fin-years">`+ys.map(yy=>
       `<button type="button" data-fyear="${yy}" aria-pressed="${yy===y}">${yy}</button>`).join("")+`</div>`;
 
+  /* No sub-line: the period and comparison it spelled out are already on the
+     tab hint and in the report itself, so it was saying the same thing twice. */
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-    `<div class="detail-sub">${FIN_SEG[seg]} \u00b7 `+
-    `${tab==="trend" ? finFullYears()[0]+"\u2013"+finFullYears()[finFullYears().length-1]+" trend"
-      : (FIN_PARTIAL[y] ? y+", "+FIN_PARTIAL[y]+" \u00b7 against "+prevLabel
-         : "year ended 31 December "+y+(isFirst?" \u00b7 earliest year on record":" \u00b7 against "+prev))}`+
-    ` \u00b7 to net operating income</div></div>`+
+    `<div class="detail-head fin-head"><div class="detail-title">${i.t}</div>`+
+    segSwitch+`</div>`+
     `<div class="detail-body is-wide">`+
       sw+(tab==="trend" ? ydTrendCards(seg) : yearRow+
       detailYearReport(i,seg,y,prevLabel,yLabel))+
