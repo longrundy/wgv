@@ -237,14 +237,19 @@ a{color:inherit}
 .detail-sub{font-size:13px;color:#6a7a90;margin:5px 0 0;line-height:1.5}
 /* Financials header: title on the left, course switch on the right, both
    staying put while the report scrolls under them. */
-.fin-head{display:flex;align-items:center;justify-content:space-between;gap:18px;
-  flex-wrap:wrap;padding-top:16px;padding-bottom:14px;min-height:0}
-.fin-hseg{flex:0 1 380px;min-width:260px}
+/* Page controls live in the sticky header, stacked under the title, so they
+   stay reachable while the report scrolls. Same shape on every page that has
+   them: title, then the switch. */
+.hd-ctl{padding-top:16px;padding-bottom:12px;min-height:0}
+.hd-ctl .detail-title{margin-bottom:10px}
+.fin-hseg{max-width:420px}
 .fin-hseg .svsplit{width:100%}
 .fin-hseg .svsplit button{padding:7px 10px;font-size:12.5px}
+/* pill strips sitting in the header need no top margin of their own */
+.hd-ctl .mb-nav,.hd-ctl .ec-secs{margin:0}
+.hd-ctl .svsw{margin:0}
 @media (max-width:820px){
-  .fin-head{gap:10px}
-  .fin-hseg{flex:1 1 100%;min-width:0}
+  .fin-hseg{max-width:none}
 }
 .card{background:#fff;border-radius:0;padding:2px 0 0;border:0}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -2769,11 +2774,13 @@ function detailMemberships(i){
   const V = tab==="share" ? mbShareView() : tab==="rev" ? mbRevView()
           : tab==="market" ? mbMarketView() : tab==="cats" ? mbCatsView() : mbTurnView();
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-    `<div class="detail-sub">${mbT(2026).all} memberships as of June 30, 2026</div></div>`+
-    `<div class="detail-body is-wide">`+
+    /* Tabs in the header, sub-line dropped: the roster count it carried is
+       already the headline of the first tab. */
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>`+
       `<div class="mb-nav">`+MB_TABS.map(([k,l])=>
         `<button type="button" data-mbtab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("")+`</div>`+
+    `</div>`+
+    `<div class="detail-body is-wide">`+
       `<div class="mb-view"><div class="mb-vt"><h4>${V.t}</h4><span>${V.s}</span></div>`+
       `<p class="mb-cap">${V.cap}</p>${V.body}</div>`+
     `</div>`;
@@ -3086,7 +3093,7 @@ function detailFinancials(i){
   /* No sub-line: the period and comparison it spelled out are already on the
      tab hint and in the report itself, so it was saying the same thing twice. */
   el("#detail").innerHTML=
-    `<div class="detail-head fin-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>`+
     segSwitch+`</div>`+
     `<div class="detail-body is-wide">`+
       sw+(tab==="trend" ? ydTrendCards(seg) : yearRow+
@@ -3413,8 +3420,10 @@ function detailHistWx(i){
   }
 
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${sub}</div></div>`+
-    `<div class="detail-body is-wide">${sw}<div class="wx-head">${lead}</div>${main}<p class="wx-foot">${foot}</p></div>`;
+    /* The switches move into the header; the sub-line went with them, since
+       it repeated the course and span the switches already show. */
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${sw}</div>`+
+    `<div class="detail-body is-wide"><div class="wx-head">${lead}</div>${main}<p class="wx-foot">${foot}</p></div>`;
 
   el("#detail").querySelectorAll("[data-wxv]").forEach(b=>b.addEventListener("click",()=>{
     state.wxView=b.dataset.wxv; detail(i);

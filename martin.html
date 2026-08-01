@@ -256,14 +256,19 @@ a{color:inherit}
 .detail-sub{font-size:13px;color:#6a7a90;margin:5px 0 0;line-height:1.5}
 /* Financials header: title on the left, course switch on the right, both
    staying put while the report scrolls under them. */
-.fin-head{display:flex;align-items:center;justify-content:space-between;gap:18px;
-  flex-wrap:wrap;padding-top:16px;padding-bottom:14px;min-height:0}
-.fin-hseg{flex:0 1 380px;min-width:260px}
+/* Page controls live in the sticky header, stacked under the title, so they
+   stay reachable while the report scrolls. Same shape on every page that has
+   them: title, then the switch. */
+.hd-ctl{padding-top:16px;padding-bottom:12px;min-height:0}
+.hd-ctl .detail-title{margin-bottom:10px}
+.fin-hseg{max-width:420px}
 .fin-hseg .svsplit{width:100%}
 .fin-hseg .svsplit button{padding:7px 10px;font-size:12.5px}
+/* pill strips sitting in the header need no top margin of their own */
+.hd-ctl .mb-nav,.hd-ctl .ec-secs{margin:0}
+.hd-ctl .svsw{margin:0}
 @media (max-width:820px){
-  .fin-head{gap:10px}
-  .fin-hseg{flex:1 1 100%;min-width:0}
+  .fin-hseg{max-width:none}
 }
 .card{background:#fff;border-radius:0;padding:2px 0 0;border:0}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1632,7 +1637,7 @@ const GROUPS = [
     {id:"weather",    label:"Weather",                 dot:"#c8161d"},
     {id:"financials", label:"Financials",              dot:"#c8161d"},
     {id:"membership", label:"Membership",              dot:"#c8161d"},
-    {id:"golffees",   label:"Golf Fees and E-commerce", dot:"#c8161d"},
+    {id:"golffees",   label:"Golf Fees &amp; E-commerce", dot:"#c8161d"},
     {id:"academy",    label:"Golf Academy",            dot:"#c8161d"},
     {id:"balance",    label:"Balance Sheet",           dot:"#c8161d"},
     {id:"accounting", label:"Accounting",              dot:"#c8161d"},
@@ -2925,11 +2930,13 @@ function detailMemberships(i){
   const V = tab==="share" ? mbShareView() : tab==="rev" ? mbRevView()
           : tab==="market" ? mbMarketView() : tab==="cats" ? mbCatsView() : mbTurnView();
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-    `<div class="detail-sub">${mbT(2026).all} memberships as of June 30, 2026</div></div>`+
-    `<div class="detail-body is-wide">`+
+    /* Tabs in the header, sub-line dropped: the roster count it carried is
+       already the headline of the first tab. */
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>`+
       `<div class="mb-nav">`+MB_TABS.map(([k,l])=>
         `<button type="button" data-mbtab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("")+`</div>`+
+    `</div>`+
+    `<div class="detail-body is-wide">`+
       `<div class="mb-view"><div class="mb-vt"><h4>${V.t}</h4><span>${V.s}</span></div>`+
       `<p class="mb-cap">${V.cap}</p>${V.body}</div>`+
     `</div>`;
@@ -3242,7 +3249,7 @@ function detailFinancials(i){
   /* No sub-line: the period and comparison it spelled out are already on the
      tab hint and in the report itself, so it was saying the same thing twice. */
   el("#detail").innerHTML=
-    `<div class="detail-head fin-head"><div class="detail-title">${i.t}</div>`+
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>`+
     segSwitch+`</div>`+
     `<div class="detail-body is-wide">`+
       sw+(tab==="trend" ? ydTrendCards(seg) : yearRow+
@@ -3569,8 +3576,10 @@ function detailHistWx(i){
   }
 
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div><div class="detail-sub">${sub}</div></div>`+
-    `<div class="detail-body is-wide">${sw}<div class="wx-head">${lead}</div>${main}<p class="wx-foot">${foot}</p></div>`;
+    /* The switches move into the header; the sub-line went with them, since
+       it repeated the course and span the switches already show. */
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${sw}</div>`+
+    `<div class="detail-body is-wide"><div class="wx-head">${lead}</div>${main}<p class="wx-foot">${foot}</p></div>`;
 
   el("#detail").querySelectorAll("[data-wxv]").forEach(b=>b.addEventListener("click",()=>{
     state.wxView=b.dataset.wxv; detail(i);
@@ -4737,7 +4746,7 @@ const DGF_COPY={
 const DGF_SECS=[["chan","Booking channels"],["rate","Rate and demand"],
                 ["web","Our website"],["comp","The competition"],["value","Our value"]];
 const dgfSec=()=>DGF_SECS.some(x=>x[0]===state.dgfSec)?state.dgfSec:"chan";
-function dgfItem(){ return {t:"Golf Fees and E-commerce", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
+function dgfItem(){ return {t:"Golf Fees & E-commerce", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
 
 const dgfRate=(r,v)=>r?v/r:0;
 
@@ -4965,9 +4974,10 @@ function detailDgf(i){
   const body=sec==="chan"?dgfChannels():sec==="rate"?dgfRateSec()
             :sec==="web"?dgfWeb():sec==="comp"?dgfComp():dgfValue();
   el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-      `<div class="detail-sub">Both courses &middot; 2022 to June 2026</div></div>`+
-    `<div class="detail-body is-wide">${pills}${body}`+
+    /* Section pills in the header; the sub-line went with them, since the
+       courses and span are stated on the pages themselves. */
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
+    `<div class="detail-body is-wide">${body}`+
       `<p class="wx-foot">Rounds and revenue from the Access worksheet and the golf `+
       `system's rate reporting. Competitor fees and value points from the mid-year review.</p>`+
     `</div>`;
