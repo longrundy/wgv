@@ -218,6 +218,63 @@ a{color:inherit}
 .mt-agenda{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#c7d5e8;
   font-weight:700;margin-top:11px!important}
 
+/* ---- Pro Forma ---- */
+.pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
+  background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
+.pf-flag b{color:var(--red-dark)}
+.pf-note{margin-top:13px;padding-top:12px;border-top:1px solid #f2f0ea;
+  font-size:11.5px;color:#6f7885;line-height:1.55}
+.pf-erow{display:grid;grid-template-columns:minmax(0,1.5fr) 78px 110px minmax(0,1fr);
+  gap:0 12px;align-items:center;padding:10px 0;border-bottom:1px solid #f7f6f2;
+  font-size:12.5px;color:#3d3d3a}
+.pf-erow:last-of-type{border-bottom:0}
+.pf-erow span:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+.pf-erow.pf-ehead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;font-weight:700;
+  border-bottom-color:#e5e2da;padding:0 0 8px}
+.pf-erow .good{color:var(--green);font-weight:700}
+.pf-erow .bad{color:var(--red-dark);font-weight:700}
+.pf-crow{display:grid;grid-template-columns:60px minmax(0,1fr) 92px 96px;gap:0 12px;
+  align-items:center;padding:6px 0;font-size:12px;color:#3d3d3a}
+.pf-crow.pf-chead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;font-weight:700;
+  border-bottom:1px solid #e5e2da;padding-bottom:8px;margin-bottom:4px}
+.pf-crow.is-last{font-weight:700;border-top:1px solid #e5e2da;padding-top:9px;margin-top:4px}
+.pf-cbar{position:relative;display:block;height:15px;background:#f2f0ea;border-radius:3px}
+.pf-cbar i{position:absolute;right:50%;top:0;bottom:0;background:var(--red);border-radius:3px 0 0 3px}
+.pf-cv{text-align:right;color:var(--red-dark);font-weight:700;font-variant-numeric:tabular-nums}
+.pf-cy{text-align:right;color:#8a8a84;font-variant-numeric:tabular-nums}
+.pf-chead .pf-cv,.pf-chead .pf-cy{color:#b4b2a9;font-weight:700}
+.pf-trow{display:grid;grid-template-columns:minmax(0,1.3fr) 100px 100px 88px;gap:0 12px;
+  align-items:center;padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:12.5px;color:#3d3d3a}
+.pf-trow:last-of-type{border-bottom:0}
+.pf-trow.pf-thead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;font-weight:700;
+  border-bottom-color:#e5e2da;padding:0 0 8px}
+.pf-trow.is-tot{border-top:2px solid #e5e2da;font-weight:700;padding-top:11px}
+.pf-tv{text-align:right;font-variant-numeric:tabular-nums}
+.pf-tv.now{font-weight:700;color:var(--ink)}
+.pf-tv.good{color:var(--green);font-weight:700}
+.pf-tv.bad{color:var(--red-dark);font-weight:700}
+.pf-tv em{font-style:normal;font-size:10.5px;color:#8a8a84;font-weight:400;margin-left:6px}
+.pf-wrap{overflow-x:auto;margin-top:4px}
+.pf-grid{display:grid;grid-template-columns:minmax(150px,1.6fr) repeat(13,minmax(58px,1fr));
+  gap:0 6px;align-items:center;padding:7px 0;border-bottom:1px solid #f7f6f2;font-size:11.5px}
+.pf-grid span:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+.pf-grid .act{color:#8a8a84}
+.pf-grid .neg{color:var(--red-dark)}
+.pf-grid.pf-ghead{font-size:9.5px;color:#b4b2a9;letter-spacing:.03em;font-weight:700;
+  border-bottom-color:#e5e2da;padding:0 0 8px}
+.pf-grid.is-tot{font-weight:700;color:var(--ink);border-top:1px solid #e5e2da}
+.pf-gn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.pf-arow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 12px;align-items:baseline;
+  padding:8px 0;border-bottom:1px solid #f7f6f2;font-size:12.5px;color:#3d3d3a}
+.pf-arow.is-tot{border-bottom:0;border-top:2px solid #e5e2da;font-weight:700;padding-top:10px}
+@media (max-width:820px){
+  .pf-erow{grid-template-columns:minmax(0,1fr) 64px 88px}
+  .pf-erow span:nth-child(4){display:none}
+  .pf-crow{grid-template-columns:52px minmax(0,1fr) 86px}
+  .pf-crow .pf-cy{display:none}
+  .pf-trow{grid-template-columns:minmax(0,1fr) 84px 84px 66px;font-size:12px}
+}
+
 /* ---- sections whose material has not been supplied yet ---- */
 .mt-empty{border:1px dashed #dfe3e9;border-radius:12px;background:#fcfcfd;
   padding:26px 28px;max-width:640px;margin-top:6px}
@@ -1663,7 +1720,7 @@ const PAGES = {
   accounting: () => pendingItem("Accounting"),
   carts:      () => pendingItem("Golf Carts"),
   usopen:     () => pendingItem("US Open Qualifier"),
-  proforma:   () => pendingItem("Pro Forma")
+  proforma:   () => ({t:"Pro Forma", m:"", s:"", c:"f-flat", a:"", pf:true})
 };
 
 function pendingItem(title){
@@ -2181,6 +2238,7 @@ function detail(i){
   if(i.langDocs){ detailLangDocs(i); return; }
   if(i.memb){ detailMemberships(i); return; }
   if(i.fin){ detailFinancials(i); return; }
+  if(i.pf){ detailPf(i); return; }
   if(i.pending){ detailPending(i); return; }
   if(i.dgf){ detailDgf(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
@@ -4988,6 +5046,304 @@ function detailDgf(i){
   };
   el("#detail").querySelectorAll("[data-dgf]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.dgfSec=b.dataset.dgf; })));
+}
+
+/* ---------------------------------------------------------------------------
+   PRO FORMA — the King & Bear semi-private model
+
+   Source: "King & Bear - Semi-Private Model.xlsx", the TROON Pro Forma sheet.
+   Every figure below was read off that sheet, and three checks were run
+   against it before any of it was typed here:
+     - the eight department NOI lines sum to EBITDA in all thirteen columns
+     - revenue less cost of sales, labour and operating expense equals EBITDA
+     - cumulative cash is the running total of annual cash
+   All three tie to the dollar. The workbook's own tie-out block agrees.
+
+   TWO THINGS A READER MUST NOT MISS, and the page says both plainly:
+
+   1. From Year 2 the model runs eighteen holes. Holes go 36 to 18, rounds
+      79,507 to 45,000, members 264 to 200. In the workbook this appears only
+      as a row labelled "# of Holes" -- it is never written as a sentence.
+
+   2. Ten years of operating cash does not repay the $10m. Cumulative cash
+      ends at -$1,734,606, the stated IRR is -4% and NPV at 10% is -$4.3m.
+      The return arrives only on a sale at year ten.
+
+   The source sheet is marked DRAFT. Two other membership models sit beside it
+   in the same workbook and are not shown here: only the semi-private model
+   ties out to the Troon pro forma.
+
+   UPDATE THIS when a revised model arrives. Nothing self-refreshes.
+--------------------------------------------------------------------------- */
+const PF={
+  cols:["2024","2025","2026 budget","Year 1","Year 2","Year 3","Year 4","Year 5",
+        "Year 6","Year 7","Year 8","Year 9","Year 10"],
+  short:["2024","2025","2026B","1","2","3","4","5","6","7","8","9","10"],
+  actual:2,          /* index of the last column that is not the model */
+  invest:10000000,
+  phase:{3:"Renovation, 36 holes",4:"Stabilise, 18 holes",12:"Mature"},
+
+    holes    :[36,36,36,36,18,18,18,18,18,18,18,18,18],
+    rounds   :[70169,79507,80000,67000,45000,45000,45000,45000,45000,45000,45000,45000,45000],
+    members  :[278,264,293,293,200,200,200,200,200,200,200,200,200],
+    rev      :[9664804,11061249,12145030,10414366,7578772,7848493,8128471,8419124,8720884,9034206,9359560,9697441,10048360],
+    cos      :[1067958,1074860,1269366,1129987,842047,868603,896019,924326,953554,983733,1014897,1047077,1080310],
+    lab      :[4157605,4325010,5007413,4790332,3379033,3480638,3585334,3693216,3804382,3918932,4036971,4158606,4283947],
+    opx      :[3235649,3454161,3556197,3362457,2270570,2346402,2424829,2505942,2589834,2676603,2766349,2859177,2955195],
+    ebitda   :[1203592,2207218,2312054,1131590,1087122,1152850,1222289,1295640,1373115,1454938,1541344,1632580,1728908],
+    cash     :[null,null,1712054,-9493272,632395,681940,734580,790492,849862,912886,979770,1050734,1126007],
+    cum      :[null,null,null,-9493272,-8860877,-8178937,-7444357,-6653864,-5804003,-4891117,-3911347,-2860613,-1734606],
+    margin   :[0.12,0.2,0.19,0.11,0.14,0.15,0.15,0.15,0.16,0.16,0.16,0.17,0.17],
+
+  /* Department NOI, in the workbook's own order. Sums to EBITDA. */
+  deps:[
+    {n:"Pro shop and outside services", d:[4029534,4873858,5028639,3996165,2852387,2937958,3026097,3116880,3210386,3306698,3405899,3508076,3613318]},
+    {n:"Restaurant", d:[-275157,-214251,-110691,-111811,-32061,-33023,-34013,-35034,-36085,-37167,-38282,-39431,-40614]},
+    {n:"Beverage cart", d:[149134,206212,209969,185090,134686,141504,148666,156188,164089,172389,181105,190261,199877]},
+    {n:"Membership", d:[1960738,2154690,2480880,2306208,1890000,1985100,2084973,2189858,2300007,2415682,2537162,2664737,2798711]},
+    {n:"Golf academy", d:[2601,2147,7110,2110,2110,2110,2110,2110,2110,2110,2110,2110,2110]},
+    {n:"Golf course maintenance", d:[-2083096,-2224386,-2622843,-2507735,-1800000,-1862000,-1926180,-1992618,-2061396,-2132596,-2206308,-2282619,-2361625]},
+    {n:"General and administrative", d:[-2353152,-2405596,-2433606,-2506614,-1825000,-1879750,-1936142,-1994227,-2054054,-2115675,-2179145,-2244520,-2311855]},
+    {n:"Marketing", d:[-227010,-185456,-247404,-231823,-135000,-139050,-143222,-147518,-151944,-156502,-161197,-166033,-171014]},
+  ],
+
+  /* What the model assumes, so the outputs need not be taken on faith. */
+  ass:[
+    {n:"Daily fee rate", f:"$", d:[110.37,105.26,111.74,117.32,126.94,130.75,134.67,138.71,142.88,147.16,151.58,156.12,160.81]},
+    {n:"Rounds per member", f:"", d:[91.36,90.85,86.44,90,90,90,90,90,90,90,90,90,90]},
+    {n:"Annual dues per member", f:"$", d:[6600,7500,7920,8316,9600,10080,10584,11113.2,11668.86,12252.3,12864.92,13508.16,14183.57]},
+    {n:"Initiation fee", f:"$", d:[null,null,null,15000,15000,15000,15000,20000,20000,20000,20000,25000,25000]},
+    {n:"Merchandise per round", f:"$", d:[12.42,10.85,13.38,13.79,15,15.45,15.91,16.39,16.88,17.39,17.91,18.45,19.0]},
+    {n:"Restaurant per round", f:"$", d:[17.91,17.31,20.25,20.86,23.75,24.46,25.2,25.95,26.73,27.53,28.36,29.21,30.08]},
+  ],
+
+  /* Sell at year ten. This is where the whole return comes from. */
+  exits:[
+    {mult:8,  ev:13831266, surplus:3831266,  irr:12, npv:1014846},
+    {mult:9,  ev:15560174, surplus:5560174,  irr:13, npv:1681415},
+    {mult:10, ev:17289083, surplus:7289083,  irr:14, npv:2347984}
+  ],
+  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilised:1728908},
+
+  /* Each add-on is a separate investment with its own return. Both are
+     negative on their own terms; the page says so rather than folding them
+     into a combined figure that hides it. */
+  addons:[
+    {n:"PGA Tour Golf Academy", invest:2000000, rev:1000000, noi:300000,
+     margin:30, irr:4, npv:-426030,
+     note:"Revenue and margin from year two onward, growing 3% a year."},
+    {n:"Lodging, ten rooms", invest:4000000, rev:875000, noi:306250,
+     margin:35, irr:-6, npv:-2058106,
+     note:"Ten rooms at a $240 average nightly rate, from year two."}
+  ],
+  combined:{invest:16000000, irr:-3, npv:-6801842}
+};
+
+const PF_COPY={
+  source:"King &amp; Bear Semi-Private Model, Troon pro forma sheet. The source workbook is marked draft.",
+  lead:"A $10m investment to convert King &amp; Bear to a semi-private club, modelled over ten years.",
+
+  planHead:"This is a sale play, not an operating one.",
+  planSay:"Ten years of operating cash does not repay the $10m \u2014 it ends <b>$1.73m short</b>. The return comes entirely from selling King &amp; Bear at the end at eight to ten times earnings.",
+  planBand:[
+    ["Eighteen holes from year two","The model runs 36 holes through the renovation year, then 18. Rounds fall from 79,507 to 45,000 and members from 264 to 200."],
+    ["The money goes out first","The full $10m is deployed in year one. Every year after that returns between $632,000 and $1.13m."],
+    ["Everything rests on the exit multiple","At eight times year-ten earnings the deal returns 12%. Without a sale it returns nothing."]
+  ],
+
+  cashHead:"Cumulative cash, year by year",
+  cashSub:"The $10m goes out in year one and never fully comes back from operations",
+  cashNote:"Selling at year ten adds $13.8m to $17.3m depending on the multiple, which is what turns the whole thing positive.",
+
+  todayHead:"What the club looks like after",
+  todaySub:"2025 actual against the model's stabilised year ten",
+  todayNote:"Ten years out, the model earns less than the property earns today. The case rests on what one restored eighteen-hole club is worth to a buyer, not on what it earns.",
+
+  plHead:"The ten-year profit and loss",
+  plSub:"Actual and budget years first, then the model. Year 1 covers the renovation.",
+  depHead:"Where the earnings come from",
+  depSub:"Department operating income. The eight lines sum to EBITDA.",
+
+  assHead:"What the model assumes",
+  assSub:"Change any of these and the outputs move",
+  assNote:"Rounds per member holds at 90 and members at 200 from year two, so member rounds are fixed at 18,000 for nine straight years. Daily-fee rate carries the growth.",
+
+  addHead:"The two add-ons",
+  addSub:"Each is a separate investment on top of the $10m, with its own return",
+  addNote:"Neither add-on covers its own cost of capital in this model. Taken together with the base case, the combined $16m returns \u22123% and a negative $6.8m present value.",
+
+  draft:"The source workbook is marked draft, and two other membership models sit beside this one. Only the semi-private model ties out to the Troon pro forma, so only it is shown here."
+};
+
+const PF_SECS=[["plan","The proposal"],["cash","Ten-year cash"],["today","Against today"],
+               ["pl","Profit and loss"],["ass","Assumptions"],["add","Add-ons"]];
+const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"plan";
+
+const pfM=n=>(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
+const pfMm=n=>(n<0?"\u2212":"")+"$"+(Math.abs(n)/1e6).toFixed(2)+"m";
+const pfN=n=>Math.round(n).toLocaleString();
+const pfPc=(a,b)=>((a/b-1)*100);
+
+/* ------------------------------------------------------------ the proposal */
+function pfPlan(){
+  const L=PF.cols.length-1, A=1;   /* Yr10 index, 2025 index */
+  return ecKpis([
+      ecKpi(pfMm(PF.invest),"Investment","deployed in year one"),
+      ecKpi(pfMm(PF.noExit.cash),"Cash after 10 years","before any sale"),
+      ecKpi("12\u201314%","IRR if we sell","at 8\u00d7 to 10\u00d7 year ten"),
+      ecKpi(String(PF.holes[L]),"Holes from year two",PF.holes[A]+" today")])+
+    `<div class="pf-flag"><b>${PF_COPY.planHead}</b> ${PF_COPY.planSay}</div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Without a sale, and with one</h3>`+
+      `<p class="wx-sub">Ten-year return on the $10m</p>`+
+      `<div class="pf-erow pf-ehead"><span>SCENARIO</span><span>IRR</span>`+
+        `<span>NPV AT 10%</span><span>CASH POSITION</span></div>`+
+      `<div class="pf-erow"><span>Operations only, no sale</span>`+
+        `<span class="bad">${PF.noExit.irr}%</span>`+
+        `<span class="bad">${pfMm(PF.noExit.npv)}</span>`+
+        `<span class="bad">${pfMm(PF.noExit.cash)}</span></div>`+
+      PF.exits.map(e=>`<div class="pf-erow"><span>Sell at ${e.mult}\u00d7 year-ten earnings</span>`+
+        `<span class="good">+${e.irr}%</span><span class="good">+${pfMm(e.npv)}</span>`+
+        `<span>+${pfMm(e.surplus)} over the $10m</span></div>`).join("")+
+      `<p class="ec-body last pf-note">Year-ten earnings of ${pfM(PF.noExit.stabilised)} `+
+      `are what the multiple is applied to.</p></div>`+
+    ecBand(PF_COPY.planBand);
+}
+
+/* ------------------------------------------------------------ ten-year cash */
+function pfCash(){
+  const i0=PF.actual+1, cum=PF.cum.slice(i0), max=Math.max.apply(null,cum.map(Math.abs));
+  const rows=cum.map((v,k)=>{
+    const yr=k+1, last=k===cum.length-1;
+    return `<div class="pf-crow${last?" is-last":""}"><span>Year ${yr}</span>`+
+      `<span class="pf-cbar"><i style="width:${(Math.abs(v)/max*50).toFixed(1)}%"></i></span>`+
+      `<span class="pf-cv">${pfMm(v)}</span>`+
+      `<span class="pf-cy">${pfM(PF.cash[i0+k])}</span></div>`;
+  }).join("");
+  return ecKpis([
+      ecKpi(pfMm(PF.cash[i0]),"Year one","the $10m going out"),
+      ecKpi(pfM(PF.cash[i0+1]),"Year two","first year back"),
+      ecKpi(pfM(PF.cash[PF.cols.length-1]),"Year ten","best year"),
+      ecKpi(pfMm(PF.noExit.cash),"Still owed at year ten","before a sale")])+
+    ecSay("Ten years of operating cash returns "+
+      pfM(PF.cash.slice(i0+1).reduce((a,b)=>a+b,0))+" against the $10m put in.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.cashHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.cashSub)}</p>`+
+      `<div class="pf-crow pf-chead"><span>YEAR</span><span></span>`+
+        `<span class="pf-cv">CUMULATIVE</span><span class="pf-cy">THAT YEAR</span></div>${rows}`+
+      `<p class="ec-body last pf-note">${esc(PF_COPY.cashNote)}</p></div>`;
+}
+
+/* ----------------------------------------------------------- against today */
+function pfToday(){
+  const A=1, L=PF.cols.length-1;
+  const rows=[
+    ["Holes in play",PF.holes[A],PF.holes[L],false],
+    ["Rounds",pfN(PF.rounds[A]),pfN(PF.rounds[L]),pfPc(PF.rounds[L],PF.rounds[A])],
+    ["Members",pfN(PF.members[A]),pfN(PF.members[L]),pfPc(PF.members[L],PF.members[A])],
+    ["Revenue",pfMm(PF.rev[A]),pfMm(PF.rev[L]),pfPc(PF.rev[L],PF.rev[A])],
+    ["Operating income",pfMm(PF.ebitda[A]),pfMm(PF.ebitda[L]),pfPc(PF.ebitda[L],PF.ebitda[A])]
+  ].map(([n,a,b,pc],k)=>`<div class="pf-trow${k===4?" is-tot":""}">`+
+    `<span>${esc(n)}</span><span class="pf-tv">${a}</span><span class="pf-tv now">${b}</span>`+
+    `<span class="pf-tv ${pc===false?"":(pc<0?"bad":"good")}">`+
+      `${pc===false?"\u221218":(pc>0?"+":"\u2212")+Math.abs(pc).toFixed(0)+"%"}</span></div>`).join("");
+  return ecKpis([
+      ecKpi(pfMm(PF.ebitda[A]),"Operating income 2025","36 holes"),
+      ecKpi(pfMm(PF.ebitda[L]),"Model year ten","18 holes"),
+      ecKpi(Math.abs(pfPc(PF.ebitda[L],PF.ebitda[A])).toFixed(0)+"%","Below today","ten years out"),
+      ecKpi((PF.margin[L]*100).toFixed(0)+"%","Year-ten margin",(PF.margin[A]*100).toFixed(0)+"% in 2025")])+
+    ecSay("The model earns less in year ten than the property earns today.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.todayHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.todaySub)}</p>`+
+      `<div class="pf-trow pf-thead"><span></span><span class="pf-tv">2025 ACTUAL</span>`+
+        `<span class="pf-tv">YEAR 10</span><span class="pf-tv">CHANGE</span></div>${rows}`+
+      `<p class="ec-body last pf-note">${esc(PF_COPY.todayNote)}</p></div>`;
+}
+
+/* --------------------------------------------------------- profit and loss */
+function pfGrid(rows,cls){
+  const head=`<div class="pf-grid pf-ghead"><span></span>`+
+    PF.short.map((s,k)=>`<span class="${k<=PF.actual?"act":""}">${s}</span>`).join("")+`</div>`;
+  return `<div class="pf-wrap">${head}`+rows.map(([n,vals,fmt,bold])=>
+    `<div class="pf-grid${bold?" is-tot":""}"><span class="pf-gn">${esc(n)}</span>`+
+    vals.map((v,k)=>`<span class="${k<=PF.actual?"act":""}${v<0?" neg":""}">`+
+      `${v===null?"\u2014":fmt(v)}</span>`).join("")+`</div>`).join("")+`</div>`;
+}
+function pfPL(){
+  const m=v=>"$"+Math.round(v/1000).toLocaleString()+"k";
+  const rows=[
+    ["Total rounds",PF.rounds,pfN,false],
+    ["Members",PF.members,pfN,false],
+    ["Revenue",PF.rev,m,true],
+    ["Cost of sales",PF.cos.map(v=>-v),m,false],
+    ["Labour",PF.lab.map(v=>-v),m,false],
+    ["Operating expense",PF.opx.map(v=>-v),m,false],
+    ["Operating income",PF.ebitda,m,true],
+    ["Margin",PF.margin,v=>(v*100).toFixed(0)+"%",false]
+  ];
+  return ecSay("Actual years, the 2026 budget, then the ten model years. Year one is the renovation.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.plHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.plSub)}</p>${pfGrid(rows)}</div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.depHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.depSub)}</p>`+
+      pfGrid(PF.deps.map(d=>[d.n,d.d,m,false]).concat([["Total operating income",PF.ebitda,m,true]]))+
+    `</div>`;
+}
+
+/* ------------------------------------------------------------- assumptions */
+function pfAss(){
+  const rows=PF.ass.map(a=>[a.n,a.d,v=>a.f+(a.f?v.toFixed(2):v.toFixed(0)),false]);
+  return ecSay("Every output on the other pages follows from these.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.assHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.assSub)}</p>`+
+      pfGrid(rows.concat([["Total rounds",PF.rounds,pfN,true]]))+
+      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Where this came from</h3>`+
+      `<p class="ec-body last">${PF_COPY.draft}</p></div>`;
+}
+
+/* ----------------------------------------------------------------- add-ons */
+function pfAdd(){
+  const cards=PF.addons.map(a=>
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(a.n)}</h3>`+
+      `<p class="wx-sub">${esc(a.note)}</p>`+
+      `<div class="pf-arow"><span>Investment</span><span class="pf-tv">${pfMm(a.invest)}</span></div>`+
+      `<div class="pf-arow"><span>Revenue once running</span><span class="pf-tv">${pfM(a.rev)}</span></div>`+
+      `<div class="pf-arow"><span>Operating income</span><span class="pf-tv">${pfM(a.noi)} `+
+        `<em>${a.margin}% margin</em></span></div>`+
+      `<div class="pf-arow"><span>Ten-year IRR</span>`+
+        `<span class="pf-tv ${a.irr<10?"bad":"good"}">${a.irr>0?"+":""}${a.irr}%</span></div>`+
+      `<div class="pf-arow is-tot"><span>Present value at 10%</span>`+
+        `<span class="pf-tv ${a.npv<0?"bad":"good"}">${pfMm(a.npv)}</span></div>`+
+    `</div>`).join("");
+  return ecKpis([
+      ecKpi(pfMm(PF.addons[0].invest),"Golf academy",PF.addons[0].irr+"% return"),
+      ecKpi(pfMm(PF.addons[1].invest),"Lodging",PF.addons[1].irr+"% return"),
+      ecKpi(pfMm(PF.combined.invest),"All three together",PF.combined.irr+"% return"),
+      ecKpi(pfMm(PF.combined.npv),"Combined present value","at a 10% discount rate")])+
+    ecSay("Neither add-on covers its own cost of capital in this model.")+
+    `<div class="ec-g2">${cards}</div>`+
+    `<p class="ec-note">${esc(PF_COPY.addNote)}</p>`;
+}
+
+/* ------------------------------------------------------------------- shell */
+function detailPf(i){
+  const sec=pfSec();
+  const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
+    PF_SECS.map(([k,l])=>`<button type="button" data-pf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
+    `</div>`;
+  const body=sec==="plan"?pfPlan():sec==="cash"?pfCash():sec==="today"?pfToday()
+            :sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
+  el("#detail").innerHTML=
+    `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
+    `<div class="detail-body is-wide">${body}`+
+      `<p class="wx-foot">${PF_COPY.source}</p></div>`;
+  const hold=fn=>()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    fn(); detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+  };
+  el("#detail").querySelectorAll("[data-pf]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.pfSec=b.dataset.pf; })));
 }
 
 function detailSurveyPending(i){
