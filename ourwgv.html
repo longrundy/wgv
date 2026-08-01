@@ -1596,6 +1596,11 @@ function shareMark(){
 }
 function openApp(){
   shareMark();
+  /* The nav is built once at page load, before anyone has signed in, so it is
+     built with mgrOk false. Rebuild it here: this is the single point every
+     sign-in passes through, so a manager password shows the Management item
+     without needing the caller to remember. */
+  buildNav();
   document.getElementById("gate").style.display="none";
   document.getElementById("gate").hidden=true;
   document.getElementById("app").hidden=false;
@@ -2095,7 +2100,7 @@ function go(view){
     if(sha(p.replace(/\s+/g,""))!==MANAGER_HASH){ alert("That password isn't right."); return; }
     state.mgrOk=true;
     store.set("wgv_mgr","1");
-    buildNav();               /* the item was hidden a moment ago */
+    buildNav();               /* this path does not pass through openApp() */
   }
   state.view=view; state.idx=0; if(view==="announce") state.turf=true; render();
   document.body.classList.remove("nav-open");
