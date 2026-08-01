@@ -1549,8 +1549,11 @@ function _sha256(ascii){
   return out;
 }
 function sha(t){ return _sha256(t); }
-const STAFF_HASH="5d1b67c4f5ebfbc63dd15285fa79e490cbc37c4c479a44f8e6646e0f7d65b5da";
-const MANAGER_HASH="dd56de4137951d9c92681b03416ec15f886b4482a27e3a517d32f085244cbe5d";
+/* One password for this portal. There is no employee tier here -- every page
+   is management material, so a second password would only be the same door
+   twice. To change it: type "hash:" followed by the new password into the
+   sign-in box, and paste the hash it prints back over the line below. */
+const PORTAL_HASH="dd56de4137951d9c92681b03416ec15f886b4482a27e3a517d32f085244cbe5d";
 const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
 
 function _tryUnlock(){
@@ -1559,13 +1562,8 @@ function _tryUnlock(){
   if(v.indexOf("hash:")===0){ document.getElementById("pwHash").textContent=sha(v.slice(5)); msg.textContent="Copy the hash below into the file."; return; }
   // A manager password gets in here too, and carries the manager unlock with
   // it, so supervisors sign in once instead of twice.
-  if(sha(v)===MANAGER_HASH){ store.set("wgv_ok","1"); store.set("wgv_mgr","1"); state.mgrOk=true; openApp(); }
-  else if(sha(v)===STAFF_HASH){
-    /* clear any manager flag left in this tab, or a staff sign-in would inherit
-       management access from whoever used the tab before. */
-    store.set("wgv_ok","1"); store.set("wgv_mgr","0"); state.mgrOk=false; openApp();
-  }
-  else{ msg.style.color="#f4a3a3"; msg.textContent="That password isn't right. Ask your manager."; document.getElementById("pw").value=""; }
+  if(sha(v)===PORTAL_HASH){ store.set("wgv_ok","1"); state.mgrOk=true; openApp(); }
+  else{ msg.style.color="#f4a3a3"; msg.textContent="That password isn't right."; document.getElementById("pw").value=""; }
 }
 /* The animated mark is embedded once, on the sign-in card, and the rail copies
    it from there. Two inline copies of the same 134KB webp is 179KB of base64
@@ -5486,7 +5484,7 @@ async function startEdit(i){
   if(!state.mgrOk){
     const pw=prompt("Manager password to edit this item:");
     if(pw===null) return;
-    if(sha(pw.replace(/\s+/g,""))!==MANAGER_HASH){ alert("That password isn't right."); return; }
+    if(sha(pw.replace(/\s+/g,""))!==PORTAL_HASH){ alert("That password isn't right."); return; }
     state.mgrOk=true;
   }
   renderContentEditor(i);
