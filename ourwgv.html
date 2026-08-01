@@ -640,6 +640,9 @@ a{color:inherit}
 .dgf-t.up{color:var(--green)} .dgf-t.down{color:var(--red-dark)}
 .dgf-tot{border-top:2px solid #e5e2da;border-bottom:0;margin-top:2px;padding-top:11px}
 .dgf-tot .dgf-n{font-size:10px;letter-spacing:.05em;color:#8a8a84}
+.dgf-sub{display:block;font-style:normal;font-size:10px;color:#a8a69e;font-weight:400;
+  margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dgf-n{white-space:normal}
 .dgf-note{margin-top:13px;padding-top:12px;border-top:1px solid #f2f0ea;
   font-size:11px;color:#8a8a84;line-height:1.55}
 .dgf-arow{display:grid;grid-template-columns:minmax(0,1fr) 78px 78px 62px;gap:0 10px;
@@ -2127,7 +2130,6 @@ function detail(i){
   if(i.memb){ detailMemberships(i); return; }
   if(i.fin){ detailFinancials(i); return; }
   if(i.dgf){ detailDgf(i); return; }
-  if(i.ecom){ detailEcom(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
   if(i.surveys){
     if(svAud()==="member"){ detailMemberGolf(i); return; }
@@ -4488,149 +4490,18 @@ function detailEmployee(i){
 }
 
 /* ---------------------------------------------------------------------------
-   E-COMMERCE — website, call center and online tee times, 1H 2026
-
-   Three sources, and they are not equally solid. Keep them apart:
-
-   1. ROUNDS   — the golf system's own reports (Rounds Report #15a and the
-      Internet Rounds Report, both courses plus both 10th-tee sheets,
-      1 Jan to 30 Jun). Every figure under channels{}, callCenter{},
-      internet{} and pages{} was read straight off those exports and
-      reconciles: internet golfers / property golfers = 38.5%, internet
-      revenue / property revenue = 47.3%.
-
-   2. SITE     — Google Analytics, supplied by the marketing manager as a
-      finished graphic. NOT verifiable from anything we hold. Flagged as
-      such on the page, because a number nobody can check should say so.
-
-   3. ADS      — Meta ads manager, same caveat as SITE, and on $1,357 of
-      spend it is a test rather than a channel.
-
-   WHAT IS MISSING, and stated on the page rather than quietly omitted:
-     - no 2025 call center comparison. The all-rounds report we hold covers
-       2026 only. Request the same report for 1 Jan - 30 Jun 2025 and the
-       growth line can be filled in.
-     - nothing measures whether booking a tee time is actually easy. There
-       is no funnel, no abandonment rate, no session-to-booking conversion.
-
-   UPDATE THIS at the next reporting period. Nothing here self-refreshes.
+   Shared presentation helpers: number formatting, the KPI strip, the
+   one-line takeaway, the navy takeaway band and the donut chart.
+   Written for the old E-commerce page, which has been folded into
+   Daily Golf Fees. Kept here because that page still uses them.
 --------------------------------------------------------------------------- */
-const ECOM={
-  period:"1 January to 30 June 2026",
-  prior:"the same six months of 2025",
-
-  /* Google Analytics, from the marketing manager. Not verifiable here. */
-  site:{
-    sessions:122000, sessionsChg:13.0,
-    active:79000,    activeChg:24.8,
-    newUsers:76000,  newChg:24.2,
-    channels:[["Organic search",75630],["Direct",28586],["Unassigned",8203],
-              ["Referral",7954],["Other",838]],
-    markets:[["Florida",24188],["Georgia",6728],["New York",6081],
-             ["Virginia",4314],["North Carolina",4118]]
-  },
-
-  /* Rounds Report #15a, both courses, 1H 2026. */
-  property:{golfers:45167, revenue:3528268, avgFee:78.12},
-
-  callCenter:{golfers:4297, revenue:548456, avgFee:127.64, prior:null},
-
-  /* Internet Rounds Report, 1H 2026 against 1H 2025. */
-  internet:{
-    golfers:{now:17391, was:15741},
-    revenue:{now:1669661, was:1401164},
-    avgFee:{now:96.01, was:89.01},
-    confirms:{now:8608, was:7933}
-  },
-
-  /* Booking page, by revenue. was = same page, 1H 2025. */
-  pages:[
-    {n:"Troon Digital",            golfers:7252, rev:1040751, wasG:5548, wasR:737542, third:false},
-    {n:"GolfNow",                  golfers:2718, rev:305264,  wasG:1191, wasR:113034, third:true},
-    {n:"WGV full affiliate member",golfers:4053, rev:125269,  wasG:3783, wasR:118764, third:false},
-    {n:"WGV wholesaler",           golfers:776,  rev:107054,  wasG:929,  wasR:133659, third:false},
-    {n:"WGV best available",       golfers:228,  rev:32914,   wasG:1766, wasR:248708, third:false},
-    {n:"Troon Advantage GNBE",     golfers:149,  rev:16488,   wasG:105,  wasR:11361,  third:true},
-    {n:"Access Premium",           golfers:104,  rev:11881,   wasG:58,   wasR:6267,   third:false}
-  ],
-
-  ads:{spend:1357, reach:22034, clickRate:3.95, hospitalityRate:2.8,
-       purchases:138, value:27698},
-
-  /* Why the channel averages differ. Read off the reservation-type rows under
-     each booking group in Rounds Report #15a.
-       full = share of that channel's rounds paying a guest rate rather than an
-              affiliate, employee, prepaid or complimentary rate
-       adv  = share booked four or more days ahead, which carries a higher rate
-              on the same card. null where the channel has no such split. */
-  rateMix:[
-    {n:"Troon Digital",        g:7252,  avg:143.51, full:100, adv:70},
-    {n:"Call center",          g:4297,  avg:127.64, full:98,  adv:48, on:true},
-    {n:"GolfNow",              g:2718,  avg:112.31, full:100, adv:null,
-       note:"a single wholesale rate"},
-    {n:"Walk-up and in-house", g:22932, avg:55.55,  full:57,  adv:4}
-  ],
-  advSpread:{early:145.29, late:116.25}
-};
-
-const ECOM_COPY={
-  siteSay:"More people are finding us, rather than the same people coming back more often \u2014 new users grew almost twice as fast as sessions.",
-  siteBand:[["Search does the heavy lifting","62% of all sessions arrive through organic search. Paid and referral together are under a tenth."],
-            ["Growth is in new faces","New users +24.8% against sessions +13.0%."],
-            ["Florida, then the Southeast","Florida alone is 24,188 users. Georgia, New York, Virginia and North Carolina follow."]],
-  callSay:"The call center is the smallest booking channel and the second most valuable per golfer \u2014 almost everything it touches is a full-rate guest.",
-  callBand:[["Small, and disproportionately valuable","One golfer in ten, one revenue dollar in six."],
-            ["Almost no discounted play","98% of its rounds pay a guest rate rather than a member, employee or complimentary one."],
-            ["Lead time is what moves the average","Four or more days ahead is worth about $29 a round on the same card."]],
-  teeSay:"Online tee times grew on both counts \u2014 10.5% more rounds, and 7.9% more money per round.",
-  teeBand:[["Close to half the money","38.5% of golfers, 47.3% of green-fee revenue."],
-           ["Third party is taking a bigger share","GolfNow went from 8% of online revenue to 18%, at $31 less per golfer."],
-           ["Booking ease is still unmeasured","The engine reports bookings, not the journey to them."]],
-  siteHead:"The website is growing on every measure, and growing fastest where it matters.",
-  siteLead:"New users are up <b>24.8%</b> against the first half of 2025 while sessions are up <b>13.0%</b> \u2014 more people are finding us, rather than the same people visiting more often. Search brings roughly six of every ten visits.",
-  callHead:"The call center books one golfer in ten and brings in one revenue dollar in six.",
-  mixWhyHead:"Why the averages differ",
-  mixWhyLead:"The four largest channels. Every one sells off the same rate card \u2014 what separates them is who they carry, and how far ahead those golfers book.",
-  mixWhyRead:"Booking four or more days ahead is worth about <b>$29</b> a round \u2014 $145.29 against $116.25 on the call center's own rates. Troon Digital carries the highest average because <b>70%</b> of its rounds are booked that far out. Walk-up and in-house carries the lowest because <b>43%</b> of its play is affiliate member, employee or complimentary, which is where that play is meant to sit.",
-  callLead:"At <b>$127.64</b> a round it earns 63% more per golfer than the property average and a third more than an online booking. It is the smallest channel by volume and the most valuable per head.",
-  teeHead:"Online tee times grew on both counts \u2014 more rounds, and more money per round.",
-  teeLead:"<b>17,391</b> rounds booked online, up 10.5% on the first half of 2025, worth <b>$1.67m</b>, up 19.2%. That is 38.5% of everyone who played and 47.3% of green-fee revenue \u2014 close to half the money from under two golfers in five.",
-  mixHead:"Where the growth came from",
-  mixLead:"GolfNow went from 8% of online revenue to 18%. Its rounds average $112.31 against Troon Digital's $143.51 \u2014 about $31 less per golfer, or roughly $85,000 across the 2,718 golfers it brought in. The growth is real, and a rising share of it is arriving through the least valuable digital channel.",
-  bestAvail:"WGV best available fell 87% as bookings consolidated into Troon Digital, which grew 41% over the same period.",
-  easeHead:"Is it easy to book a tee time?",
-  easeLead:"Not measured. The tee-time engine reports bookings but not the journey to them \u2014 there is no session-to-booking conversion and no record of where people abandon. What we can see is that 8,608 bookings produced 17,391 golfers, an average party of 2.02, up from 1.98.",
-  easeNext:"Conversion and drop-off reporting from the booking engine would answer it.",
-  adsHead:"Paid social",
-  adsLead:"Six months of Meta advertising on $1,357 of spend."
-};
-
-const ECOM_SECS=[["site","The website"],["call","Call center"],["tee","Online tee times"]];
-const ecomSec=()=>ECOM_SECS.some(x=>x[0]===state.ecomSec)?state.ecomSec:"site";
-/* a declaration, not a const arrow: the nav structure is built before this
-   point in the file and const bindings are not hoisted */
-function ecomItem(){ return {t:"E-commerce", m:"", s:"", c:"f-flat", a:"", ecom:true}; }
-
-/* The pinned Management items, in order, in ONE place.
-
-   This list is built twice: once when the page first paints, and again after
-   the Content workbook finishes loading, because that loader rebuilds
-   S.management.items from scratch to fold in any sheet rows. When the two
-   lists were written out separately, anything added to only one of them
-   appeared on first paint and then vanished a second later. Add new
-   Management items here and nowhere else. */
 function mgmtPinned(){
-  return [surveysItem(), histWeatherItem(), financialsItem(), dgfItem(), ecomItem(), membershipsItem()];
+  return [surveysItem(), histWeatherItem(), financialsItem(), dgfItem(), membershipsItem()];
 }
-
 const ecMoney=n=>"$"+Math.round(n).toLocaleString();
 const ecNum=n=>Math.round(n).toLocaleString();
 const ecPc=(a,b)=>((a/b-1)*100);
 const ecChg=v=>`<em class="ec-chg ${v>=0?"up":"down"}">${v>=0?"+":"\u2212"}${Math.abs(v).toFixed(0)}%</em>`;
-
-/* A strip of KPI cards across the top, the way the marketing piece opens.
-   Full width, so the page starts wide instead of a tall card beside a short
-   stack of tiles with dead air between them. */
 function ecKpi(n,l,d){
   return `<div class="ec-kpi"><div class="ec-kn">${n}</div>`+
     `<div class="ec-kl">${l}</div>${d?`<div class="ec-kd">${d}</div>`:""}</div>`;
@@ -4641,7 +4512,6 @@ function ecBand(points){
   return `<div class="ec-band">`+points.map(([h,p])=>
     `<div><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join("")+`</div>`;
 }
-
 const EC_WHEEL=["#17325a","#3a6ea5","#8fa6c4","#639922","#c8161d"];
 function ecDonut(items){
   const tot=items.reduce((z,x)=>z+x[1],0), r=52, circ=2*Math.PI*r;
@@ -4657,166 +4527,6 @@ function ecDonut(items){
     `aria-label="Sessions by channel, ${items.map(x=>x[0]+" "+Math.round(x[1]/tot*100)+"%").join(", ")}">`+
     `${segs}<text x="70" y="66" text-anchor="middle" class="ec-dbig">${Math.round(items[0][1]/tot*100)}%</text>`+
     `<text x="70" y="82" text-anchor="middle" class="ec-dsm">organic</text></svg>`;
-}
-
-/* ------------------------------------------------------------- the website */
-function ecomSite(){
-  const s=ECOM.site, tot=s.channels.reduce((a,c)=>a+c[1],0);
-  const key=s.channels.map(([n,v],k)=>
-    `<div class="ec-krow"><i style="background:${EC_WHEEL[k%EC_WHEEL.length]}"></i>`+
-    `<span class="ec-n">${esc(n)}</span><span class="ec-v">${ecNum(v)}</span>`+
-    `<span class="ec-p">${(v/tot*100).toFixed(0)}%</span></div>`).join("");
-  const mtop=s.markets[0][1];
-  const mk=s.markets.map(([n,v],i)=>
-    `<div class="ec-row"><span class="ec-n"><em class="ec-rank">${i+1}</em>${esc(n)}</span>`+
-    `<span class="ec-bar"><i style="width:${(v/mtop*100).toFixed(0)}%"></i></span>`+
-    `<span class="ec-v">${ecNum(v)}</span></div>`).join("");
-  return ecKpis([
-      ecKpi(ecNum(s.sessions),"Website sessions",ecChg(s.sessionsChg)+" on 2025"),
-      ecKpi(ecNum(s.active),"Active users",ecChg(s.activeChg)+" on 2025"),
-      ecKpi(ecNum(s.newUsers),"New users",ecChg(s.newChg)+" on 2025"),
-      ecKpi((s.channels[0][1]/tot*100).toFixed(0)+"%","From organic search",ecNum(s.channels[0][1])+" sessions")
-    ])+
-    ecSay(ECOM_COPY.siteSay)+
-    `<div class="dt-cols">`+
-      `<div class="wx-card"><h3 class="wx-h">Where the traffic comes from</h3>`+
-        `<p class="wx-sub">Sessions by channel</p>`+
-        `<div class="ec-dwrap">${ecDonut(s.channels)}<div class="ec-dkey">${key}</div></div></div>`+
-      `<div class="wx-card"><h3 class="wx-h">Top five states</h3>`+
-        `<p class="wx-sub">Users, first half of 2026</p>${mk}</div>`+
-    `</div>`+
-    ecBand(ECOM_COPY.siteBand);
-}
-
-/* ------------------------------------------------------------ call center */
-function ecomCall(){
-  const c=ECOM.callCenter, p=ECOM.property, i=ECOM.internet;
-  const other={g:p.golfers-c.golfers-i.golfers.now, r:p.revenue-c.revenue-i.revenue.now};
-  other.a=other.r/other.g;
-  const max=Math.max(c.revenue,i.revenue.now,other.r);
-  const rows=[["Call center",c.golfers,c.revenue,c.avgFee,true],
-              ["Online tee times",i.golfers.now,i.revenue.now,i.avgFee.now,false],
-              ["Every other way",other.g,other.r,other.a,false]]
-    .map(([n,g,r,a,on])=>`<div class="ec-crow${on?" is-on":""}">`+
-      `<span class="ec-n">${esc(n)}</span>`+
-      `<span class="ec-v">${ecNum(g)}</span><span class="ec-p">${(g/p.golfers*100).toFixed(1)}%</span>`+
-      `<span class="ec-bar"><i style="width:${(r/max*100).toFixed(0)}%;background:${on?"var(--navy)":"#8fa6c4"}"></i></span>`+
-      `<span class="ec-v">${ecMoney(r)}</span><span class="ec-p">${(r/p.revenue*100).toFixed(1)}%</span>`+
-      `<span class="ec-v">$${a.toFixed(2)}</span></div>`).join("");
-  return ecKpis([
-      ecKpi(ecNum(c.golfers),"Golfers booked",(c.golfers/p.golfers*100).toFixed(1)+"% of all play"),
-      ecKpi(ecMoney(c.revenue),"Revenue",(c.revenue/p.revenue*100).toFixed(1)+"% of green fees"),
-      ecKpi("$"+c.avgFee.toFixed(2),"Average fee","property is $"+p.avgFee.toFixed(2)),
-      ecKpi("98%","Full-rate guests","member and comp play is 2%")
-    ])+
-    ecSay(ECOM_COPY.callSay)+
-    `<div class="wx-card"><h3 class="wx-h">How every golfer booked</h3>`+
-      `<p class="wx-sub">All ${ecNum(p.golfers)} rounds played, first half of 2026</p>`+
-      `<div class="ec-crow ec-chead"><span class="ec-n">CHANNEL</span>`+
-        `<span class="ec-v">GOLFERS</span><span class="ec-p">SHARE</span><span></span>`+
-        `<span class="ec-v">REVENUE</span><span class="ec-p">SHARE</span>`+
-        `<span class="ec-v">AVG FEE</span></div>${rows}</div>`+
-    ecomRateMix()+
-    ecBand(ECOM_COPY.callBand);
-}
-
-/* The reason the channel averages are so far apart: rate mix and lead time,
-   not one channel charging more than another. */
-function ecomRateMix(){
-  const rows=ECOM.rateMix.map(x=>
-    `<div class="ec-crow ec-mrow${x.on?" is-on":""}">`+
-      `<span class="ec-n">${esc(x.n)}`+
-        `${x.note?` <em class="ec-sub">${esc(x.note)}</em>`:""}</span>`+
-      `<span class="ec-v">${ecNum(x.g)}</span>`+
-      `<span class="ec-bar"><i style="width:${x.full}%"></i></span>`+
-      `<span class="ec-v">${x.full}%</span>`+
-      `<span class="ec-bar"><i style="width:${x.adv===null?0:x.adv}%;background:var(--green)"></i></span>`+
-      `<span class="ec-v">${x.adv===null?"\u2014":x.adv+"%"}</span>`+
-      `<span class="ec-v">$${x.avg.toFixed(2)}</span></div>`).join("");
-  return `<div class="wx-card ec-why"><h3 class="wx-h">${esc(ECOM_COPY.mixWhyHead)}</h3>`+
-    `<p class="wx-sub">${esc(ECOM_COPY.mixWhyLead)}</p>`+
-    `<div class="ec-crow ec-mrow ec-chead"><span class="ec-n">CHANNEL</span>`+
-      `<span class="ec-v">GOLFERS</span><span></span><span class="ec-v">FULL RATE</span>`+
-      `<span></span><span class="ec-v">4+ DAYS OUT</span>`+
-      `<span class="ec-v">AVG FEE</span></div>${rows}`+
-    `<p class="ec-body last ec-why-read">${ECOM_COPY.mixWhyRead}</p></div>`;
-}
-
-/* -------------------------------------------------------- online tee times */
-function ecomTee(){
-  const i=ECOM.internet, p=ECOM.property, a=ECOM.ads;
-  const gc=ecPc(i.golfers.now,i.golfers.was), rc=ecPc(i.revenue.now,i.revenue.was),
-        ac=ecPc(i.avgFee.now,i.avgFee.was);
-  const max=Math.max.apply(null,ECOM.pages.map(x=>x.rev));
-  const rows=ECOM.pages.map(x=>{
-    const chg=x.wasR?ecPc(x.rev,x.wasR):null;
-    return `<div class="ec-crow ec-prow"><span class="ec-n">${esc(x.n)}`+
-      `${x.third?' <em class="ec-3p">third party</em>':""}</span>`+
-      `<span class="ec-bar wide"><i style="width:${(x.rev/max*100).toFixed(0)}%;`+
-        `background:${x.third?"var(--amber)":"var(--navy)"}"></i></span>`+
-      `<span class="ec-v">${ecMoney(x.rev)}</span>`+
-      `<span class="ec-p ${chg>=0?"up":"down"}">${chg===null?"\u2014":(chg>=0?"+":"\u2212")+Math.abs(chg).toFixed(0)+"%"}</span></div>`;
-  }).join("");
-  const third=ECOM.pages.filter(x=>x.third);
-  const t26=third.reduce((z,x)=>z+x.rev,0), t25=third.reduce((z,x)=>z+x.wasR,0);
-  return ecKpis([
-      ecKpi(ecNum(i.golfers.now),"Rounds booked online",ecChg(gc)+" on 2025"),
-      ecKpi(ecMoney(i.revenue.now),"Revenue",ecChg(rc)+" on 2025"),
-      ecKpi("$"+i.avgFee.now.toFixed(2),"Average fee",ecChg(ac)+" on 2025"),
-      ecKpi((i.revenue.now/p.revenue*100).toFixed(1)+"%","Of green-fee revenue",
-            (i.golfers.now/p.golfers*100).toFixed(1)+"% of golfers")
-    ])+
-    ecSay(ECOM_COPY.teeSay)+
-    `<div class="wx-card"><h3 class="wx-h">Where the bookings came from</h3>`+
-      `<p class="wx-sub">Revenue by booking page, against the same six months of 2025</p>`+
-      `<div class="ec-crow ec-prow ec-chead"><span class="ec-n">BOOKING PAGE</span><span></span>`+
-        `<span class="ec-v">REVENUE</span><span class="ec-p">VS 2025</span></div>${rows}`+
-      `<div class="wx-legend"><span><i class="wx-key" style="background:var(--navy)"></i>ours</span>`+
-        `<span><i class="wx-key" style="background:var(--amber)"></i>third party \u2014 `+
-        `${ecMoney(t26)} this year against ${ecMoney(t25)} last, now `+
-        `${(t26/i.revenue.now*100).toFixed(0)}% of online revenue</span></div></div>`+
-    `<div class="dt-cols">`+
-      `<div class="wx-card"><h3 class="wx-h">${esc(ECOM_COPY.mixHead)}</h3>`+
-        `<p class="ec-body">${ECOM_COPY.mixLead}</p>`+
-        `<p class="ec-body last">${ECOM_COPY.bestAvail}</p></div>`+
-      `<div class="wx-card"><h3 class="wx-h">${esc(ECOM_COPY.easeHead)}</h3>`+
-        `<p class="ec-body">${ECOM_COPY.easeLead}</p>`+
-        `<p class="ec-body last"><b>${esc(ECOM_COPY.easeNext)}</b></p></div>`+
-    `</div>`+
-    `<div class="wx-card ec-ads"><h3 class="wx-h">${esc(ECOM_COPY.adsHead)}</h3>`+
-      `<p class="wx-sub">${esc(ECOM_COPY.adsLead)}</p>`+
-      `<div class="ec-adrow">`+
-        `<div><span class="ec-av">${ecMoney(a.spend)}</span><span class="ec-al">spent</span></div>`+
-        `<div><span class="ec-av">${ecNum(a.reach)}</span><span class="ec-al">reached</span></div>`+
-        `<div><span class="ec-av">${a.clickRate.toFixed(2)}%</span><span class="ec-al">click rate &middot; hospitality average ${a.hospitalityRate}%</span></div>`+
-        `<div><span class="ec-av">${ecNum(a.purchases)}</span><span class="ec-al">purchases</span></div>`+
-        `<div><span class="ec-av">${ecMoney(a.value)}</span><span class="ec-al">purchase value</span></div>`+
-      `</div></div>`+
-    ecBand(ECOM_COPY.teeBand);
-}
-
-/* ------------------------------------------------------------------ shell */
-function detailEcom(i){
-  const sec=ecomSec();
-  const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
-    ECOM_SECS.map(([k,l])=>`<button type="button" data-ecom="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
-    `</div>`;
-  const body=sec==="site"?ecomSite():sec==="call"?ecomCall():ecomTee();
-  el("#detail").innerHTML=
-    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
-      `<div class="detail-sub">${ECOM.period} &middot; both courses</div></div>`+
-    `<div class="detail-body is-wide">`+
-      pills+body+
-      `<p class="wx-foot">Rounds and revenue from the golf system's booking reports. `+
-      `Website and advertising figures from the marketing team.</p>`+
-    `</div>`;
-  const hold=fn=>()=>{
-    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
-    fn(); detail(i);
-    const after=el("#detail"); if(after) after.scrollTop=keep;
-  };
-  el("#detail").querySelectorAll("[data-ecom]").forEach(b=>b.addEventListener("click",
-    hold(()=>{ state.ecomSec=b.dataset.ecom; })));
 }
 
 /* ---------------------------------------------------------------------------
@@ -4848,28 +4558,71 @@ function detailEcom(i){
 const DGF={
   years:["2022","2023","2024","2025","2026 H1"],
   partial:4,                       /* index of the year that is not complete */
-  /* [rounds, revenue] per year, both courses */
+
+  /* THE HEADLINE FIGURE COMES FROM THE FINANCIALS, ALWAYS.
+     45,211 rounds is the Pro Shop line in the 2026 YTD P&L. The booking
+     system counts 44,971 for the same six months -- half a percent apart,
+     for reasons nobody can usefully explain in a meeting. So the channel
+     table below shows how bookings arrived and does NOT print a competing
+     grand total. Nothing here is scaled or adjusted to force a tie. */
+  finRounds:45211,
+  finRevenue:6759451,              /* total revenue, all departments, 2026 YTD */
+  proShopRev:3995247,              /* includes cart, range and other income */
+
+  /* [rounds, revenue] per year, both courses.
+
+     "Our website" is golfwgv.com. The site has always run on a third-party
+     booking engine; the engine changed, the website did not. The old
+     worksheet split those years into "WGV Website", "Troon Digital" and
+     "Troon Access" as though they were separate channels, which made a
+     routine engine swap look like a 75% collapse and an enormous migration.
+     They are one channel and are added together here.
+
+     TeeOff.com is gone -- 88 rounds in 2022, none since 2024. */
   channels:[
-    {n:"WGV Staff",     d:[[45875,2017601],[45064,2057926],[40010,1837414],[41676,2003019],[22960,1252013]]},
-    {n:"WGV Website",   d:[[25178,1964010],[24479,2020889],[21848,1717765],[13372,588956],[6077,174736]]},
-    {n:"Troon Digital", d:[[0,0],[0,0],[441,62240],[10880,1368555],[7374,1053713]]},
-    {n:"Res-Center",    d:[[8127,910316],[7213,893929],[6014,765255],[7389,892187],[3852,509774]]},
-    {n:"Wholesalers",   d:[[3256,396671],[3216,411723],[1966,294601],[2682,313390],[1694,208366]]},
-    {n:"GolfNow",       d:[[0,0],[10,1082],[23,2696],[2816,278361],[2717,305209]]},
-    {n:"Troon Access",  d:[[0,0],[0,0],[12,1527],[505,42206],[297,26203]]},
-    {n:"TeeOff.com",    d:[[88,9346],[11,1008],[0,0],[0,0],[0,0]]}
+    {n:"Our website", note:"golfwgv.com",
+     d:[[25178,1964010],[24479,2020889],[22301,1781532],[24757,1999717],[13748,1254652]]},
+    {n:"Golf shop and staff", note:"booked in person or by our team",
+     d:[[45875,2017601],[45064,2057926],[40010,1837414],[41676,2003019],[22960,1252013]]},
+    {n:"Call center", note:"Golf365 reservations",
+     d:[[8127,910316],[7213,893929],[6014,765255],[7389,892187],[3852,509774]]},
+    {n:"Wholesalers", note:"ten travel partners",
+     d:[[3256,396671],[3216,411723],[1966,294601],[2682,313390],[1694,208366]]},
+    {n:"GolfNow", note:"third party",
+     d:[[0,0],[10,1082],[23,2696],[2816,278361],[2717,305209]]}
   ],
-  total:[[82524,5297943],[79993,5386557],[70314,4681497],[79320,5486675],[44971,3530014]],
+  total:[[82436,5288597],[79982,5385549],[70314,4681497],[79320,5486675],[44971,3530014]],
 
   /* Daily-fee rounds only, year to date against the same point last year. */
   adr:{rounds:{now:19002,was:17057}, fees:{now:2472222,was:2097287},
        rate:{now:130.10,was:122.96}, window:{now:15,was:11}},
 
-  /* Average rate by month, 2026 against 2025, read off the rate chart. */
+  /* Rate mix by channel: share paying a guest rate rather than a member,
+     employee or complimentary one, and share booked four or more days out. */
+  rateMix:[
+    {n:"Our website",         g:7252, avg:143.51, full:100, adv:70},
+    {n:"Call center",         g:4297, avg:127.64, full:98,  adv:48},
+    {n:"GolfNow",             g:2718, avg:112.31, full:100, adv:null, note:"one wholesale rate"},
+    {n:"Golf shop and staff", g:22932, avg:55.55, full:57,  adv:4}
+  ],
+  advSpread:{early:145.29, late:116.25},
+
+  /* Average rate by month, 2026 against 2025. */
   monthly:[["Jan",66,60],["Feb",78,75],["Mar",102,99],["Apr",78,73],
            ["May",70,64],["Jun",68,62],["Jul",68,63]],
 
-  /* Green fees as quoted in the mid-year review. Prime / non-prime. */
+  /* Google Analytics, from the marketing team. */
+  site:{sessions:122000, sessionsChg:13.0, active:79000, activeChg:24.8,
+        newUsers:76000, newChg:24.2,
+        channels:[["Organic search",75630],["Direct",28586],["Unassigned",8203],
+                  ["Referral",7954],["Other",838]],
+        markets:[["Florida",24188],["Georgia",6728],["New York",6081],
+                 ["Virginia",4314],["North Carolina",4118]]},
+  ads:{spend:1357, reach:22034, clickRate:3.95, hospitalityRate:2.8,
+       purchases:138, value:27698},
+
+  /* Green fees as quoted in the July mid-year review, prime / non-prime.
+     St Johns is $115 prime here and on the Memberships club table. */
   comp:{
     tiers:[
       {t:"Premium destination", note:"where a golf traveller compares us",
@@ -4893,8 +4646,7 @@ const DGF={
     ["Beyond the round","Restaurants, clubhouse, events and the wider World Golf Village setting."]
   ],
 
-  /* Ways a golfer can book with us today, from the mid-year review. */
-  avenues:["WGV website","Troon Access","GolfNow","One-click stay and play","TeeOff.com",
+  avenues:["Our website","Troon Access","GolfNow","One-click stay and play","TeeOff.com",
            "Call center","Golf shop","Golf professional staff","Text the manager","Wholesalers"],
   wholesalers:["Tee Time USA","TPC Vacations","Golf Pac","Golf Zoo","GolfBreaks UK &amp; US",
                "My Golf Vacations","Your Golf Travel","GolfNow / Troon Golf Vacations",
@@ -4902,17 +4654,23 @@ const DGF={
 };
 
 const DGF_COPY={
-  chanSay:"Rounds have held steady while revenue per round has climbed every year since 2024. The mix underneath has changed completely.",
+  chanSay:"Our website books roughly three rounds in ten, and has done every year since 2022. What has changed is what those rounds are worth.",
   chanBand:[
-    ["Troon Digital replaced the website","From 441 rounds in 2024 to 10,880 in 2025. It is now our largest external booking source."],
-    ["The website did not just shrink","Its rate per round fell from $78.00 in 2022 to $28.75 today \u2014 the rounds that left were the full-rate ones."],
-    ["Staff booking is the backbone","Roughly half of all rounds, every year, and its rate per round is up 25% since 2022."]
+    ["The website is our steadiest channel","Around 30% of all rounds every year for five years, at $91 a round today against $78 in 2022."],
+    ["The golf shop is the backbone","Half of all rounds, and its rate per round is up 25% since 2022."],
+    ["GolfNow is the newest channel","From nothing in 2023 to 2,717 rounds, at $112 a round."]
   ],
   rateSay:"Daily-fee rounds are up 11.4% and the average rate is up 5.8%, worth $375,000 more in green fees.",
   rateBand:[
     ["Rate rose without costing rounds","Both went up together, which is the outcome you want."],
     ["Golfers are booking earlier","The average booking window went from 11 days to 15."],
     ["Around 6% is the ceiling","Pushing shoulder rates deeper into June met clear market resistance."]
+  ],
+  webSay:"More people are finding us, rather than the same people coming back more often \u2014 new users grew almost twice as fast as sessions.",
+  webBand:[
+    ["Search does the heavy lifting","62% of all sessions arrive through organic search."],
+    ["Growth is in new faces","New users up 24.8% against sessions up 13.0%."],
+    ["Florida, then the Southeast","Florida alone is 24,188 users, three and a half times the next state."]
   ],
   compSay:"We are benchmarked against premium daily-fee and resort golf, not against municipal or value courses.",
   compBand:[
@@ -4922,13 +4680,15 @@ const DGF_COPY={
   ],
   valueSay:"We do not compete to be the lowest-priced golf in the market. We compete to be the best value in it.",
   valueClose:"Guests are not paying for eighteen holes. They are investing in a complete championship golf experience \u2014 two legendary courses, resort-level service, and the prestige of one of America's iconic golf destinations.",
-  chanNote:"Rounds and revenue from the Access worksheet, both courses. 2026 covers January to June only, so its bars are shorter by design \u2014 no full-year projection is shown.",
-  adrNote:"Daily-fee rounds only, year to date against the same point last year. A different cut from the channel table above, which counts every round played including member and staff rounds.",
+  mixWhyHead:"Why the rates differ",
+  mixWhyLead:"The four largest channels. Every one sells off the same rate card \u2014 what separates them is who they carry, and how far ahead those golfers book.",
+  mixWhyRead:"Booking four or more days ahead is worth about <b>$29</b> a round. Our website carries the highest rate because <b>70%</b> of its rounds come in that far out. The golf shop carries the lowest because <b>43%</b> of its play is member, employee or complimentary, which is where that play belongs.",
+  chanNote:"Rounds by channel come from the booking system. 2026 covers January to June.",
   compNote:"Green fees as quoted in the July mid-year review. Competitor rates move; recheck before quoting these."
 };
 
 const DGF_SECS=[["chan","Booking channels"],["rate","Rate and demand"],
-                ["comp","The competition"],["value","Our value"]];
+                ["web","Our website"],["comp","The competition"],["value","Our value"]];
 const dgfSec=()=>DGF_SECS.some(x=>x[0]===state.dgfSec)?state.dgfSec:"chan";
 function dgfItem(){ return {t:"Daily Golf Fees", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
 
@@ -4937,17 +4697,18 @@ const dgfRate=(r,v)=>r?v/r:0;
 /* ------------------------------------------------------------- channels */
 function dgfChanChart(){
   const Y=DGF.years, W=760, H=210, L=52, B=26;
-  const max=Math.max.apply(null,DGF.total.map(t=>t[0]));
+  const colTot=k=>DGF.channels.reduce((z,c)=>[z[0]+c.d[k][0],z[1]+c.d[k][1]],[0,0]);
+  const max=Math.max.apply(null,DGF.years.map((y,k)=>colTot(k)[0]));
   const bw=(W-L-10)/Y.length;
   let g=`<svg viewBox="0 0 ${W} ${H+B}" class="dgf-chart" role="img" `+
-    `aria-label="Total rounds by year, ${Y.map((y,k)=>y+" "+DGF.total[k][0].toLocaleString()).join(", ")}">`;
+    `aria-label="Rounds by year, ${Y.map((y,k)=>y+" "+colTot(k)[0].toLocaleString()).join(", ")}">`;
   [0,25000,50000,75000].forEach(v=>{
     const y=H-v/max*(H-16);
     g+=`<line x1="${L}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}" stroke="#eeece6"></line>`+
        `<text x="${L-8}" y="${(y+4).toFixed(1)}" text-anchor="end" class="dgf-ax">${v?v/1000+"k":"0"}</text>`;
   });
   Y.forEach((y,k)=>{
-    const [r,rev]=DGF.total[k], h=r/max*(H-16), x=L+k*bw+bw*0.18, w=bw*0.64;
+    const [r,rev]=colTot(k), h=r/max*(H-16), x=L+k*bw+bw*0.18, w=bw*0.64;
     const part=k===DGF.partial;
     g+=`<rect x="${x.toFixed(1)}" y="${(H-h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" `+
        `rx="3" fill="${part?"#9fb0c6":"var(--navy)"}"></rect>`+
@@ -4960,40 +4721,91 @@ function dgfChanChart(){
 }
 
 function dgfChannels(){
-  const Y=DGF.years, last=Y.length-1;
+  const Y=DGF.years, last=Y.length-1, web=DGF.channels[0];
   const rows=DGF.channels.map(c=>{
     const cells=c.d.map(([r,v],k)=>
       `<span class="dgf-c${k===DGF.partial?" part":""}">`+
-        `<b>${r?ecNum(r):"\u2014"}</b>`+
-        `<u>${r?"$"+dgfRate(r,v).toFixed(0):""}</u></span>`).join("");
+        `<b>${r?ecNum(r):"\u2014"}</b><u>${r?"$"+dgfRate(r,v).toFixed(0):""}</u></span>`).join("");
     const first=c.d.findIndex(x=>x[0]>0);
     const trend=first>=0&&c.d[last][0]&&c.d[first][0]
       ? dgfRate(c.d[last][0],c.d[last][1])-dgfRate(c.d[first][0],c.d[first][1]) : null;
-    return `<div class="dgf-row"><span class="dgf-n">${esc(c.n)}</span>${cells}`+
+    return `<div class="dgf-row"><span class="dgf-n">${esc(c.n)}`+
+      `${c.note?`<em class="dgf-sub">${esc(c.note)}</em>`:""}</span>${cells}`+
       `<span class="dgf-t ${trend>0?"up":(trend<0?"down":"")}">`+
       `${trend===null?"\u2014":(trend>0?"+":"\u2212")+"$"+Math.abs(trend).toFixed(0)}</span></div>`;
   }).join("");
-  const tot=DGF.total.map(([r,v],k)=>
-    `<span class="dgf-c${k===DGF.partial?" part":""}"><b>${ecNum(r)}</b>`+
-    `<u>$${dgfRate(r,v).toFixed(0)}</u></span>`).join("");
-  const t=DGF.total;
+  const w26=web.d[4], w22=web.d[0];
   return ecKpis([
-      ecKpi("$"+dgfRate(t[4][0],t[4][1]).toFixed(2),"Revenue per round","was $"+dgfRate(t[3][0],t[3][1]).toFixed(2)+" in 2025"),
-      ecKpi(ecNum(t[4][0]),"Rounds, Jan to Jun","both courses"),
-      ecKpi(ecMoney(t[4][1]),"Green fee revenue","first half of 2026"),
-      ecKpi(ecNum(DGF.channels[2].d[4][0]),"Troon Digital rounds","from 441 two years ago")])+
+      ecKpi(ecNum(DGF.finRounds),"Rounds, Jan to Jun","both courses"),
+      ecKpi(ecMoney(DGF.proShopRev),"Golf revenue","green fees, cart and range"),
+      ecKpi(ecNum(w26[0]),"Booked on our website",(w26[0]/DGF.total[4][0]*100).toFixed(0)+"% of all rounds"),
+      ecKpi("$"+dgfRate(w26[0],w26[1]).toFixed(2),"Our website rate","was $"+dgfRate(w22[0],w22[1]).toFixed(2)+" in 2022")])+
     ecSay(DGF_COPY.chanSay)+
     `<div class="wx-card ec-card"><h3 class="wx-h">Revenue per round, and the rounds behind it</h3>`+
       `<p class="wx-sub">Bar height is rounds; the figure above each bar is revenue per round</p>`+
       dgfChanChart()+`</div>`+
-    `<div class="wx-card ec-card dgf-tbl"><h3 class="wx-h">Every booking channel</h3>`+
+    `<div class="wx-card ec-card dgf-tbl"><h3 class="wx-h">How bookings arrived</h3>`+
       `<p class="wx-sub">Rounds, with revenue per round underneath</p>`+
       `<div class="dgf-row dgf-head"><span class="dgf-n">CHANNEL</span>`+
         Y.map((y,k)=>`<span class="dgf-c${k===DGF.partial?" part":""}">${y}</span>`).join("")+
         `<span class="dgf-t">RATE</span></div>${rows}`+
-      `<div class="dgf-row dgf-tot"><span class="dgf-n">ALL CHANNELS</span>${tot}<span class="dgf-t"></span></div>`+
       `<p class="ec-body last dgf-note">${esc(DGF_COPY.chanNote)}</p></div>`+
+    dgfRateMix()+
     ecBand(DGF_COPY.chanBand);
+}
+
+function dgfRateMix(){
+  const rows=DGF.rateMix.map(x=>
+    `<div class="ec-crow ec-mrow${x.n==="Our website"?" is-on":""}">`+
+      `<span class="ec-n">${esc(x.n)}${x.note?` <em class="ec-sub">${esc(x.note)}</em>`:""}</span>`+
+      `<span class="ec-v">${ecNum(x.g)}</span>`+
+      `<span class="ec-bar"><i style="width:${x.full}%"></i></span>`+
+      `<span class="ec-v">${x.full}%</span>`+
+      `<span class="ec-bar"><i style="width:${x.adv===null?0:x.adv}%;background:var(--green)"></i></span>`+
+      `<span class="ec-v">${x.adv===null?"\u2014":x.adv+"%"}</span>`+
+      `<span class="ec-v">$${x.avg.toFixed(2)}</span></div>`).join("");
+  return `<div class="wx-card ec-card ec-why"><h3 class="wx-h">${esc(DGF_COPY.mixWhyHead)}</h3>`+
+    `<p class="wx-sub">${esc(DGF_COPY.mixWhyLead)}</p>`+
+    `<div class="ec-crow ec-mrow ec-chead"><span class="ec-n">CHANNEL</span>`+
+      `<span class="ec-v">GOLFERS</span><span></span><span class="ec-v">FULL RATE</span>`+
+      `<span></span><span class="ec-v">4+ DAYS OUT</span><span class="ec-v">RATE</span></div>${rows}`+
+    `<p class="ec-body last ec-why-read">${DGF_COPY.mixWhyRead}</p></div>`;
+}
+
+/* -------------------------------------------------------------- website */
+function dgfWeb(){
+  const s=DGF.site, a=DGF.ads, tot=s.channels.reduce((z,c)=>z+c[1],0), mtop=s.markets[0][1];
+  const key=s.channels.map(([n,v],k)=>
+    `<div class="ec-krow"><i style="background:${EC_WHEEL[k%EC_WHEEL.length]}"></i>`+
+    `<span class="ec-n">${esc(n)}</span><span class="ec-v">${ecNum(v)}</span>`+
+    `<span class="ec-p">${(v/tot*100).toFixed(0)}%</span></div>`).join("");
+  const mk=s.markets.map(([n,v],i)=>
+    `<div class="ec-row"><span class="ec-n"><em class="ec-rank">${i+1}</em>${esc(n)}</span>`+
+    `<span class="ec-bar"><i style="width:${(v/mtop*100).toFixed(0)}%"></i></span>`+
+    `<span class="ec-v">${ecNum(v)}</span></div>`).join("");
+  return ecKpis([
+      ecKpi(ecNum(s.sessions),"Sessions",ecChg(s.sessionsChg)+" on 2025"),
+      ecKpi(ecNum(s.active),"Active users",ecChg(s.activeChg)+" on 2025"),
+      ecKpi(ecNum(s.newUsers),"New users",ecChg(s.newChg)+" on 2025"),
+      ecKpi((s.channels[0][1]/tot*100).toFixed(0)+"%","From search",ecNum(s.channels[0][1])+" sessions")])+
+    ecSay(DGF_COPY.webSay)+
+    `<div class="ec-g2">`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Where the traffic comes from</h3>`+
+        `<p class="wx-sub">Sessions by channel</p>`+
+        `<div class="ec-dwrap">${ecDonut(s.channels)}<div class="ec-key2">${key}</div></div></div>`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Top five states</h3>`+
+        `<p class="wx-sub">Users, first half of 2026</p>${mk}</div>`+
+    `</div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Paid social</h3>`+
+      `<p class="wx-sub">Six months of Meta advertising</p>`+
+      `<div class="ec-adrow">`+
+        `<div><span class="ec-av">${ecMoney(a.spend)}</span><span class="ec-al">spent</span></div>`+
+        `<div><span class="ec-av">${ecNum(a.reach)}</span><span class="ec-al">reached</span></div>`+
+        `<div><span class="ec-av">${a.clickRate.toFixed(2)}%</span><span class="ec-al">click rate &middot; hospitality average ${a.hospitalityRate}%</span></div>`+
+        `<div><span class="ec-av">${ecNum(a.purchases)}</span><span class="ec-al">purchases</span></div>`+
+        `<div><span class="ec-av">${ecMoney(a.value)}</span><span class="ec-al">purchase value</span></div>`+
+      `</div></div>`+
+    ecBand(DGF_COPY.webBand);
 }
 
 /* ----------------------------------------------------------------- rate */
@@ -5069,7 +4881,7 @@ function dgfComp(){
       ecKpi("$295\u2013775","Tier one prime","destination golf"),
       ecKpi(String(all.length),"Courses tracked","in the competitive set")])+
     ecSay(DGF_COPY.compSay)+
-    `<div class="wx-card ec-card"><h3 class="wx-h">The competitive set</h3>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Who we compete with on green fee</h3>`+
       `<p class="wx-sub">Prime and non-prime green fees</p>`+
       `<div class="dgf-crow dgf-head"><span class="dgf-n">COURSE</span><span></span>`+
         `<span class="ec-v">PRIME</span><span class="ec-v">NON-PRIME</span></div>${tiers}`+
@@ -5104,7 +4916,7 @@ function detailDgf(i){
     DGF_SECS.map(([k,l])=>`<button type="button" data-dgf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
   const body=sec==="chan"?dgfChannels():sec==="rate"?dgfRateSec()
-            :sec==="comp"?dgfComp():dgfValue();
+            :sec==="web"?dgfWeb():sec==="comp"?dgfComp():dgfValue();
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
       `<div class="detail-sub">Both courses &middot; 2022 to June 2026</div></div>`+
