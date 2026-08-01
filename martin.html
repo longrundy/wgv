@@ -484,7 +484,6 @@ a{color:inherit}
   .pv-top{grid-template-columns:1fr;gap:12px}
   .pv-srow{grid-template-columns:84px minmax(0,1fr) 26px}
 }
-}
 .pv-open{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-size:12.5px;
  font-weight:600;color:var(--wet);text-decoration:none}
 .pv-open:hover{text-decoration:underline}
@@ -1553,7 +1552,7 @@ function sha(t){ return _sha256(t); }
    is management material, so a second password would only be the same door
    twice. To change it: type "hash:" followed by the new password into the
    sign-in box, and paste the hash it prints back over the line below. */
-const PORTAL_HASH="dd56de4137951d9c92681b03416ec15f886b4482a27e3a517d32f085244cbe5d";
+const PORTAL_HASH="6f021f0268d5dd0d4e286ad5202f57335f2a8cc568704c4f7865c97879443ef8";
 const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
 
 function _tryUnlock(){
