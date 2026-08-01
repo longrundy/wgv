@@ -615,6 +615,59 @@ a{color:inherit}
 .emp-none{font-size:12.5px;color:#5f5e5a;line-height:1.55;border:1px dashed #dfe3e9;
  border-radius:10px;background:#fcfcfd;padding:12px 14px;margin:12px 0 0}
 .emp-none b{color:var(--ink)}
+/* ---- Daily Golf Fees ---- */
+.dgf-chart{width:100%;height:auto;display:block;margin-top:4px}
+.dgf-ax{font-size:9.5px;fill:#a8a69e}
+.dgf-axs{font-size:8.5px;fill:#c4c2ba}
+.dgf-bv{font-size:11px;font-weight:700;fill:var(--ink)}
+.dgf-tbl{overflow-x:auto}
+.dgf-row{display:grid;grid-template-columns:minmax(112px,1.3fr) repeat(5,minmax(62px,1fr)) 54px;
+  gap:0 8px;align-items:center;padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:12px}
+.dgf-row:last-of-type{border-bottom:0}
+.dgf-head{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;font-weight:700;
+  border-bottom-color:#e5e2da;padding:0 0 8px}
+.dgf-n{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);
+  font-weight:600}
+.dgf-head .dgf-n{font-weight:700;color:#b4b2a9}
+.dgf-c{text-align:right;line-height:1.25}
+.dgf-c b{display:block;font-size:12px;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.dgf-c u{display:block;text-decoration:none;font-size:10px;color:#8a8a84;
+  font-variant-numeric:tabular-nums}
+.dgf-c.part b,.dgf-head .dgf-c.part{color:#7c8593}
+.dgf-t{text-align:right;font-size:11px;font-weight:700;color:#b4b2a9;
+  font-variant-numeric:tabular-nums}
+.dgf-t.up{color:var(--green)} .dgf-t.down{color:var(--red-dark)}
+.dgf-tot{border-top:2px solid #e5e2da;border-bottom:0;margin-top:2px;padding-top:11px}
+.dgf-tot .dgf-n{font-size:10px;letter-spacing:.05em;color:#8a8a84}
+.dgf-note{margin-top:13px;padding-top:12px;border-top:1px solid #f2f0ea;
+  font-size:11px;color:#8a8a84;line-height:1.55}
+.dgf-arow{display:grid;grid-template-columns:minmax(0,1fr) 78px 78px 62px;gap:0 10px;
+  align-items:center;padding:10px 0;border-bottom:1px solid #f7f6f2;font-size:12.5px}
+.dgf-arow:last-of-type{border-bottom:0}
+.ec-v.was{color:#a8a69e;font-weight:400}
+.dgf-tier{margin-top:14px}
+.dgf-tier:first-of-type{margin-top:4px}
+.dgf-th{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;
+  padding-bottom:6px;border-bottom:1px solid #f2f0ea}
+.dgf-th b{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--navy)}
+.dgf-th span{font-size:11px;color:#a8a69e}
+.dgf-crow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.6fr) 62px 74px;
+  gap:0 12px;align-items:center;padding:8px 0;font-size:12.5px;color:#3d3d3a}
+.dgf-pb{position:relative;display:block;height:10px;background:#f2f0ea;border-radius:5px}
+.dgf-pb i{position:absolute;left:0;top:0;bottom:0;background:var(--navy);border-radius:5px}
+.dgf-pb em{position:absolute;left:0;top:0;bottom:0;background:#9fb0c6;border-radius:5px}
+.dgf-vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px;
+  margin-top:4px}
+.dgf-v{border-left:3px solid var(--navy);padding-left:13px}
+.dgf-v b{display:block;font-size:12.5px;color:var(--ink);font-weight:700;margin-bottom:3px}
+.dgf-v span{display:block;font-size:11.5px;color:#5f5e5a;line-height:1.55}
+.dgf-close{margin:18px 0 0;padding-top:15px;border-top:1px solid #f2f0ea;
+  font-size:13px;color:#3d3d3a;line-height:1.7;font-style:italic}
+.dgf-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.dgf-pill{font-size:11.5px;color:var(--navy);background:#f4f7fb;border:1px solid #dde3ec;
+  border-radius:999px;padding:5px 12px}
+.dgf-pill.sm{font-size:11px;color:#5f5e5a;background:#faf9f6;border-color:#eeece6}
 /* ---- E-commerce ---- */
 /* Uses the house layout: wx-head / wx-strip / wx-card / dt-cols, so this page
    fills the pane the same way Weather and Financials do. No max-width here. */
@@ -792,6 +845,11 @@ button.emp-srow:hover{background:#fafbfd}
   .ec-row{grid-template-columns:minmax(0,1fr) 60px 34px}
   .ec-row .ec-bar{display:none}
   .ec-adrow{grid-template-columns:1fr 1fr;gap:12px}
+  .dgf-row{grid-template-columns:minmax(96px,1fr) repeat(5,minmax(52px,1fr)) 44px;font-size:11px}
+  .dgf-crow{grid-template-columns:minmax(0,1fr) 54px 64px}
+  .dgf-crow .dgf-pb{display:none}
+  .dgf-arow{grid-template-columns:minmax(0,1fr) 62px 62px 54px}
+  .dgf-vgrid{grid-template-columns:1fr}
   .ec-kpis.c4,.ec-kpis.c3{grid-template-columns:1fr 1fr}
   .ec-kn{font-size:25px}
   .ec-say{font-size:14px}
@@ -2068,6 +2126,7 @@ function detail(i){
   if(i.langDocs){ detailLangDocs(i); return; }
   if(i.memb){ detailMemberships(i); return; }
   if(i.fin){ detailFinancials(i); return; }
+  if(i.dgf){ detailDgf(i); return; }
   if(i.ecom){ detailEcom(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
   if(i.surveys){
@@ -4561,7 +4620,7 @@ function ecomItem(){ return {t:"E-commerce", m:"", s:"", c:"f-flat", a:"", ecom:
    appeared on first paint and then vanished a second later. Add new
    Management items here and nowhere else. */
 function mgmtPinned(){
-  return [surveysItem(), histWeatherItem(), financialsItem(), ecomItem(), membershipsItem()];
+  return [surveysItem(), histWeatherItem(), financialsItem(), dgfItem(), ecomItem(), membershipsItem()];
 }
 
 const ecMoney=n=>"$"+Math.round(n).toLocaleString();
@@ -4758,6 +4817,308 @@ function detailEcom(i){
   };
   el("#detail").querySelectorAll("[data-ecom]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.ecomSec=b.dataset.ecom; })));
+}
+
+/* ---------------------------------------------------------------------------
+   DAILY GOLF FEES — channels, rate, competitive set, value proposition
+
+   Sources, and how solid each one is:
+
+   1. CHANNELS — the Access Worksheet (both courses, 2022 through 2026 H1).
+      Rounds and revenue read straight off it; every rate per round on this
+      page is computed from those two numbers rather than typed, so the
+      arithmetic cannot drift from the source.
+
+   2. ADR      — the Rounds & Rate summary, daily-fee rounds only. Its 19,002
+      booked rounds is a different cut from the channel worksheet's 44,971,
+      which counts every round including member and staff play. The two are
+      not meant to reconcile; the page says which is which.
+
+   3. COMPSET and VALUE — the mid-year review document. Judgement and market
+      knowledge from the golf team, not system data. Rates are as quoted in
+      that document and go stale; recheck them each time this is presented.
+
+   NO PROJECTION IS SHOWN. Doubling the first half overstates the year --
+      H1 is 57% of 2025's rounds and 64% of its revenue, so the second half
+      runs lighter. If a projection is ever wanted, base it on prior-year
+      seasonality, not on doubling.
+
+   UPDATE THIS when a new year closes or the rate card changes.
+--------------------------------------------------------------------------- */
+const DGF={
+  years:["2022","2023","2024","2025","2026 H1"],
+  partial:4,                       /* index of the year that is not complete */
+  /* [rounds, revenue] per year, both courses */
+  channels:[
+    {n:"WGV Staff",     d:[[45875,2017601],[45064,2057926],[40010,1837414],[41676,2003019],[22960,1252013]]},
+    {n:"WGV Website",   d:[[25178,1964010],[24479,2020889],[21848,1717765],[13372,588956],[6077,174736]]},
+    {n:"Troon Digital", d:[[0,0],[0,0],[441,62240],[10880,1368555],[7374,1053713]]},
+    {n:"Res-Center",    d:[[8127,910316],[7213,893929],[6014,765255],[7389,892187],[3852,509774]]},
+    {n:"Wholesalers",   d:[[3256,396671],[3216,411723],[1966,294601],[2682,313390],[1694,208366]]},
+    {n:"GolfNow",       d:[[0,0],[10,1082],[23,2696],[2816,278361],[2717,305209]]},
+    {n:"Troon Access",  d:[[0,0],[0,0],[12,1527],[505,42206],[297,26203]]},
+    {n:"TeeOff.com",    d:[[88,9346],[11,1008],[0,0],[0,0],[0,0]]}
+  ],
+  total:[[82524,5297943],[79993,5386557],[70314,4681497],[79320,5486675],[44971,3530014]],
+
+  /* Daily-fee rounds only, year to date against the same point last year. */
+  adr:{rounds:{now:19002,was:17057}, fees:{now:2472222,was:2097287},
+       rate:{now:130.10,was:122.96}, window:{now:15,was:11}},
+
+  /* Average rate by month, 2026 against 2025, read off the rate chart. */
+  monthly:[["Jan",66,60],["Feb",78,75],["Mar",102,99],["Apr",78,73],
+           ["May",70,64],["Jun",68,62],["Jul",68,63]],
+
+  /* Green fees as quoted in the mid-year review. Prime / non-prime. */
+  comp:{
+    tiers:[
+      {t:"Premium destination", note:"where a golf traveller compares us",
+       c:[["TPC Sawgrass",775,550],["Ocean Course at Hammock Beach",395,250],
+          ["The Conservatory at Hammock Beach",295,175]]},
+      {t:"Premium daily fee", note:"our everyday price competitors",
+       c:[["The Yards",150,75],["Marsh Creek Country Club",150,90],
+          ["St. Johns Golf & Country Club",115,55],["The Golf Club at South Hampton",115,55],
+          ["Cimarrone Golf Club",105,55],["Eagle Landing Golf Club",99,49]]},
+      {t:"Value daily fee", note:"not who we price against",
+       c:[["Grand Reserve Golf Club",95,49],["Hidden Hills Golf Club",75,35]]}
+    ]
+  },
+
+  value:[
+    ["Two championship courses","King &amp; Bear is the only Arnold Palmer and Jack Nicklaus collaboration. Slammer &amp; Squire is a Sam Snead and Gene Sarazen design."],
+    ["A legendary destination","History and prestige a regional daily-fee course cannot offer."],
+    ["Exceptional conditioning","Significant annual investment in turf, clubhouse and course improvements."],
+    ["Resort-level service","PGA professionals, complimentary range balls, water stations, bag handling."],
+    ["Choice and variety","Two distinctly different championship layouts on one property."],
+    ["Beyond the round","Restaurants, clubhouse, events and the wider World Golf Village setting."]
+  ],
+
+  /* Ways a golfer can book with us today, from the mid-year review. */
+  avenues:["WGV website","Troon Access","GolfNow","One-click stay and play","TeeOff.com",
+           "Call center","Golf shop","Golf professional staff","Text the manager","Wholesalers"],
+  wholesalers:["Tee Time USA","TPC Vacations","Golf Pac","Golf Zoo","GolfBreaks UK &amp; US",
+               "My Golf Vacations","Your Golf Travel","GolfNow / Troon Golf Vacations",
+               "Sports Tour","Vacayou"]
+};
+
+const DGF_COPY={
+  chanSay:"Rounds have held steady while revenue per round has climbed every year since 2024. The mix underneath has changed completely.",
+  chanBand:[
+    ["Troon Digital replaced the website","From 441 rounds in 2024 to 10,880 in 2025. It is now our largest external booking source."],
+    ["The website did not just shrink","Its rate per round fell from $78.00 in 2022 to $28.75 today \u2014 the rounds that left were the full-rate ones."],
+    ["Staff booking is the backbone","Roughly half of all rounds, every year, and its rate per round is up 25% since 2022."]
+  ],
+  rateSay:"Daily-fee rounds are up 11.4% and the average rate is up 5.8%, worth $375,000 more in green fees.",
+  rateBand:[
+    ["Rate rose without costing rounds","Both went up together, which is the outcome you want."],
+    ["Golfers are booking earlier","The average booking window went from 11 days to 15."],
+    ["Around 6% is the ceiling","Pushing shoulder rates deeper into June met clear market resistance."]
+  ],
+  compSay:"We are benchmarked against premium daily-fee and resort golf, not against municipal or value courses.",
+  compBand:[
+    ["Tier one is the comparison","A golfer choosing where to spend $125 to $250 is weighing us against Sawgrass and Hammock Beach."],
+    ["Tier two sets the daily floor","St Johns, South Hampton, Cimarrone and The Yards run $99 to $150 prime."],
+    ["Tier three is not our market","Value courses at $75 to $95 compete on price alone."]
+  ],
+  valueSay:"We do not compete to be the lowest-priced golf in the market. We compete to be the best value in it.",
+  valueClose:"Guests are not paying for eighteen holes. They are investing in a complete championship golf experience \u2014 two legendary courses, resort-level service, and the prestige of one of America's iconic golf destinations.",
+  chanNote:"Rounds and revenue from the Access worksheet, both courses. 2026 covers January to June only, so its bars are shorter by design \u2014 no full-year projection is shown.",
+  adrNote:"Daily-fee rounds only, year to date against the same point last year. A different cut from the channel table above, which counts every round played including member and staff rounds.",
+  compNote:"Green fees as quoted in the July mid-year review. Competitor rates move; recheck before quoting these."
+};
+
+const DGF_SECS=[["chan","Booking channels"],["rate","Rate and demand"],
+                ["comp","The competition"],["value","Our value"]];
+const dgfSec=()=>DGF_SECS.some(x=>x[0]===state.dgfSec)?state.dgfSec:"chan";
+function dgfItem(){ return {t:"Daily Golf Fees", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
+
+const dgfRate=(r,v)=>r?v/r:0;
+
+/* ------------------------------------------------------------- channels */
+function dgfChanChart(){
+  const Y=DGF.years, W=760, H=210, L=52, B=26;
+  const max=Math.max.apply(null,DGF.total.map(t=>t[0]));
+  const bw=(W-L-10)/Y.length;
+  let g=`<svg viewBox="0 0 ${W} ${H+B}" class="dgf-chart" role="img" `+
+    `aria-label="Total rounds by year, ${Y.map((y,k)=>y+" "+DGF.total[k][0].toLocaleString()).join(", ")}">`;
+  [0,25000,50000,75000].forEach(v=>{
+    const y=H-v/max*(H-16);
+    g+=`<line x1="${L}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}" stroke="#eeece6"></line>`+
+       `<text x="${L-8}" y="${(y+4).toFixed(1)}" text-anchor="end" class="dgf-ax">${v?v/1000+"k":"0"}</text>`;
+  });
+  Y.forEach((y,k)=>{
+    const [r,rev]=DGF.total[k], h=r/max*(H-16), x=L+k*bw+bw*0.18, w=bw*0.64;
+    const part=k===DGF.partial;
+    g+=`<rect x="${x.toFixed(1)}" y="${(H-h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" `+
+       `rx="3" fill="${part?"#9fb0c6":"var(--navy)"}"></rect>`+
+       `<text x="${(x+w/2).toFixed(1)}" y="${(H-h-6).toFixed(1)}" text-anchor="middle" class="dgf-bv">`+
+       `$${(dgfRate(r,rev)).toFixed(0)}</text>`+
+       `<text x="${(x+w/2).toFixed(1)}" y="${H+14}" text-anchor="middle" class="dgf-ax">${y}</text>`+
+       `<text x="${(x+w/2).toFixed(1)}" y="${H+25}" text-anchor="middle" class="dgf-axs">${(r/1000).toFixed(1)}k rds</text>`;
+  });
+  return g+`</svg>`;
+}
+
+function dgfChannels(){
+  const Y=DGF.years, last=Y.length-1;
+  const rows=DGF.channels.map(c=>{
+    const cells=c.d.map(([r,v],k)=>
+      `<span class="dgf-c${k===DGF.partial?" part":""}">`+
+        `<b>${r?ecNum(r):"\u2014"}</b>`+
+        `<u>${r?"$"+dgfRate(r,v).toFixed(0):""}</u></span>`).join("");
+    const first=c.d.findIndex(x=>x[0]>0);
+    const trend=first>=0&&c.d[last][0]&&c.d[first][0]
+      ? dgfRate(c.d[last][0],c.d[last][1])-dgfRate(c.d[first][0],c.d[first][1]) : null;
+    return `<div class="dgf-row"><span class="dgf-n">${esc(c.n)}</span>${cells}`+
+      `<span class="dgf-t ${trend>0?"up":(trend<0?"down":"")}">`+
+      `${trend===null?"\u2014":(trend>0?"+":"\u2212")+"$"+Math.abs(trend).toFixed(0)}</span></div>`;
+  }).join("");
+  const tot=DGF.total.map(([r,v],k)=>
+    `<span class="dgf-c${k===DGF.partial?" part":""}"><b>${ecNum(r)}</b>`+
+    `<u>$${dgfRate(r,v).toFixed(0)}</u></span>`).join("");
+  const t=DGF.total;
+  return ecKpis([
+      ecKpi("$"+dgfRate(t[4][0],t[4][1]).toFixed(2),"Revenue per round","was $"+dgfRate(t[3][0],t[3][1]).toFixed(2)+" in 2025"),
+      ecKpi(ecNum(t[4][0]),"Rounds, Jan to Jun","both courses"),
+      ecKpi(ecMoney(t[4][1]),"Green fee revenue","first half of 2026"),
+      ecKpi(ecNum(DGF.channels[2].d[4][0]),"Troon Digital rounds","from 441 two years ago")])+
+    ecSay(DGF_COPY.chanSay)+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Revenue per round, and the rounds behind it</h3>`+
+      `<p class="wx-sub">Bar height is rounds; the figure above each bar is revenue per round</p>`+
+      dgfChanChart()+`</div>`+
+    `<div class="wx-card ec-card dgf-tbl"><h3 class="wx-h">Every booking channel</h3>`+
+      `<p class="wx-sub">Rounds, with revenue per round underneath</p>`+
+      `<div class="dgf-row dgf-head"><span class="dgf-n">CHANNEL</span>`+
+        Y.map((y,k)=>`<span class="dgf-c${k===DGF.partial?" part":""}">${y}</span>`).join("")+
+        `<span class="dgf-t">RATE</span></div>${rows}`+
+      `<div class="dgf-row dgf-tot"><span class="dgf-n">ALL CHANNELS</span>${tot}<span class="dgf-t"></span></div>`+
+      `<p class="ec-body last dgf-note">${esc(DGF_COPY.chanNote)}</p></div>`+
+    ecBand(DGF_COPY.chanBand);
+}
+
+/* ----------------------------------------------------------------- rate */
+function dgfRateChart(){
+  const M=DGF.monthly, W=700, H=190, L=42, B=22;
+  const max=Math.max.apply(null,M.map(m=>Math.max(m[1],m[2])))*1.12;
+  const bw=(W-L-10)/M.length;
+  let g=`<svg viewBox="0 0 ${W} ${H+B}" class="dgf-chart" role="img" `+
+    `aria-label="Average rate by month, 2026 against 2025">`;
+  [0,50,100].forEach(v=>{
+    const y=H-v/max*(H-10);
+    g+=`<line x1="${L}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}" stroke="#eeece6"></line>`+
+       `<text x="${L-8}" y="${(y+4).toFixed(1)}" text-anchor="end" class="dgf-ax">$${v}</text>`;
+  });
+  M.forEach((m,k)=>{
+    const x=L+k*bw, w=bw*0.30;
+    [[m[2],"#9fb0c6",x+bw*0.16],[m[1],"var(--navy)",x+bw*0.50]].forEach(([v,col,px])=>{
+      const h=v/max*(H-10);
+      g+=`<rect x="${px.toFixed(1)}" y="${(H-h).toFixed(1)}" width="${w.toFixed(1)}" `+
+         `height="${h.toFixed(1)}" rx="2" fill="${col}"></rect>`;
+    });
+    g+=`<text x="${(x+bw*0.5).toFixed(1)}" y="${H+15}" text-anchor="middle" class="dgf-ax">${m[0]}</text>`;
+  });
+  return g+`</svg>`;
+}
+
+function dgfRateSec(){
+  const a=DGF.adr;
+  const pc=(n,w)=>((n/w-1)*100);
+  const rows=[["Booked rounds",ecNum(a.rounds.now),ecNum(a.rounds.was),pc(a.rounds.now,a.rounds.was)],
+              ["Green fees",ecMoney(a.fees.now),ecMoney(a.fees.was),pc(a.fees.now,a.fees.was)],
+              ["Average rate","$"+a.rate.now.toFixed(2),"$"+a.rate.was.toFixed(2),pc(a.rate.now,a.rate.was)],
+              ["Days booked ahead",a.window.now,a.window.was,pc(a.window.now,a.window.was)]]
+    .map(([n,now,was,d])=>`<div class="dgf-arow"><span class="dgf-n">${n}</span>`+
+      `<span class="ec-v">${now}</span><span class="ec-v was">${was}</span>`+
+      `<span class="ec-p ${d>=0?"up":"down"}">${d>=0?"+":"\u2212"}${Math.abs(d).toFixed(1)}%</span></div>`).join("");
+  return ecKpis([
+      ecKpi("$"+a.rate.now.toFixed(2),"Average rate","+$"+(a.rate.now-a.rate.was).toFixed(2)+" on last year"),
+      ecKpi(ecNum(a.rounds.now),"Booked rounds",ecChg(pc(a.rounds.now,a.rounds.was))+" on last year"),
+      ecKpi(ecMoney(a.fees.now),"Green fees",ecChg(pc(a.fees.now,a.fees.was))+" on last year"),
+      ecKpi(a.window.now+" days","Booked ahead","was "+a.window.was+" days")])+
+    ecSay(DGF_COPY.rateSay)+
+    `<div class="ec-g2">`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Average rate by month</h3>`+
+        `<p class="wx-sub">2026 against 2025</p>${dgfRateChart()}`+
+        `<div class="wx-legend"><span><i class="wx-key" style="background:var(--navy)"></i>2026</span>`+
+        `<span><i class="wx-key" style="background:#9fb0c6"></i>2025</span></div></div>`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Daily fee, year to date</h3>`+
+        `<p class="wx-sub">Against the same point last year</p>`+
+        `<div class="dgf-arow dgf-head"><span class="dgf-n"></span><span class="ec-v">2026</span>`+
+        `<span class="ec-v">2025</span><span class="ec-p">CHANGE</span></div>${rows}`+
+        `<p class="ec-body last dgf-note">${esc(DGF_COPY.adrNote)}</p></div>`+
+    `</div>`+
+    ecBand(DGF_COPY.rateBand);
+}
+
+/* ---------------------------------------------------------- competition */
+function dgfComp(){
+  const all=DGF.comp.tiers.reduce((z,t)=>z.concat(t.c),[]);
+  const max=Math.max.apply(null,all.map(c=>c[1]));
+  const tiers=DGF.comp.tiers.map((t,i)=>
+    `<div class="dgf-tier"><div class="dgf-th"><b>Tier ${i+1} &middot; ${esc(t.t)}</b>`+
+      `<span>${esc(t.note)}</span></div>`+
+      t.c.map(([n,p,np])=>
+        `<div class="dgf-crow"><span class="dgf-n">${esc(n)}</span>`+
+        `<span class="dgf-pb"><i style="width:${(p/max*100).toFixed(1)}%"></i>`+
+        `<em style="width:${(np/max*100).toFixed(1)}%"></em></span>`+
+        `<span class="ec-v">$${p}</span><span class="ec-v was">$${np}</span></div>`).join("")+
+    `</div>`).join("");
+  return ecKpis([
+      ecKpi("3","Tiers in the market","by what a golfer compares"),
+      ecKpi("$99\u2013150","Tier two prime","our everyday competitors"),
+      ecKpi("$295\u2013775","Tier one prime","destination golf"),
+      ecKpi(String(all.length),"Courses tracked","in the competitive set")])+
+    ecSay(DGF_COPY.compSay)+
+    `<div class="wx-card ec-card"><h3 class="wx-h">The competitive set</h3>`+
+      `<p class="wx-sub">Prime and non-prime green fees</p>`+
+      `<div class="dgf-crow dgf-head"><span class="dgf-n">COURSE</span><span></span>`+
+        `<span class="ec-v">PRIME</span><span class="ec-v">NON-PRIME</span></div>${tiers}`+
+      `<p class="ec-body last dgf-note">${esc(DGF_COPY.compNote)}</p></div>`+
+    ecBand(DGF_COPY.compBand);
+}
+
+/* --------------------------------------------------------------- value */
+function dgfValue(){
+  const cards=DGF.value.map(([h,p])=>
+    `<div class="dgf-v"><b>${h}</b><span>${p}</span></div>`).join("");
+  const av=DGF.avenues.map(a=>`<span class="dgf-pill">${esc(a)}</span>`).join("");
+  const wh=DGF.wholesalers.map(w=>`<span class="dgf-pill sm">${w}</span>`).join("");
+  return ecSay(DGF_COPY.valueSay)+
+    `<div class="wx-card ec-card"><h3 class="wx-h">What a guest is paying for</h3>`+
+      `<div class="dgf-vgrid">${cards}</div>`+
+      `<p class="dgf-close">${DGF_COPY.valueClose}</p></div>`+
+    `<div class="ec-g2">`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Ways to book with us</h3>`+
+        `<p class="wx-sub">${DGF.avenues.length} avenues \u2014 the most we have ever offered</p>`+
+        `<div class="dgf-pills">${av}</div></div>`+
+      `<div class="wx-card ec-card"><h3 class="wx-h">Wholesale partners</h3>`+
+        `<p class="wx-sub">${DGF.wholesalers.length} active</p>`+
+        `<div class="dgf-pills">${wh}</div></div>`+
+    `</div>`;
+}
+
+/* --------------------------------------------------------------- shell */
+function detailDgf(i){
+  const sec=dgfSec();
+  const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
+    DGF_SECS.map(([k,l])=>`<button type="button" data-dgf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
+    `</div>`;
+  const body=sec==="chan"?dgfChannels():sec==="rate"?dgfRateSec()
+            :sec==="comp"?dgfComp():dgfValue();
+  el("#detail").innerHTML=
+    `<div class="detail-head"><div class="detail-title">${i.t}</div>`+
+      `<div class="detail-sub">Both courses &middot; 2022 to June 2026</div></div>`+
+    `<div class="detail-body is-wide">${pills}${body}`+
+      `<p class="wx-foot">Rounds and revenue from the Access worksheet and the golf `+
+      `system's rate reporting. Competitor fees and value points from the mid-year review.</p>`+
+    `</div>`;
+  const hold=fn=>()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    fn(); detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+  };
+  el("#detail").querySelectorAll("[data-dgf]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.dgfSec=b.dataset.dgf; })));
 }
 
 function detailSurveyPending(i){
@@ -5465,7 +5826,7 @@ function applyContent(rows){
   if(S.management){
     // Customer Surveys is hard-coded and pinned to the top; a duplicate sheet
     // row is dropped so it can't appear twice.
-    const mgmtDrop = /^\s*((customer\s+)?surveys?|feedback|(historical\s+)?weather|financials?|e-?\s?commerce|memberships?)\s*$/i;
+    const mgmtDrop = /^\s*((customer\s+)?surveys?|feedback|(historical\s+)?weather|financials?|e-?\s?commerce|daily\s+golf\s+fees|memberships?)\s*$/i;
     const mgmtRows = mgmt.filter(r=>!mgmtDrop.test((r.title||"").trim()));
     S.management.items = mgmtPinned().concat(mgmtRows.map(contentTypeToItem));
   }
