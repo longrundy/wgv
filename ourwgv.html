@@ -766,6 +766,53 @@ button.emp-srow:hover{background:#fafbfd}
   font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer}
 .emp-subs button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
 
+/* ---- survey year switcher + the 2022 (UniFocus) screen ---- */
+.emp-yrs{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 9px}
+.emp-yrs button{border:1px solid #e5e2da;background:#fff;color:#5f5e5a;font-family:inherit;
+  font-size:12px;font-weight:600;padding:5px 14px;border-radius:999px;cursor:pointer}
+.emp-yrs button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.emp-yrs button.off{color:#c2c0b8;background:#fbfaf8;border-style:dashed;cursor:default}
+.emp-gapnote{font-size:11.5px;color:#6f7885;line-height:1.65;margin:0 0 16px;
+  padding-left:11px;border-left:2px solid #e5e2da}
+.emp-gapnote b{color:#4a5568;font-weight:700}
+.emp-sublbl{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#8a8a84;
+  font-weight:700;margin:16px 0 6px}
+.emp-sublbl:first-of-type{margin-top:10px}
+
+.e22-row{display:grid;
+  grid-template-columns:minmax(0,270px) minmax(110px,1fr) 52px 50px minmax(110px,1fr) 52px 50px 72px;
+  gap:0 14px;align-items:center;padding:11px 10px;border-bottom:1px solid #f2f0ea}
+.e22-row:last-child{border-bottom:0}
+.e22-row.e22-head{font-size:9.5px;letter-spacing:.05em;color:#b4b2a9;
+  border-bottom-color:#e5e2da;padding-bottom:7px}
+.e22-head .e22-c{text-align:center}
+.e22-n{font-size:13.5px;font-weight:600;color:var(--ink);min-width:0}
+.e22-s{text-align:right;font-size:15px;font-weight:700;color:var(--ink)}
+.e22-s.low{color:var(--red-dark)}
+.e22-d{text-align:right;font-size:11px;color:#b4b2a9;white-space:nowrap}
+.e22-d.up{color:var(--green)} .e22-d.down{color:var(--red-dark)}
+.e22-vs{text-align:right;font-size:12px;font-weight:600;color:var(--red-dark);white-space:nowrap}
+.e22-vs.ok{color:var(--green)}
+
+.e22-drow{display:grid;grid-template-columns:minmax(0,1fr) 64px 52px;gap:0 12px;align-items:center;
+  padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:13px;color:#3d3d3a}
+.e22-drow:last-child{border-bottom:0}
+.e22-drow em{display:block;font-style:normal;font-size:11px;color:var(--amber);margin-top:2px}
+.e22-drow.e22-dhead{font-size:9.5px;letter-spacing:.05em;color:#b4b2a9;border-bottom-color:#e5e2da}
+.e22-drow.e22-dhead span:last-child{text-align:right}
+.e22-dc{text-align:right;font-size:11.5px;color:#8a8a84}
+
+.e22-q{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:0 12px;align-items:start;
+  padding:7px 0;border-bottom:1px solid #f7f6f2;font-size:12.5px;line-height:1.5;color:#3d3d3a}
+.e22-q:last-of-type{border-bottom:0}
+.e22-q em{display:block;font-style:normal;font-size:10.5px;color:#b4b2a9;margin-top:2px}
+.e22-q b{text-align:right;font-size:13px;font-weight:700;white-space:nowrap}
+.e22-q b.low{color:var(--red-dark)} .e22-q b.good{color:var(--green)}
+.e22-goals{margin:0;padding-left:17px}
+.e22-goals li{font-size:12.5px;color:#3d3d3a;line-height:1.5;margin-bottom:4px}
+.e22-goalnote{font-size:11.5px;color:var(--red-dark);margin:6px 0 0}
+.e22-goalnote b{font-weight:700}
+
 .emp-trow{display:grid;grid-template-columns:minmax(0,1fr) 34px 34px;gap:0 10px;align-items:center;
   padding:6px 0;border-bottom:1px solid #f7f6f2;font-size:11.5px;color:#3d3d3a}
 .emp-trow.emp-thead{font-size:9.5px;color:#b4b2a9;border-bottom-color:#e5e2da;letter-spacing:.05em}
@@ -808,6 +855,10 @@ button.emp-srow:hover{background:#fafbfd}
   .emp-three>.emp-col:last-child{padding-bottom:0;border-bottom:0}
   .emp-srow{grid-template-columns:minmax(0,1fr) 56px 44px 82px;gap:0 10px}
   .emp-srow .emp-rbar,.emp-srow .emp-rbar-h{display:none}
+  .e22-row{grid-template-columns:minmax(0,1fr) 52px 46px 52px 46px;gap:0 10px}
+  .e22-row .emp-rbar{display:none}
+  .e22-head .e22-c{grid-column:auto !important;text-align:right}
+  .e22-vs{display:none}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
   .emp-srow{grid-template-columns:minmax(0,1fr) 42px 86px;gap:0 10px}
@@ -1997,7 +2048,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
+const state={view:"announce",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"2026",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -4393,6 +4444,96 @@ const EMP_MIN_PART=40;
 /* Gaps smaller than this are noise on a ten-point scale and are reported as
    "level with", not as a difference. Golf's lowest topic sits 0.1 above the
    property average; calling that "above" reads as a finding when it is not. */
+/* ================= 2022 EMPLOYEE SURVEY =================
+   April 2022 STAR Staff Survey, run by UniFocus — a different company and a
+   different instrument from the 2026 survey. Scored 0-100 across nine
+   dimensions, not 0-10 across twelve topics, so the two years cannot be put
+   on one scale and compared directly. Each year is shown in its own terms.
+
+   Source files: KB_STAFFScope_-_Apr2022.pdf and SS_STAFFScope_-_Apr2022.pdf
+   (Executive Summary, Department/Dimension Report, Dimension Summary Report).
+
+   No survey exists for 2023, 2024 or 2025 — see EMP_YEARS below.
+   ========================================================= */
+const EMP22={
+  survey:"STAR Staff Survey", company:"UniFocus", period:"April 2022",
+  n:62, scale:100, troonOverall:84.3, benchOverall:83.5,
+  courses:[
+    {id:"kb", name:"King & Bear",       n:31, o:72.9, prev:76.0},
+    {id:"ss", name:"Slammer & Squire",  n:31, o:78.5, prev:79.7}
+  ],
+  /* dimension, KB now, KB prev, SS now, SS prev, Troon company average */
+  dims:[
+    ["Loyalty",                    84.5, 82.6, 87.5, 86.8, 87.4],
+    ["Engagement Index",           79.3, 81.6, 80.7, 83.8, 83.8],
+    ["Troon Guiding Principles",   77.5, 80.6, 80.8, 80.5, 87.1],
+    ["Basic Needs",                77.1, 79.4, 83.0, 81.4, 86.1],
+    ["Organizational Climate",     72.8, 76.9, 82.0, 83.0, 83.6],
+    ["Growth & Development",       67.9, 72.2, 70.1, 77.0, 81.8],
+    ["Management Support",         67.2, 72.1, 75.3, 77.6, 83.8],
+    ["Teamwork",                   66.7, 73.9, 73.7, 72.3, 81.8],
+    ["Communication",              61.5, 64.2, 66.7, 71.8, 79.8]
+  ],
+  /* department, rating, responses — per course */
+  depts:{
+    kb:[["Maintenance",80.7,5],["Operations",77.0,19],["Food & Beverage",56.6,7]],
+    ss:[["Maintenance",83.6,9],["Operations",80.5,19],["Food & Beverage",48.6,3]]
+  },
+  /* the survey company's top three flagged opportunities */
+  opps:{
+    kb:[["Associate performance and contributions are appropriately valued and rewarded at our facility.",56.7,"Basic Needs"],
+        ["My manager/supervisor deals fairly with everyone and shows no favoritism.",62.8,"Management Support"],
+        ["I believe managers at our facility will act on problems identified by this survey.",65.1,"Organizational Climate"]],
+    ss:[["All departments/work groups communicate well with one another.",50.6,"Communication"],
+        ["Associate performance and contributions are appropriately valued and rewarded at our facility.",62.8,"Basic Needs"],
+        ["Facility managers are willing to hear ideas to improve work practices.",66.1,"Management Support"]]
+  },
+  /* goals set after the previous survey — every one marked Not Attained */
+  goals:{
+    kb:["All departments/work groups communicate well with one another. (Communication)",
+        "In my department, we discuss ideas and ways to exceed guest/member expectations. (Teamwork)",
+        "I hear more praise than criticism in my department. (Communication)"],
+    ss:["Managers/supervisors can be counted on to respond to problems quickly. (Management Support)",
+        "I believe managers at our facility will act on problems identified by this survey. (Organizational Climate)",
+        "Associate performance and contributions are appropriately valued and rewarded at our facility. (Basic Needs)"]
+  },
+  best:{
+    kb:[["I know what is expected of me and how my performance will be judged.",89.4],
+        ["I believe our facility deserves my loyalty.",88.2],
+        ["I feel committed to my continued employment.",87.6],
+        ["My co-workers treat me fairly and make me feel part of the team.",87.6],
+        ["I am likely to recommend Troon for employment to a friend or colleague.",83.9]],
+    ss:[["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",93.0],
+        ["My co-workers treat me fairly and make me feel part of the team.",91.1],
+        ["My current position provides enough challenge to meet my needs.",90.6],
+        ["We conduct all of our business dealings with integrity and respect.",90.4],
+        ["I feel committed to my continued employment.",89.4]]
+  },
+  gained:{
+    kb:[["I believe our facility deserves my loyalty.",81.7,88.2],
+        ["I know what is expected of me and how my performance will be judged.",83.9,89.4],
+        ["I am empowered to do whatever it takes to satisfy guests/members.",78.5,82.8],
+        ["I am likely to recommend this Property for employment.",78.3,82.2],
+        ["I am kept informed on how well our facility is performing to meet our goals.",59.8,63.4]],
+    ss:[["My current position provides enough challenge to meet my needs.",80.9,90.6],
+        ["I have been trained in how to satisfy our guests/members.",78.0,87.8],
+        ["Associates in my department share information and assist one another.",81.5,87.2],
+        ["We deliver optimal financial results for our owners and partners.",72.6,80.3],
+        ["In my department, we discuss ideas and ways to exceed guest/member expectations.",59.7,63.3]]
+  },
+  thinDept:3
+};
+
+/* Years we can show, and plain reasons for the ones we cannot. */
+const EMP_YEARS=[
+  ["2026", true,  ""],
+  ["2025", false, "No survey. Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff were taking a beating all season, and a survey run in that mood would not have told us anything about how we normally run."],
+  ["2024", false, "No survey. King & Bear was closed for eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
+  ["2023", false, "No survey run this year."],
+  ["2022", true,  ""]
+];
+const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear&&y[1])?state.empYear:"2026";
+
 const EMP_NOISE=0.15;
 /* Course-level flag: soft against its own course AND high-moving. */
 const EMP_LEV=0.60;
@@ -4514,6 +4655,108 @@ function empSummary(){
     `<p class="emp-note">${C.recFoot}</p>`;
 }
 
+/* ------------------------------------------------- 2022 survey (UniFocus) */
+const e22pct=v=>Math.max(0,Math.min(100,(v-50)/50*100));
+function e22Delta(now,prev){
+  const d=(now-prev);
+  const cls=Math.abs(d)<0.05?"":(d>0?" up":" down");
+  return `<span class="e22-d${cls}">${d>0?"+":""}${d.toFixed(1)}</span>`;
+}
+function e22Bar(v,avg){
+  return `<span class="emp-rbar" aria-hidden="true">`+
+    `<i style="width:${e22pct(v).toFixed(1)}%;background:${v<avg?"var(--red)":"var(--navy)"}"></i>`+
+    `<b style="left:${e22pct(avg).toFixed(1)}%"></b></span>`;
+}
+function e22CourseCard(c){
+  const vs=(c.o-EMP22.troonOverall);
+  return `<div class="emp-col">`+
+    `<p class="emp-klbl">${esc(c.name)}</p>`+
+    `<p class="emp-kbig">${c.o.toFixed(1)}<em>out of 100</em></p>`+
+    `<p class="emp-ksub">${c.n} answered. `+
+    (c.o<c.prev?`Down from ${c.prev.toFixed(1)}`:`Up from ${c.prev.toFixed(1)}`)+
+    ` at the previous survey, and ${Math.abs(vs).toFixed(1)} points `+
+    `${vs<0?"below":"above"} the Troon company average of ${EMP22.troonOverall}.</p>`+
+  `</div>`;
+}
+function e22Dims(){
+  const head=`<div class="e22-row e22-head">`+
+    `<span>Dimension</span>`+
+    `<span class="e22-c" style="grid-column:2/5">King &amp; Bear</span>`+
+    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span>`+
+    `<span class="e22-vs">vs Troon</span></div>`;
+  return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
+    EMP22.dims.map(d=>{
+      const [n,kc,kp,sc,sp,co]=d, gap=((kc+sc)/2)-co;
+      return `<div class="e22-row">`+
+        `<span class="e22-n">${esc(n)}</span>`+
+        e22Bar(kc,co)+`<span class="e22-s${kc<co?" low":""}">${kc.toFixed(1)}</span>`+e22Delta(kc,kp)+
+        e22Bar(sc,co)+`<span class="e22-s${sc<co?" low":""}">${sc.toFixed(1)}</span>`+e22Delta(sc,sp)+
+        `<span class="e22-vs${gap>=0?" ok":""}">${gap>0?"+":""}${gap.toFixed(1)}</span>`+
+      `</div>`;
+    }).join("")+`</div>`;
+}
+function e22Depts(){
+  return `<div class="emp-panel emp-two">`+
+    EMP22.courses.map(c=>{
+      const rows=EMP22.depts[c.id].map(([n,r,cnt])=>{
+        const thin=cnt<=EMP22.thinDept;
+        return `<div class="e22-drow">`+
+          `<span>${esc(n)}${thin?`<em>${cnt} answered \u2014 too few to read as a score</em>`:""}</span>`+
+          `<span class="e22-dc">${cnt}</span>`+
+          `<span class="e22-s${r<70?" low":""}">${r.toFixed(1)}</span></div>`;
+      }).join("");
+      return `<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+        `<div class="e22-drow e22-dhead"><span>Department</span><span class="e22-dc">ANSWERED</span><span>RATING</span></div>`+
+        rows+`</div>`;
+    }).join("")+`</div>`;
+}
+function e22Lists(){
+  return `<div class="emp-panel emp-two">`+
+    EMP22.courses.map(c=>{
+      const opps=EMP22.opps[c.id].map(o=>`<div class="e22-q"><span>${esc(o[0])}<em>${esc(o[2])}</em></span>`+
+        `<b class="low">${o[1].toFixed(1)}</b></div>`).join("");
+      const best=EMP22.best[c.id].map(b=>`<div class="e22-q"><span>${esc(b[0])}</span>`+
+        `<b class="good">${b[1].toFixed(1)}</b></div>`).join("");
+      const gain=EMP22.gained[c.id].map(g=>`<div class="e22-q"><span>${esc(g[0])}</span>`+
+        `<b class="good">${g[1].toFixed(1)} \u2192 ${g[2].toFixed(1)}</b></div>`).join("");
+      const goals=EMP22.goals[c.id].map(g=>`<li>${esc(g)}</li>`).join("");
+      return `<div class="emp-col">`+
+        `<p class="emp-cn">${esc(c.name)}</p>`+
+        `<p class="emp-sublbl">What the survey company flagged to work on</p>${opps}`+
+        `<p class="emp-sublbl">Goals set after the previous survey</p>`+
+        `<ul class="e22-goals">${goals}</ul>`+
+        `<p class="e22-goalnote">All three marked <b>not attained</b>.</p>`+
+        `<p class="emp-sublbl">Highest scoring</p>${best}`+
+        `<p class="emp-sublbl">Biggest gains since the previous survey</p>${gain}`+
+      `</div>`;
+    }).join("")+`</div>`;
+}
+function empSummary22(){
+  const fb=EMP22.depts.ss.find(d=>d[0]==="Food & Beverage");
+  return `<p class="emp-meta">${EMP22.survey} &middot; ${EMP22.company} &middot; ${EMP22.period} `+
+      `&middot; ${EMP22.n} responses across both courses</p>`+
+    `<div class="emp-panel emp-three">`+
+      `<div class="emp-col"><p class="emp-klbl">Who answered</p>`+
+        `<p class="emp-kbig stack">${EMP22.n}<em>${EMP22.courses[0].n} at each course</em></p>`+
+        `<p class="emp-ksub">A different survey company from 2026, scored out of 100 across nine dimensions rather than out of 10 across twelve topics. The two years cannot be compared number to number.</p></div>`+
+      e22CourseCard(EMP22.courses[0])+
+      e22CourseCard(EMP22.courses[1])+
+    `</div>`+
+    `<div class="emp-call act"><h5>WHAT STAFF RATED LOWEST</h5>`+
+      `<p>Being valued and rewarded for what you do was flagged at both courses \u2014 56.7 at King &amp; Bear, the lowest question on the survey, and 62.8 at Slammer &amp; Squire. Pay is still the lowest topic in 2026 at 6.8. Different survey company, different scale, same item at the bottom four years apart.</p></div>`+
+    `<div class="emp-call warn"><h5>NOT ONE GOAL FROM THE PREVIOUS SURVEY WAS MET</h5>`+
+      `<p>Six goals were set after the survey before this one, three at each course. Every one came back marked not attained. Communication finished 2022 as the lowest dimension at both courses.</p></div>`+
+    `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
+    e22Dims()+
+    `<p class="emp-note">Scored 0\u2013100. The small figure beside each score is the move since the previous survey. The tick on each bar is the Troon company average for that dimension; bars in red sit below it. The last column is how far the two courses together sit from that average.</p>`+
+    `<p class="emp-slbl">EACH DEPARTMENT</p>`+
+    e22Depts()+
+    `<div class="emp-caution"><h5>READ FOOD &amp; BEVERAGE LIGHTLY</h5>`+
+      `<p>Food &amp; Beverage was the weakest department at both courses, but Slammer &amp; Squire's figure of ${fb[1].toFixed(1)} rests on ${fb[2]} responses. Three people is not a department score.</p></div>`+
+    `<p class="emp-slbl">WHAT EACH COURSE WAS TOLD</p>`+
+    e22Lists()+
+    `<p class="emp-note">Figures are from the April 2022 UniFocus STAFFScope reports for each course: Executive Summary, Department/Dimension Report and Dimension Summary Report. A separate manager survey was run at Slammer &amp; Squire with five responses; it is not shown here because there is no King &amp; Bear equivalent to set beside it.</p>`;
+}
 /* One card per team, for handing to that team's leader. */
 function empLeaderCard(dp){
   const thin=empThin(dp), lo=empLowest(dp), [word]=empRecWord(dp.e);
@@ -4624,7 +4867,29 @@ function empRec(c){
 }
 /* ------------------------------------------------------------------ shell */
 function detailEmployee(i){
-  const sec=empSec(), det=empDet();
+  const yr=empYear(), sec=empSec(), det=empDet();
+  const yrPills=`<div class="emp-yrs" role="group" aria-label="Survey year">`+
+    EMP_YEARS.map(([y,live,why])=>live
+      ? `<button type="button" data-empyr="${y}" aria-pressed="${y===yr}">${y}</button>`
+      : `<button type="button" class="off" disabled title="${esc(why)}">${y}</button>`).join("")+
+    `</div>`;
+  const skipped=EMP_YEARS.filter(y=>!y[1]&&y[2]);
+  const gapNote=`<p class="emp-gapnote">`+
+    skipped.map(([y,,why])=>`<b>${y}</b> ${esc(why)}`).join("<br>")+`</p>`;
+
+  if(yr==="2022"){
+    el("#detail").innerHTML=
+      `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
+      `<div class="detail-body is-wide">`+yrPills+gapNote+
+        `<div class="emp-wide">${empSummary22()}</div>`+
+      `</div>`;
+    svAudWire(i);
+    el("#detail").querySelectorAll("[data-empyr]").forEach(b=>b.addEventListener("click",()=>{
+      state.empYear=b.dataset.empyr; detail(i);
+    }));
+    return;
+  }
+
   const pills=`<div class="mg-yrs emp-secs" role="group" aria-label="View">`+
     EMP_SECS.map(([k,l])=>`<button type="button" data-emp="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
@@ -4644,6 +4909,7 @@ function detailEmployee(i){
   el("#detail").innerHTML=
     `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
     `<div class="detail-body is-wide">`+
+      yrPills+gapNote+
       `<p class="emp-meta">${EMP.survey} &middot; ${EMP.period} &middot; `+
       `${EMP.courses.reduce((a,c)=>a+c.n,0)} responses</p>`+
       pills+body+
@@ -4657,6 +4923,9 @@ function detailEmployee(i){
     fn(); detail(i);
     const after=el("#detail"); if(after) after.scrollTop=keep;
   };
+  el("#detail").querySelectorAll("[data-empyr]").forEach(b=>b.addEventListener("click",()=>{
+    state.empYear=b.dataset.empyr; detail(i);
+  }));
   el("#detail").querySelectorAll("[data-emp]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.empSec=b.dataset.emp; })));
   el("#detail").querySelectorAll("[data-empdet]").forEach(b=>b.addEventListener("click",
