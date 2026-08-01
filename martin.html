@@ -63,12 +63,12 @@ a{color:inherit}
 .back{font-size:22px;width:40px;height:40px;display:none;align-items:center;justify-content:center;border-radius:8px}
 
 /* ---------- rail ---------- */
-.rail{background:var(--navy);color:#fff;padding:22px 16px;overflow-y:auto}
-.brand{display:flex;justify-content:center;margin-bottom:20px}
+.rail{background:var(--navy);color:#fff;padding:18px 14px;overflow-y:auto}
+.brand{display:flex;justify-content:center;margin-bottom:14px}
 .brand-link,.troon-link{display:block;border-radius:8px;transition:opacity .15s}
 .brand-link:hover,.troon-link:hover{opacity:.82}
 .brand-link:focus-visible,.troon-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.brand img{width:94px;height:auto;display:block}
+.brand img{width:78px;height:auto;display:block}
 /* The rail mark is a ~4s waving-flag loop that never stops. Anyone who has
    asked their OS to reduce motion gets the first frame as a still instead.
    Both are the same artwork, keyed off the same source GIF — if you replace
@@ -92,9 +92,11 @@ a{color:inherit}
 .grp-body .nav-item{padding:9px 12px;font-size:13.5px;color:#c7d5e8;border-radius:0 8px 8px 0;border-left:2px solid transparent;margin-left:-1px}
 .grp-body .nav-item:active{background:var(--navy-2)}
 .grp-body .nav-item[aria-current="true"]{background:var(--navy-3);color:#fff;border-left-color:var(--red)}
-.grp-body .nav-item .dot{width:6px;height:6px}
-.nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:13px 12px;border-radius:10px;
-  font-size:15px;border-left:3px solid transparent;font-weight:600}
+.grp-body .nav-item .dot{width:5px;height:5px;border-radius:50%;flex:none}
+/* Eleven items, all visible without scrolling: tighter than the staff portal,
+   which only carries five. */
+.nav-item{display:flex;align-items:center;gap:9px;width:100%;padding:7px 11px;border-radius:8px;
+  font-size:13.5px;border-left:3px solid transparent;font-weight:600;line-height:1.25}
 .nav-item:active{background:var(--navy-2)}
 .nav-item[aria-current="true"]{background:var(--navy-3);border-left-color:var(--red)}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
@@ -206,6 +208,15 @@ a{color:inherit}
 
 /* ---------- detail ---------- */
 .detail{background:#fff;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* ---- meeting header in the rail: text, not navigation ---- */
+.mt-meet{padding:0 4px 12px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.14)}
+.mt-meet p{margin:0}
+.mt-place{font-size:12.5px;color:#fff;font-weight:600;line-height:1.35}
+.mt-when{font-size:11.5px;color:#9fb4d4;margin-top:1px!important;line-height:1.35}
+.mt-what{font-size:11.5px;color:#9fb4d4;line-height:1.35}
+.mt-agenda{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#c7d5e8;
+  font-weight:700;margin-top:11px!important}
+
 /* ---- sections whose material has not been supplied yet ---- */
 .mt-empty{border:1px dashed #dfe3e9;border-radius:12px;background:#fcfcfd;
   padding:26px 28px;max-width:640px;margin-top:6px}
@@ -1503,6 +1514,12 @@ button.yd-r:hover{background:#f2f5f9}
   <!-- RAIL -->
   <nav class="rail" id="rail" aria-label="Sections">
     <div class="brand"><a class="brand-link" href="https://www.golfwgv.com" target="_blank" rel="noopener" aria-label="World Golf Village — public site"><img class="brand-mark" alt="World Golf Village" width="188" height="225"></a></div>
+    <div class="mt-meet">
+      <p class="mt-place">Lake Martin, Alabama</p>
+      <p class="mt-when">August 2026</p>
+      <p class="mt-what">WGV Mid-Year Review</p>
+      <p class="mt-agenda">Agenda</p>
+    </div>
     <div id="navHost"></div>
   </nav>
 
