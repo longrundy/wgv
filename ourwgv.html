@@ -683,7 +683,7 @@ a{color:inherit}
 .emp-src{font-size:11px;color:#b4b2a9;margin:0 0 8px}
 .emp-src2{font-size:11px;color:#b4b2a9;line-height:1.55;margin:18px 0 0;max-width:760px}
 .emp-tag.act{color:var(--red-dark);background:#fdeeee}
-.emp-tag.watch{color:#8a6a2a;background:#faf2e2}
+.emp-tag.watch{color:var(--amber);background:#fff}
 .emp-tag.strong{color:var(--green);background:#eef5e6}
 .emp-th{display:grid;grid-template-columns:minmax(0,1fr) 74px 22px;gap:0 9px;align-items:center;
  padding:5px 0;border-bottom:1px solid #f7f6f2}
@@ -698,31 +698,37 @@ a{color:inherit}
  border-radius:10px;background:#fcfcfd;padding:12px 14px;margin:12px 0 0}
 .emp-none b{color:var(--ink)}
 /* ---- plain-language employee feedback ---- */
-/* .detail-body.is-wide > * kills max-width by specificity, so re-assert it
-   here. Without this the team rows stretch the full pane and the name and
-   the numbers end up at opposite edges with a lake of white between. */
-.detail-body.is-wide .emp-wide{max-width:880px}
-.emp-lead{font-size:13.5px;color:#5f5e5a;line-height:1.65;margin:0 0 16px}
+/* Fill the frame: the screen uses the whole pane and starts at the same left
+   edge as the title, so there is no gutter between the rail and the content.
+   The team rows below cap the name column rather than letting it absorb the
+   slack, which is what used to leave a lake of white mid-row. */
+.detail-body.is-wide .emp-wide{max-width:none;margin-left:0;margin-right:0}
 .emp-panel{border:1px solid #e5e2da;border-radius:12px;background:#fff;
   padding:16px 18px;margin-bottom:14px}
 .emp-two{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
 .emp-two>.emp-col:first-child{padding-right:22px;border-right:1px solid #e5e2da}
+/* Headline band: three equal cells with dividers, spanning the pane. */
+.emp-three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.emp-three>.emp-col{padding:0 26px;border-right:1px solid #e5e2da;min-width:0}
+.emp-three>.emp-col:first-child{padding-left:0}
+.emp-three>.emp-col:last-child{padding-right:0;border-right:0}
 .emp-klbl{font-size:10px;letter-spacing:.07em;color:#8a8a84;font-weight:700;
   text-transform:uppercase;margin:0 0 5px}
 .emp-kbig{margin:0;font-size:32px;font-weight:700;color:var(--ink);line-height:1}
 .emp-kbig em{font-style:normal;font-size:14px;font-weight:400;color:#8a8a84;margin-left:7px}
+.emp-kbig.stack em{display:block;margin-left:0;margin-top:5px;font-size:12.5px;line-height:1.4}
 .emp-ksub{margin:9px 0 0;font-size:12px;color:#5f5e5a;line-height:1.55}
 .emp-call{border-left:3px solid;border-radius:0;padding:12px 15px;margin-bottom:12px}
 .emp-call.act{border-color:var(--red);background:#fdf3f3}
-.emp-call.warn{border-color:var(--amber);background:#faf2e2}
+.emp-call.warn{border-color:var(--navy);background:#fff}
 .emp-call h5{margin:0 0 4px;font-size:10px;letter-spacing:.06em;font-weight:700}
-.emp-call.act h5{color:var(--red-dark)} .emp-call.warn h5{color:#8a6a2a}
+.emp-call.act h5{color:var(--red-dark)} .emp-call.warn h5{color:var(--navy)}
 .emp-call p{margin:0;font-size:13px;color:#3d3d3a;line-height:1.6}
 .emp-slbl{font-size:10.5px;letter-spacing:.08em;color:#8a8a84;font-weight:700;margin:20px 0 7px}
 
-/* team rows: fixed metric columns, bar absorbs the slack */
-.emp-srow{display:grid;grid-template-columns:minmax(0,1fr) 62px 108px 44px 92px;
-  gap:0 14px;align-items:center;width:100%;padding:12px 10px;
+/* team rows: name capped, bar absorbs the slack so nothing drifts apart */
+.emp-srow{display:grid;grid-template-columns:minmax(0,360px) 70px minmax(150px,1fr) 52px 104px;
+  gap:0 18px;align-items:center;width:100%;padding:12px 10px;
   border:0;border-bottom:1px solid #f2f0ea;text-align:left;font-family:inherit;background:none}
 .emp-srow:last-child{border-bottom:0}
 .emp-srow.emp-shead{font-size:9.5px;color:#b4b2a9;letter-spacing:.05em;
@@ -783,7 +789,7 @@ button.emp-srow:hover{background:#fafbfd}
 .emp-note b{color:#4a5568;font-weight:700}
 .emp-note.flagline{border-left-color:var(--red)}
 .emp-dnote{font-size:11.5px;color:#8a8a84;line-height:1.5;margin:10px 0 0}
-.emp-caution{border-left:3px solid var(--amber);border-radius:0;background:#faf2e2;
+.emp-caution{border-left:3px solid var(--amber);border-radius:0;background:#fff;
   padding:10px 12px;margin:12px 0 0}
 .emp-caution h5{margin:0 0 3px;font-size:10px;letter-spacing:.05em;font-weight:700;color:#8a6a2a}
 .emp-caution p{margin:0;font-size:12.5px;color:#3d3d3a;line-height:1.5}
@@ -796,6 +802,12 @@ button.emp-srow:hover{background:#fafbfd}
   .emp-grid>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
   .emp-two{grid-template-columns:1fr;gap:20px}
+  .emp-three{grid-template-columns:1fr;gap:0}
+  .emp-three>.emp-col{padding:18px 0;border-right:0;border-bottom:1px solid #e5e2da}
+  .emp-three>.emp-col:first-child{padding-top:0}
+  .emp-three>.emp-col:last-child{padding-bottom:0;border-bottom:0}
+  .emp-srow{grid-template-columns:minmax(0,1fr) 56px 44px 82px;gap:0 10px}
+  .emp-srow .emp-rbar,.emp-srow .emp-rbar-h{display:none}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
   .emp-srow{grid-template-columns:minmax(0,1fr) 42px 86px;gap:0 10px}
@@ -4344,7 +4356,9 @@ const empTeam=n=>EMP_TEAM[n]||n;
 
 const EMP_COPY={
   counts:{responses:60,payroll:110},
-  lead:"Sixty of roughly a hundred and ten staff answered. The survey asks two different things, and they do not move together.",
+  whoLbl:"Who answered",
+  whoSub:"of about a hundred and ten on payroll",
+  lead:"The survey asks two different things, and they do not move together.",
   rateLbl:"How they rate working here",
   rateSub:"Averaged across twelve topics, from pay to whether your work feels worthwhile.",
   recLbl:"Would they recommend us",
@@ -4472,8 +4486,12 @@ function empSummary(){
 
   const sel=EMP.depts.find(d=>d.n===state.empDept);
 
-  return `<p class="emp-lead">${C.lead}</p>`+
-    `<div class="emp-panel emp-two">`+
+  return `<div class="emp-panel emp-three">`+
+      `<div class="emp-col">`+
+        `<p class="emp-klbl">${C.whoLbl}</p>`+
+        `<p class="emp-kbig stack">${C.counts.responses}<em>${esc(C.whoSub)}</em></p>`+
+        `<p class="emp-ksub">${C.lead}</p>`+
+      `</div>`+
       `<div class="emp-col">`+
         `<p class="emp-klbl">${C.rateLbl}</p>`+
         `<p class="emp-kbig">${EMP.propOverall.toFixed(1)}<em>out of 10</em></p>`+
