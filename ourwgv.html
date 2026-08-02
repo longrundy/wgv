@@ -842,10 +842,12 @@ button.emp-srow:hover{background:#fafbfd}
 .e22-d.up{color:var(--green)} .e22-d.down{color:var(--red-dark)}
 .e22-vs{text-align:right;font-size:12px;font-weight:600;color:var(--red-dark);white-space:nowrap}
 .e22-vs.ok{color:var(--green)}
-.e22-row.e19-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 58px minmax(110px,1fr) 58px 86px}
-/* 2023 carries no comparison column, so it is one narrower than 2022 and
-   2019, which still use the last slot for "vs Troon" and "K&B vs S&S". */
-.e22-row.e23-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 52px 50px minmax(110px,1fr) 52px 50px}
+/* Name, two course readings, and one trailing comparison. 2022 compares to
+   Troon and 2019 compares the courses to each other; 2023 has no trailing
+   column, so it is one narrower. */
+.e22-row.e19-row,.e22-row.e22-row6{
+  grid-template-columns:minmax(0,270px) minmax(110px,1fr) 58px minmax(110px,1fr) 58px 86px}
+.e22-row.e23-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 58px minmax(110px,1fr) 58px}
 
 .e22-drow{display:grid;grid-template-columns:minmax(0,1fr) 64px 52px;gap:0 12px;align-items:center;
   padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:13px;color:#3d3d3a}
@@ -925,7 +927,8 @@ button.emp-srow:hover{background:#fafbfd}
   .e22-row .emp-rbar{display:none}
   .e22-head .e22-c{grid-column:auto !important;text-align:right}
   .e22-vs{display:none}
-  .e22-row.e19-row{grid-template-columns:minmax(0,1fr) 52px 52px;gap:0 10px}
+  .e22-row.e19-row,.e22-row.e22-row6,.e22-row.e23-row{
+    grid-template-columns:minmax(0,1fr) 52px 52px;gap:0 10px}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
   .emp-srow{grid-template-columns:minmax(0,1fr) 42px;gap:0 10px}
@@ -4994,25 +4997,23 @@ function e22CourseCard(c){
   return `<div class="emp-col">`+
     `<p class="emp-klbl">${esc(c.name)}</p>`+
     `<p class="emp-kbig">${c.o.toFixed(1)}<em>out of 100</em></p>`+
-    `<p class="emp-ksub">${c.n} answered. `+
-    (c.o<c.prev?`Down from ${c.prev.toFixed(1)}`:`Up from ${c.prev.toFixed(1)}`)+
-    ` at the previous survey, and ${Math.abs(vs).toFixed(1)} points `+
+    `<p class="emp-ksub">${c.n} answered. ${Math.abs(vs).toFixed(1)} points `+
     `${vs<0?"below":"above"} the Troon company average of ${EMP22.troonOverall}.</p>`+
   `</div>`;
 }
 function e22Dims(){
-  const head=`<div class="e22-row e22-head">`+
+  const head=`<div class="e22-row e22-row6 e22-head">`+
     `<span>Dimension</span>`+
-    `<span class="e22-c" style="grid-column:2/5">King &amp; Bear</span>`+
-    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span>`+
+    `<span class="e22-c" style="grid-column:2/4">King &amp; Bear</span>`+
+    `<span class="e22-c" style="grid-column:4/6">Slammer &amp; Squire</span>`+
     `<span class="e22-vs">vs Troon</span></div>`;
   return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
     EMP22.dims.map(d=>{
-      const [n,kc,kp,sc,sp,co]=d, gap=((kc+sc)/2)-co;
-      return `<div class="e22-row">`+
+      const [n,kc,,sc,,co]=d, gap=((kc+sc)/2)-co;
+      return `<div class="e22-row e22-row6">`+
         `<span class="e22-n">${esc(n)}</span>`+
-        e22Bar(kc,co)+`<span class="e22-s${kc<co?" low":""}">${kc.toFixed(1)}</span>`+e22Delta(kc,kp)+
-        e22Bar(sc,co)+`<span class="e22-s${sc<co?" low":""}">${sc.toFixed(1)}</span>`+e22Delta(sc,sp)+
+        e22Bar(kc,co)+`<span class="e22-s${kc<co?" low":""}">${kc.toFixed(1)}</span>`+
+        e22Bar(sc,co)+`<span class="e22-s${sc<co?" low":""}">${sc.toFixed(1)}</span>`+
         `<span class="e22-vs${gap>=0?" ok":""}">${gap>0?"+":""}${gap.toFixed(1)}</span>`+
       `</div>`;
     }).join("")+`</div>`;
@@ -5210,34 +5211,31 @@ function empSummaryAll(){
       `Some of that last jump is the survey changing; not all of it.</p></div>`+
     `<p class="emp-slbl">EVERY FIGURE ON THE SHEET</p>`+
     `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`+
-    `<p class="emp-note">Green marks each course's best year, red its worst; a dash means no survey. `+
-      `Only ${EMP_ALL.detailed.join(", ")} have full reports behind them \u2014 pick a year above to open one. `+
-      `${Y7.filter(y=>prop.kb[y]!==undefined&&EMP_ALL.detailed.indexOf(String(y))<0).join(" and ")} are single `+
-      `figures from this sheet with no underlying report loaded.</p>`;
+    `<p class="emp-note">Green marks each course's best year, red its worst. `+
+      `Pick a year above to open it.</p>`;
 }
 
 /* ------------------------------------------------- 2023 survey (UniFocus) */
 function e23Dims(){
   const head=`<div class="e22-row e23-row e22-head">`+
     `<span>Dimension</span>`+
-    `<span class="e22-c" style="grid-column:2/5">King &amp; Bear</span>`+
-    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span></div>`;
+    `<span class="e22-c" style="grid-column:2/4">King &amp; Bear</span>`+
+    `<span class="e22-c" style="grid-column:4/6">Slammer &amp; Squire</span></div>`;
   return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
     EMP23.dims.map(d=>{
-      const [n,kc,kp,sc,sp]=d;
-      const bar=(v,was)=>`<span class="emp-rbar" aria-hidden="true">`+
-        `<i style="width:${e22pct(v).toFixed(1)}%;background:${v<was?"var(--red)":"var(--navy)"}"></i>`+
-        `<b style="left:${e22pct(was).toFixed(1)}%"></b></span>`;
+      const [n,kc,,sc]=d;
+      const bar=v=>`<span class="emp-rbar" aria-hidden="true">`+
+        `<i style="width:${e22pct(v).toFixed(1)}%;background:var(--navy)"></i></span>`;
       return `<div class="e22-row e23-row">`+
         `<span class="e22-n">${esc(n)}</span>`+
-        bar(kc,kp)+`<span class="e22-s${kc<kp?" low":""}">${kc.toFixed(1)}</span>`+e22Delta(kc,kp)+
-        bar(sc,sp)+`<span class="e22-s${sc<sp?" low":""}">${sc.toFixed(1)}</span>`+e22Delta(sc,sp)+
+        bar(kc)+`<span class="e22-s">${kc.toFixed(1)}</span>`+
+        bar(sc)+`<span class="e22-s">${sc.toFixed(1)}</span>`+
       `</div>`;
     }).join("")+`</div>`;
 }
 function e23DeptCard(dp){
   const subs=dp.subs.map(([n,r,c])=> r===null
-    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered \u2014 held back by the survey company to protect anonymity</em></div>`
+    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered</em></div>`
     : `<div class="e23-sub"><span>${esc(n)}</span><b>${r.toFixed(1)}</b><em>${c} answered</em></div>`).join("");
   const list=(rows,cls,fmt)=>rows.map(r=>
     `<div class="e22-q"><span>${esc(r[0])}</span><b class="${cls}">${fmt(r)}</b></div>`).join("");
@@ -5256,15 +5254,13 @@ function empSummary23(){
   const kb=EMP23.courses[0], ss=EMP23.courses[1];
   const card=c=>`<div class="emp-col"><p class="emp-klbl">${esc(c.name)}</p>`+
     `<p class="emp-kbig">${c.o}<em>out of 100</em></p>`+
-    `<p class="emp-ksub">${c.n} answered. Up from ${c.prev.toFixed(1)} in 2022`+
-    (c.o-c.prev>=5?", a jump of about "+Math.round(c.o-c.prev)+" points":"")+
-    `.</p></div>`;
+    `<p class="emp-ksub">${c.n} answered.</p></div>`;
   return `<p class="emp-meta">${EMP23.survey} &middot; ${EMP23.company} &middot; ${EMP23.period} `+
       `&middot; ${EMP23.n} responses across both courses</p>`+
     `<div class="emp-panel emp-three">`+
       `<div class="emp-col"><p class="emp-klbl">Who answered</p>`+
         `<p class="emp-kbig stack">${EMP23.n}<em>${kb.n} at King &amp; Bear, ${ss.n} at Slammer &amp; Squire</em></p>`+
-        `<p class="emp-ksub">Same survey company and same 0\u2013100 scale as 2022, so these two years can be set against each other. Neither compares directly with 2026.</p></div>`+
+        `<p class="emp-ksub">Scored out of 100.</p></div>`+
       card(kb)+card(ss)+
     `</div>`+
     `<div class="emp-call act"><h5>KING &amp; BEAR MOVED, AND MOVED A LONG WAY</h5>`+
@@ -5273,13 +5269,12 @@ function empSummary23(){
       `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organisational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
     `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
     e23Dims()+
-    `<p class="emp-note">The tick on each bar is that course's own 2022 score, so the filled bar shows the move since last year. Bars in red fell. Troon company averages for 2023 were not part of this export, so there is no company comparison on this screen \u2014 the 2022 screen has one.</p>`+
     `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
     `<div class="emp-two">`+
       EMP23.courses.map(c=>`<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
         EMP23.depts[c.id].map(e23DeptCard).join("")+`</div>`).join("")+
     `</div>`+
-    `<p class="emp-note">Departments are listed largest first. The 2023 export gives flagged questions, gains and highest scores per department rather than per course, so this section is arranged by department \u2014 the 2022 screen arranges the same material by course. Each course's overall figure comes from the consolidated satisfaction sheet, which carries the exact figure the department reports print only as a chart. Written comments were collected but are not shown here: they name individual managers and there is no set for King &amp; Bear maintenance, so the coverage is uneven.</p>`;
+    `<p class="emp-note">Departments are listed largest first.</p>`;
 }
 
 /* ------------------------------------------------- 2019 survey (UniFocus) */
@@ -5308,7 +5303,7 @@ function e19Dims(){
 }
 function e19DeptCard(dp){
   const subs=dp.subs.map(([n,r,c])=> r===null
-    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered \u2014 held back by the survey company to protect anonymity</em></div>`
+    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered</em></div>`
     : `<div class="e23-sub"><span>${esc(n)}</span><b>${r.toFixed(1)}</b><em>${c} answered</em></div>`).join("");
   const list=(rows,cls)=>rows.map(r=>
     `<div class="e22-q"><span>${esc(r[0])}</span><b class="${cls}">${r[1].toFixed(1)}</b></div>`).join("");
@@ -5353,18 +5348,13 @@ function empSummary19(){
     `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
     e19Dims()+
     `<p class="emp-note">The tick on each bar is the average of the two courses for that dimension, so the filled bar shows `+
-    `which course sat above it and which below. Bars in red are below. Troon company averages for 2019 are printed per `+
-    `department rather than per dimension in this export, so there is no company tick here \u2014 the department cards carry one, `+
-    `and the 2022 screen has a company tick per dimension.</p>`+
+    `which course sat above it and which below. Bars in red are below.</p>`+
     `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
     `<div class="emp-two">`+
       EMP19.courses.map(c=>`<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
         EMP19.depts[c.id].map(e19DeptCard).join("")+`</div>`).join("")+
     `</div>`+
-    `<p class="emp-note">Departments are listed largest first. Sub-teams with fewer than three answers were held back by the `+
-    `survey company to protect anonymity and are shown without a score. Written comments were collected at both courses but `+
-    `are not shown here: they name individual managers by first name and job title, and no set exists for maintenance at `+
-    `either course, so the coverage is uneven.</p>`;
+    `<p class="emp-note">Departments are listed largest first.</p>`;
 }
 
 /* One card per team, for handing to that team's leader. */
