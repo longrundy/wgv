@@ -370,6 +370,109 @@ a{color:inherit}
   .cw-cmp{grid-template-columns:minmax(0,1fr) 100px}
   .cw-cmp span:nth-child(2){display:none}
 }
+/* ---- Org Chart ----
+   Top-down. Connectors are drawn as SVG from the measured position of each
+   card, not with pseudo-elements at fixed offsets, so nothing drifts when
+   spacing, fonts or the pane width change. */
+.oc-canvas{position:relative}
+.oc-links{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:0}
+.oc-links path{fill:none;stroke:#ccd6e3;stroke-width:2;stroke-linecap:round;
+ transition:stroke .22s}
+.oc-links path.is-live{stroke:#3a5f95}
+.oc-node > *{position:relative;z-index:1}
+.oc-node{display:flex;flex-direction:column;align-items:center;position:relative;
+ flex:0 0 auto;padding:0 10px}
+.oc-row{display:flex;justify-content:center;align-items:stretch;padding-top:48px}
+.oc-row.is-first{padding-top:10px}
+.oc-top{display:flex;justify-content:center}
+/* initials medallion, centred by line-height so the letters cannot drift out */
+.oc-av{display:block;flex:none;border-radius:50%;text-align:center;font-weight:700;
+ background:#eef2f8;color:#42618f;width:34px;height:34px;line-height:34px;font-size:12px;
+ margin:0 auto 10px;transition:background .2s,color .2s}
+.oc-lon{display:flex;align-items:center;gap:16px;padding:17px 30px 17px 20px;
+ border-radius:18px;background:linear-gradient(135deg,#1d3c6b,#122a4c);
+ box-shadow:0 18px 40px -22px rgba(18,42,76,.85), 0 2px 6px -2px rgba(18,42,76,.35)}
+.oc-lon .oc-av{width:50px;height:50px;line-height:50px;font-size:16px;margin:0;
+ background:rgba(255,255,255,.14);color:#fff;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.oc-lon b{display:block;font-size:16.5px;font-weight:700;color:#fff;letter-spacing:.015em;
+ line-height:1.25}
+.oc-lon .oc-lr{display:block;font-size:10.5px;color:#9fb4d2;margin-top:4px;
+ letter-spacing:.14em;text-transform:uppercase}
+/* one width and one minimum height per tier, so every card in a row lines up */
+.oc-card{width:196px;min-height:170px;display:flex;flex-direction:column;
+ border:1px solid #e6eaf0;border-radius:15px;background:#fff;
+ padding:16px 14px 14px;text-align:center;
+ box-shadow:0 1px 2px rgba(23,50,90,.04), 0 10px 26px -20px rgba(23,50,90,.5);
+ transition:transform .2s cubic-bezier(.2,.8,.25,1), box-shadow .2s, border-color .2s}
+.oc-card b{display:block;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.oc-card i{display:block;font-style:normal;font-size:11.5px;color:#5f6b7d;margin-top:3px;
+ line-height:1.4}
+.oc-foot-sp{margin-top:auto}
+button.oc-card:hover{transform:translateY(-3px);border-color:#c1cfe1;
+ box-shadow:0 1px 2px rgba(23,50,90,.05), 0 18px 34px -22px rgba(23,50,90,.62)}
+button.oc-card:hover .oc-av{background:#e2eaf5}
+button.oc-card[aria-expanded="true"]{border-color:var(--navy);
+ box-shadow:0 1px 2px rgba(23,50,90,.06), 0 16px 32px -20px rgba(23,50,90,.7)}
+button.oc-card[aria-expanded="true"] .oc-av{background:var(--navy);color:#fff}
+.oc-pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ margin-top:12px;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:#4a648f;
+ background:#eef2f8;border-radius:999px;padding:5px 12px;transition:background .2s,color .2s}
+.oc-cv{font-style:normal;font-size:8px;line-height:1;transition:transform .24s ease}
+button.oc-card:hover .oc-pill{background:#dfe8f4}
+button.oc-card[aria-expanded="true"] .oc-pill{background:var(--navy);color:#fff}
+button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
+.oc-drawer{display:grid;grid-template-rows:0fr;
+ transition:grid-template-rows .34s cubic-bezier(.2,.8,.25,1)}
+.oc-drawer.is-open{grid-template-rows:1fr}
+.oc-drawer > div{overflow:hidden}
+.oc-panel{margin-top:18px;background:#f7f9fc;border:1px solid #e6eaf0;
+ border-radius:20px;padding:4px 22px 30px;position:relative}
+.oc-notch{position:absolute;top:-8px;width:15px;height:15px;background:#f7f9fc;
+ border-left:1px solid #e6eaf0;border-top:1px solid #e6eaf0;
+ border-radius:4px 0 0 0;transform:translateX(-50%) rotate(45deg);
+ transition:left .34s cubic-bezier(.2,.8,.25,1)}
+.oc-ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:18px 2px 0}
+.oc-ph b{font-size:14px;font-weight:700;color:var(--ink)}
+.oc-ph i{font-style:normal;font-size:12.5px;color:#5f6b7d}
+.oc-ph em{font-style:normal;font-size:11.5px;color:var(--muted);margin-left:auto}
+.oc-sm{width:176px;min-height:132px;display:flex;flex-direction:column;
+ border:1px solid #e6eaf0;border-radius:13px;background:#fff;
+ padding:13px 12px 12px;text-align:center;
+ box-shadow:0 1px 2px rgba(23,50,90,.04), 0 8px 20px -18px rgba(23,50,90,.5)}
+.oc-sm .oc-av{width:30px;height:30px;line-height:30px;font-size:11px;margin:0 auto 9px}
+.oc-sm b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.oc-sm i{display:block;font-style:normal;font-size:11px;color:#6b7686;margin-top:2px;
+ line-height:1.4}
+.oc-tag{display:inline-block;margin:12px auto 0;font-size:9px;font-weight:700;
+ letter-spacing:.08em;padding:3px 8px;border-radius:5px;background:#eef2f8;color:#476190}
+.oc-foot{font-size:12.5px;color:var(--muted);line-height:1.6;margin:30px 0 0;
+ padding-top:15px;border-top:1px solid var(--line-soft)}
+.oc-foot b{color:var(--ink)}
+/* a five-card bus cannot survive a phone, so the chart becomes a left-spine
+   list and the drawn connectors step aside for a simple rule */
+@media (max-width:980px){
+  .oc-links{display:none}
+  .oc-row{flex-direction:column;align-items:stretch;padding:14px 0 0 22px;
+    margin-left:20px;border-left:2px solid #ccd6e3}
+  .oc-row.is-first{margin-left:0;padding-left:0;border-left:0}
+  .oc-node{align-items:stretch;padding:5px 0;width:100%}
+  .oc-node > *{position:static}
+  .oc-card,.oc-sm{width:100%;min-height:76px;flex-direction:row;align-items:center;
+    text-align:left;gap:13px;flex-wrap:nowrap;padding:13px 15px}
+  .oc-card .oc-av,.oc-sm .oc-av{margin:0}
+  .oc-nm{flex:1 1 auto;min-width:0}
+  .oc-pill,.oc-tag{flex:0 0 auto;margin:0 0 0 auto}
+  .oc-tag{margin-top:0}
+  .oc-foot-sp{display:none}
+  .oc-notch{display:none}
+  .oc-panel{padding:4px 14px 22px}
+  .oc-lon{width:100%;border-radius:15px}
+}
+@media (max-width:420px){
+  .oc-card,.oc-sm{flex-wrap:wrap;min-height:76px}
+  .oc-tag{margin:2px 0 0 47px}
+}
 /* ---- Pro Forma ---- */
 .pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
   background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
@@ -1969,6 +2072,7 @@ document.getElementById("pw").addEventListener("keydown",function(e){ if(e.key==
 const GROUPS = [
   {label:"", items:[
     {id:"feedback",   label:"Feedback",                dot:"#c8161d"},
+    {id:"orgchart",   label:"Org Chart",               dot:"#c8161d"},
     {id:"weather",    label:"Weather",                 dot:"#c8161d"},
     {id:"financials", label:"Financials",              dot:"#c8161d"},
     {id:"membership", label:"Membership",              dot:"#c8161d"},
@@ -1989,6 +2093,7 @@ const GROUPS = [
    panel rather than an empty screen or invented content. */
 const PAGES = {
   feedback:   () => surveysItem(),
+  orgchart:   () => orgItem(),
   weather:    () => histWeatherItem(),
   financials: () => financialsItem(),
   membership: () => membershipsItem(),
@@ -2368,6 +2473,161 @@ function detailCarts(i){
   el("#detail").querySelectorAll("[data-cwfm]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.cwFm=+b.dataset.cwfm; })));
 }
+
+/* =====================================================
+   ORG CHART
+
+   One array drives the whole chart; adding a person is a single line.
+   Top-down: the COO alone, then the five departments across, and each
+   department's team in a drawer beneath the row.
+   ===================================================== */
+const ORG = {
+  name:"Lon Grundy", role:"Chief Operating Officer",
+  team:[
+    { name:"Reagan Davis", role:"Club Director", team:[
+        { name:"Matt Hipps", role:"Head Golf Professional", team:[
+            { name:"Burke Villenauve", role:"1st Asst Golf Professional" },
+            { name:"Jordyn Hodson", role:"Merchandiser / Asst Golf Pro" },
+            { name:"Michael Hodgins", role:"Golf Sales" }
+        ]},
+        { name:"Nate Loch\u00e8", role:"Membership Sales" },
+        { name:"Brian Murphy", role:"Facility Maintenance" }
+    ]},
+    { name:"Lori Cramer", role:"Accounting / HR" },
+    { name:"Taylor Fuller", role:"Marketing Manager" },
+    { name:"Rick Waters", role:"Director of F&B", team:[
+        { name:"Tiago Joaquim", role:"Executive Chef" },
+        { name:"Mellinda Smith", role:"F&B Manager" },
+        { name:"Kristin Brickley", role:"Catering Sales" }
+    ]},
+    { name:"Pace Anderson", role:"Director of Agronomy", team:[
+        { name:"Ken McLaughlin", role:"Superintendent", tag:"KING & BEAR", team:[
+            { name:"Robert Beladi", role:"Asst. Superintendent" }
+        ]},
+        { name:"Mitch Wessel", role:"Superintendent", tag:"SLAMMER & SQUIRE", team:[
+            { name:"Jeffrey Dow", role:"Asst. Superintendent" }
+        ]},
+        { name:"Brad Purves", role:"Head Mechanic" }
+    ]}
+  ]
+};
+
+function orgItem(){ return {t:"Org Chart", m:"", s:"", c:"f-flat", a:"", org:true}; }
+
+const ocInits = n => n.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+const ocKids  = p => p.team || [];
+const ocUnder = p => ocKids(p).reduce((n,c)=> n + 1 + ocUnder(c), 0);
+
+function ocSmall(p){
+  const ch = ocKids(p);
+  return `<div class="oc-node"><div class="oc-sm">`+
+      `<span class="oc-av">${ocInits(p.name)}</span>`+
+      `<span class="oc-nm"><b>${esc(p.name)}</b><i>${esc(p.role)}</i></span>`+
+      (p.tag ? `<span class="oc-tag">${esc(p.tag)}</span>` : "")+
+    `</div>`+
+    (ch.length ? `<div class="oc-row">${ch.map(ocSmall).join("")}</div>` : "")+
+  `</div>`;
+}
+
+function ocDept(d, i){
+  const body = `<span class="oc-av">${ocInits(d.name)}</span>`+
+    `<span class="oc-nm"><b>${esc(d.name)}</b><i>${esc(d.role)}</i></span>`;
+  if(!ocKids(d).length){
+    return `<div class="oc-node"><div class="oc-card">${body}</div></div>`;
+  }
+  return `<div class="oc-node">`+
+    `<button type="button" class="oc-card" data-oc="${i}" `+
+    `aria-expanded="${state.ocOpen===i}" aria-controls="ocDrawer">${body}`+
+    `<span class="oc-foot-sp"></span>`+
+    `<span class="oc-pill">${ocUnder(d)} on the team<i class="oc-cv">\u25be</i></span>`+
+    `</button></div>`;
+}
+
+/* One rounded elbow per report: down out of the parent, across at the
+   midpoint, down into the child. Straight down when already aligned. */
+function ocPath(px, py, cx, cy){
+  const midY = py + (cy - py) / 2;
+  if(Math.abs(cx - px) < 1) return `M${px},${py} L${cx},${cy}`;
+  const dir = cx > px ? 1 : -1;
+  const r = Math.max(0, Math.min(13, Math.abs(cx - px)/2, midY - py, cy - midY));
+  return `M${px},${py} L${px},${midY - r} Q${px},${midY} ${px + dir*r},${midY} `+
+         `L${cx - dir*r},${midY} Q${cx},${midY} ${cx},${midY + r} L${cx},${cy}`;
+}
+function ocDrawLinks(canvas){
+  const svg = canvas.querySelector(":scope > .oc-links");
+  if(!svg) return;
+  const rb = canvas.getBoundingClientRect();
+  if(!rb.width || !rb.height){ svg.innerHTML = ""; return; }
+  svg.setAttribute("width", rb.width);
+  svg.setAttribute("height", rb.height);
+  let out = "";
+  canvas.querySelectorAll(".oc-node").forEach(node=>{
+    const row = node.querySelector(":scope > .oc-row");
+    const card = node.firstElementChild;
+    if(!row || !card || card === row) return;
+    const pr = card.getBoundingClientRect();
+    const px = pr.left - rb.left + pr.width/2, py = pr.bottom - rb.top;
+    row.querySelectorAll(":scope > .oc-node").forEach(ch=>{
+      const cc = ch.firstElementChild;
+      if(!cc) return;
+      const cr = cc.getBoundingClientRect();
+      const cx = cr.left - rb.left + cr.width/2, cy = cr.top - rb.top;
+      const live = cc.getAttribute && cc.getAttribute("aria-expanded")==="true";
+      out += `<path d="${ocPath(px,py,cx,cy)}"${live?' class="is-live"':""}></path>`;
+    });
+  });
+  svg.innerHTML = out;
+}
+function ocDrawAll(){ document.querySelectorAll(".oc-canvas").forEach(ocDrawLinks); }
+
+let ocRO;
+function detailOrg(i){
+  const open = state.ocOpen;
+  let drawer = `<div><div></div></div>`;
+  if(open!=null && ORG.team[open]){
+    const d = ORG.team[open];
+    const left = ((open + 0.5) / ORG.team.length * 100).toFixed(2);
+    drawer = `<div><div class="oc-panel">`+
+      `<span class="oc-notch" style="left:${left}%"></span>`+
+      `<div class="oc-ph"><b>${esc(d.name)}</b><i>${esc(d.role)}</i>`+
+        `<em>${ocUnder(d)} people</em></div>`+
+      `<div class="oc-canvas"><svg class="oc-links" aria-hidden="true"></svg>`+
+        `<div class="oc-row is-first">${ocKids(d).map(ocSmall).join("")}</div>`+
+      `</div></div></div>`;
+  }
+  el("#detail").innerHTML =
+    `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
+    `<div class="detail-body is-wide">`+
+      `<div class="oc-top"><div class="oc-canvas">`+
+        `<svg class="oc-links" aria-hidden="true"></svg>`+
+        `<div class="oc-node"><div class="oc-lon">`+
+          `<span class="oc-av">${ocInits(ORG.name)}</span><div>`+
+          `<b>${esc(ORG.name)}</b><span class="oc-lr">${esc(ORG.role)}</span></div></div>`+
+          `<div class="oc-row">${ORG.team.map(ocDept).join("")}</div>`+
+        `</div>`+
+      `</div></div>`+
+      `<div class="oc-drawer${open==null?"":" is-open"}" id="ocDrawer">${drawer}</div>`+
+      `<p class="oc-foot"><b>${1 + ocUnder(ORG)} people.</b> Reagan Davis, Rick Waters and `+
+      `Pace Anderson each run a team &mdash; click a card to open it.</p>`+
+    `</div>`;
+
+  el("#detail").querySelectorAll("[data-oc]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const k = +b.dataset.oc;
+      state.ocOpen = (state.ocOpen === k) ? null : k;
+      detailOrg(i);
+    });
+  });
+  requestAnimationFrame(ocDrawAll);
+  setTimeout(ocDrawAll, 60);
+  setTimeout(ocDrawAll, 400);
+  if(window.ResizeObserver){
+    if(ocRO) ocRO.disconnect();
+    ocRO = new ResizeObserver(()=>ocDrawAll());
+    document.querySelectorAll(".oc-canvas").forEach(c=>ocRO.observe(c));
+  }
+}
+window.addEventListener("resize", ocDrawAll);
 
 function pendingItem(title){
   return {t:title, m:"", s:"", c:"f-flat", a:"", pending:true};
@@ -2819,7 +3079,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev",cwTab:"now",cwSub:"all",cwFm:0};
+const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev",cwTab:"now",cwSub:"all",cwFm:0,ocOpen:null};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -2887,6 +3147,7 @@ function detail(i){
   if(i.pf){ detailPf(i); return; }
   if(i.uso){ detailUsopen(i); return; }
   if(i.carts){ detailCarts(i); return; }
+  if(i.org){ detailOrg(i); return; }
   if(i.pending){ detailPending(i); return; }
   if(i.dgf){ detailDgf(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
