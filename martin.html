@@ -468,6 +468,9 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
   .oc-notch{display:none}
   .oc-panel{padding:4px 14px 22px}
   .oc-lon{width:100%;border-radius:15px}
+  /* only the open department stays on screen, so its team is visible without
+     scrolling past the other four */
+  .oc-node.is-away{display:none}
 }
 @media (max-width:420px){
   .oc-card,.oc-sm{flex-wrap:wrap;min-height:76px}
@@ -2519,6 +2522,8 @@ const ORG = {
 
 function orgItem(){ return {t:"Org Chart", m:"", s:"", c:"f-flat", a:"", org:true}; }
 
+const ocNarrow = () => typeof window.matchMedia==="function" &&
+  window.matchMedia("(max-width:980px)").matches;
 const ocInits = n => n.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
 const ocKids  = p => p.team || [];
 const ocUnder = p => ocKids(p).reduce((n,c)=> n + 1 + ocUnder(c), 0);
@@ -2538,9 +2543,14 @@ function ocDept(d, i){
   const body = `<span class="oc-av">${ocInits(d.name)}</span>`+
     `<span class="oc-nm"><b>${esc(d.name)}</b><i>${esc(d.role)}</i></span>`;
   if(!ocKids(d).length){
-    return `<div class="oc-node"><div class="oc-card">${body}</div></div>`;
+    const flatAway = state.ocOpen!=null ? " is-away" : "";
+    return `<div class="oc-node${flatAway}"><div class="oc-card">${body}</div></div>`;
   }
-  return `<div class="oc-node">`+
+  /* On a phone the drawer opens below five stacked cards, which pushes the
+     team off screen. When one department is open the other four are taken
+     out of the flow (narrow screens only -- see the media query). */
+  const away = state.ocOpen!=null && state.ocOpen!==i ? " is-away" : "";
+  return `<div class="oc-node${away}">`+
     `<button type="button" class="oc-card" data-oc="${i}" `+
     `aria-expanded="${state.ocOpen===i}" aria-controls="ocDrawer">${body}`+
     `<span class="oc-foot-sp"></span>`+
@@ -2621,6 +2631,11 @@ function detailOrg(i){
       const k = +b.dataset.oc;
       state.ocOpen = (state.ocOpen === k) ? null : k;
       detailOrg(i);
+      if(ocNarrow()){
+        const pane = el("#detail");
+        if(pane) pane.scrollTop = 0;
+        try{ window.scrollTo(0,0); }catch(e){}
+      }
     });
   });
   requestAnimationFrame(ocDrawAll);
