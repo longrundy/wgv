@@ -6068,9 +6068,11 @@ const PF_COPY={
   draft:"The source workbook is marked draft, and two other membership models sit beside this one. Only the semi-private model ties out to the Troon pro forma, so only it is shown here."
 };
 
-const PF_SECS=[["plan","The proposal"],["cash","Ten-year cash"],["today","Against today"],
-               ["pl","Profit and loss"],["ass","Assumptions"],["add","Add-ons"]];
-const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"plan";
+/* Profit and loss sits first and is where the page lands: it is the sheet
+   Lon opens to, and the other views read as commentary on it. */
+const PF_SECS=[["pl","Profit and loss"],["plan","The proposal"],["cash","Ten-year cash"],
+               ["today","Against today"],["ass","Assumptions"],["add","Add-ons"]];
+const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"pl";
 
 const pfM=n=>(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
 const pfMm=n=>(n<0?"\u2212":"")+"$"+(Math.abs(n)/1e6).toFixed(2)+"m";
@@ -6162,7 +6164,11 @@ function pfGrid(rows,cls){
       `${v===null?"\u2014":fmt(v)}</span>`).join("")+`</div>`).join("")+`</div>`;
 }
 function pfPL(){
-  const m=v=>"$"+Math.round(v/1000).toLocaleString()+"k";
+  /* These are millions. Showing them as thousands ($9,665k) reads as though the
+     property turns over nine million-ish only if you do the division in your
+     head, and in an owner meeting nobody does. Two decimals keeps the same
+     precision the k figure carried. */
+  const m=v=>"$"+(v/1e6).toFixed(2)+"m";
   const rows=[
     ["Total rounds",PF.rounds,pfN,false],
     ["Members",PF.members,pfN,false],
