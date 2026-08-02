@@ -112,7 +112,6 @@ a{color:inherit}
 .nav-item[aria-current="true"] .nav-count{color:#fff}
 .solo{margin-bottom:6px}
 .mgmt-sep{border-top:1px solid var(--navy-line);margin:12px 0 6px}
-.lock{font-size:12px}
 /* Footer picks up the nav's type and left edge so the rail reads as one column
    instead of a left-aligned menu sitting on a centred block. */
 .rail-foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--navy-line);
@@ -1681,8 +1680,9 @@ const GROUPS = [
     {id:"resources", label:"Resources", dot:"#c8161d"},
     /* mgrOnly: never rendered for a staff sign-in. The prompt in go() stays as a
        second line of defence for anyone who reaches the view another way, but
-       an employee should not see the item at all. */
-    {id:"management", label:"Management", dot:"#c8161d", locked:true, mgrOnly:true}
+       an employee should not see the item at all — which is why it carries no
+       lock icon: the only people who see it are already through the door. */
+    {id:"management", label:"Management", dot:"#c8161d", mgrOnly:true}
   ]}
 ];
 const MGMT = ["management"];
@@ -2131,7 +2131,7 @@ function buildNav(){
     if(g.sep) html+='<div class="mgmt-sep"></div>';
     const gid="g"+gi;
     if(openGroups[gid]===undefined) openGroups[gid]=false;
-    html+=`<div class="grp"><button class="grp-head" data-grp="${gid}" aria-expanded="${openGroups[gid]}"><span class="g-dot"></span><span class="g-label">${g.label}${g.locked?' <span class="lock">&#128274;</span>':""}</span><span class="chev">&#9662;</span></button>
+    html+=`<div class="grp"><button class="grp-head" data-grp="${gid}" aria-expanded="${openGroups[gid]}"><span class="g-dot"></span><span class="g-label">${g.label}</span><span class="chev">&#9662;</span></button>
       <div class="grp-body" data-body="${gid}" ${openGroups[gid]?"":"hidden"}>${g.items.filter(navVisible).map(i=>navItem(i,"")).join("")}</div></div>`;
   });
   el("#navHost").innerHTML=html;
@@ -2150,7 +2150,7 @@ function navItem(i,cls){
   const n=S[i.id]&&S[i.id].tabs?S[i.id].items.length:"";
   return `<button class="nav-item ${cls}" data-view="${i.id}" aria-current="false">
     <span class="dot" style="background:${i.dot}"></span>
-    <span class="nav-label">${i.label}${i.locked?' <span class="lock">&#128274;</span>':""}</span>
+    <span class="nav-label">${i.label}</span>
     <span class="nav-count">${n}</span></button>`;
 }
 
