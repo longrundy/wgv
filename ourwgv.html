@@ -1081,11 +1081,15 @@ button.emp-srow:hover{background:#fafbfd}
 button.yd-r{cursor:pointer}
 button.yd-r:hover{background:#f2f5f9}
 .yd-grp{margin:0}
-.yd-grp.open{border:1px solid #c9d6e6;border-radius:11px;overflow:hidden;
+.yd-grp.open{border:1px solid #e3e8ef;border-radius:11px;overflow:hidden;
  box-shadow:0 2px 6px rgba(23,50,90,.07);margin:7px 0 11px}
-.yd-grp.open > button.yd-r{border-radius:0;background:#eaf1fa;border-bottom:1px solid #c9d6e6;
- box-shadow:inset 3px 0 0 var(--navy)}
-.yd-grp.open > button.yd-r > *:first-child{padding-left:14px}
+/* An expanded department and the grand total are the same object on screen,
+   so they are styled by one rule rather than two that happen to agree. The
+   header takes its wash from .yd-band, the notes card at the top of the page. */
+.yd-grp.open > button.yd-r,.yd-grand.open > .yd-grandhead{border-radius:0;
+ background:linear-gradient(180deg,#fbfcfe,#f1f5fa);border-bottom:0;box-shadow:none}
+.yd-grp.open > button.yd-r > *:first-child,
+.yd-grand.open > .yd-grandhead > *:first-child{padding-left:14px}
 .yd-grp.open .yd-nm{font-size:16px;font-weight:700;color:var(--navy)}
 .yd-grp.open > button.yd-r .yd-u .yd-n{color:#7f8a99}
 .yd-grp.open > button.yd-r .yd-big .yd-n{color:var(--navy)}
@@ -1102,7 +1106,6 @@ button.yd-r:hover{background:#f2f5f9}
 .yd-grp.open > .yd-panel{display:block}
 .yd-pl > *{padding:6px 14px}
 .yd-pl > *:first-child{padding-left:30px}
-.yd-pl + .yd-pl{border-top:1px solid #f2f0ea}
 .yd-nm2{font-size:13.5px;font-weight:500;color:#66665e;display:flex;align-items:baseline;gap:8px}
 .yd-pl .yd-n{font-size:13.5px}
 .yd-pl .yd-big .yd-n{font-size:16.5px}
@@ -1112,13 +1115,6 @@ button.yd-r:hover{background:#f2f5f9}
 .yd-sub{margin:22px 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
  color:#a9a9a1}
 .yd-grand > .yd-grandhead{background:#f8fafc}
-.yd-grand.open{border-color:#e3e8ef}
-.yd-grand.open > .yd-grandhead{background:linear-gradient(180deg,#fbfcfe,#f1f5fa);
- border-bottom:0;box-shadow:none}
-/* Nothing in this card opens, so the row rules were separating lines
-   nobody scans against each other. The outline and the tinted header
-   carry the structure on their own. */
-.yd-grand .yd-pl + .yd-pl{border-top:0}
 .yd-grand.open .yd-nm{color:var(--ink)}
 .yd-grand.open > .yd-grandhead .yd-big .yd-n{color:var(--ink)}
 .yd-m{display:none}
