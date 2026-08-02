@@ -1265,19 +1265,10 @@ button.emp-srow:hover{background:#fafbfd}
 .yd-band-t{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#a9a9a1}
 .yd-band-w{font-size:11.5px;font-weight:600;color:var(--navy);background:#fff;
  border:1px solid #dde5ef;border-radius:999px;padding:1px 9px}
-.yd-band-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.yd-bc h5{margin:0 0 5px;font-size:10.5px;font-weight:700;letter-spacing:.04em;
- display:flex;align-items:center;gap:6px}
-.yd-bc.good h5{color:var(--navy)}
-.yd-bc.work h5{color:var(--red-dark)}
-.yd-bc h5 i{width:5px;height:5px;border-radius:50%;display:inline-block}
-.yd-bc.good h5 i{background:var(--navy)}
-.yd-bc.work h5 i{background:var(--red)}
-.yd-bc ul{margin:0;padding-left:15px}
-.yd-bc li{font-size:12.5px;line-height:1.5;color:#5f5f58;margin-bottom:3px}
-.yd-bc li b{color:var(--ink);font-weight:600}
-.yd-none{margin:0;font-size:12.5px;color:#a9a9a1}
-@media (max-width:820px){ .yd-band-cols{grid-template-columns:1fr;gap:10px} }
+.yd-notes{margin:0;padding-left:15px}
+.yd-notes li{font-size:12.5px;line-height:1.5;color:#5f5f58;margin-bottom:3px}
+.yd-notes li:last-child{margin-bottom:0}
+.yd-notes li b{color:var(--ink);font-weight:600}
 
 .yd-r{display:grid;grid-template-columns:minmax(0,1fr) 152px 176px 152px;align-items:center;
  width:100%;border:0;background:none;font-family:inherit;padding:0;text-align:left;border-radius:8px;
@@ -3437,15 +3428,18 @@ function ydBest(a,p,b,upGood,prevLabel){
 }
 function ydBand(seg,period,prevLabel){
   const S=ydSay(seg,period,prevLabel,state.finOpen||"");
-  const li=a=>a.slice(0,3).map(t=>`<li>${t}</li>`).join("");
+  /* One list, no headings. Each line already says which way it cuts - "up
+     $413,916", "furthest behind, by $58,978" - so sorting them under Working
+     well and Room to improve was labelling what the sentence had already said.
+     The good lines still come first, so the order carries what the headings
+     used to. */
+  const notes=S.good.slice(0,3).concat(S.work.slice(0,3));
   return `<div class="yd-band"><div class="yd-band-top">`+
-    `<span class="yd-band-t">What this says</span><span class="yd-band-w">${S.who}</span></div>`+
-    `<div class="yd-band-cols">`+
-      `<div class="yd-bc good"><h5><i></i>Working well</h5>`+
-        (S.good.length?`<ul>${li(S.good)}</ul>`:`<p class="yd-none">Nothing stands out here.</p>`)+`</div>`+
-      `<div class="yd-bc work"><h5><i></i>Room to improve</h5>`+
-        (S.work.length?`<ul>${li(S.work)}</ul>`:`<p class="yd-none">No concerns here.</p>`)+`</div>`+
-    `</div></div>`;
+    `<span class="yd-band-t">Notes</span><span class="yd-band-w">${S.who}</span></div>`+
+    (notes.length
+      ?`<ul class="yd-notes">${notes.map(t=>`<li>${t}</li>`).join("")}</ul>`
+      :`<p class="yd-none">Nothing stands out.</p>`)+
+    `</div>`;
 }
 
 function detailYearReport(i,seg,period,prevLabel,periodLabel){
