@@ -812,6 +812,20 @@ button.emp-srow:hover{background:#fafbfd}
 .e22-goals li{font-size:12.5px;color:#3d3d3a;line-height:1.5;margin-bottom:4px}
 .e22-goalnote{font-size:11.5px;color:var(--red-dark);margin:6px 0 0}
 .e22-goalnote b{font-weight:700}
+/* department cards on the 2023 screen */
+.e23-card{border:1px solid #e5e2da;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.e23-head{display:flex;align-items:baseline;gap:10px;margin-bottom:3px}
+.e23-name{font-size:15px;font-weight:700;color:var(--ink);flex:1 1 auto;min-width:0}
+.e23-o{font-size:22px;font-weight:700;color:var(--ink)}
+.e23-o.low{color:var(--red-dark)}
+.e23-meta{font-size:11.5px;color:#8a8a84;margin:0 0 10px}
+.e23-meta b{color:var(--amber);font-weight:700}
+.e23-sub{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:#3d3d3a;
+  padding:6px 0;border-bottom:1px solid #f7f6f2}
+.e23-sub span{flex:1 1 auto;min-width:0}
+.e23-sub b{font-weight:700;color:var(--ink)}
+.e23-sub em{font-style:normal;font-size:11px;color:#b4b2a9;flex:0 0 auto}
+
 
 .emp-trow{display:grid;grid-template-columns:minmax(0,1fr) 34px 34px;gap:0 10px;align-items:center;
   padding:6px 0;border-bottom:1px solid #f7f6f2;font-size:11.5px;color:#3d3d3a}
@@ -4523,12 +4537,122 @@ const EMP22={
   thinDept:3
 };
 
+/* ================= 2023 EMPLOYEE SURVEY =================
+   April 2023 STAR Staff Survey, UniFocus again — same instrument and scale
+   as 2022, so the two years CAN be compared with each other. Neither can be
+   compared with 2026, which is a different company on a 0-10 scale.
+
+   Source files: the six April 2023 department reports (Department Summary,
+   Department/Dimension Report, Demographic Summary Report) for golf course
+   maintenance, golf operations and food & beverage at each course.
+
+   Two limits worth knowing, both stated on screen:
+   - The property Overall is read off the department report charts, which
+     print it only to the nearest whole number. The exact figure lives in the
+     Dimension Summary Report, which was not part of this export.
+   - Troon company averages per dimension are not in these files, so the 2023
+     bars carry no company tick. The change since 2022 is shown instead.
+   ========================================================= */
+const EMP23={
+  survey:"STAR Staff Survey", company:"UniFocus", period:"April 2023",
+  n:47, scale:100, overallRounded:true,
+  courses:[
+    {id:"kb", name:"King & Bear",      n:22, o:79, prev:72.9},
+    {id:"ss", name:"Slammer & Squire", n:25, o:81, prev:78.5}
+  ],
+  /* dimension, KB 2023, KB 2022, SS 2023, SS 2022 */
+  dims:[
+    ["Loyalty",                  89.0, 84.5, 84.9, 87.5],
+    ["Engagement Index",         84.9, 79.3, 81.8, 80.7],
+    ["Basic Needs",              81.4, 77.1, 83.5, 83.0],
+    ["Organizational Climate",   80.9, 72.8, 80.7, 82.0],
+    ["Troon Guiding Principles", 80.0, 77.5, 84.3, 80.8],
+    ["Management Support",       78.4, 67.2, 78.3, 75.3],
+    ["Growth & Development",     74.1, 67.9, 75.4, 70.1],
+    ["Teamwork",                 71.0, 66.7, 79.0, 73.7],
+    ["Communication",            68.7, 61.5, 74.1, 66.7]
+  ],
+  depts:{
+    kb:[
+      {n:"Golf operations", cnt:12, o:82.3, eng:87.6, thin:false,
+       subs:[["Golf Outside Services",80.4,10],["Golf Shop",null,2]],
+       opps:[["All departments/work groups communicate well with one another.",53.0],
+             ["In the last six months, I have talked with my manager/supervisor about my performance.",58.3],
+             ["In the last 30 days, I have received recognition or praise for good work.",60.6]],
+       gain:[["My manager/supervisor follows through on what he/she says he/she will do.",68.4,87.9],
+             ["My manager/supervisor deals fairly with everyone and shows no favoritism.",72.2,90.3],
+             ["Our facility provides on-the-job training for my position that I can use.",70.2,86.4]],
+       best:[["I am likely to recommend this Property for employment to a friend or colleague.",94.4],
+             ["I am likely to recommend Troon for employment to a friend or colleague.",94.4],
+             ["I feel committed to my continued employment.",94.4]]},
+      {n:"Food & Beverage", cnt:6, o:65.1, eng:75.0, thin:true,
+       subs:[["Front of House",65.1,6]],
+       opps:[["In the last six months, I have talked with my manager/supervisor about my performance.",33.3],
+             ["I am satisfied with the current level of leadership provided by my manager/supervisor.",38.9],
+             ["I believe managers at our facility will act on problems identified by this survey.",38.9]],
+       gain:[["Facility managers are concerned about the needs of associates as well as getting the tasks done.",28.6,69.5],
+             ["Managers at our facility support me when I make decisions to satisfy our guests/members.",31.0,75.0],
+             ["My manager/supervisor deals fairly with everyone and shows no favoritism.",21.4,50.0]],
+       best:[["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",91.7],
+             ["I know what is expected of me and how my performance will be judged.",88.9],
+             ["My co-workers treat me fairly and make me feel part of the team.",88.9]]},
+      {n:"Golf course maintenance", cnt:4, o:92.7, eng:91.7, thin:true,
+       subs:[["Grounds",92.7,4]],
+       opps:[["All departments/work groups communicate well with one another.",72.2],
+             ["Information shared at our facility prepares the associates to give great guest service.",77.8],
+             ["In my department, we discuss ideas and ways to exceed guest/member expectations.",83.3]],
+       gain:[["I am kept informed on how well our facility is performing to meet our goals.",56.7,87.5],
+             ["In the last 30 days, I have received recognition or praise for good work.",63.3,95.8],
+             ["I have been trained in how to satisfy our guests/members.",58.3,87.5]],
+       best:[["I am empowered to do whatever it takes to satisfy guests/members.",100.0],
+             ["I am proud to work for our facility.",100.0],
+             ["Overall, I am very satisfied with my employment at our facility.",100.0]]}
+    ],
+    ss:[
+      {n:"Golf operations", cnt:16, o:82.4, eng:83.3, thin:false,
+       subs:[["Golf Shop",90.7,6],["Golf Outside Services",77.3,10]],
+       opps:[["All departments/work groups communicate well with one another.",66.7],
+             ["In the last six months, I have talked with my manager/supervisor about my performance.",67.9],
+             ["Our facility provides on-the-job training for my position that I can use.",71.4]],
+       gain:[["All departments/work groups communicate well with one another.",54.6,66.7],
+             ["I understand my performance evaluations and what I need to do to improve.",67.8,82.1],
+             ["In my department, we discuss ideas and ways to exceed guest/member expectations.",66.7,77.1]],
+       best:[["I know what is expected of me and how my performance will be judged.",92.2],
+             ["We conduct all of our business dealings with integrity and respect.",92.2],
+             ["I am proud to work for our facility.",90.6]]},
+      {n:"Golf course maintenance", cnt:6, o:85.4, eng:84.3, thin:false,
+       subs:[["Grounds",85.4,6]],
+       opps:[["Associate performance and contributions are appropriately valued and rewarded at our facility.",69.4],
+             ["I believe managers at our facility will act on problems identified by this survey.",69.5],
+             ["Information shared at our facility prepares the associates to give great guest service.",73.3]],
+       gain:[["All departments/work groups communicate well with one another.",51.9,75.0],
+             ["My co-workers are committed to giving exceptional guest/member service.",62.5,90.0],
+             ["In my department, we discuss ideas and ways to exceed guest/member expectations.",66.7,86.7]],
+       best:[["My co-workers treat me fairly and make me feel part of the team.",100.0],
+             ["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",100.0],
+             ["We constantly strive to exceed the expectations of our guests, members, and owners.",100.0]]},
+      {n:"Food & Beverage", cnt:3, o:61.9, eng:68.5, thin:true,
+       subs:[["Front of House",61.9,3]],
+       opps:[["In the last 30 days, I have received recognition or praise for good work.",38.9],
+             ["Managers/supervisors can be counted on to respond to problems quickly.",38.9],
+             ["In the last six months, I have talked with my manager/supervisor about my performance.",38.9]],
+       gain:[["I am kept informed on how well our facility is performing to meet our goals.",16.7,55.6],
+             ["I have the tools/resources I need to do my job.",22.2,66.7],
+             ["Facility managers are concerned about the needs of associates as well as getting the tasks done.",16.7,44.4]],
+       best:[["I understand my performance evaluations and what I need to do to improve.",94.4],
+             ["I know what is expected of me and how my performance will be judged.",88.9],
+             ["I believe our facility deserves my loyalty.",88.9]]}
+    ]
+  },
+  thinDept:6
+};
+
 /* Years we can show, and plain reasons for the ones we cannot. */
 const EMP_YEARS=[
   ["2026", true,  ""],
   ["2025", false, "No survey. Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff were taking a beating all season, and a survey run in that mood would not have told us anything about how we normally run."],
   ["2024", false, "No survey. King & Bear was closed for eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
-  ["2023", false, "A survey was run in April 2023, but only the golf course maintenance department reports have been loaded so far. The property-level reports for each course are still outstanding, so there is nothing here yet."],
+  ["2023", true,  ""],
   ["2022", true,  ""]
 ];
 const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear&&y[1])?state.empYear:"2026";
@@ -4756,6 +4880,74 @@ function empSummary22(){
     e22Lists()+
     `<p class="emp-note">Figures are from the April 2022 UniFocus STAFFScope reports for each course: Executive Summary, Department/Dimension Report and Dimension Summary Report. A separate manager survey was run at Slammer &amp; Squire with five responses; it is not shown here because there is no King &amp; Bear equivalent to set beside it.</p>`;
 }
+/* ------------------------------------------------- 2023 survey (UniFocus) */
+function e23Dims(){
+  const head=`<div class="e22-row e22-head">`+
+    `<span>Dimension</span>`+
+    `<span class="e22-c" style="grid-column:2/5">King &amp; Bear</span>`+
+    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span>`+
+    `<span class="e22-vs">Both, vs 2022</span></div>`;
+  return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
+    EMP23.dims.map(d=>{
+      const [n,kc,kp,sc,sp]=d, mv=((kc+sc)/2)-((kp+sp)/2);
+      const bar=(v,was)=>`<span class="emp-rbar" aria-hidden="true">`+
+        `<i style="width:${e22pct(v).toFixed(1)}%;background:${v<was?"var(--red)":"var(--navy)"}"></i>`+
+        `<b style="left:${e22pct(was).toFixed(1)}%"></b></span>`;
+      return `<div class="e22-row">`+
+        `<span class="e22-n">${esc(n)}</span>`+
+        bar(kc,kp)+`<span class="e22-s${kc<kp?" low":""}">${kc.toFixed(1)}</span>`+e22Delta(kc,kp)+
+        bar(sc,sp)+`<span class="e22-s${sc<sp?" low":""}">${sc.toFixed(1)}</span>`+e22Delta(sc,sp)+
+        `<span class="e22-vs${mv>=0?" ok":""}">${mv>0?"+":""}${mv.toFixed(1)}</span>`+
+      `</div>`;
+    }).join("")+`</div>`;
+}
+function e23DeptCard(dp){
+  const subs=dp.subs.map(([n,r,c])=> r===null
+    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered \u2014 held back by the survey company to protect anonymity</em></div>`
+    : `<div class="e23-sub"><span>${esc(n)}</span><b>${r.toFixed(1)}</b><em>${c} answered</em></div>`).join("");
+  const list=(rows,cls,fmt)=>rows.map(r=>
+    `<div class="e22-q"><span>${esc(r[0])}</span><b class="${cls}">${fmt(r)}</b></div>`).join("");
+  return `<div class="e23-card">`+
+    `<div class="e23-head"><span class="e23-name">${esc(dp.n)}</span>`+
+      `<span class="e23-o${dp.o<70?" low":""}">${dp.o.toFixed(1)}</span></div>`+
+    `<p class="e23-meta">${dp.cnt} answered &middot; engagement ${dp.eng.toFixed(1)}`+
+      (dp.thin?` &middot; <b>too few to read as a firm score</b>`:``)+`</p>`+
+    subs+
+    `<p class="emp-sublbl">Flagged to work on</p>${list(dp.opps,"low",r=>r[1].toFixed(1))}`+
+    `<p class="emp-sublbl">Biggest gains since 2022</p>${list(dp.gain,"good",r=>r[1].toFixed(1)+" \u2192 "+r[2].toFixed(1))}`+
+    `<p class="emp-sublbl">Highest scoring</p>${list(dp.best,"good",r=>r[1].toFixed(1))}`+
+  `</div>`;
+}
+function empSummary23(){
+  const kb=EMP23.courses[0], ss=EMP23.courses[1];
+  const card=c=>`<div class="emp-col"><p class="emp-klbl">${esc(c.name)}</p>`+
+    `<p class="emp-kbig">${c.o}<em>out of 100</em></p>`+
+    `<p class="emp-ksub">${c.n} answered. Up from ${c.prev.toFixed(1)} in 2022`+
+    (c.o-c.prev>=5?", a jump of about "+Math.round(c.o-c.prev)+" points":"")+
+    `. Shown to the nearest whole number \u2014 see the note below.</p></div>`;
+  return `<p class="emp-meta">${EMP23.survey} &middot; ${EMP23.company} &middot; ${EMP23.period} `+
+      `&middot; ${EMP23.n} responses across both courses</p>`+
+    `<div class="emp-panel emp-three">`+
+      `<div class="emp-col"><p class="emp-klbl">Who answered</p>`+
+        `<p class="emp-kbig stack">${EMP23.n}<em>${kb.n} at King &amp; Bear, ${ss.n} at Slammer &amp; Squire</em></p>`+
+        `<p class="emp-ksub">Same survey company and same 0\u2013100 scale as 2022, so these two years can be set against each other. Neither compares directly with 2026.</p></div>`+
+      card(kb)+card(ss)+
+    `</div>`+
+    `<div class="emp-call act"><h5>KING &amp; BEAR MOVED, AND MOVED A LONG WAY</h5>`+
+      `<p>Every one of the nine dimensions rose at King &amp; Bear. Management support went from 67.2 to 78.4 and organisational climate from 72.8 to 80.9. After a 2022 in which not one goal was met, this is the year something changed.</p></div>`+
+    `<div class="emp-call warn"><h5>SLAMMER &amp; SQUIRE SLIPPED ON LOYALTY</h5>`+
+      `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organisational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
+    `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
+    e23Dims()+
+    `<p class="emp-note">The tick on each bar is that course's own 2022 score, so the filled bar shows the move since last year. Bars in red fell. Troon company averages for 2023 were not part of this export, so there is no company comparison on this screen \u2014 the 2022 screen has one.</p>`+
+    `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
+    `<div class="emp-two">`+
+      EMP23.courses.map(c=>`<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+        EMP23.depts[c.id].map(e23DeptCard).join("")+`</div>`).join("")+
+    `</div>`+
+    `<p class="emp-note">Departments are listed largest first. The 2023 export gives flagged questions, gains and highest scores per department rather than per course, so this section is arranged by department \u2014 the 2022 screen arranges the same material by course. Each course's overall figure is read from the department report charts, which print it only to the nearest whole number; the exact figure is in the Dimension Summary Report, which was not part of this export. Written comments were collected but are not shown here: they name individual managers and there is no set for King &amp; Bear maintenance, so the coverage is uneven.</p>`;
+}
+
 /* One card per team, for handing to that team's leader. */
 function empLeaderCard(dp){
   const thin=empThin(dp), lo=empLowest(dp), [word]=empRecWord(dp.e);
@@ -4876,11 +5068,12 @@ function detailEmployee(i){
   const gapNote=`<p class="emp-gapnote">`+
     skipped.map(([y,,why])=>`<b>${y}</b> ${esc(why)}`).join("<br>")+`</p>`;
 
-  if(yr==="2022"){
+  if(yr==="2022"||yr==="2023"){
+    const yrBody = yr==="2022" ? empSummary22() : empSummary23();
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
       `<div class="detail-body is-wide">`+yrPills+gapNote+
-        `<div class="emp-wide">${empSummary22()}</div>`+
+        `<div class="emp-wide">${yrBody}</div>`+
       `</div>`;
     svAudWire(i);
     el("#detail").querySelectorAll("[data-empyr]").forEach(b=>b.addEventListener("click",()=>{
