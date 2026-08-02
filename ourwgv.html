@@ -738,7 +738,7 @@ a{color:inherit}
 .emp-slbl{font-size:10.5px;letter-spacing:.08em;color:#8a8a84;font-weight:700;margin:20px 0 7px}
 
 /* team rows: name capped, bar absorbs the slack so nothing drifts apart */
-.emp-srow{display:grid;grid-template-columns:minmax(0,360px) 70px minmax(150px,1fr) 52px 104px;
+.emp-srow{display:grid;grid-template-columns:minmax(0,360px) 70px minmax(150px,1fr) 52px;
   gap:0 18px;align-items:center;width:100%;padding:12px 10px;
   border:0;border-bottom:1px solid #f2f0ea;text-align:left;font-family:inherit;background:none}
 .emp-srow:last-child{border-bottom:0}
@@ -843,6 +843,9 @@ button.emp-srow:hover{background:#fafbfd}
 .e22-vs{text-align:right;font-size:12px;font-weight:600;color:var(--red-dark);white-space:nowrap}
 .e22-vs.ok{color:var(--green)}
 .e22-row.e19-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 58px minmax(110px,1fr) 58px 86px}
+/* 2023 carries no comparison column, so it is one narrower than 2022 and
+   2019, which still use the last slot for "vs Troon" and "K&B vs S&S". */
+.e22-row.e23-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 52px 50px minmax(110px,1fr) 52px 50px}
 
 .e22-drow{display:grid;grid-template-columns:minmax(0,1fr) 64px 52px;gap:0 12px;align-items:center;
   padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:13px;color:#3d3d3a}
@@ -925,7 +928,7 @@ button.emp-srow:hover{background:#fafbfd}
   .e22-row.e19-row{grid-template-columns:minmax(0,1fr) 52px 52px;gap:0 10px}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
-  .emp-srow{grid-template-columns:minmax(0,1fr) 42px 86px;gap:0 10px}
+  .emp-srow{grid-template-columns:minmax(0,1fr) 42px;gap:0 10px}
   .emp-srow .emp-sa,.emp-srow .emp-rbar,.emp-srow .emp-rbar-h{display:none}
   .emp-cgrid{grid-template-columns:1fr}
   .emp-panel{padding:13px 14px}
@@ -4908,7 +4911,7 @@ function empRatingBar(v){
     `<b style="left:${avg.toFixed(1)}%"></b></span>`;
 }
 function empTeamRow(dp,selName){
-  const thin=empThin(dp), lo=empLowest(dp), r=empRecWord(dp.e);
+  const thin=empThin(dp), lo=empLowest(dp);
   const note=thin
     ? `<span class="emp-sn warn">${esc(EMP_COPY.thinNote(dp.cnt+" of "+empHead(dp)))}</span>`
     : `<span class="emp-sn${lo.gap<-EMP_NOISE?" bad":""}">${esc(empPlain(lo.k))} \u2014 ${lo.score.toFixed(1)}`+
@@ -4918,13 +4921,12 @@ function empTeamRow(dp,selName){
     `<span class="emp-sa">${dp.cnt} of ~${empHead(dp)}</span>`+
     empRatingBar(dp.o)+
     `<span class="emp-ss${dp.o<EMP.propOverall?" low":""}">${dp.o.toFixed(1)}</span>`+
-    `<span class="emp-sr ${thin?"":r[1]}">${r[0]}<em>${dp.e>0?"+":""}${dp.e}</em></span>`+
   `</button>`;
 }
 const empTeamHead=()=>`<div class="emp-srow emp-shead">`+
   `<span>TEAM &middot; AND WHAT THEY RATE LOWEST</span><span class="emp-sa">ANSWERED</span>`+
   `<span class="emp-rbar-h">6 &nbsp;&nbsp; vs property &nbsp;&nbsp; 10</span>`+
-  `<span class="emp-ss">RATING</span><span class="emp-sr">RECOMMEND</span></div>`;
+  `<span class="emp-ss">RATING</span></div>`;
 /* Dots need saying out loud; a sentence above the table is not a legend. */
 const empDotLegend=()=>`<div class="emp-dotkey">`+
   `<span><i class="emp-dots d1">\u25cf</i>barely moves overall</span>`+
@@ -5214,22 +5216,20 @@ function empSummaryAll(){
 
 /* ------------------------------------------------- 2023 survey (UniFocus) */
 function e23Dims(){
-  const head=`<div class="e22-row e22-head">`+
+  const head=`<div class="e22-row e23-row e22-head">`+
     `<span>Dimension</span>`+
     `<span class="e22-c" style="grid-column:2/5">King &amp; Bear</span>`+
-    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span>`+
-    `<span class="e22-vs">Both, vs 2022</span></div>`;
+    `<span class="e22-c" style="grid-column:5/8">Slammer &amp; Squire</span></div>`;
   return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
     EMP23.dims.map(d=>{
-      const [n,kc,kp,sc,sp]=d, mv=((kc+sc)/2)-((kp+sp)/2);
+      const [n,kc,kp,sc,sp]=d;
       const bar=(v,was)=>`<span class="emp-rbar" aria-hidden="true">`+
         `<i style="width:${e22pct(v).toFixed(1)}%;background:${v<was?"var(--red)":"var(--navy)"}"></i>`+
         `<b style="left:${e22pct(was).toFixed(1)}%"></b></span>`;
-      return `<div class="e22-row">`+
+      return `<div class="e22-row e23-row">`+
         `<span class="e22-n">${esc(n)}</span>`+
         bar(kc,kp)+`<span class="e22-s${kc<kp?" low":""}">${kc.toFixed(1)}</span>`+e22Delta(kc,kp)+
         bar(sc,sp)+`<span class="e22-s${sc<sp?" low":""}">${sc.toFixed(1)}</span>`+e22Delta(sc,sp)+
-        `<span class="e22-vs${mv>=0?" ok":""}">${mv>0?"+":""}${mv.toFixed(1)}</span>`+
       `</div>`;
     }).join("")+`</div>`;
 }
