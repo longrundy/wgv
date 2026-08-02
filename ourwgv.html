@@ -406,9 +406,9 @@ a{color:inherit}
 .gy-bar button:not([aria-pressed="true"]):hover{background:#e9eef6}
 .gh-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:0 0 16px}
 .gh-tile{border:1px solid #dfe3e9;border-radius:11px;padding:10px 12px;background:#fcfcfd}
-.gh-tile.low{border-color:#f3dcdc;background:#fdf7f7}
+/* Same rule as the member tiles: a score tile states the number, it does not
+   grade it. Red here made ordinary scores look like failures. */
 .gh-tn{font-size:20px;font-weight:700;color:var(--ink);line-height:1.15}
-.gh-tile.low .gh-tn{color:var(--red)}
 .gh-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:2px}
 .gh-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .gh-wrap{min-width:660px}
@@ -450,9 +450,9 @@ a{color:inherit}
 .mg-rate{font-size:12.5px;color:#5f5e5a;line-height:1.5;margin:0 0 12px}
 .mg-rate b{color:var(--ink)}
 .mg-tile{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
-.mg-tile.food{border-color:#f3dcdc;background:#fdf7f7}
+/* Every stat tile reads the same. A tile is not a verdict: 95% food is a fine
+   score even when it is the lowest of the three, so nothing here turns red. */
 .mg-tn{font-size:22px;font-weight:700;color:var(--ink);line-height:1.15}
-.mg-tile.food .mg-tn{color:var(--red)}
 .mg-tv{font-size:11.5px;color:#7c8593}
 .mg-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:3px}
 .mg-say{font-size:13.5px;color:#3d3d3a;line-height:1.5;margin:0 0 10px}
@@ -488,7 +488,9 @@ a{color:inherit}
 .mg-nosurv{color:#cfcdc5;font-weight:400;background:transparent!important}
 .mg-rhead{padding-bottom:6px;border-bottom:1px solid #e5e2da;font-size:10.5px;
  letter-spacing:.05em;color:#b4b2a9}
-.mg-rhead .mg-ov{color:#5f5e5a;font-weight:700}
+/* OVERALL sits in the same header row as GOLF and FOOD, so it reads at the same
+   size as they do — the badge size below would otherwise crowd the row. */
+.mg-rhead .mg-ov{color:#5f5e5a;font-weight:700;font-size:inherit}
 .mg-item{width:100%;text-align:left;font-family:inherit;border:0;border-bottom:1px solid #f7f6f2;
  background:transparent;cursor:pointer;padding:8px 0}
 .mg-item:hover{background:#fafbfd}
@@ -497,7 +499,7 @@ a{color:inherit}
  text-overflow:ellipsis}
 .mg-num{text-align:right}
 .mg-sub{font-size:12.5px;color:#5f5e5a;font-weight:500}
-.mg-ov{font-size:13.5px;font-weight:700;padding:5px 0;border-radius:6px;text-align:center}
+.mg-ov{font-size:12.5px;font-weight:700;padding:5px 0;border-radius:6px;text-align:center}
 .mg-note{font-size:12.5px;color:var(--muted);line-height:1.55;margin:12px 0 0}
 /* public reviews — two products side by side */
 .pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
@@ -4012,7 +4014,7 @@ function ghSummary(y){
 function detailGuestHist(i){
   const y=gYear(), B=GUEST_HIST.y[y], M=GUEST_HIST.months;
   const tiles=[["Total property",B.tpe.t]].concat(GUEST_HIST.depts.map(d=>[d,B.d[d]]))
-    .map(([l,v])=>`<div class="gh-tile${v!=null&&v<85?" low":""}">`+
+    .map(([l,v])=>`<div class="gh-tile">`+
       `<div class="gh-tn">${v!=null?v.toFixed(1)+"%":"\u2014"}</div>`+
       `<div class="gh-tl">${l.toUpperCase()}</div></div>`).join("");
   const gap=ghGapNote(y,B,M);
@@ -4161,7 +4163,7 @@ function mgOverview(){
       (hasP?`<span class="mg-num mg-play">${r.p!=null?r.p:"\u2014"}`+
         (r.w?`<em title="${r.w} on the wait list">+${r.w}</em>`:"")+`</span>`:"")+
       `<span class="mg-num mg-sub">${r.a!=null?Math.round(r.a)+"%":"\u2014"}</span>`+
-      `<span class="mg-num mg-sub" style="color:${mgTone(r.f)[1]}">${r.f!=null?Math.round(r.f)+"%":"\u2014"}</span>`+
+      `<span class="mg-num mg-sub">${r.f!=null?Math.round(r.f)+"%":"\u2014"}</span>`+
       (r.o!=null
         ? `<span class="mg-num mg-ov" style="background:${bg};color:${fg}">${Math.round(r.o)}%</span>`
         : `<span class="mg-num mg-ov mg-nosurv" title="No survey results">\u2014</span>`)+
@@ -4209,7 +4211,7 @@ function mgEvent(){
   const worst=tp.length?tp[tp.length-1]:null;
   const shown=state.mgCm||14;
   const midLbl=mgIsGolf()?"Golf":"Service";
-  const tiles=[["mg-tile",midLbl,r.a,"%"],["mg-tile food","Food & Beverage",r.f,"%"],
+  const tiles=[["mg-tile",midLbl,r.a,"%"],["mg-tile","Food & Beverage",r.f,"%"],
                ["mg-tile","Overall",r.o,"%"]]
     .concat(r.p!=null?[["mg-tile plain","Participants",r.p,""]]:[])
     .map(([c,l,v,u])=>`<div class="${c}"><div class="mg-tn">${v!=null?v+u:"\u2014"}</div>`+
