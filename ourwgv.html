@@ -1111,12 +1111,16 @@ button.yd-r:hover{background:#f2f5f9}
  border-radius:999px;padding:1px 7px}
 .yd-sub{margin:22px 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
  color:#a9a9a1}
-.yd-grand > button.yd-r{background:#fdfaf8;cursor:default}
+.yd-grand > .yd-grandhead{background:#fdfaf8}
 .yd-grand.open{border-color:#f0e2da}
-.yd-grand.open > button.yd-r{background:#fdf4ef;border-bottom-color:#f0e2da;
+.yd-grand.open > .yd-grandhead{background:#fdf4ef;border-bottom:0;
  box-shadow:inset 3px 0 0 var(--red)}
+/* Nothing in this card opens, so the row rules were separating lines
+   nobody scans against each other. The outline and the tinted header
+   carry the structure on their own. */
+.yd-grand .yd-pl + .yd-pl{border-top:0}
 .yd-grand.open .yd-nm{color:var(--ink)}
-.yd-grand.open > button.yd-r .yd-big .yd-n{color:var(--ink)}
+.yd-grand.open > .yd-grandhead .yd-big .yd-n{color:var(--ink)}
 .yd-m{display:none}
 @media (max-width:860px){
   .yd-r{grid-template-columns:minmax(0,1fr) auto}
@@ -3179,9 +3183,7 @@ const YD = {"2018":{"depts":{"Pro Shop / Outside Serv":[["Revenues",1929141,null
 const YD_DEPTS=["Pro Shop / Outside Serv","Merchandise","Restaurant","Beverage Cart","Food Truck",
   "Golf Course Maintenance","Golf Academy","General Administrative","Membership","Marketing"];
 const YD_COST=/Employee Related|Operating Expenses|^COS|Cost of Sales/;
-const YD_NOTE={"Membership":"split evenly between the courses",
-  "Marketing":"split evenly between the courses",
-  "Merchandise":"revenue and cost of sales only"};
+const YD_NOTE={"Merchandise":"revenue and cost of sales only"};
 
 function ydPick(l,seg){
   const g=(a,b)=>seg==="ss"?a:seg==="kb"?b:((a==null&&b==null)?null:(a||0)+(b||0));
@@ -3397,9 +3399,9 @@ function detailYearReport(i,seg,period,prevLabel,periodLabel){
     const tn=P.totals.find(l=>l[0]==="NOI");
     const TT=tn?ydPick(tn,seg):[null,null,null];
     h+=`<div class="yd-sub">${FIN_SEG[seg]} total</div>`+
-      `<div class="yd-grp yd-grand open"><button type="button" class="yd-r">`+
+      `<div class="yd-grp yd-grand open"><div class="yd-r yd-grandhead">`+
       `<span class="yd-nm">Net operating income</span>`+ydCells(TT[0],TT[1],TT[2],false,true)+
-      `</button><div class="yd-panel">`+
+      `</div><div class="yd-panel">`+
       ydPanelRows(P.totals.filter(l=>l[0]!=="NOI"),seg)+`</div></div>`;
   }
   return h;
@@ -3483,9 +3485,6 @@ function detailFinancials(i){
       sw+(tab==="trend" ? ydTrendCards(seg) : yearRow+
       detailYearReport(i,seg,y,prevLabel,yLabel))+
 
-      `<p class="fin-foot">Figures are year-end actuals from the department profit and loss reports. `+
-      `Membership and Marketing are property-wide and split evenly between the courses, so course-level `+
-      `figures for those two carry an assumption rather than a measurement.</p>`+
     `</div>`;
 
   el("#detail").querySelectorAll("[data-fmode]").forEach(b=>b.addEventListener("click",()=>{
