@@ -270,6 +270,106 @@ a{color:inherit}
   .uso-row{grid-template-columns:minmax(0,1fr) 88px}
   .uso-d{grid-column:1/2;grid-row:2}
 }
+/* ---- Golf Carts ----
+   Three tabs: the current fleet, then one per vendor. Vendor pages carry the
+   same shape so the bids read side by side once E-Z-GO arrives. */
+.cw-kind{display:inline-flex;border:1px solid #dde3ec;border-radius:10px;overflow:hidden;
+ background:#f4f7fb;margin:0 0 18px}
+.cw-kind button{border:0;border-right:1px solid #dde3ec;background:transparent;color:#33507a;
+ font-family:inherit;font-size:13px;font-weight:600;padding:7px 18px;cursor:pointer;line-height:1.3}
+.cw-kind button:last-child{border-right:0}
+.cw-kind button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.cw-kind button:not([aria-pressed="true"]):hover{background:#e9eef6}
+.cw-yrs{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 16px}
+.cw-yrs button{border:1px solid #dde3ec;background:#f4f7fb;color:#33507a;font-family:inherit;
+ font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer}
+.cw-yrs button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.cw-yrs button:not([aria-pressed="true"]):hover{background:#e9eef6}
+.cw-flag{margin:0 0 20px;padding:2px 0 2px 14px;border-left:4px solid var(--red);
+ font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.5}
+.cw-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
+.cw-2 + .cw-2,.cw-2 + .wx-card,.wx-card + .wx-card,.wx-card + .cw-2,
+.cw-band + .wx-card,.cw-band + .cw-2{margin-top:18px}
+/* the rule above stacks blocks; inside a two-column row the cards are siblings
+   but must stay top-aligned, so it is cancelled here. */
+.cw-2 > .wx-card{margin-top:0}
+.cw-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 14px;align-items:baseline;
+ padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.cw-row:last-child{border-bottom:0}
+.cw-n{font-size:13.5px;font-weight:600;color:var(--ink)}
+.cw-sub{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
+.cw-v{text-align:right;font-size:15px;font-weight:700;color:var(--ink);
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+.cw-row.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
+.cw-row.is-tot .cw-v{font-size:19px;color:var(--navy)}
+.cw-neg{color:var(--green)}
+.cw-foot{font-size:11.5px;color:var(--muted);line-height:1.5;margin:10px 0 0}
+.cw-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:9px;margin:0 0 18px}
+.cw-tile{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
+.cw-tn{font-size:22px;font-weight:700;color:var(--ink);line-height:1.15;
+ font-variant-numeric:tabular-nums}
+.cw-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:3px;text-transform:uppercase}
+/* navy band — the current fleet, sitting clear of the cards above it */
+.cw-band{background:var(--navy);border-radius:14px;padding:20px 24px;margin-top:26px}
+.cw-bh{margin:0 0 14px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;
+ color:#8fa6c4;font-weight:700;text-align:center}
+.cw-bcols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px}
+.cw-bcols>div{padding-right:26px;border-right:1px solid rgba(255,255,255,.16)}
+.cw-bcols>div:last-child{border-right:0;padding-right:0}
+.cw-bcols b{display:block;font-size:30px;font-weight:700;color:#fff;line-height:1.05;
+ font-variant-numeric:tabular-nums}
+.cw-band h4{margin:6px 0 3px;font-size:12.5px;font-weight:700;color:#fff;line-height:1.35}
+.cw-band p{margin:0;font-size:12px;color:#b9c8de;line-height:1.55}
+/* comparison table — variance sits under each figure so monthly and annual
+   both carry their own delta against what we pay today */
+.cw-cmp{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 104px 112px;
+ gap:0 12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.cw-cmp:last-child{border-bottom:0}
+.cw-chead{padding-bottom:6px;border-bottom:1px solid var(--line);font-size:10.5px;
+ letter-spacing:.05em;color:#b4b2a9;text-transform:uppercase;align-items:baseline}
+.cw-chead span:nth-child(n+3){text-align:right}
+.cw-cn{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.35}
+.cw-cd{font-size:12.5px;color:#5f5e5a;line-height:1.35;padding-top:1px}
+.cw-cv{text-align:right;font-size:14px;font-weight:700;color:var(--ink);
+ font-variant-numeric:tabular-nums;line-height:1.3}
+.cw-cv i{display:block;font-style:normal;font-size:11.5px;font-weight:600;
+ color:var(--red);margin-top:2px}
+.cw-cmp.is-now{background:#f2f6fb;margin:0 -8px;padding-left:8px;padding-right:8px;
+ border-radius:6px;border-bottom:0}
+.cw-cmp.is-now .cw-cn{font-weight:700}
+.cw-opt{display:grid;grid-template-columns:minmax(0,1fr) 78px 96px 104px;gap:0 12px;
+ align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.cw-opt:last-child{border-bottom:0}
+.cw-ohead{padding-bottom:6px;border-bottom:1px solid var(--line);font-size:10.5px;
+ letter-spacing:.05em;color:#b4b2a9;text-transform:uppercase}
+.cw-ohead span:not(:first-child){text-align:right}
+.cw-on{font-size:13.5px;font-weight:600;color:var(--ink)}
+.cw-od{font-size:12.5px;color:#5f5e5a;text-align:right;font-variant-numeric:tabular-nums}
+.cw-ov{font-size:15px;font-weight:700;color:var(--ink);text-align:right;
+ font-variant-numeric:tabular-nums}
+.cw-opt.is-pick{background:#f2f6fb;margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:6px}
+.cw-anchor{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 16px;
+ padding:10px 14px;background:#f4f7fb;border:1px solid #dde3ec;border-radius:10px}
+.cw-anchor b{font-size:15px;color:var(--navy)}
+.cw-anchor span{font-size:12.5px;color:#5f5e5a}
+.cw-anchor em{font-style:normal;font-size:12.5px;font-weight:700;color:var(--red)}
+.cw-addon{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 16px}
+.cw-addl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+ font-weight:700}
+.cw-empty{border:1px dashed #cfd6e0;border-radius:14px;padding:34px 24px;text-align:center}
+.cw-empty h4{margin:0 0 7px;font-size:15px;font-weight:700;color:var(--ink)}
+.cw-empty p{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+@media (max-width:820px){
+  .cw-2{grid-template-columns:1fr}
+  .cw-bcols{grid-template-columns:1fr;gap:16px 0}
+  .cw-bcols>div{padding-right:0;border-right:0;padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.16)}
+  .cw-bcols>div:last-child{padding-bottom:0;border-bottom:0}
+  .cw-opt{grid-template-columns:minmax(0,1fr) 96px}
+  .cw-opt span:nth-child(2){display:none}
+  .cw-cmp{grid-template-columns:minmax(0,1fr) 100px}
+  .cw-cmp span:nth-child(2){display:none}
+}
 /* ---- Pro Forma ---- */
 .pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
   background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
@@ -1896,7 +1996,7 @@ const PAGES = {
   academy:    () => pendingItem("Golf Academy"),
   balance:    () => pendingItem("Balance Sheet"),
   accounting: () => pendingItem("Accounting"),
-  carts:      () => pendingItem("Golf Carts"),
+  carts:      () => cartsItem(),
   usopen:     () => usopenItem(),
   proforma:   () => ({t:"Pro Forma", m:"", s:"", c:"f-flat", a:"", pf:true})
 };
@@ -1993,6 +2093,280 @@ function detailUsopen(i){
       `<div class="dt-cols">${marks}${worth}</div>`+
       why+rest+
     `</div></div>`;
+}
+
+/* =====================================================
+   GOLF CARTS
+
+   The 148-car fleet comes off a Huntington equipment finance agreement on
+   29 December 2026, with a $495,800 final payment falling due that day. Two
+   vendors are bidding to replace it. Everything hand-keyed below comes off
+   the signed agreement and the vendor proposals; nothing is derived except
+   the per-course baseline, which is noted where it is used.
+
+   CURRENT AGREEMENT — Huntington National Bank, EFA 008-0803101-502
+   Debtor is Blue Sky Capital LLC. 49 payments: one advance of $50,000, then
+   47 at $14,134, then $495,800 on 29 Dec 2026.
+
+   THE PER-COURSE BASELINE: the agreement is one payment covering all 148
+   cars. Both courses run identical 74-car fleets, so it is halved to give
+   each course a figure to compare against. That is an allocation, not a
+   term of the agreement.
+
+   CLUB CAR — proposal dated 31 July 2026, Russ Lord, December 2026 delivery.
+   Two figures on that proposal do not reconcile and are being queried:
+     - King & Bear purchase totals $1,080,400 against 74 cars at $7,300.
+       74 at that price is $540,200; $1,080,400 is exactly 148 cars. The
+       arithmetic figure is used below until Club Car confirms.
+     - Slammer & Squire 24-month lead acid shows $9,603 a month against
+       $128.04 per car. 74 at $128.04 is $9,474.96. Their total is used
+       below since it is the number they quoted.
+   ===================================================== */
+const CART = {
+  now:{ cars:148, monthly:14134, perCar:95.50, financed:998999, rate:"7.216%",
+        charge:211098, total:1210098, allIn:8176, balloon:495800,
+        balloonDate:"December 29, 2026", funded:"December 29, 2022",
+        payments:49, lender:"Huntington National Bank" },
+  sale:{ offer:2500, proceeds:370000, gap:125800, perCar:850,
+         ccValue:2300, ccGap:155400 },
+  cc:{ received:"July 31, 2026", rep:"Russ Lord", delivery:"December 2026 delivery",
+       expires:"Expires August 30",
+       kbLease:[ ["2027 Tempo Lithium-Ion","48 mo",9158.98],
+                 ["2027 Tempo Lithium-Ion","54 mo",8163.68] ],
+       ssLease:[ ["Tempo Lead Acid \u00b7 FMV","24 mo",9603],
+                 ["Tempo Lithium \u00b7 FMV","24 mo",14771.14],
+                 ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72] ],
+       buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,540200],
+             ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,379028],
+             ["Slammer &amp; Squire \u2014 refurbished lithium","74 cars",4950,366300] ],
+       buyPick:906500,
+       fm:[ ["Visage V3 screen","Car control, GPS yardages, tracking",39,2886],
+            ["V4 screen","GPS yardages only",24,1776],
+            ["V4 car control","",13,962],
+            ["V4 tracking","",13,962] ] }
+};
+const CW_FM=[[0,"None"],[39,"Visage V3 \u00b7 $39"],[24,"V4 screen \u00b7 $24"],[50,"V4 full \u00b7 $50"]];
+
+function cartsItem(){
+  return {t:"Golf Carts", m:"", s:"", c:"f-flat", a:"", carts:true};
+}
+
+const cwTab = () => state.cwTab || "now";
+const cwSub = () => state.cwSub || "all";
+function cwMoney(v){ return "$" + Math.round(v).toLocaleString(); }
+
+/* A figure with its variance against today sitting underneath, so monthly
+   and annual each carry their own delta rather than sharing one column. */
+function cwCell(v, base){
+  const d = v - base;
+  return `<span class="cw-cv">${cwMoney(v)}` +
+    (d > 0 ? `<i>+${cwMoney(d)}</i>` : "") + `</span>`;
+}
+function cwRow(name, term, m, base){
+  return `<div class="cw-cmp"><span class="cw-cn">${name}</span>`+
+    `<span class="cw-cd">${term}</span>`+
+    cwCell(m, base) + cwCell(m*12, base*12) + `</div>`;
+}
+function cwNowRow(m, note){
+  return `<div class="cw-cmp is-now"><span class="cw-cn">What we pay now</span>`+
+    `<span class="cw-cd">${note}</span>`+
+    `<span class="cw-cv">${cwMoney(m)}</span>`+
+    `<span class="cw-cv">${cwMoney(m*12)}</span></div>`;
+}
+
+function cwNowPane(){
+  const n=CART.now, s=CART.sale;
+  return `<p class="cw-flag">All ${n.cars} carts come off agreement on ${n.balloonDate} `+
+    `&mdash; and a final payment of ${cwMoney(n.balloon)} falls due that same day.</p>`+
+    `<div class="cw-tiles">`+
+      `<div class="cw-tile"><div class="cw-tn">${n.cars}</div><div class="cw-tl">Carts</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">${cwMoney(n.monthly)}</div>`+
+        `<div class="cw-tl">Per month</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">$${n.perCar.toFixed(2)}</div>`+
+        `<div class="cw-tl">Per cart, per month</div></div>`+
+    `</div>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">The agreement</h3><div>`+
+        `<div class="cw-row"><span class="cw-n">Financed`+
+          `<span class="cw-sub">Funded ${n.funded}</span></span>`+
+          `<span class="cw-v">${cwMoney(n.financed)}</span></div>`+
+        `<div class="cw-row"><span class="cw-n">Interest rate</span>`+
+          `<span class="cw-v">${n.rate}</span></div>`+
+        `<div class="cw-row"><span class="cw-n">Finance charge</span>`+
+          `<span class="cw-v">${cwMoney(n.charge)}</span></div>`+
+        `<div class="cw-row is-tot"><span class="cw-n">Total over the term</span>`+
+          `<span class="cw-v">${cwMoney(n.total)}</span></div>`+
+      `</div><p class="cw-foot">${n.lender}, on ${n.payments} payments. That works out `+
+      `to ${cwMoney(n.allIn)} per cart all in.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">If we sell the fleet</h3><div>`+
+        `<div class="cw-row"><span class="cw-n">Final payment`+
+          `<span class="cw-sub">${n.balloonDate}</span></span>`+
+          `<span class="cw-v">${cwMoney(n.balloon)}</span></div>`+
+        `<div class="cw-row"><span class="cw-n">${n.cars} carts at ${cwMoney(s.offer)}`+
+          `<span class="cw-sub">Offer from a used cart vendor</span></span>`+
+          `<span class="cw-v cw-neg">&minus;${cwMoney(s.proceeds)}</span></div>`+
+        `<div class="cw-row is-tot"><span class="cw-n">Still to fund</span>`+
+          `<span class="cw-v">${cwMoney(s.gap)}</span></div>`+
+      `</div><p class="cw-foot">${cwMoney(s.perCar)} a cart out of pocket. Club Car puts `+
+      `the fleet nearer ${cwMoney(s.ccValue)}, which would leave ${cwMoney(s.ccGap)} `+
+      `&mdash; and they said to take ${cwMoney(s.offer)} if we can get it.</p></div>`+
+    `</div>`+
+    `<div class="cw-band"><h3 class="cw-bh">Current fleet</h3><div class="cw-bcols">`+
+      `<div><b>74</b><h4>King &amp; Bear</h4>`+
+        `<p>2023 Club Car Tempo lithium-ion</p></div>`+
+      `<div><b>74</b><h4>Slammer &amp; Squire</h4>`+
+        `<p>2023 Club Car Tempo lithium-ion</p></div>`+
+    `</div></div>`;
+}
+
+/* Every lease option on one screen, per property, with screens and tracking
+   layered on so the whole picture moves together. */
+function cwAllPane(){
+  const c=CART.cc, n=CART.now, add=state.cwFm||0;
+  const perCourse = add*74, base = n.monthly/2;
+  const head = `<div class="cw-cmp cw-chead"><span>Vehicle</span><span>Term</span>`+
+    `<span>Monthly</span><span>Annual</span></div>`;
+  const table = rows => head + cwNowRow(base,"2023 lithium") +
+    rows.map(r => cwRow(r[0], r[1], r[2]+perCourse, base)).join("");
+  return `<p class="cw-flag">Today we pay <b>${cwMoney(n.monthly)}</b> a month `+
+    `&mdash; <b>${cwMoney(n.monthly*12)}</b> a year &mdash; for ${n.cars} carts. `+
+    `Every Club Car lease package sits above that.</p>`+
+    `<div class="cw-addon"><span class="cw-addl">Add screens &amp; tracking</span>`+
+      `<div class="cw-yrs" style="margin:0" role="group" aria-label="Screens and tracking">`+
+      CW_FM.map(([v,l])=>`<button type="button" data-cwfm="${v}" `+
+        `aria-pressed="${v===add}">${l}</button>`).join("")+`</div></div>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
+        `<div>${table(c.kbLease)}</div></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
+        `<div>${table(c.ssLease)}</div></div>`+
+    `</div>`+
+    `<div class="wx-card"><h3 class="wx-h">Buy &mdash; one-time cost</h3><div>`+
+      `<div class="cw-opt cw-ohead"><span>Fleet</span><span></span><span>Per cart</span>`+
+        `<span>Total</span></div>`+
+      c.buy.map(b=>`<div class="cw-opt"><span class="cw-on">${b[0]}`+
+        `<span class="cw-sub">${b[1]}</span></span><span class="cw-od"></span>`+
+        `<span class="cw-od">${cwMoney(b[2])}</span>`+
+        `<span class="cw-ov">${cwMoney(b[3])}</span></div>`).join("")+
+      `<div class="cw-opt is-pick"><span class="cw-on">Lithium at King &amp; Bear, `+
+        `refurbished at Slammer</span><span class="cw-od"></span><span class="cw-od"></span>`+
+        `<span class="cw-ov">${cwMoney(c.buyPick)}</span></div>`+
+    `</div></div>`;
+}
+
+function cwBuyPane(){
+  const c=CART.cc;
+  return `<p class="cw-flag">Club Car proposes two different fleets &mdash; new lithium at `+
+    `King &amp; Bear, and either lead acid or refurbished lithium at Slammer &amp; Squire.</p>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear</h3><div>`+
+        `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
+          `<span>Per cart</span><span>Total</span></div>`+
+        `<div class="cw-opt is-pick"><span class="cw-on">2027 Tempo Lithium-Ion</span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$7,300</span>`+
+          `<span class="cw-ov">$540,200</span></div>`+
+      `</div><p class="cw-foot">Premium body and seat colour, auto park brake, cooler, `+
+      `sand bucket, hinged windshield, decals and freight all included.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
+        `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
+          `<span>Per cart</span><span>Total</span></div>`+
+        `<div class="cw-opt"><span class="cw-on">2027 Tempo Flooded Lead Acid</span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$5,122</span>`+
+          `<span class="cw-ov">$379,028</span></div>`+
+        `<div class="cw-opt"><span class="cw-on">Refurbished Tempo Lithium</span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$4,950</span>`+
+          `<span class="cw-ov">$366,300</span></div>`+
+      `</div><p class="cw-foot">Standard colours. Refurbished cars are model year 2021 `+
+      `with new seats, wheels, tires, windshield and body panels.</p></div>`+
+    `</div>`;
+}
+
+function cwLeasePane(){
+  const c=CART.cc;
+  const head = `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Term</span>`+
+    `<span>Per cart</span><span>Monthly</span></div>`;
+  const rows = (list,per) => list.map((r,k)=>{
+    const pc = per[k];
+    return `<div class="cw-opt${per===PC_KB?" is-pick":""}">`+
+      `<span class="cw-on">${r[0]}</span><span class="cw-od">${r[1]}</span>`+
+      `<span class="cw-od">$${pc.toFixed(2)}</span>`+
+      `<span class="cw-ov">${cwMoney(r[2])}</span></div>`;
+  }).join("");
+  return `<p class="cw-flag">Terms are not comparable between the two courses &mdash; `+
+    `King &amp; Bear is quoted at 48 and 54 months, Slammer &amp; Squire only at 12 and 24.</p>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
+        `<div>${head}${rows(c.kbLease,PC_KB)}</div>`+
+        `<p class="cw-foot">Both above our $95.50 anchor. The 54-month term closes most `+
+        `of the gap.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
+        `<div>${head}${rows(c.ssLease,PC_SS)}</div>`+
+        `<p class="cw-foot">Twelve-month pricing also quoted, at roughly double these `+
+        `figures. The lead acid monthly does not reconcile &mdash; 74 at $128.04 is `+
+        `$9,475, not $9,603.</p></div>`+
+    `</div>`;
+}
+const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28];
+
+function cwFmPane(){
+  const c=CART.cc;
+  return `<p class="cw-flag">Screens and tracking are priced separately, per car per `+
+    `month, and are not included in any of the vehicle figures.</p>`+
+    `<div class="wx-card"><h3 class="wx-h">Per course &middot; 74 cars</h3><div>`+
+      `<div class="cw-opt cw-ohead"><span>Module</span><span></span><span>Per cart</span>`+
+        `<span>Monthly</span></div>`+
+      c.fm.map(f=>`<div class="cw-opt"><span class="cw-on">${f[0]}`+
+        (f[1]?`<span class="cw-sub">${f[1]}</span>`:"")+`</span>`+
+        `<span class="cw-od"></span><span class="cw-od">$${f[2]}</span>`+
+        `<span class="cw-ov">${cwMoney(f[3])}</span></div>`).join("")+
+    `</div><p class="cw-foot">Across both courses, the V3 package is $5,772 a month `+
+    `&mdash; $69,264 a year on top of the carts.</p></div>`;
+}
+
+function cwCcPane(){
+  const c=CART.cc, sub=cwSub();
+  const subs=[["all","All options"],["buy","Buy"],["lease","Lease"],["fm","Screens &amp; tracking"]];
+  const body = sub==="buy" ? cwBuyPane() : sub==="lease" ? cwLeasePane()
+             : sub==="fm" ? cwFmPane() : cwAllPane();
+  return `<div class="cw-anchor"><b>Club Car</b>`+
+      `<span>Received ${c.received} &middot; ${c.rep} &middot; ${c.delivery}</span>`+
+      `<em>${c.expires}</em></div>`+
+    `<div class="cw-yrs" role="group" aria-label="Structure">`+
+    subs.map(([k,l])=>`<button type="button" data-cwsub="${k}" `+
+      `aria-pressed="${k===sub}">${l}</button>`).join("")+`</div>`+ body;
+}
+
+/* No bid yet. Says so plainly rather than showing filler. */
+function cwEzPane(){
+  return `<div class="cw-empty"><h4>No proposal received yet</h4>`+
+    `<p>E-Z-GO pricing is expected within the next few days. This page will fill in the `+
+    `same shape as Club Car &mdash; buy, lease, and screens &mdash; so the two read side `+
+    `by side.</p></div>`;
+}
+
+function detailCarts(i){
+  const tab=cwTab();
+  const tabs=[["now","Current fleet"],["cc","Club Car"],["ez","E-Z-GO"]];
+  const body = tab==="cc" ? cwCcPane() : tab==="ez" ? cwEzPane() : cwNowPane();
+  el("#detail").innerHTML =
+    `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
+    `<div class="detail-body is-wide">`+
+      `<div class="cw-kind" role="group" aria-label="View">`+
+      tabs.map(([k,l])=>`<button type="button" data-cwtab="${k}" `+
+        `aria-pressed="${k===tab}">${l}</button>`).join("")+`</div>`+
+      body+
+    `</div>`;
+  const hold=fn=>()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    fn(); detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+  };
+  el("#detail").querySelectorAll("[data-cwtab]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.cwTab=b.dataset.cwtab; })));
+  el("#detail").querySelectorAll("[data-cwsub]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.cwSub=b.dataset.cwsub; })));
+  el("#detail").querySelectorAll("[data-cwfm]").forEach(b=>b.addEventListener("click",
+    hold(()=>{ state.cwFm=+b.dataset.cwfm; })));
 }
 
 function pendingItem(title){
@@ -2445,7 +2819,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
+const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev",cwTab:"now",cwSub:"all",cwFm:0};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -2512,6 +2886,7 @@ function detail(i){
   if(i.fin){ detailFinancials(i); return; }
   if(i.pf){ detailPf(i); return; }
   if(i.uso){ detailUsopen(i); return; }
+  if(i.carts){ detailCarts(i); return; }
   if(i.pending){ detailPending(i); return; }
   if(i.dgf){ detailDgf(i); return; }
   if(i.histwx){ detailHistWx(i); return; }
