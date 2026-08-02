@@ -913,6 +913,44 @@ button.emp-srow:hover{background:#fafbfd}
   font-size:12px;font-weight:600;padding:5px 14px;border-radius:999px;cursor:pointer}
 .emp-yrs button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
 .emp-yrs button.off{color:#c2c0b8;background:#fbfaf8;border-style:dashed;cursor:default}
+/* ---- consolidated all-years view ---- */
+.ea-key{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:#5f5e5a;margin:0 0 10px}
+.ea-key span{display:flex;align-items:center;gap:7px}
+.ea-key i.ea-l{width:22px;height:0;border-top:2px solid;display:inline-block}
+.ea-key i.ea-dash{border-top-style:dashed;border-color:#b4b2a9}
+.ea-key b{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ea-key b.ea-open{background:#fff;border:2px solid var(--navy)}
+.ea-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:1px solid #e5e2da;border-radius:12px;overflow:hidden}
+.ea-card{padding:16px 18px;border-right:1px solid #e5e2da;min-width:0}
+.ea-card:last-child{border-right:0}
+.ea-cn{font-size:13px;font-weight:700;color:var(--ink);margin:0 0 4px}
+.ea-cnow{font-size:26px;font-weight:700;color:var(--ink);line-height:1.1;margin:6px 0 0}
+.ea-cnow small{font-size:12px;font-weight:400;color:#8a8a84;margin-left:6px}
+.ea-cdel{font-size:11.5px;font-weight:700;margin:3px 0 0}
+.ea-cdel.up{color:var(--green)} .ea-cdel.dn{color:var(--red-dark)}
+.ea-cmeta{font-size:11px;color:#8a8a84;margin:8px 0 0;line-height:1.5}
+.ea-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.ea-tbl th{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:#b4b2a9;
+  font-weight:700;text-align:right;padding:0 8px 8px;border-bottom:1px solid #e5e2da}
+.ea-tbl th:first-child{text-align:left}
+.ea-tbl th.ns{color:var(--navy)}
+.ea-tbl td{padding:9px 8px;border-bottom:1px solid #f7f6f2;text-align:right;color:#3d3d3a}
+.ea-tbl td:first-child{text-align:left;color:var(--ink)}
+.ea-tbl tr:last-child td{border-bottom:0}
+.ea-tbl td.ea-sub{padding-left:22px;color:#5f5e5a;font-size:12.5px}
+.ea-tbl td.ea-na{color:#c9c7c0}
+.ea-tbl td.ea-hi{font-weight:700;color:var(--green)}
+.ea-tbl td.ea-lo{font-weight:700;color:var(--red-dark)}
+.ea-tbl tr.ea-grp td{font-weight:700;color:var(--ink);background:#fafbfc}
+@media (max-width:980px){
+  .ea-cards{grid-template-columns:1fr}
+  .ea-card{border-right:0;border-bottom:1px solid #e5e2da}
+  .ea-card:last-child{border-bottom:0}
+  .ea-tbl{font-size:11.5px}
+  .ea-tbl td,.ea-tbl th{padding:7px 4px}
+}
+
 .emp-gapnote{font-size:11.5px;color:#6f7885;line-height:1.65;margin:0 0 16px;
   padding-left:11px;border-left:2px solid #e5e2da}
 .emp-gapnote b{color:#4a5568;font-weight:700}
@@ -2250,7 +2288,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"2026",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
+const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev"};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -4604,15 +4642,56 @@ const EMP23={
   thinDept:6
 };
 
-/* Years we can show, and plain reasons for the ones we cannot. */
+/* ================= CONSOLIDATED, ALL YEARS =================
+   From the consolidated employee satisfaction sheet, which carries one figure
+   per course per department per year, 2019 to 2026. This is the only source
+   for 2019 and 2021 — there are no underlying reports loaded for those years.
+
+   SCALES DIFFER. 2019-2023 are UniFocus STAR surveys scored out of 100. 2026
+   is a different survey company scoring out of 10; the sheet multiplies those
+   by ten so they sit on the same axis (8.4 becomes 84.0). The axis lines up,
+   the questions do not — so 2026 is drawn with open markers on a faded line
+   and the note on screen says why.
+
+   The combined figure for each department is the plain average of the two
+   courses; a test asserts that, so it cannot quietly drift.
+   =========================================================== */
+const EMP_ALL={
+  years:[2019,2020,2021,2022,2023,2024,2025,2026],
+  newScale:2026,
+  detailed:["2026","2023","2022"],   // years with reports behind them
+  rows:[
+    {name:"World Golf Village", prop:true,
+      kb:{2019:70.6,2021:77.3,2022:72.9,2023:79.3,2026:85.0},
+      ss:{2019:79.6,2021:79.1,2022:78.5,2023:80.6,2026:83.0}},
+    {name:"Golf course maintenance",
+      kb:{2019:84.5,2021:87.3,2022:80.7,2023:92.7,2026:85.0},
+      ss:{2019:86.3,2021:87.5,2022:83.6,2023:85.4,2026:83.0}},
+    {name:"Golf operations",
+      kb:{2019:59.3,2021:69.2,2022:77.0,2023:82.3,2026:85.5},
+      ss:{2019:71.8,2021:77.1,2022:80.5,2023:82.4,2026:83.5}},
+    {name:"Food and beverage",
+      kb:{2019:67.9,2021:75.5,2022:56.6,2023:65.1,2026:90.5},
+      ss:{2019:80.7,2021:72.7,2022:48.6,2023:61.9,2026:88.5}}
+  ]
+};
+const eaBoth=(r,y)=>(r.kb[y]===undefined||r.ss[y]===undefined)?undefined:(r.kb[y]+r.ss[y])/2;
+const eaRow=n=>EMP_ALL.rows.find(r=>r.name===n);
+
+/* Which years get a pill, and plain reasons for the years that do not. */
 const EMP_YEARS=[
-  ["2026", true,  ""],
-  ["2025", false, "No survey. Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff were taking a beating all season, and a survey run in that mood would not have told us anything about how we normally run."],
-  ["2024", false, "No survey. King & Bear was closed for eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
-  ["2023", true,  ""],
-  ["2022", true,  ""]
+  ["consolidated","Consolidated"],
+  ["2026","2026"],
+  ["2023","2023"],
+  ["2022","2022"]
 ];
-const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear&&y[1])?state.empYear:"2026";
+const EMP_SKIPPED=[
+  ["2025","Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff took a beating all season, and a survey run in that mood would not have told us how we normally run."],
+  ["2024","King & Bear was closed eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
+  ["2020","COVID."]
+];
+const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear)?state.empYear:"consolidated";
+
 
 const EMP_NOISE=0.15;
 /* Course-level flag: soft against its own course AND high-moving. */
@@ -4837,6 +4916,143 @@ function empSummary22(){
     e22Lists()+
     `<p class="emp-note">Figures are from the April 2022 UniFocus STAFFScope reports for each course: Executive Summary, Department/Dimension Report and Dimension Summary Report. A separate manager survey was run at Slammer &amp; Squire with five responses; it is not shown here because there is no King &amp; Bear equivalent to set beside it.</p>`;
 }
+/* ------------------------------------------- consolidated: all years view */
+/* Hand-built SVG: no chart library in this file, and none wanted. */
+function eaChart(row,opt){
+  const o=Object.assign({w:1040,h:300,lo:45,hi:95,ticks:[50,60,70,80,90],
+    pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true},opt||{});
+  const Y7=EMP_ALL.years, iw=o.w-o.pad.l-o.pad.r, ih=o.h-o.pad.t-o.pad.b;
+  const X=y=>o.pad.l+Y7.indexOf(y)*(iw/(Y7.length-1));
+  const V=v=>o.pad.t+ih-((v-o.lo)/(o.hi-o.lo))*ih;
+  const col={kb:"#17325a", ss:"#c8161d"};
+  let s=`<svg viewBox="0 0 ${o.w} ${o.h}" role="img" aria-label="${esc(row.name)}, 2019 to 2026">`;
+
+  o.ticks.forEach(t=>{
+    s+=`<line x1="${o.pad.l}" y1="${V(t)}" x2="${o.w-o.pad.r}" y2="${V(t)}" stroke="#f0eee8"/>`+
+       `<text x="${o.pad.l-9}" y="${V(t)+4}" text-anchor="end" font-size="10.5" fill="#b4b2a9">${t}</text>`;
+  });
+
+  Y7.forEach(y=>{
+    if(row.kb[y]===undefined&&row.ss[y]===undefined){
+      s+=`<rect x="${X(y)-15}" y="${o.pad.t}" width="30" height="${ih}" fill="#faf9f7"/>`;
+      if(o.gapText)
+        s+=`<text x="${X(y)}" y="${o.pad.t+ih/2}" text-anchor="middle" font-size="10" fill="#b4b2a9"
+              transform="rotate(-90 ${X(y)} ${o.pad.t+ih/2})">no survey</text>`;
+    }
+    s+=`<text x="${X(y)}" y="${o.h-o.pad.b+19}" text-anchor="middle" font-size="11"
+          fill="${y===EMP_ALL.newScale?"#17325a":"#8a8a84"}"
+          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${y}</text>`;
+  });
+
+  ["kb","ss"].forEach(k=>{
+    const pts=Y7.filter(y=>row[k][y]!==undefined);
+    for(let i=1;i<pts.length;i++){
+      const a=pts[i-1], b=pts[i];
+      const adjacent=Y7.indexOf(b)-Y7.indexOf(a)===1;
+      const crosses=a<EMP_ALL.newScale&&b>=EMP_ALL.newScale;
+      s+=`<line x1="${X(a)}" y1="${V(row[k][a])}" x2="${X(b)}" y2="${V(row[k][b])}" `+
+         `stroke="${col[k]}" stroke-width="2.4" stroke-linecap="round" `+
+         `opacity="${crosses?0.5:1}" ${adjacent&&!crosses?"":'stroke-dasharray="5 5"'}/>`;
+    }
+    pts.forEach(y=>{
+      const v=row[k][y], ns=y>=EMP_ALL.newScale;
+      s+=`<circle cx="${X(y)}" cy="${V(v)}" r="${ns?5.5:5}" fill="${ns?"#fff":col[k]}" `+
+         `stroke="${col[k]}" stroke-width="${ns?2.5:0}"/>`;
+      if(o.labels)
+        s+=`<text x="${X(y)}" y="${V(v)-12}" text-anchor="middle" font-size="11" `+
+           `font-weight="700" fill="${col[k]}">${v.toFixed(1)}</text>`;
+    });
+  });
+  return s+`</svg>`;
+}
+
+function eaKey(){
+  return `<div class="ea-key">`+
+    `<span><i class="ea-l" style="border-color:#17325a"></i><b style="background:#17325a"></b>King &amp; Bear</span>`+
+    `<span><i class="ea-l" style="border-color:#c8161d"></i><b style="background:#c8161d"></b>Slammer &amp; Squire</span>`+
+    `<span><i class="ea-l ea-dash"></i>spans a year with no survey</span>`+
+    `<span><b class="ea-open"></b>different survey \u2014 see the note</span>`+
+  `</div>`;
+}
+
+function eaTable(){
+  const Y7=EMP_ALL.years;
+  let s=`<table class="ea-tbl"><thead><tr><th>Department</th>`+
+    Y7.map(y=>`<th${y===EMP_ALL.newScale?' class="ns"':''}>${y}</th>`).join("")+
+    `</tr></thead><tbody>`;
+  EMP_ALL.rows.forEach(r=>{
+    s+=`<tr class="ea-grp"><td>${esc(r.name)}</td>`+
+      Y7.map(y=>{const v=eaBoth(r,y);return `<td>${v===undefined?"&mdash;":v.toFixed(1)}</td>`;}).join("")+`</tr>`;
+    [["kb","King & Bear"],["ss","Slammer & Squire"]].forEach(([k,label])=>{
+      const vals=Y7.map(y=>r[k][y]).filter(v=>v!==undefined);
+      const hi=Math.max(...vals), lo=Math.min(...vals);
+      s+=`<tr><td class="ea-sub">${label}</td>`+Y7.map(y=>{
+        const v=r[k][y];
+        return v===undefined?`<td class="ea-na">&mdash;</td>`
+          :`<td class="${v===hi?"ea-hi":v===lo?"ea-lo":""}">${v.toFixed(1)}</td>`;
+      }).join("")+`</tr>`;
+    });
+  });
+  return s+`</tbody></table>`;
+}
+
+function empSummaryAll(){
+  const Y7=EMP_ALL.years, prop=EMP_ALL.rows.find(r=>r.prop);
+  const measured=Y7.filter(y=>prop.kb[y]!==undefined).length;
+  const first=Y7.find(y=>prop.kb[y]!==undefined), last=EMP_ALL.newScale;
+  const now=eaBoth(prop,last), was=eaBoth(prop,first);
+  const kbMove=prop.kb[last]-prop.kb[first], ssMove=prop.ss[last]-prop.ss[first];
+
+  const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>{
+    const yrs=Y7.filter(y=>eaBoth(r,y)!==undefined);
+    const nowV=eaBoth(r,yrs[yrs.length-1]), prevV=eaBoth(r,yrs[yrs.length-2]);
+    const del=nowV-prevV, lows=yrs.map(y=>eaBoth(r,y));
+    return `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
+      eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,pad:{t:10,r:10,b:18,l:10}})+
+      `<p class="ea-cnow">${nowV.toFixed(1)}<small>2026</small></p>`+
+      `<p class="ea-cdel ${del>=0?"up":"dn"}">${del>0?"+":""}${del.toFixed(1)} since 2023</p>`+
+      `<p class="ea-cmeta">${eaBoth(r,yrs[0]).toFixed(1)} in ${yrs[0]} &middot; low of ${Math.min(...lows).toFixed(1)}</p>`+
+    `</div>`;
+  }).join("");
+
+  return `<p class="emp-meta">Consolidated satisfaction sheet &middot; ${first} to ${last} `+
+      `&middot; ${measured} years measured</p>`+
+    `<div class="emp-panel emp-three">`+
+      `<div class="emp-col"><p class="emp-klbl">Where we are now</p>`+
+        `<p class="emp-kbig">${now.toFixed(1)}<em>2026, both courses</em></p>`+
+        `<p class="emp-ksub">The highest reading of the eight years \u2014 on a different survey from everything before it.</p></div>`+
+      `<div class="emp-col"><p class="emp-klbl">Since ${first}</p>`+
+        `<p class="emp-kbig" style="color:var(--green)">+${(now-was).toFixed(1)}<em>points</em></p>`+
+        `<p class="emp-ksub">From ${was.toFixed(1)} in ${first}. King &amp; Bear has climbed ${kbMove.toFixed(1)} points; Slammer &amp; Squire ${ssMove.toFixed(1)}.</p></div>`+
+      `<div class="emp-col"><p class="emp-klbl">Years measured</p>`+
+        `<p class="emp-kbig stack">${measured}<em>of the eight years since ${first}. ${EMP_SKIPPED.map(x=>x[0]).sort().join(", ")} were not surveyed.</em></p></div>`+
+    `</div>`+
+    `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
+    `<div class="emp-panel">${eaKey()}${eaChart(prop,{lo:65,hi:90,ticks:[70,75,80,85]})}</div>`+
+    `<p class="emp-note"><b>${first} to 2023</b> are UniFocus STAR surveys scored out of 100. <b>2026</b> is a `+
+      `different survey company scoring out of 10; the sheet multiplies those by ten so they sit on the same `+
+      `axis, so 8.4 becomes 84.0. The axis lines up but the questions do not, so read the last step as a change `+
+      `of instrument as much as a change in mood. That is why the 2026 points are open and the line into them is faded.</p>`+
+    `<div class="emp-call warn"><h5>THE TWO COURSES HAVE SWAPPED PLACES</h5>`+
+      `<p>Slammer &amp; Squire led on every reading from ${first} through 2022. King &amp; Bear passed it by 2026 `+
+      `and has gained ${kbMove.toFixed(1)} points since ${first} against Slammer's ${ssMove.toFixed(1)}. The 2022 dip `+
+      `belongs to King &amp; Bear alone \u2014 it fell ${(prop.kb[2021]-prop.kb[2022]).toFixed(1)} points that year while Slammer barely moved.</p></div>`+
+    `<p class="emp-slbl">EACH DEPARTMENT, BOTH COURSES COMBINED</p>`+
+    `<div class="ea-cards">${cards}</div>`+
+    `<p class="emp-note">All three on the same axis so the shapes compare. Each figure is the average of the two courses.</p>`+
+    `<div class="emp-call act"><h5>FOOD AND BEVERAGE IS THE VOLATILE ONE</h5>`+
+      `<p>It fell ${(eaBoth(eaRow("Food and beverage"),2021)-eaBoth(eaRow("Food and beverage"),2022)).toFixed(1)} points `+
+      `between 2021 and 2022 to ${eaBoth(eaRow("Food and beverage"),2022).toFixed(1)}, the lowest figure anywhere on this sheet, `+
+      `stayed low through 2023, and now posts the highest department reading of 2026. Nothing else moves like that. `+
+      `Some of that last jump is the survey changing; not all of it.</p></div>`+
+    `<p class="emp-slbl">EVERY FIGURE ON THE SHEET</p>`+
+    `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`+
+    `<p class="emp-note">Green marks each course's best year, red its worst; a dash means no survey. `+
+      `Only ${EMP_ALL.detailed.join(", ")} have full reports behind them \u2014 pick a year above to open one. `+
+      `${Y7.filter(y=>prop.kb[y]!==undefined&&EMP_ALL.detailed.indexOf(String(y))<0).join(" and ")} are single `+
+      `figures from this sheet with no underlying report loaded.</p>`;
+}
+
 /* ------------------------------------------------- 2023 survey (UniFocus) */
 function e23Dims(){
   const head=`<div class="e22-row e22-head">`+
@@ -5017,16 +5233,16 @@ function empRec(c){
 function detailEmployee(i){
   const yr=empYear(), sec=empSec(), det=empDet();
   const yrPills=`<div class="emp-yrs" role="group" aria-label="Survey year">`+
-    EMP_YEARS.map(([y,live,why])=>live
-      ? `<button type="button" data-empyr="${y}" aria-pressed="${y===yr}">${y}</button>`
-      : `<button type="button" class="off" disabled title="${esc(why)}">${y}</button>`).join("")+
+    EMP_YEARS.map(([k,label])=>
+      `<button type="button" data-empyr="${k}" aria-pressed="${k===yr}">${label}</button>`).join("")+
     `</div>`;
-  const skipped=EMP_YEARS.filter(y=>!y[1]&&y[2]);
+  /* Years with no survey get no pill — just the reason, once. */
   const gapNote=`<p class="emp-gapnote">`+
-    skipped.map(([y,,why])=>`<b>${y}</b> ${esc(why)}`).join("<br>")+`</p>`;
+    EMP_SKIPPED.map(([y,why])=>`<b>${y}</b> ${esc(why)}`).join("<br>")+`</p>`;
 
-  if(yr==="2022"||yr==="2023"){
-    const yrBody = yr==="2022" ? empSummary22() : empSummary23();
+  if(yr==="consolidated"||yr==="2022"||yr==="2023"){
+    const yrBody = yr==="consolidated" ? empSummaryAll()
+                 : yr==="2022" ? empSummary22() : empSummary23();
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
       `<div class="detail-body is-wide">`+yrPills+gapNote+
