@@ -831,6 +831,7 @@ button.emp-srow:hover{background:#fafbfd}
 .e22-d.up{color:var(--green)} .e22-d.down{color:var(--red-dark)}
 .e22-vs{text-align:right;font-size:12px;font-weight:600;color:var(--red-dark);white-space:nowrap}
 .e22-vs.ok{color:var(--green)}
+.e22-row.e19-row{grid-template-columns:minmax(0,270px) minmax(110px,1fr) 58px minmax(110px,1fr) 58px 86px}
 
 .e22-drow{display:grid;grid-template-columns:minmax(0,1fr) 64px 52px;gap:0 12px;align-items:center;
   padding:9px 0;border-bottom:1px solid #f7f6f2;font-size:13px;color:#3d3d3a}
@@ -910,6 +911,7 @@ button.emp-srow:hover{background:#fafbfd}
   .e22-row .emp-rbar{display:none}
   .e22-head .e22-c{grid-column:auto !important;text-align:right}
   .e22-vs{display:none}
+  .e22-row.e19-row{grid-template-columns:minmax(0,1fr) 52px 52px;gap:0 10px}
   .emp-two>.emp-col:first-child{padding-right:0;border-right:0;padding-bottom:20px;
     border-bottom:1px solid #e5e2da}
   .emp-srow{grid-template-columns:minmax(0,1fr) 42px 86px;gap:0 10px}
@@ -4495,6 +4497,114 @@ const EMP_MIN_PART=40;
 /* Gaps smaller than this are noise on a ten-point scale and are reported as
    "level with", not as a difference. Golf's lowest topic sits 0.1 above the
    property average; calling that "above" reads as a finding when it is not. */
+/* ================= 2019 EMPLOYEE SURVEY =================
+   February 2019 STAR Staff Survey, UniFocus — the same company, the same
+   instrument and the same 0-100 scale as 2022 and 2023, so those three years
+   can be set against one another. None of them compares with 2026, which is a
+   different survey company scoring out of 10.
+
+   Source file: the February 2019 department reports (Department Summary,
+   Department/Dimension Report, Demographic Summary Report, Department
+   Critical Issue Rank Report) for golf operations, food & beverage and
+   maintenance at each course, plus the two Comments Reports.
+
+   Four limits, each stated on screen rather than papered over:
+   - The previous-survey rows printed blank throughout this export, so there is
+     no change-since column. 2019 is the earliest year with reports behind it
+     and stands on its own.
+   - Property Overall is printed only on the department charts, to the nearest
+     whole number: 66 at King & Bear, 77 at Slammer & Squire. The exact figure
+     lives in the Dimension Summary Report, which was not part of this export.
+   - Troon company averages appear on those same charts per department, not per
+     dimension, so the dimension bars carry no company tick. The department
+     cards carry one.
+   - Where a department drew fewer than ten responses, UniFocus ranked its
+     flagged questions by score alone rather than by impact, and says so on the
+     report. Those departments are marked.
+
+   Written comments were collected at both courses but are not shown, for the
+   same reason as 2023: they name individual managers by first name and job
+   title, and no set exists for maintenance at either course.
+   ========================================================= */
+const EMP19={
+  survey:"STAR Staff Survey", company:"UniFocus", period:"February 2019",
+  n:57, scale:100, overallRounded:true,
+  courses:[
+    {id:"kb", name:"King & Bear",      n:29, o:66},
+    {id:"ss", name:"Slammer & Squire", n:28, o:77}
+  ],
+  /* dimension, King & Bear, Slammer & Squire */
+  dims:[
+    ["Loyalty",                  76.6, 81.9],
+    ["Engagement Index",         73.5, 79.6],
+    ["Organizational Climate",   69.7, 81.1],
+    ["Basic Needs",              69.3, 78.5],
+    ["Troon Guiding Principles", 69.3, 79.2],
+    ["Teamwork",                 66.3, 77.6],
+    ["Management Support",       62.1, 77.5],
+    ["Growth & Development",     60.3, 71.6],
+    ["Communication",            50.8, 66.2]
+  ],
+  /* co = Troon company average for that department, read off the report chart
+     to the nearest whole number. scoreRanked = fewer than ten responses, so
+     UniFocus ranked the flagged questions by score alone. */
+  depts:{
+    kb:[
+      {n:"Golf operations", cnt:17, o:59.3, eng:70.6, co:81, thin:false, scoreRanked:false,
+       subs:[["Golf Outside Services",59.5,15],["Golf Shop",null,2]],
+       opps:[["My manager/supervisor follows through on what he/she says he/she will do.",31.4],
+             ["I am satisfied with the current level of leadership provided by my manager/supervisor.",36.3],
+             ["Managers/supervisors can be counted on to respond to problems quickly.",41.2]],
+       best:[["My co-workers treat me fairly and make me feel part of the team.",87.8],
+             ["I believe our facility deserves my loyalty.",87.3],
+             ["I am proud to work for our facility.",78.4]]},
+      {n:"Food & Beverage", cnt:6, o:67.9, eng:67.6, co:82, thin:true, scoreRanked:true,
+       subs:[["Kitchen",79.2,3],["Restaurant / Banquets / Beverage Cart",57.1,3]],
+       opps:[["All departments/work groups communicate well with one another.",41.7],
+             ["Work scheduling practices are fair.",47.2],
+             ["I hear more praise than criticism in my department.",47.2]],
+       best:[["My current position provides enough challenge to meet my needs.",88.9],
+             ["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",80.6],
+             ["I am likely to recommend Troon for employment to a friend or colleague.",77.8]]},
+      {n:"Golf course maintenance", cnt:6, o:84.5, eng:87.0, co:85, thin:true, scoreRanked:true,
+       subs:[["Grounds",84.5,6]],
+       opps:[["We deliver optimal financial results for our owners and partners.",66.7],
+             ["My co-workers are committed to giving exceptional guest/member service.",66.7],
+             ["All departments/work groups communicate well with one another.",69.4]],
+       best:[["I get the training I need for new procedures.",94.4],
+             ["I know what is expected of me and how my performance will be judged.",94.4],
+             ["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",94.4]]}
+    ],
+    ss:[
+      {n:"Golf operations", cnt:13, o:71.8, eng:74.3, co:81, thin:false, scoreRanked:false,
+       subs:[["Golf Outside Services",70.9,11],["Accounting / Administration",null,1],["Golf Shop",null,1]],
+       opps:[["In the last six months, I have talked with my manager/supervisor about my performance.",52.8],
+             ["Associate performance and contributions are appropriately valued and rewarded at our facility.",53.9],
+             ["My manager/supervisor addresses my concerns.",70.5]],
+       best:[["All associates are treated fairly regardless of sex, race, religion, national origin, disability, or sexual orientation.",88.5],
+             ["Work scheduling practices are fair.",84.7],
+             ["My co-workers treat me fairly and make me feel part of the team.",83.3]]},
+      {n:"Food & Beverage", cnt:11, o:80.7, eng:81.8, co:82, thin:false, scoreRanked:false,
+       subs:[["Kitchen",83.3,3],["Restaurant / Banquets / Beverage Cart",79.8,8]],
+       opps:[["All departments/work groups communicate well with one another.",53.0],
+             ["Associate performance and contributions are appropriately valued and rewarded at our facility.",66.7],
+             ["We continuously redefine superior service and operational excellence through best practices, embracing customer and associate feedback.",75.8]],
+       best:[["I am empowered to do whatever it takes (within reasonable limits) to satisfy guests/members.",93.9],
+             ["I have been trained in how to satisfy our guests/members.",90.0],
+             ["We conduct all of our business dealings with integrity and respect.",90.0]]},
+      {n:"Golf course maintenance", cnt:4, o:86.3, eng:90.3, co:85, thin:true, scoreRanked:true,
+       subs:[["Grounds",84.1,3],["Facilities",null,1]],
+       opps:[["We deliver optimal financial results for our owners and partners.",50.0],
+             ["All departments/work groups communicate well with one another.",50.0],
+             ["Information shared at our facility prepares the associates to give great guest service.",58.3]],
+       best:[["I know what is expected of me and how my performance will be judged.",100.0],
+             ["My current position provides enough challenge to meet my needs.",100.0],
+             ["My co-workers treat me fairly and make me feel part of the team.",100.0]]}
+    ]
+  },
+  thinDept:6
+};
+
 /* ================= 2022 EMPLOYEE SURVEY =================
    April 2022 STAR Staff Survey, run by UniFocus — a different company and a
    different instrument from the 2026 survey. Scored 0-100 across nine
@@ -4702,7 +4812,7 @@ const EMP23={
 const EMP_ALL={
   years:[2019,2020,2021,2022,2023,2024,2025,2026],
   newScale:2026,
-  detailed:["2026","2023","2022"],   // years with reports behind them
+  detailed:["2026","2023","2022","2019"],   // years with reports behind them
   rows:[
     {name:"World Golf Village", prop:true,
       kb:{2019:70.6,2021:77.3,2022:72.9,2023:79.3,2026:85.0},
@@ -4726,7 +4836,8 @@ const EMP_YEARS=[
   ["consolidated","Consolidated"],
   ["2026","2026"],
   ["2023","2023"],
-  ["2022","2022"]
+  ["2022","2022"],
+  ["2019","2019"]
 ];
 const EMP_SKIPPED=[
   ["2025","Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff took a beating all season, and a survey run in that mood would not have told us how we normally run."],
@@ -5164,6 +5275,91 @@ function empSummary23(){
     `<p class="emp-note">Departments are listed largest first. The 2023 export gives flagged questions, gains and highest scores per department rather than per course, so this section is arranged by department \u2014 the 2022 screen arranges the same material by course. Each course's overall figure comes from the consolidated satisfaction sheet, which carries the exact figure the department reports print only as a chart. Written comments were collected but are not shown here: they name individual managers and there is no set for King &amp; Bear maintenance, so the coverage is uneven.</p>`;
 }
 
+/* ------------------------------------------------- 2019 survey (UniFocus) */
+/* No previous-survey column exists for 2019, so the row carries six cells,
+   not eight, and the last one is the gap between the two courses — which is
+   the finding of this year. A dedicated grid rule keeps the dead space out. */
+function e19Dims(){
+  const head=`<div class="e22-row e19-row e22-head">`+
+    `<span>Dimension</span>`+
+    `<span class="e22-c" style="grid-column:2/4">King &amp; Bear</span>`+
+    `<span class="e22-c" style="grid-column:4/6">Slammer &amp; Squire</span>`+
+    `<span class="e22-vs">K&amp;B vs S&amp;S</span></div>`;
+  return `<div class="emp-panel" style="padding:14px 10px 6px">`+head+
+    EMP19.dims.map(d=>{
+      const [n,kc,sc]=d, mid=(kc+sc)/2, gap=kc-sc;
+      const bar=v=>`<span class="emp-rbar" aria-hidden="true">`+
+        `<i style="width:${e22pct(v).toFixed(1)}%;background:${v<mid?"var(--red)":"var(--navy)"}"></i>`+
+        `<b style="left:${e22pct(mid).toFixed(1)}%"></b></span>`;
+      return `<div class="e22-row e19-row">`+
+        `<span class="e22-n">${esc(n)}</span>`+
+        bar(kc)+`<span class="e22-s${kc<mid?" low":""}">${kc.toFixed(1)}</span>`+
+        bar(sc)+`<span class="e22-s${sc<mid?" low":""}">${sc.toFixed(1)}</span>`+
+        `<span class="e22-vs${gap>=0?" ok":""}">${gap>0?"+":""}${gap.toFixed(1)}</span>`+
+      `</div>`;
+    }).join("")+`</div>`;
+}
+function e19DeptCard(dp){
+  const subs=dp.subs.map(([n,r,c])=> r===null
+    ? `<div class="e23-sub"><span>${esc(n)}</span><em>${c} answered \u2014 held back by the survey company to protect anonymity</em></div>`
+    : `<div class="e23-sub"><span>${esc(n)}</span><b>${r.toFixed(1)}</b><em>${c} answered</em></div>`).join("");
+  const list=(rows,cls)=>rows.map(r=>
+    `<div class="e22-q"><span>${esc(r[0])}</span><b class="${cls}">${r[1].toFixed(1)}</b></div>`).join("");
+  const vsCo=dp.o-dp.co;
+  return `<div class="e23-card">`+
+    `<div class="e23-head"><span class="e23-name">${esc(dp.n)}</span>`+
+      `<span class="e23-o${dp.o<70?" low":""}">${dp.o.toFixed(1)}</span></div>`+
+    `<p class="e23-meta">${dp.cnt} answered &middot; engagement ${dp.eng.toFixed(1)} &middot; `+
+      `${Math.abs(vsCo).toFixed(1)} ${vsCo<0?"below":"above"} the Troon average of ${dp.co} for this department`+
+      (dp.thin?` &middot; <b>too few to read as a firm score</b>`:``)+`</p>`+
+    subs+
+    `<p class="emp-sublbl">Flagged to work on</p>${list(dp.opps,"low")}`+
+    (dp.scoreRanked?`<p class="e22-goalnote">Fewer than ten answered, so the survey company ranked these three by score alone rather than by what would move engagement most.</p>`:``)+
+    `<p class="emp-sublbl">Highest scoring</p>${list(dp.best,"good")}`+
+  `</div>`;
+}
+function empSummary19(){
+  const kb=EMP19.courses[0], ss=EMP19.courses[1];
+  const card=c=>`<div class="emp-col"><p class="emp-klbl">${esc(c.name)}</p>`+
+    `<p class="emp-kbig">${c.o}<em>out of 100</em></p>`+
+    `<p class="emp-ksub">${c.n} answered. The department reports print the property figure only as a chart, `+
+    `so this is to the nearest whole number.</p></div>`;
+  return `<p class="emp-meta">${EMP19.survey} &middot; ${EMP19.company} &middot; ${EMP19.period} `+
+      `&middot; ${EMP19.n} responses across both courses</p>`+
+    `<div class="emp-panel emp-three">`+
+      `<div class="emp-col"><p class="emp-klbl">Who answered</p>`+
+        `<p class="emp-kbig stack">${EMP19.n}<em>${kb.n} at King &amp; Bear, ${ss.n} at Slammer &amp; Squire</em></p>`+
+        `<p class="emp-ksub">The earliest year with reports behind it. Same survey company and same 0\u2013100 scale as 2022 and 2023. `+
+        `The previous-survey rows printed blank in this export, so there is nothing to compare 2019 back to.</p></div>`+
+      card(kb)+card(ss)+
+    `</div>`+
+    `<div class="emp-call warn"><h5>KING &amp; BEAR WAS THE WEAKER COURSE ON EVERY ONE OF THE NINE</h5>`+
+      `<p>King &amp; Bear scored below Slammer &amp; Squire on all nine dimensions, by about eleven points on average. `+
+      `The widest gaps were management support, 62.1 against 77.5, and organisational climate, 69.7 against 81.1. `+
+      `Golf operations carried it: seventeen of the twenty-nine King &amp; Bear responses, rating manager follow-through 31.4 `+
+      `and satisfaction with leadership 36.3 \u2014 the two lowest numbers anywhere in this survey.</p></div>`+
+    `<div class="emp-call act"><h5>COMMUNICATION WAS THE FLOOR AT BOTH COURSES</h5>`+
+      `<p>Communication was the lowest of the nine at both courses, 50.8 at King &amp; Bear and 66.2 at Slammer &amp; Squire. `+
+      `Inside it, whether departments communicate well with one another scored 42.5 and 53.7 \u2014 and that single question `+
+      `was flagged in the top three for four of the six departments. Maintenance was the exception on everything else, `+
+      `finishing highest at both courses.</p></div>`+
+    `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
+    e19Dims()+
+    `<p class="emp-note">The tick on each bar is the average of the two courses for that dimension, so the filled bar shows `+
+    `which course sat above it and which below. Bars in red are below. Troon company averages for 2019 are printed per `+
+    `department rather than per dimension in this export, so there is no company tick here \u2014 the department cards carry one, `+
+    `and the 2022 screen has a company tick per dimension.</p>`+
+    `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
+    `<div class="emp-two">`+
+      EMP19.courses.map(c=>`<div class="emp-col"><p class="emp-cn">${esc(c.name)}</p>`+
+        EMP19.depts[c.id].map(e19DeptCard).join("")+`</div>`).join("")+
+    `</div>`+
+    `<p class="emp-note">Departments are listed largest first. Sub-teams with fewer than three answers were held back by the `+
+    `survey company to protect anonymity and are shown without a score. Written comments were collected at both courses but `+
+    `are not shown here: they name individual managers by first name and job title, and no set exists for maintenance at `+
+    `either course, so the coverage is uneven.</p>`;
+}
+
 /* One card per team, for handing to that team's leader. */
 function empLeaderCard(dp){
   const thin=empThin(dp), lo=empLowest(dp), [word]=empRecWord(dp.e);
@@ -5283,9 +5479,10 @@ function detailEmployee(i){
   const gapNote=`<p class="emp-gapnote">`+
     EMP_SKIPPED.map(([y,why])=>`<b>${y}</b> ${esc(why)}`).join("<br>")+`</p>`;
 
-  if(yr==="consolidated"||yr==="2022"||yr==="2023"){
+  if(yr==="consolidated"||yr==="2022"||yr==="2023"||yr==="2019"){
     const yrBody = yr==="consolidated" ? empSummaryAll()
-                 : yr==="2022" ? empSummary22() : empSummary23();
+                 : yr==="2022" ? empSummary22()
+                 : yr==="2019" ? empSummary19() : empSummary23();
     el("#detail").innerHTML=
       `<div class="detail-head"><div class="detail-title">${i.t}</div>${svAudBar()}</div>`+
       `<div class="detail-body is-wide">`+yrPills+gapNote+
