@@ -1111,10 +1111,10 @@ button.yd-r:hover{background:#f2f5f9}
  border-radius:999px;padding:1px 7px}
 .yd-sub{margin:22px 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
  color:#a9a9a1}
-.yd-grand > .yd-grandhead{background:#fdfaf8}
-.yd-grand.open{border-color:#f0e2da}
-.yd-grand.open > .yd-grandhead{background:#fdf4ef;border-bottom:0;
- box-shadow:inset 3px 0 0 var(--red)}
+.yd-grand > .yd-grandhead{background:#f8fafc}
+.yd-grand.open{border-color:#e3e8ef}
+.yd-grand.open > .yd-grandhead{background:linear-gradient(180deg,#fbfcfe,#f1f5fa);
+ border-bottom:0;box-shadow:none}
 /* Nothing in this card opens, so the row rules were separating lines
    nobody scans against each other. The outline and the tinted header
    carry the structure on their own. */
@@ -3400,7 +3400,7 @@ function detailYearReport(i,seg,period,prevLabel,periodLabel){
     const TT=tn?ydPick(tn,seg):[null,null,null];
     h+=`<div class="yd-sub">${FIN_SEG[seg]} total</div>`+
       `<div class="yd-grp yd-grand open"><div class="yd-r yd-grandhead">`+
-      `<span class="yd-nm">Net operating income</span>`+ydCells(TT[0],TT[1],TT[2],false,true)+
+      `<span class="yd-nm">Net Operating Income</span>`+ydCells(TT[0],TT[1],TT[2],false,true)+
       `</div><div class="yd-panel">`+
       ydPanelRows(P.totals.filter(l=>l[0]!=="NOI"),seg)+`</div></div>`;
   }
