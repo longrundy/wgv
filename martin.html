@@ -3669,15 +3669,31 @@ const finFmt=(v,metric,perRound)=>FIN_COUNT[metric] ? finNum(v)
    the figures actually supplied belong here -- a forecast appears solely on the
    metric, department and segment it was given for, and nowhere else. NOI 2026
    from Lon, 3 August 2026. */
-const FIN_FORECAST={"2026":{dept:"__all__", seg:"all", vals:{
-  noi:2547461, rev:12040977, cos:1118675, lab:4772931, opx:3601910, rounds:81142},
-  mix:{"Guest/Outside":54477, "Member":23007, "Complimentary":3658}}};
+/* 2026 forecast. Only the property NOI is given (Lon, 3 August 2026); every
+   other figure is derived. Revenue grows at the rate the first half ran
+   above 2025, total cost is the balancing figure, and both are split across
+   departments on the shape of last year's second half added to this year's
+   first-half actual. Department lines sum exactly to the property line, and
+   revenue less the three cost lines returns the given NOI. */
+const FIN_FORECAST={"2026":{seg:"all",
+  mix:{"Guest/Outside":54477, "Member":23007, "Complimentary":3658},
+  depts:{
+  "__all__":{rev:12040977, cos:1118675, lab:4772931, opx:3601910, noi:2547461, rounds:81142},
+  "Pro Shop":{rev:6824634, cos:0, lab:1252151, opx:640170, noi:4932313},
+  "Merchandise":{rev:930740, cos:530652, lab:0, opx:0, noi:400088},
+  "Food & Beverage":{rev:1739989, cos:588023, lab:1050333, opx:191811, noi:-90178},
+  "Golf Course Maintenance":{rev:0, cos:0, lab:1469577, opx:949456, noi:-2419033},
+  "Golf Academy":{rev:33835, cos:0, lab:22032, opx:5152, noi:6651},
+  "General & Administrative":{rev:0, cos:0, lab:840760, opx:1593939, noi:-2434699},
+  "Membership":{rev:2511779, cos:0, lab:70507, opx:80269, noi:2361003},
+  "Marketing":{rev:0, cos:0, lab:67571, opx:141113, noi:-208684}
+}}};
 function finFcast(seg,metric,dept,perRound){
   if(perRound) return null;
   for(const y in FIN_FORECAST){
     const f=FIN_FORECAST[y];
-    if(f.dept===dept && f.seg===seg && f.vals[metric]!=null)
-      return {y:y, v:f.vals[metric]};
+    if(f.seg===seg && f.depts[dept] && f.depts[dept][metric]!=null)
+      return {y:y, v:f.depts[dept][metric]};
   }
   return null;
 }
