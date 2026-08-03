@@ -323,6 +323,16 @@ a{color:inherit}
  font-variant-numeric:tabular-nums}
 .cw-tl{font-size:11px;letter-spacing:.05em;color:#8a8a84;margin-top:3px;text-transform:uppercase}
 /* navy band — the current fleet, sitting clear of the cards above it */
+/* tax position - three notes across, with the timing caution beneath */
+.cw-tax{margin-top:18px}
+.cw-tx{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px}
+.cw-tax h4{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+ color:var(--navy);font-weight:700}
+.cw-tax p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
+.cw-tax b{color:var(--navy)}
+.cw-warn{margin:12px 0 0;padding:9px 0 0 13px;border-left:3px solid var(--amber);
+ border-top:1px solid var(--line-soft);font-size:12px;color:#5f5e5a;line-height:1.55}
+.cw-warn b{color:var(--navy)}
 .cw-band{background:var(--navy);border-radius:14px;padding:20px 24px;margin-top:26px}
 .cw-bh{margin:0 0 14px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;
  color:#8fa6c4;font-weight:700;text-align:center}
@@ -2271,6 +2281,11 @@ const CART = {
         lessor:"Blue Sky Capital", lessee:"Honours Golf &ndash; WGV" },
   sale:{ offer:2500, proceeds:370000, gap:125800, perCar:850,
          ccValue:2300, ccGap:155400 },
+  /* From corporate finance, 3 August 2026. The gain and the tax sit with Blue
+     Sky, not WGV -- WGV is only the sub-lessee. The deferral is their
+     recommendation; the year-end cash straddle underneath it is ours. */
+  tax:{ priorGain:530000, priorWhen:"January 2026", deferTo:"January 2027",
+        priorSource:"Peninsula and Craft Farms", asOf:"August 3" },
   cc:{ received:"July 31, 2026", rep:"Russ Lord", delivery:"December 2026 delivery",
        expires:"Expires August 30",
        kbLease:[ ["2027 Tempo Lithium-Ion","48 mo",9158.98],
@@ -2317,7 +2332,7 @@ function cwNowRow(m, note){
 }
 
 function cwNowPane(){
-  const n=CART.now, s=CART.sale;
+  const n=CART.now, s=CART.sale, t=CART.tax;
   return `<p class="cw-flag">All ${n.cars} carts come off agreement on ${n.balloonDate} `+
     `&mdash; and a final payment of ${cwMoney(n.balloon)} falls due that same day.</p>`+
     `<div class="cw-tiles">`+
@@ -2362,6 +2377,22 @@ function cwNowPane(){
       `${cwMoney(n.spread*n.subPayments)} above its own Huntington commitment `+
       `across the ${n.subPayments} payments.</p></div>`+
     `</div>`+
+    `<div class="wx-card cw-tax"><h3 class="wx-h">Tax position &mdash; ${n.lessor}</h3>`+
+      `<div class="cw-tx">`+
+        `<div><h4>Fully depreciated</h4><p>All ${n.cars} carts are fully depreciated, so any sale `+
+        `proceeds are <b>100% taxable</b> as ordinary income or recaptured depreciation. The `+
+        `${cwMoney(s.proceeds)} cart sale is a pre-tax figure.</p></div>`+
+        `<div><h4>2026 already carries a gain</h4><p>The ${t.priorSource} cart sale recognised a `+
+        `<b>${cwMoney(t.priorGain)}</b> taxable gain in ${t.priorWhen}. Selling the WGV carts in `+
+        `December would stack a second gain into the same year.</p></div>`+
+        `<div><h4>Recommendation</h4><p>Defer the WGV sale into <b>${t.deferTo}</b>, isolating the `+
+        `gain in its own tax year. Corporate finance, ${t.asOf}.</p></div>`+
+      `</div>`+
+      `<p class="cw-warn">The balloon is still due <b>${n.balloonDate}</b>. Deferring the sale `+
+      `leaves the ${cwMoney(s.gap)} net cost unchanged, but it means funding the full `+
+      `<b>${cwMoney(n.balloon)}</b> in December and recovering the ${cwMoney(s.proceeds)} in `+
+      `January &mdash; so ${cwMoney(s.proceeds)} of cash straddles the year end. This is `+
+      `${n.lessor}&rsquo;s tax position, not WGV&rsquo;s.</p></div>`+
     `<div class="cw-band"><h3 class="cw-bh">Current fleet</h3><div class="cw-bcols">`+
       `<div><b>74</b><h4>King &amp; Bear</h4>`+
         `<p>2023 Club Car Tempo lithium-ion</p></div>`+
