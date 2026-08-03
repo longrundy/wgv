@@ -2976,8 +2976,8 @@ const FIN_NOTES = {
   "2025":"Front-nine greens renovation at Slammer & Squire, January to June.",
 };
 
-const FIN_METRICS=[["rev","Revenue"],["cos","Cost of sales"],["lab","Labor"],
-                   ["opx","Operating expenses"],["noi","Net operating income"]];
+const FIN_METRICS=[["rev","Revenue"],["cos","Cost of Sales"],["lab","Labor"],
+                   ["opx","Operating Expenses"],["noi","Net Operating Income"]];
 const FIN_LOWER_BETTER={cos:1,lab:1,opx:1};
 
 /* One metric, one department, every year on record. */
@@ -3019,83 +3019,6 @@ function finTrend(seg,metric,dept,perRound){
      `${perRound?finCents(vals[vals.length-1]):finMoney(vals[vals.length-1])}</text>`;
   return {svg:`<svg class="fin-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`,
           first:vals[0], last:vals[vals.length-1], vals, good, ys};
-}
-
-/* Reads the selected metric and department and says what is going well and what
-   is not. Every claim is derived, so it moves when the numbers do. */
-function finRead(seg,metric,dept){
-  const ys=finFullYears(), a=ys[0], b=ys[ys.length-1], p=ys[ys.length-2];
-  const lower=!!FIN_LOWER_BETTER[metric];
-  const mname=(FIN_METRICS.find(m=>m[0]===metric)||["","" ])[1];
-  const dname=dept==="__all__"?"the property":dept;
-  const V=(y,c)=>finVal(y,metric,dept,c||seg,false);
-  const PR=(y,c)=>finVal(y,metric,dept,c||seg,true);
-  const rev=y=>dept==="__all__"?finTot(y,"rev",seg):finGet(y,dept,"rev",seg);
-  const good=[], work=[];
-  const pc=(x,y)=>y?((x-y)/Math.abs(y))*100:0;
-
-  // long run
-  const dLong=pc(V(b),V(a));
-  const okLong = lower ? dLong<0 : dLong>0;
-  (okLong?good:work).push(
-    `${mname} ${dLong>=0?"rose":"fell"} <b>${Math.abs(dLong).toFixed(0)}%</b> at ${dname} between ${a} and ${b}`+
-    `, ${finMoney(V(a))} to ${finMoney(V(b))}.`);
-
-  // last year
-  const dYr=pc(V(b),V(p));
-  if(Math.abs(dYr)>=1){
-    const okYr = lower ? dYr<0 : dYr>0;
-    (okYr?good:work).push(
-      `Against ${p} it ${dYr>=0?"rose":"fell"} <b>${Math.abs(dYr).toFixed(0)}%</b>.`);
-  }
-
-  // per round — does it still hold once volume is stripped out?
-  const dPr=pc(PR(b),PR(a));
-  const okPr = lower ? dPr<0 : dPr>0;
-  (okPr?good:work).push(
-    `Per round it went ${finCents(PR(a))} to <b>${finCents(PR(b))}</b> `+
-    `(${dPr>=0?"+":"\u2212"}${Math.abs(dPr).toFixed(0)}%), so the move `+
-    `${okPr===okLong?"holds up once rounds are taken out":"is partly a rounds story"}.`);
-
-  // share of that department's own revenue
-  if(metric!=="rev" && metric!=="noi" && rev(b)>0 && rev(a)>0){
-    const sB=V(b)/rev(b)*100, sA=V(a)/rev(a)*100;
-    const okShare=sB<sA;
-    (okShare?good:work).push(
-      `As a share of ${dname==="the property"?"revenue":dname+" revenue"} it is `+
-      `<b>${sB.toFixed(1)}%</b>, against ${sA.toFixed(1)}% in ${a}.`);
-  }
-
-  // the two courses against each other
-  if(seg==="all" && dept!=="Golf Academy"){
-    const ss=V(b,"ss"), kb=V(b,"kb");
-    if(ss&&kb){
-      const gap=Math.abs(pc(kb,ss));
-      if(gap>=8){
-        const ahead = lower ? (kb<ss?"King & Bear":"Slammer & Squire")
-                            : (kb>ss?"King & Bear":"Slammer & Squire");
-        const behind = ahead==="King & Bear"?"Slammer & Squire":"King & Bear";
-        work.push(`<b>${ahead}</b> is ${gap.toFixed(0)}% better than ${behind} on this measure `+
-          `(${finMoney(ahead==="King & Bear"?kb:ss)} against ${finMoney(ahead==="King & Bear"?ss:kb)}) `+
-          `\u2014 worth understanding why.`);
-      }
-    }
-  }
-
-  // best and worst year on record
-  const series=ys.map(y=>({y,v:V(y)}));
-  const best=series.reduce((x,z)=>((lower? z.v<x.v : z.v>x.v)?z:x));
-  const worst=series.reduce((x,z)=>((lower? z.v>x.v : z.v<x.v)?z:x));
-  const why = yy => FIN_NOTES[yy] ? ` ${FIN_NOTES[yy]}` : "";
-  if(best.y!==b) work.push(`The best year on record is <b>${best.y}</b> at ${finMoney(best.v)}, not ${b}.${why(best.y)}`);
-  else good.push(`${b} is the best year on record for this measure.${why(b)}`);
-  if(worst.y===b) work.push(`${b} is the weakest year on record for this measure.${why(b)}`);
-  else if(worst.y!==a) good.push(`The weakest year was <b>${worst.y}</b> at ${finMoney(worst.v)}.${why(worst.y)}`);
-
-  if(dept==="Merchandise") work.push(`Note: merchandise revenue and cost of sales are separated `+
-    `from Pro Shop, but its labor and operating costs are not \u2014 so this line is a gross margin, `+
-    `not a full department result.`);
-  return {good,work,mname,dname};
 }
 
 const FIN_KEYS=[["rev","Revenue"],["cos","Cost of sales"],["lab","Labor"],
@@ -3519,107 +3442,6 @@ const ydName=l=>YD_SAY[l]||l;
 const ydAbs=n=>"$"+Math.abs(Math.round(n)).toLocaleString();
 const ydAbsN=n=>Math.abs(Math.round(n)).toLocaleString();
 
-/* Everything here is derived, so it moves when the numbers do. */
-function ydSay(seg,period,prevLabel,open){
-  const P=YD[period]||{}, good=[], work=[];
-  const push=(ok,t)=>(ok?good:work).push(t);
-  const dn = open.indexOf("d:")===0 ? open.slice(2) : (open==="__rounds__" ? "Rounds" : null);
-
-  if(dn && dn!=="Rounds"){
-    const rows=(P.depts||{})[dn]||[];
-    const noi=rows.find(l=>l[0]==="NOI");
-    let revMissed=false;
-    const rev=rows.find(l=>/^Revenues?$/.test(l[0])||l[0]==="Rev - Green Fees");
-    if(rev){const [ra,,rb]=ydPick(rev,seg); if(ra!=null&&rb!=null&&ra<rb) revMissed=true;}
-    if(noi){
-      const [a,p,b]=ydPick(noi,seg), c=ydBest(a,p,b,true,prevLabel);
-      if(c) push(c.ok,`Net operating income is <b>${finMoney(a)}</b>, `+
-        `${c.ok?"up":"down"} ${ydAbs(c.d)} ${c.vs==="budget"?"on budget":c.basis}.`);
-    }
-    const scored=rows.filter(l=>l[0]!=="NOI").map(l=>{
-      const [a,p,b]=ydPick(l,seg);
-      const isCost=YD_COST.test(l[0]);
-      const c=ydBest(a,p,b,!isCost,prevLabel);
-      if(!c) return null;
-      return {name:ydName(l[0]), c, isCost, ok:c.ok, mag:Math.abs(c.d)};
-    }).filter(Boolean).sort((x,y)=>y.mag-x.mag);
-    const vs=c=>c.vs==="budget"?"against budget":c.basis;
-    if(scored[0]) push(scored[0].ok,
-      `<b>${scored[0].name}</b> moved furthest, by ${ydAbs(scored[0].c.d)} ${vs(scored[0].c)}.`);
-    const bad=scored.find(x=>!x.ok && (!scored[0]||x.name!==scored[0].name));
-    if(bad) work.push(`<b>${bad.name}</b> is ${ydAbs(bad.c.d)} behind ${vs(bad.c)}.`);
-    /* A cost under budget only because the revenue behind it never arrived is not
-       an achievement, so it doesn't get listed as a win. */
-    const win=scored.find(x=>x.ok && (!scored[0]||x.name!==scored[0].name) && !(x.isCost&&revMissed));
-    if(win) good.push(`<b>${win.name}</b> is ahead by ${ydAbs(win.c.d)} ${vs(win.c)}.`);
-    return {who:dn, good, work};
-  }
-
-  /* Rounds selected: the mix is the story. */
-  if(dn==="Rounds"){
-    const R=P.rounds;
-    if(R){
-      const T=ydPick(R.total,seg), c=ydBest(T[0],T[1],T[2],true,prevLabel);
-      if(c) push(c.ok,`Rounds are <b>${finNum(T[0])}</b>, ${c.ok?"up":"down"} ${ydAbsN(c.d)} `+
-        `${c.vs==="budget"?"on budget":c.basis}.`);
-      R.lines.forEach(l=>{
-        const [a2,p2,b2]=ydPick(l,seg), c2=ydBest(a2,p2,b2,true,prevLabel);
-        if(!c2) return;
-        if(Math.abs(c2.d) >= Math.max(300,(T[0]||0)*0.01))
-          push(c2.ok,`<b>${l[0]}</b> rounds are ${ydAbsN(c2.d)} ${c2.ok?"over":"under"} `+
-            `${c2.vs==="budget"?"budget":prevLabel}.`);
-      });
-    }
-    return {who:"Rounds", good, work};
-  }
-
-  /* Nothing selected: the whole operation, top to bottom. */
-  const t=k=>(P.totals||[]).find(l=>l[0]===k);
-  const g=[], wk=[];
-  const add=(ok,t2)=>(ok?g:wk).push(t2);
-  const noi=t("NOI");
-  if(noi){
-    const [a2,p2,b2]=ydPick(noi,seg), c=ydBest(a2,p2,b2,true,prevLabel);
-    if(c) add(c.ok,`Net operating income is <b>${finMoney(a2)}</b>, `+
-      `${c.ok?"up":"down"} ${ydAbs(c.d)} ${c.vs==="budget"?"on budget":c.basis}.`);
-  }
-  const rv2=t("Revenues");
-  if(rv2){const [a2,p2,b2]=ydPick(rv2,seg), c=ydBest(a2,p2,b2,true,prevLabel);
-    if(c) add(c.ok,`Revenue is ${ydAbs(c.d)} ${c.ok?"ahead":"behind"} `+
-      `${c.vs==="budget"?"of plan":c.basis}.`);}
-  const lb=t("Employee Related");
-  if(lb){const [a2,p2,b2]=ydPick(lb,seg), c=ydBest(a2,p2,b2,false,prevLabel);
-    if(c) add(c.ok,`Labor is ${ydAbs(c.d)} ${c.ok?"under":"over"} `+
-      `${c.vs==="budget"?"budget":prevLabel}.`);}
-  if(P.rounds){
-    const T=ydPick(P.rounds.total,seg), c=ydBest(T[0],T[1],T[2],true,prevLabel);
-    if(c) add(c.ok,`Rounds are ${ydAbsN(c.d)} ${c.ok?"ahead":"behind"} `+
-      `${c.vs==="budget"?"of budget":c.basis} at <b>${finNum(T[0])}</b>.`);
-  }
-  /* which departments are carrying the result, and which are dragging it */
-  const scored=YD_DEPTS.map(nm=>{
-    const rows=(P.depts||{})[nm]; if(!rows) return null;
-    const n2=rows.find(l=>l[0]==="NOI"); if(!n2) return null;
-    const [a2,p2,b2]=ydPick(n2,seg);
-    const c=ydBest(a2,p2,b2,true,prevLabel);
-    return c?{nm, c}:null;
-  }).filter(Boolean).sort((x,y)=>y.c.d-x.c.d);
-  if(scored.length){
-    const best=scored[0], worst=scored[scored.length-1];
-    if(best.c.ok) g.push(`<b>${best.nm}</b> is furthest ahead, by ${ydAbs(best.c.d)} `+
-      `${best.c.vs==="budget"?"against budget":best.c.basis}.`);
-    if(!worst.c.ok) wk.push(`<b>${worst.nm}</b> is furthest behind, by ${ydAbs(worst.c.d)} `+
-      `${worst.c.vs==="budget"?"against budget":worst.c.basis}.`);
-  }
-  /* margin is context rather than a variance, so it only lands if there is room */
-  if(noi && g.length<3){
-    const rv3=t("Revenues");
-    if(rv3){const [ra]=ydPick(rv3,seg), [na]=ydPick(noi,seg);
-      if(ra) g.push(`Operating margin is <b>${(na/ra*100).toFixed(1)}%</b>.`);}
-  }
-  return {who: FIN_SEG[seg], good:g, work:wk};
-  return {who: dn || FIN_SEG[seg], good, work};
-}
 /* Prior year and budget are both true comparisons, so lead with whichever
    reads better: the larger gain when ahead, the smaller shortfall when behind.
    The basis is always named so nobody has to guess which one they are seeing,
@@ -3633,26 +3455,10 @@ function ydBest(a,p,b,upGood,prevLabel){
   o.sort((x,y)=>s*y.d-s*x.d);
   return Object.assign({ok:s*o[0].d>0}, o[0]);
 }
-function ydBand(seg,period,prevLabel){
-  const S=ydSay(seg,period,prevLabel,state.finOpen||"");
-  /* One list, no headings. Each line already says which way it cuts - "up
-     $413,916", "furthest behind, by $58,978" - so sorting them under Working
-     well and Room to improve was labelling what the sentence had already said.
-     The good lines still come first, so the order carries what the headings
-     used to. */
-  const notes=S.good.slice(0,3).concat(S.work.slice(0,3));
-  return `<div class="yd-band"><div class="yd-band-top">`+
-    `<span class="yd-band-t">Notes</span><span class="yd-band-w">${S.who}</span></div>`+
-    (notes.length
-      ?`<ul class="yd-notes">${notes.map(t=>`<li>${t}</li>`).join("")}</ul>`
-      :`<p class="yd-none">Nothing stands out.</p>`)+
-    `</div>`;
-}
-
 function detailYearReport(i,seg,period,prevLabel,periodLabel){
   const P=YD[period]||{};
   const open=state.finOpen||"";
-  let h=ydBand(seg,period,prevLabel)+
+  let h=
     `<div class="yd-r yd-head"><span>&nbsp;</span><span>Prior year</span>`+
     `<span class="yd-a">Actual</span><span>Budget</span></div>`;
 
@@ -3708,8 +3514,6 @@ function ydTrendCards(seg){
   const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
   const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
   const noted=T.ys.filter(yy=>FIN_NOTES[yy]);
-  const R=finRead(seg,metric,dept);
-  const li=a=>a.map(t=>`<li>${t}</li>`).join("");
   return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
     `<div class="fin-pick"><div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
       `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+`</div>`+
@@ -3726,15 +3530,7 @@ function ydTrendCards(seg){
     T.svg+
     (noted.length?`<div class="fin-notes"><h5>What was happening</h5><ul>`+
       noted.map(yy=>`<li><b>${yy}</b> ${FIN_NOTES[yy]}</li>`).join("")+`</ul></div>`:"")+
-    `</div>`+
-    `<div class="fin-card dt-full"><h4 class="fin-h">What this says</h4>`+
-    `<p class="fin-subh">${R.mname} at ${R.dname}, ${FIN_SEG[seg]}.</p>`+
-    `<div class="fin-cols">`+
-      `<div class="fin-read good"><h5>Working well</h5>`+
-        (R.good.length?`<ul>${li(R.good)}</ul>`:`<p class="fin-none">Nothing stands out on this measure.</p>`)+`</div>`+
-      `<div class="fin-read work"><h5>Room to improve</h5>`+
-        (R.work.length?`<ul>${li(R.work)}</ul>`:`<p class="fin-none">No concerns on this measure.</p>`)+`</div>`+
-    `</div></div>`;
+    `</div>`;
 }
 
 function detailFinancials(i){
