@@ -330,7 +330,7 @@ a{color:inherit}
  color:var(--navy);font-weight:700}
 .cw-tax p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
 .cw-tax b{color:var(--navy)}
-.cw-warn{margin:15px 0 0;padding:1px 0 1px 12px;border-left:3px solid var(--navy);
+.cw-warn{margin:26px 0 2px;padding:3px 0 3px 13px;border-left:3px solid var(--navy);
  font-size:12px;color:#5f5e5a;line-height:1.55}
 .cw-warn b{color:var(--navy)}
 /* current fleet, reduced to a single strip so the tab holds one screen */
@@ -2109,8 +2109,7 @@ const GROUPS = [
     {id:"membership", label:"Membership",              dot:"#c8161d"},
     {id:"golffees",   label:"Golf Fees &amp; E-commerce", dot:"#c8161d"},
     {id:"academy",    label:"Golf Academy",            dot:"#c8161d"},
-    {id:"balance",    label:"Balance Sheet",           dot:"#c8161d"},
-    {id:"accounting", label:"Accounting",              dot:"#c8161d"},
+    {id:"balance",    label:"Balance Sheet / Acct",    dot:"#c8161d"},
     {id:"carts",      label:"Golf Carts",              dot:"#c8161d"},
     {id:"usopen",     label:"US Open Qualifier",       dot:"#c8161d"},
     {id:"proforma",   label:"Pro Forma",               dot:"#c8161d"}
@@ -2131,7 +2130,6 @@ const PAGES = {
   golffees:   () => dgfItem(),
   academy:    () => pendingItem("Golf Academy"),
   balance:    () => balanceItem(),
-  accounting: () => pendingItem("Accounting"),
   carts:      () => cartsItem(),
   usopen:     () => usopenItem(),
   proforma:   () => ({t:"Pro Forma", m:"", s:"", c:"f-flat", a:"", pf:true})
