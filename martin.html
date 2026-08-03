@@ -2330,7 +2330,9 @@ function cwNowPane(){
       `${cwMoney(n.headMonthly)}, then the balloon &mdash; ${cwMoney(n.allIn)} `+
       `per cart all in. ${n.lessor} sub-leases to ${n.lessee} at `+
       `${cwMoney(n.monthly)} on ${n.subPayments} payments, a `+
-      `${cwMoney(n.spread)} a month spread. The tiles above are ours.</p></div>`+
+      `${cwMoney(n.spread)} a month spread &mdash; `+
+      `${cwMoney(n.spread*n.subPayments)} over the ${n.subPayments} payments. `+
+      `The tiles above are WGV, not Blue Sky.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">If we sell the fleet</h3><div>`+
         `<div class="cw-row"><span class="cw-n">Final payment`+
           `<span class="cw-sub">${n.balloonDate}</span></span>`+
@@ -2342,7 +2344,10 @@ function cwNowPane(){
           `<span class="cw-v">${cwMoney(s.gap)}</span></div>`+
       `</div><p class="cw-foot">${cwMoney(s.perCar)} a cart out of pocket. Club Car puts `+
       `the fleet nearer ${cwMoney(s.ccValue)}, which would leave ${cwMoney(s.ccGap)} `+
-      `&mdash; and they said to take ${cwMoney(s.offer)} if we can get it.</p></div>`+
+      `&mdash; and they said to take ${cwMoney(s.offer)} if we can get it. `+
+      `Set against the ${cwMoney(s.gap)}, Blue Sky will have taken `+
+      `${cwMoney(n.spread*n.subPayments)} above its own Huntington commitment `+
+      `across the ${n.subPayments} payments.</p></div>`+
     `</div>`+
     `<div class="cw-band"><h3 class="cw-bh">Current fleet</h3><div class="cw-bcols">`+
       `<div><b>74</b><h4>King &amp; Bear</h4>`+
