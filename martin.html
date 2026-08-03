@@ -305,16 +305,16 @@ a{color:inherit}
 .cw-neg{color:var(--green)}
 .cw-foot{font-size:11.5px;color:var(--muted);line-height:1.5;margin:10px 0 0}
 .cw-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:9px;margin:0 0 18px}
-/* balance sheet - navy close, left aligned and multi-paragraph unlike cw-band */
-.bs-band{background:var(--navy);border-radius:14px;padding:20px 24px;margin-top:18px}
-.bs-bh{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;
- color:#8fa6c4;font-weight:700}
-.bs-band p{margin:0 0 9px;font-size:12.5px;color:#b9c8de;line-height:1.6}
-.bs-band p:last-child{margin-bottom:0}
-.bs-band b{color:#fff;font-weight:700}
-.bs-blk{padding:0 0 12px;border-bottom:1px solid var(--line-soft)}
-.bs-blk + .bs-blk{padding:12px 0 0;border-bottom:0}
-.bs-txt{font-size:12.5px;line-height:1.6;margin:0;color:#4a4a46}
+/* balance sheet - chart and the benchmark walk side by side, so the whole
+   discussion sits on one screen. The chart keeps the wider column because the
+   shape of the four years is the argument. */
+.bs-2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:stretch}
+.bs-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px;margin-top:16px;
+ padding-top:14px;border-top:1px solid var(--line)}
+.bs-notes h4{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+ color:var(--navy);font-weight:700}
+.bs-notes p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
+.bs-notes b{color:var(--navy)}
 .cw-tile{border:1px solid #dfe3e9;border-radius:11px;padding:11px 13px;background:#fcfcfd}
 .cw-tn{font-size:22px;font-weight:700;color:var(--ink);line-height:1.15;
  font-variant-numeric:tabular-nums}
@@ -2731,7 +2731,7 @@ const bsMoney = v => "$" + Math.round(v).toLocaleString();
 /* Four years on one frame. The shape is the argument, so the lines carry it
    and only the two figures that get quoted out loud are labelled. */
 function bsChart(){
-  const LO=520000, HI=1300000, X0=64, X1=616, Y0=60, Y1=246;
+  const LO=520000, HI=1300000, X0=54, X1=616, Y0=55, Y1=220;
   const px = i => X0 + i*(X1-X0)/(AR_DATA.months.length-1);
   const py = v => Y1 - (v-LO)/(HI-LO)*(Y1-Y0);
   let g="";
@@ -2740,7 +2740,7 @@ function bsChart(){
          `<text x="${X0-8}" y="${(py(v)+4).toFixed(1)}" text-anchor="end" font-size="11" fill="#8a8a84">`+
          `${v>=1000000?(v/1000000).toFixed(1)+"m":v/1000+"k"}</text>`;
   });
-  g += `<line x1="${X0}" y1="252" x2="${X1}" y2="252" stroke="#e5e2da"/>`;
+  g += `<line x1="${X0}" y1="226" x2="${X1}" y2="226" stroke="#e5e2da"/>`;
   AR_DATA.series.forEach(s=>{
     g += `<polyline points="${s.v.map((v,i)=>px(i).toFixed(1)+","+py(v).toFixed(1)).join(" ")}" `+
          `fill="none" stroke="${s.c}" stroke-width="${s.w}"/>`;
@@ -2757,15 +2757,15 @@ function bsChart(){
        `<text x="${(px(last)-6).toFixed(1)}" y="${(py(cur.v[last])-4).toFixed(1)}" text-anchor="end" `+
        `font-size="11" font-weight="700" fill="var(--navy)">${cur.v[last].toLocaleString()}</text>`;
   AR_DATA.months.forEach((m,i)=>{
-    g += `<text x="${px(i).toFixed(1)}" y="270" text-anchor="middle" font-size="11" fill="#8a8a84">${m}</text>`;
+    g += `<text x="${px(i).toFixed(1)}" y="244" text-anchor="middle" font-size="11" fill="#8a8a84">${m}</text>`;
   });
   let lx=X0;
   [["2026","#17325a"],["2025","#888780"],["2024 and 2023","#d3d1c7"]].forEach(([l,c])=>{
-    g += `<rect x="${lx}" y="286" width="16" height="3" fill="${c}"/>`+
-         `<text x="${lx+22}" y="291" font-size="11" fill="${c==="#17325a"?"var(--navy)":"#8a8a84"}">${l}</text>`;
+    g += `<rect x="${lx}" y="260" width="16" height="3" fill="${c}"/>`+
+         `<text x="${lx+22}" y="265" font-size="11" fill="${c==="#17325a"?"var(--navy)":"#8a8a84"}">${l}</text>`;
     lx += 22 + l.length*6.4 + 26;
   });
-  return `<svg class="wx-svg" viewBox="0 0 640 300">${g}</svg>`;
+  return `<svg class="wx-svg" viewBox="0 0 640 270">${g}</svg>`;
 }
 
 function bsPane(){
@@ -2773,12 +2773,10 @@ function bsPane(){
   const total=cur.v[last], carveTot=d.carve.reduce((a,r)=>a+r[2],0);
   const trade=total-carveTot, whole=trade-d.memMonthly;
   const yoyPct=(total-prev.v[last])/prev.v[last]*100;
-  const monthFall=cur.v[last-1]-total;
   const febRise=cur.v[1]-cur.v[0];
 
-  return `<p class="cw-flag">Receivables follow the same shape every year &mdash; a spring peak, then `+
-    `a fall through summer. July is the first month this year to come in below prior year, helped by `+
-    `a ${bsMoney(d.oneOff)} wholesale balance collected in the month.</p>`+
+  return `<p class="cw-flag">Receivables are seasonal &mdash; a spring peak, then a fall through `+
+    `summer. July came in below prior year for the first time this year.</p>`+
 
     `<div class="cw-tiles">`+
       `<div class="cw-tile"><div class="cw-tn">${bsMoney(total)}</div>`+
@@ -2791,39 +2789,9 @@ function bsPane(){
         `<div class="cw-tl">Wholesalers and vendors</div></div>`+
     `</div>`+
 
-    `<div class="wx-card"><h3 class="wx-h">Accounts receivable, January to July</h3>`+
-      bsChart()+
-      `<p class="cw-foot">Every year rises to a spring peak and falls into summer. The two darker `+
-      `years sit higher because of the dues change described below. Beyond this window the balance `+
-      `builds again into the autumn &mdash; July to December was up 14%, 29% and 7% in the last `+
-      `three years.</p></div>`+
-
-    `<div class="cw-2">`+
-
-      `<div class="wx-card"><h3 class="wx-h">What drives the spring peak</h3>`+
-        `<div class="bs-blk">`+
-          `<div class="cw-row" style="padding:0 0 6px;border:0"><span class="cw-n">Wholesale golf `+
-          `vacations<span class="cw-sub">every year, including before 2025</span></span>`+
-          `<span class="cw-v" style="color:var(--muted);font-size:13px">+45%</span></div>`+
-          `<p class="bs-txt">Wholesalers sell WGV golf vacations. Florida sells best in the late `+
-          `winter and early spring, when the weather turns here before it turns anywhere else, and `+
-          `again to a lesser degree in the autumn for the same reason. We bill them once the golf `+
-          `is played, so balances build while they are selling and pay down after. In 2024, before `+
-          `any dues change, receivables rose 45% from January to the spring peak on this alone.</p>`+
-        `</div>`+
-        `<div class="bs-blk">`+
-          `<div class="cw-row" style="padding:0 0 6px;border:0"><span class="cw-n">Annual dues `+
-          `alignment<span class="cw-sub">2025 onward</span></span>`+
-          `<span class="cw-v" style="color:var(--muted);font-size:13px">+113%</span></div>`+
-          `<p class="bs-txt">Annual dues used to be collected on each member&rsquo;s anniversary `+
-          `date, spread across the year. From 2025 every annual renewal is billed together in `+
-          `February, due in March. February 2024 was ${bsMoney(d.series[1].v[1])}; February 2026 `+
-          `was ${bsMoney(cur.v[1])}.</p>`+
-        `</div>`+
-        `<p class="cw-foot">Both are timing. The dues effect runs `+
-        `${Math.round((cur.v[1]-d.febPre)/d.febPre*100)}% above the pre-change years in February `+
-        `and ${Math.round((total-608746)/608746*100)}% by July; the wholesale balances clear as the `+
-        `rounds are played.</p></div>`+
+    `<div class="bs-2">`+
+      `<div class="wx-card"><h3 class="wx-h">Accounts receivable, January to July</h3>`+
+        bsChart()+`</div>`+
 
       `<div class="wx-card"><h3 class="wx-h">What the balance should hold</h3><div>`+
         `<div class="cw-row"><span class="cw-n">31 July balance</span>`+
@@ -2839,30 +2807,21 @@ function bsPane(){
         `<div class="cw-row is-tot"><span class="cw-n">Wholesalers and vendors</span>`+
           `<span class="cw-v">${bsMoney(whole)}</span></div>`+
       `</div>`+
-      `<p class="cw-foot">With nothing past due, members carry ${bsMoney(d.memMonthly)} &mdash; one `+
-      `month of billing across ${d.memMonthlyCount} monthly payers. In February the `+
-      `${d.memAnnualCount} annual payers add a further ${bsMoney(d.memAnnual)}, which is `+
-      `${Math.round(d.memAnnual/febRise*100)}% of this year&rsquo;s January to February rise.</p>`+
-      `<p class="cw-foot">The wholesale side carries the longest balances. One wholesaler was sold, `+
-      `and its ${bsMoney(d.oneOff)} balance sat while the buyer took the account over. It was `+
-      `collected in July, and accounts for ${Math.round(d.oneOff/monthFall*100)}% of the `+
-      `month&rsquo;s ${bsMoney(monthFall)} fall. Setting it aside, July is level with last year `+
-      `rather than 10% below it. A small number of similar accounts are still being worked.</p>`+
-      `</div>`+
-
+      `<p class="cw-foot">In February the ${d.memAnnualCount} annual payers add a further `+
+      `${bsMoney(d.memAnnual)} on top of the member line.</p></div>`+
     `</div>`+
 
-    `<div class="bs-band"><h3 class="bs-bh">What changed in June</h3>`+
-      `<p>Through the high season the club is at its busiest and long projects are the hardest to `+
-      `take on. Collections had sat with a <b>one-person accounting team</b> &mdash; and that person `+
-      `carries human resources as well as accounting. Chasing balances is slow, confrontational work `+
-      `that does not fit alongside a full season and a second department.</p>`+
-      `<p>Coming out of season we paired the <b>club director</b> with the accounting manager. He `+
-      `oversees both the membership department and golf, so he already holds the relationships with `+
-      `the members and the wholesalers being chased. The two worked the balances together through `+
-      `<b>June and July</b>.</p>`+
-      `<p>That pairing is now the standing arrangement rather than a one-off push, so collections no `+
-      `longer depend on a single person having spare capacity.</p></div>`;
+    `<div class="bs-notes">`+
+      `<div><h4>Wholesale season</h4><p>Wholesalers pay after the round is played, so balances build `+
+      `through their selling season and again, less so, in the autumn. 2024 rose <b>45%</b> from `+
+      `January to its peak, before any dues change.</p></div>`+
+      `<div><h4>Dues aligned in 2025</h4><p>All annual renewals now bill in February rather than on `+
+      `anniversary dates. That <b>${bsMoney(d.memAnnual)}</b> book is `+
+      `${Math.round(d.memAnnual/febRise*100)}% of this year&rsquo;s January to February rise.</p></div>`+
+      `<div><h4>Collections</h4><p>A <b>${bsMoney(d.oneOff)}</b> balance from a wholesaler that `+
+      `changed hands was collected in July. Chasing now pairs the club director with the accounting `+
+      `manager as a standing arrangement.</p></div>`+
+    `</div>`;
 }
 
 function detailBalance(i){
