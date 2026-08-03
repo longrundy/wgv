@@ -1561,7 +1561,13 @@ button.oc-card:hover{transform:translateY(-3px);border-color:#c1cfe1;
  box-shadow:0 1px 2px rgba(23,50,90,.05), 0 18px 34px -22px rgba(23,50,90,.62)}
 button.oc-card:hover .oc-av{background:#e2eaf5}
 button.oc-card[aria-expanded="true"]{border-color:var(--navy);
- box-shadow:0 1px 2px rgba(23,50,90,.06), 0 16px 32px -20px rgba(23,50,90,.7)}
+ box-shadow:0 0 0 1px var(--navy), 0 1px 2px rgba(23,50,90,.06),
+ 0 16px 32px -20px rgba(23,50,90,.7)}
+/* Arrow off the bottom of the open card, pointing down into its team panel. */
+button.oc-card[aria-expanded="true"]::after{content:"";position:absolute;
+ left:50%;bottom:-11px;transform:translateX(-50%);width:0;height:0;
+ border-left:9px solid transparent;border-right:9px solid transparent;
+ border-top:10px solid var(--navy)}
 button.oc-card[aria-expanded="true"] .oc-av{background:var(--navy);color:#fff}
 .oc-pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;
  margin-top:12px;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:#4a648f;
@@ -1574,9 +1580,10 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
  transition:grid-template-rows .34s cubic-bezier(.2,.8,.25,1)}
 .oc-drawer.is-open{grid-template-rows:1fr}
 .oc-drawer > div{overflow:hidden}
-.oc-panel{margin-top:18px;background:#f7f9fc;border:1px solid #e6eaf0;
- border-radius:20px;padding:4px 22px 30px;position:relative}
-.oc-notch{position:absolute;top:-8px;width:15px;height:15px;background:#f7f9fc;
+.oc-panel{margin-top:18px;background:#f7f9fc;border:1px solid var(--navy);
+ border-radius:20px;padding:4px 22px 30px;position:relative;
+ box-shadow:0 0 0 1px var(--navy)}
+.oc-notch{display:none;position:absolute;top:-8px;width:15px;height:15px;background:#f7f9fc;
  border-left:1px solid #e6eaf0;border-top:1px solid #e6eaf0;
  border-radius:4px 0 0 0;transform:translateX(-50%) rotate(45deg);
  transition:left .34s cubic-bezier(.2,.8,.25,1)}
@@ -1614,6 +1621,7 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
   .oc-tag{margin-top:0}
   .oc-foot-sp{display:none}
   .oc-notch{display:none}
+  button.oc-card[aria-expanded="true"]::after{display:none}
   .oc-panel{padding:4px 14px 22px}
   .oc-lon{width:100%;border-radius:15px}
   /* only the open department stays on screen, so its team is visible without
