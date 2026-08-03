@@ -2227,6 +2227,13 @@ function detailUsopen(i){
    Debtor is Blue Sky Capital LLC. 49 payments: one advance of $50,000, then
    47 at $14,134, then $495,800 on 29 Dec 2026.
 
+   THE SUB-LEASE - Blue Sky Capital LLC to Honours Golf - WGV, LLC.
+   48 payments of $14,634. Blue Sky takes a $500 a month spread over its own
+   commitment to Huntington, its return on the advance it fronted. $14,634
+   over 148 cars is $98.88 a cart a month, and that is what the tiles and every
+   vendor comparison are anchored to, because it is what WGV actually pays.
+   The agreement card stays on the head lease: that is where the financing is.
+
    THE PER-COURSE BASELINE: the agreement is one payment covering all 148
    cars. Both courses run identical 74-car fleets, so it is halved to give
    each course a figure to compare against. That is an allocation, not a
@@ -2242,10 +2249,13 @@ function detailUsopen(i){
        below since it is the number they quoted.
    ===================================================== */
 const CART = {
-  now:{ cars:148, monthly:14134, perCar:95.50, financed:998999, rate:"7.216%",
+  now:{ cars:148, monthly:14634, perCar:98.88, subPayments:48,
+        headMonthly:14134, headPayments:47, advance:50000, spread:500,
+        financed:998999, rate:"7.216%",
         charge:211098, total:1210098, allIn:8176, balloon:495800,
         balloonDate:"December 29, 2026", funded:"December 29, 2022",
-        payments:49, lender:"Huntington National Bank" },
+        payments:49, lender:"Huntington National Bank",
+        lessor:"Blue Sky Capital", lessee:"Honours Golf &ndash; WGV" },
   sale:{ offer:2500, proceeds:370000, gap:125800, perCar:850,
          ccValue:2300, ccGap:155400 },
   cc:{ received:"July 31, 2026", rep:"Russ Lord", delivery:"December 2026 delivery",
@@ -2315,8 +2325,12 @@ function cwNowPane(){
           `<span class="cw-v">${cwMoney(n.charge)}</span></div>`+
         `<div class="cw-row is-tot"><span class="cw-n">Total over the term</span>`+
           `<span class="cw-v">${cwMoney(n.total)}</span></div>`+
-      `</div><p class="cw-foot">${n.lender}, on ${n.payments} payments. That works out `+
-      `to ${cwMoney(n.allIn)} per cart all in.</p></div>`+
+      `</div><p class="cw-foot">${n.lender} finances ${n.lessor} &mdash; `+
+      `${cwMoney(n.advance)} advance, ${n.headPayments} payments of `+
+      `${cwMoney(n.headMonthly)}, then the balloon &mdash; ${cwMoney(n.allIn)} `+
+      `per cart all in. ${n.lessor} sub-leases to ${n.lessee} at `+
+      `${cwMoney(n.monthly)} on ${n.subPayments} payments, a `+
+      `${cwMoney(n.spread)} a month spread. The tiles above are ours.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">If we sell the fleet</h3><div>`+
         `<div class="cw-row"><span class="cw-n">Final payment`+
           `<span class="cw-sub">${n.balloonDate}</span></span>`+
@@ -2401,7 +2415,7 @@ function cwBuyPane(){
 }
 
 function cwLeasePane(){
-  const c=CART.cc;
+  const c=CART.cc, n=CART.now;
   const head = `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Term</span>`+
     `<span>Per cart</span><span>Monthly</span></div>`;
   const rows = (list,per) => list.map((r,k)=>{
@@ -2416,8 +2430,8 @@ function cwLeasePane(){
     `<div class="cw-2">`+
       `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.kbLease,PC_KB)}</div>`+
-        `<p class="cw-foot">Both above our $95.50 anchor. The 54-month term closes most `+
-        `of the gap.</p></div>`+
+        `<p class="cw-foot">Both above our $${n.perCar.toFixed(2)} anchor. The 54-month `+
+        `term closes most of the gap.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,PC_SS)}</div>`+
         `<p class="cw-foot">Twelve-month pricing also quoted, at roughly double these `+
@@ -2465,7 +2479,7 @@ function cwEzPane(){
 
 function detailCarts(i){
   const tab=cwTab();
-  const tabs=[["now","Current fleet"],["cc","Club Car"],["ez","E-Z-GO"]];
+  const tabs=[["now","Current Fleet"],["cc","Club Car"],["ez","E-Z-GO"]];
   const body = tab==="cc" ? cwCcPane() : tab==="ez" ? cwEzPane() : cwNowPane();
   el("#detail").innerHTML =
     `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
