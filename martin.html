@@ -4294,8 +4294,6 @@ function ydTrendCards(seg){
   const T=finTrend(seg,metric,dept,per);
   const RT = FIN_COUNT[metric] ? finRoundsTrend(seg) : null;
   const hide = FIN_COUNT[metric] ? ' style="visibility:hidden" aria-hidden="true"' : "";
-  const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
-  const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
   const noted=T.ys.filter(yy=>FIN_NOTES[yy]);
   return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
     `<div class="fin-pick"><div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
@@ -4307,10 +4305,6 @@ function ydTrendCards(seg){
     `<div class="fin-mrow fin-per"${hide}>`+
       `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
       `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div></div>`+
-    `<p class="fin-subh">${mname}${per?" per round":""} \u00b7 ${dept==="__all__"?"all departments":dept} `+
-    `\u00b7 ${FIN_SEG[seg]}. ${finFmt(T.first,metric,per)} in ${T.ys[0]} to `+
-    `<b>${finFmt(T.last,metric,per)}</b> in ${T.ys[T.ys.length-1]}`+
-    (T.fc?` (forecast)`:``)+` \u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
     (RT?RT.svg+RT.note:T.svg)+
     (noted.length?`<div class="fin-notes"><h5>What was happening</h5><ul>`+
       noted.map(yy=>`<li><b>${yy}</b> ${FIN_NOTES[yy]}</li>`).join("")+`</ul></div>`:"")+
