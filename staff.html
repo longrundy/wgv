@@ -3586,6 +3586,11 @@ function finRoundsTrend(seg){
       s+=`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${isF?4.5:3}" `+
          `fill="${isF?"#fff":sr.c}" stroke="${sr.c}" stroke-width="${isF?2:0}"></circle>`;
     });
+    /* The forecast year carries no axis reading of its own, so each line is
+       labelled at its end point. */
+    if(fmix) s+=`<text x="${(x(nAct)-8).toFixed(1)}" y="${(y(sr.v[nAct])-10).toFixed(1)}" `+
+      `text-anchor="end" font-size="11" font-weight="700" fill="${sr.c}">`+
+      `${finNum(sr.v[nAct])}</text>`;
   });
   ys.forEach((yy,i)=>{
     s+=`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#8a8a84" `+
