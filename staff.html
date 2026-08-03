@@ -3590,21 +3590,20 @@ function ydTrendCards(seg){
   const per = state.finPer==="round" && !FIN_COUNT[metric];
   const T=finTrend(seg,metric,dept,per);
   const RT = FIN_COUNT[metric] ? finRoundsTrend(seg) : null;
+  const hide = FIN_COUNT[metric] ? ' style="visibility:hidden" aria-hidden="true"' : "";
   const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
   const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
   const noted=T.ys.filter(yy=>FIN_NOTES[yy]);
   return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
     `<div class="fin-pick"><div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
       `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+`</div>`+
-    (FIN_COUNT[metric] ? "" :
-      `<label class="fin-sel"><span>Department</span><select data-fdept>`+
+    `<label class="fin-sel"${hide}><span>Department</span><select data-fdept>`+
       `<option value="__all__"${dept==="__all__"?" selected":""}>All Departments</option>`+
       FIN_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
-      `</select></label>`)+
-    (FIN_COUNT[metric] ? "" :
-      `<div class="fin-mrow fin-per">`+
+    `</select></label>`+
+    `<div class="fin-mrow fin-per"${hide}>`+
       `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
-      `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div>`)+`</div>`+
+      `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div></div>`+
     `<p class="fin-subh">${mname}${per?" per round":""} \u00b7 ${dept==="__all__"?"all departments":dept} `+
     `\u00b7 ${FIN_SEG[seg]}. ${finFmt(T.first,metric,per)} in ${T.ys[0]} to `+
     `<b>${finFmt(T.last,metric,per)}</b> in ${T.ys[T.ys.length-1]}`+
