@@ -330,9 +330,11 @@ a{color:inherit}
  color:var(--navy);font-weight:700}
 .cw-tax p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
 .cw-tax b{color:var(--navy)}
-.cw-warn{margin:26px 0 2px;padding:3px 0 3px 13px;border-left:3px solid var(--navy);
+/* must out-specify .cw-tax p above, which sets margin:0 -- a bare .cw-warn
+   loses to it and the spacing silently does nothing */
+.cw-tax .cw-warn{margin:28px 0 2px;padding:4px 0 4px 13px;border-left:3px solid var(--navy);
  font-size:12px;color:#5f5e5a;line-height:1.55}
-.cw-warn b{color:var(--navy)}
+.cw-tax .cw-warn b{color:var(--navy)}
 /* current fleet, reduced to a single strip so the tab holds one screen */
 .cw-slim{display:flex;align-items:baseline;gap:0 22px;flex-wrap:wrap;
  padding:13px 22px;margin-top:14px}
