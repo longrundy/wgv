@@ -3659,7 +3659,25 @@ const FIN_NOTES = {
 };
 
 const FIN_METRICS=[["rev","Revenue"],["cos","Cost of Sales"],["lab","Labor"],
-                   ["opx","Operating Expenses"],["noi","Net Operating Income"]];
+                   ["opx","Operating Expenses"],["noi","Net Operating Income"],
+                   ["rounds","Rounds"]];
+/* Rounds is a count, not money, so it formats plainly and has no per-round view. */
+const FIN_COUNT={rounds:1};
+const finFmt=(v,metric,perRound)=>FIN_COUNT[metric] ? finNum(v)
+  : (perRound ? finCents(v) : finMoney(v));
+/* Forecast points shown on the annual trend beyond the last closed year. Only
+   the figures actually supplied belong here -- a forecast appears solely on the
+   metric, department and segment it was given for, and nowhere else. NOI 2026
+   from Lon, 3 August 2026. */
+const FIN_FORECAST={"2026":{metric:"noi", dept:"__all__", seg:"all", value:2547461}};
+function finFcast(seg,metric,dept,perRound){
+  if(perRound) return null;
+  for(const y in FIN_FORECAST){
+    const f=FIN_FORECAST[y];
+    if(f.metric===metric && f.dept===dept && f.seg===seg) return {y:y, v:f.value};
+  }
+  return null;
+}
 const FIN_LOWER_BETTER={cos:1,lab:1,opx:1};
 
 /* One metric, one department, every year on record. */
@@ -3670,8 +3688,10 @@ function finVal(y,metric,dept,seg,perRound){
   return rd ? raw/rd : 0;
 }
 function finTrend(seg,metric,dept,perRound){
-  const ys=finFullYears();
-  const vals=ys.map(y=>finVal(y,metric,dept,seg,perRound));
+  const fc=finFcast(seg,metric,dept,perRound);
+  const ys=finFullYears().concat(fc?[fc.y]:[]);
+  const vals=finFullYears().map(y=>finVal(y,metric,dept,seg,perRound)).concat(fc?[fc.v]:[]);
+  const nAct=vals.length-(fc?1:0);
   const W=svgW(1), H=210, PL=46, PR=20, PB=28;
   /* Headroom has to be added, not multiplied: for a cost centre every value is
      negative, so max*1.1 lands BELOW the maximum and the line overflows the box. */
@@ -3682,25 +3702,32 @@ function finTrend(seg,metric,dept,perRound){
   const y=v=>H-PB-((v-lo)/Math.max(1,hi-lo))*(H-PB-16);
   const good = FIN_LOWER_BETTER[metric] ? (vals[vals.length-1]<vals[0]) : (vals[vals.length-1]>vals[0]);
   const stroke = good ? "#4c7a1a" : "var(--red)";
-  let s=`<path d="${vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" `+
+  let s=`<path d="${vals.slice(0,nAct).map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" `+
         `fill="none" stroke="${stroke}" stroke-width="3" stroke-linejoin="round"></path>`;
+  if(fc) s+=`<path d="M${x(nAct-1).toFixed(1)} ${y(vals[nAct-1]).toFixed(1)} `+
+    `L${x(nAct).toFixed(1)} ${y(fc.v).toFixed(1)}" fill="none" stroke="${stroke}" `+
+    `stroke-width="3" stroke-dasharray="6 4" opacity="0.55"></path>`;
   vals.forEach((v,i)=>{
-    s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${i===vals.length-1?5:3.5}" fill="${stroke}"></circle>`;
+    const isF = fc && i===vals.length-1;
+    s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${i===vals.length-1?5:3.5}" `+
+       `fill="${isF?"#fff":stroke}" stroke="${stroke}" stroke-width="${isF?2.5:0}"></circle>`;
     const nt=FIN_NOTES[ys[i]];
     s+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" `+
-       `fill="${nt?"var(--ink)":"#8a8a84"}" font-weight="${nt?700:400}">${ys[i].slice(2)}`+
+       `fill="${nt?"var(--ink)":"#8a8a84"}" font-weight="${nt?700:400}" `+
+       `font-style="${fc&&i===vals.length-1?"italic":"normal"}">${ys[i].slice(2)}`+
        `${nt?'<tspan fill="var(--gold)" font-size="11">*</tspan>':""}</text>`;
   });
   [lo,(lo+hi)/2,hi].forEach(v=>{
-    const lbl = perRound ? finCents(v).replace(/\.\d+$/,"") : (v<0?"\u2212":"")+"$"+(Math.abs(v)/1e6).toFixed(1)+"M";
+    const lbl = FIN_COUNT[metric] ? finNum(v)
+      : perRound ? finCents(v).replace(/\.\d+$/,"") : (v<0?"\u2212":"")+"$"+(Math.abs(v)/1e6).toFixed(1)+"M";
     s+=`<text x="0" y="${y(v)+3}" font-size="9.5" fill="#b9b9b1">${lbl}</text>`;
     s+=`<line x1="${PL}" x2="${W-PR}" y1="${y(v)}" y2="${y(v)}" stroke="#f5f3ee"></line>`;
   });
   s+=`<text x="${x(vals.length-1)}" y="${y(vals[vals.length-1])-13}" text-anchor="end" `+
      `font-size="12" font-weight="700" fill="${stroke}">`+
-     `${perRound?finCents(vals[vals.length-1]):finMoney(vals[vals.length-1])}</text>`;
+     `${finFmt(vals[vals.length-1],metric,perRound)}${fc?" est":""}</text>`;
   return {svg:`<svg class="fin-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`,
-          first:vals[0], last:vals[vals.length-1], vals, good, ys};
+          first:vals[0], last:vals[vals.length-1], vals, good, ys, fc:fc};
 }
 
 const FIN_KEYS=[["rev","Revenue"],["cos","Cost of sales"],["lab","Labor"],
@@ -4191,7 +4218,7 @@ function ydTrendCards(seg){
   const ys=finFullYears();
   const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
   const dept = (state.finDept==="__all__"||FIN_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
-  const per = state.finPer==="round";
+  const per = state.finPer==="round" && !FIN_COUNT[metric];
   const T=finTrend(seg,metric,dept,per);
   const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
   const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
@@ -4203,12 +4230,14 @@ function ydTrendCards(seg){
       `<option value="__all__"${dept==="__all__"?" selected":""}>All departments</option>`+
       FIN_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
     `</select></label>`+
-    `<div class="fin-mrow fin-per">`+
+    (FIN_COUNT[metric] ? "" :
+      `<div class="fin-mrow fin-per">`+
       `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
-      `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div></div>`+
+      `<button type="button" data-fper="round" aria-pressed="${per}">Per round</button></div>`)+`</div>`+
     `<p class="fin-subh">${mname}${per?" per round":""} \u00b7 ${dept==="__all__"?"all departments":dept} `+
-    `\u00b7 ${FIN_SEG[seg]}. ${finMoney(T.first)} in ${T.ys[0]} to <b>${finMoney(T.last)}</b> `+
-    `in ${T.ys[T.ys.length-1]} \u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
+    `\u00b7 ${FIN_SEG[seg]}. ${finFmt(T.first,metric,per)} in ${T.ys[0]} to `+
+    `<b>${finFmt(T.last,metric,per)}</b> in ${T.ys[T.ys.length-1]}`+
+    (T.fc?` (forecast)`:``)+` \u2014 ${d>=0?"up":"down"} ${pct.toFixed(0)}%.</p>`+
     T.svg+
     (noted.length?`<div class="fin-notes"><h5>What was happening</h5><ul>`+
       noted.map(yy=>`<li><b>${yy}</b> ${FIN_NOTES[yy]}</li>`).join("")+`</ul></div>`:"")+
