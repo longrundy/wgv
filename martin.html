@@ -3670,7 +3670,8 @@ const finFmt=(v,metric,perRound)=>FIN_COUNT[metric] ? finNum(v)
    metric, department and segment it was given for, and nowhere else. NOI 2026
    from Lon, 3 August 2026. */
 const FIN_FORECAST={"2026":{dept:"__all__", seg:"all", vals:{
-  noi:2547461, rev:12040977, cos:1118675, lab:4772931, opx:3601910}}};
+  noi:2547461, rev:12040977, cos:1118675, lab:4772931, opx:3601910, rounds:81142},
+  mix:{"Guest/Outside":54477, "Member":23007, "Complimentary":3658}}};
 function finFcast(seg,metric,dept,perRound){
   if(perRound) return null;
   for(const y in FIN_FORECAST){
@@ -4220,10 +4221,14 @@ function detailYearReport(i,seg,period,prevLabel,periodLabel){
    share of rounds named underneath. Source is FIN_DATA __mix__. */
 const FIN_MIX=[["Guest/Outside","#17325a"],["Member","#4c7a1a"],["Complimentary","#b4b2a9"]];
 function finRoundsTrend(seg){
-  const ys=finFullYears();
+  const fcy=Object.keys(FIN_FORECAST).find(y=>FIN_FORECAST[y].seg===seg && FIN_FORECAST[y].mix);
+  const fmix=fcy?FIN_FORECAST[fcy].mix:null;
+  const acts=finFullYears(), ys=acts.concat(fmix?[fcy]:[]);
+  const nAct=acts.length;
   const series=FIN_MIX.map(([k,c])=>({
     k:k, c:c,
-    v:ys.map(y=>(((FIN_DATA[y]||{})["__mix__"]||{})[k]||{})[seg]||0)
+    v:acts.map(y=>(((FIN_DATA[y]||{})["__mix__"]||{})[k]||{})[seg]||0)
+        .concat(fmix?[fmix[k]]:[])
   }));
   const all=series.reduce((a,s)=>a.concat(s.v),[]);
   const W=svgW(1), H=210, PL=46, PR=20, PB=28;
@@ -4237,23 +4242,24 @@ function finRoundsTrend(seg){
        `<line x1="${PL}" x2="${W-PR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#f5f3ee"></line>`;
   });
   series.forEach(sr=>{
-    s+=`<path d="${sr.v.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" `+
+    s+=`<path d="${sr.v.slice(0,nAct).map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" `+
        `fill="none" stroke="${sr.c}" stroke-width="2.5" stroke-linejoin="round"></path>`;
+    if(fmix) s+=`<path d="M${x(nAct-1).toFixed(1)} ${y(sr.v[nAct-1]).toFixed(1)} `+
+      `L${x(nAct).toFixed(1)} ${y(sr.v[nAct]).toFixed(1)}" fill="none" stroke="${sr.c}" `+
+      `stroke-width="2.5" stroke-dasharray="6 4" opacity="0.55"></path>`;
     sr.v.forEach((v,i)=>{
-      s+=`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" `+
-         `r="${i===sr.v.length-1?4.5:3}" fill="${sr.c}"></circle>`;
+      const isF = fmix && i===sr.v.length-1;
+      s+=`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${isF?4.5:3}" `+
+         `fill="${isF?"#fff":sr.c}" stroke="${sr.c}" stroke-width="${isF?2:0}"></circle>`;
     });
   });
   ys.forEach((yy,i)=>{
-    s+=`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" `+
-       `fill="#8a8a84">${yy.slice(2)}</text>`;
+    s+=`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#8a8a84" `+
+       `font-style="${fmix&&i===ys.length-1?"italic":"normal"}">${yy.slice(2)}</text>`;
   });
-  const last=ys.length-1;
-  const tot=series.reduce((a,sr)=>a+sr.v[last],0)||1;
   const note=`<p class="fin-subh" style="margin-top:8px">`+
-    series.map(sr=>`<span style="color:${sr.c};font-weight:700">&#9632;</span> ${sr.k} `+
-      `${finNum(sr.v[last])} (${(sr.v[last]/tot*100).toFixed(1)}%)`).join(" &nbsp;&middot;&nbsp; ")+
-    ` &mdash; ${ys[last]}.</p>`;
+    series.map(sr=>`<span style="color:${sr.c};font-weight:700">&#9632;</span> ${sr.k}`)
+      .join(" &nbsp;&middot;&nbsp; ")+`</p>`;
   return {svg:`<svg class="fin-svg" viewBox="0 0 ${W} ${H}">${s}</svg>`, note:note};
 }
 
@@ -4261,20 +4267,22 @@ function finRoundsTrend(seg){
 function ydTrendCards(seg){
   const ys=finFullYears();
   const metric = FIN_METRICS.some(m=>m[0]===state.finMetric)?state.finMetric:"noi";
-  const dept = (state.finDept==="__all__"||FIN_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
+  const dept = FIN_COUNT[metric] ? "__all__"
+    : (state.finDept==="__all__"||FIN_DEPTS.indexOf(state.finDept)>-1)?state.finDept:"__all__";
   const per = state.finPer==="round" && !FIN_COUNT[metric];
   const T=finTrend(seg,metric,dept,per);
-  const RT = FIN_COUNT[metric] && dept==="__all__" ? finRoundsTrend(seg) : null;
+  const RT = FIN_COUNT[metric] ? finRoundsTrend(seg) : null;
   const mname=(FIN_METRICS.find(m=>m[0]===metric)||[])[1];
   const d=T.last-T.first, pct=T.first?Math.abs(d/T.first)*100:0;
   const noted=T.ys.filter(yy=>FIN_NOTES[yy]);
   return `<div class="fin-card dt-full"><h4 class="fin-h">Trend, ${T.ys[0]}\u2013${T.ys[T.ys.length-1]}</h4>`+
     `<div class="fin-pick"><div class="fin-mrow">`+FIN_METRICS.map(([k,lbl])=>
       `<button type="button" data-fmet="${k}" aria-pressed="${k===metric}">${lbl}</button>`).join("")+`</div>`+
-    `<label class="fin-sel"><span>Department</span><select data-fdept>`+
-      `<option value="__all__"${dept==="__all__"?" selected":""}>All departments</option>`+
+    (FIN_COUNT[metric] ? "" :
+      `<label class="fin-sel"><span>Department</span><select data-fdept>`+
+      `<option value="__all__"${dept==="__all__"?" selected":""}>All Departments</option>`+
       FIN_DEPTS.map(dn=>`<option value="${dn}"${dn===dept?" selected":""}>${dn}</option>`).join("")+
-    `</select></label>`+
+      `</select></label>`)+
     (FIN_COUNT[metric] ? "" :
       `<div class="fin-mrow fin-per">`+
       `<button type="button" data-fper="total" aria-pressed="${!per}">Total</button>`+
