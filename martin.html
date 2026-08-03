@@ -2257,13 +2257,15 @@ function detailUsopen(i){
    term of the agreement.
 
    CLUB CAR — proposal dated 31 July 2026, Russ Lord, December 2026 delivery.
-   Two figures on that proposal do not reconcile and are being queried:
-     - King & Bear purchase totals $1,080,400 against 74 cars at $7,300.
-       74 at that price is $540,200; $1,080,400 is exactly 148 cars. The
-       arithmetic figure is used below until Club Car confirms.
-     - Slammer & Squire 24-month lead acid shows $9,603 a month against
-       $128.04 per car. 74 at $128.04 is $9,474.96. Their total is used
-       below since it is the number they quoted.
+   Two figures were queried and Club Car has since corrected both. Every
+   per-car rate now multiplies to its stated total at 74 cars:
+     - King & Bear purchase was $1,080,400, which was 148 cars rather than
+       74. Now $540,200, matching the arithmetic figure used here all along.
+     - Slammer & Squire 24-month lead acid was $9,603 against $128.04 per
+       car. Now $9,474.96, so their total and their per-car rate agree.
+   Twelve-month Slammer & Squire pricing is quoted alongside the 24-month
+   terms and both are shown: lead acid $236.95 a car ($17,534.30), lithium
+   $374.07 ($27,681.18), refurbished lithium $423.89 ($31,367.86).
    ===================================================== */
 const CART = {
   now:{ cars:148, monthly:14634, perCar:98.88, subPayments:48,
@@ -2284,9 +2286,12 @@ const CART = {
        expires:"Expires August 30",
        kbLease:[ ["2027 Tempo Lithium-Ion","48 mo",9158.98],
                  ["2027 Tempo Lithium-Ion","54 mo",8163.68] ],
-       ssLease:[ ["Tempo Lead Acid \u00b7 FMV","24 mo",9603],
+       ssLease:[ ["Tempo Lead Acid \u00b7 FMV","24 mo",9474.96],
                  ["Tempo Lithium \u00b7 FMV","24 mo",14771.14],
-                 ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72] ],
+                 ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72],
+                 ["Tempo Lead Acid \u00b7 FMV","12 mo",17534.30],
+                 ["Tempo Lithium \u00b7 FMV","12 mo",27681.18],
+                 ["Refurbished Lithium \u00b7 $1 out","12 mo",31367.86] ],
        buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,540200],
              ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,379028],
              ["Slammer &amp; Squire \u2014 refurbished lithium","74 cars",4950,366300] ],
@@ -2477,12 +2482,12 @@ function cwLeasePane(){
         `term closes most of the gap.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,PC_SS)}</div>`+
-        `<p class="cw-foot">Twelve-month pricing also quoted, at roughly double these `+
-        `figures. The lead acid monthly does not reconcile &mdash; 74 at $128.04 is `+
-        `$9,475, not $9,603.</p></div>`+
+        `<p class="cw-foot">Twelve-month terms run roughly double the 24-month rates for `+
+        `the same cars. Club Car corrected the lead acid monthly to $9,474.96 on review; `+
+        `every rate here now agrees with its total.</p></div>`+
     `</div>`;
 }
-const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28];
+const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28,236.95,374.07,423.89];
 
 function cwFmPane(){
   const c=CART.cc;
@@ -2522,7 +2527,7 @@ function cwEzPane(){
 
 function detailCarts(i){
   const tab=cwTab();
-  const tabs=[["now","Current Fleet"],["cc","Club Car"],["ez","E-Z-GO"]];
+  const tabs=[["now","Current Fleet"],["cc","Club Car Bid"],["ez","E-Z-GO Bid"]];
   const body = tab==="cc" ? cwCcPane() : tab==="ez" ? cwEzPane() : cwNowPane();
   el("#detail").innerHTML =
     `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
