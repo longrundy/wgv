@@ -309,8 +309,11 @@ a{color:inherit}
    discussion sits on one screen. The chart keeps the wider column because the
    shape of the four years is the argument. */
 .bs-2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:stretch}
-.bs-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px;margin-top:16px;
- padding-top:14px;border-top:1px solid var(--line)}
+/* .wx-card + .wx-card adds a stacking margin; inside this row the two cards are
+   siblings but must stay top-aligned, so it is cancelled here as it is for .cw-2 */
+.bs-2 > .wx-card{margin-top:0}
+.bs-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px;margin-top:30px;
+ padding-top:16px;border-top:1px solid var(--line)}
 .bs-notes h4{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
  color:var(--navy);font-weight:700}
 .bs-notes p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
