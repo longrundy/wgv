@@ -1442,15 +1442,6 @@ button.emp-srow:hover{background:#fafbfd}
 .mb-vt span{font-size:11.5px;color:#9aa3ae}
 .mb-cap{font-size:12.5px;color:#5f5f58;margin:0 0 12px;line-height:1.5}
 .mb-cap b{color:var(--ink);font-weight:600}
-/* displacement: what a member tee time forgoes, against what it yields */
-.mb-disp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 20px;margin:0 0 14px;
- padding:15px 20px;background:var(--navy);border-radius:12px}
-.mb-disp>div{padding-right:20px;border-right:1px solid rgba(255,255,255,.16)}
-.mb-disp>div:last-child{border-right:0;padding-right:0}
-.mb-dn{font-size:23px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
-.mb-dl{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
- font-weight:700;margin-top:4px}
-.mb-dl b{color:#fff;font-weight:700}
 .mb-cap2{font-size:12.5px;color:#5f5f58;margin:9px 0 0;line-height:1.55}
 .mb-cap2 b{color:var(--ink);font-weight:600}
 .mb-svg{width:100%;height:auto;display:block;overflow:visible}
@@ -4309,7 +4300,7 @@ function mbShareView(){
 /* ---- memberships and revenue ---- */
 const MB_REV_FROM = 2021;   // post-COVID; the years before tell a different story
 function mbRevView(){
-  const S=mbS().filter(d=>parseInt(String(d.y),10)>=MB_REV_FROM), ACT=MB_DATA.act, PR=MB_DATA.pr;
+  const S=mbS().filter(d=>parseInt(String(d.y),10)>=MB_REV_FROM), ACT=MB_DATA.act;
   const W=svgW(1), H=232, PL=38, PRt=62, PB=26;
   const rows=S.map(d=>{const k=d.partial?"2026 YTD":d.y, A=ACT[k]||{};
     return {y:d.y,partial:d.partial,n:d.members,rev:A.total||0,per:A.per||0};});
@@ -4333,30 +4324,6 @@ function mbRevView(){
   s+=`<text x="${pts[pts.length-1][0]+9}" y="${pts[pts.length-1][1]+4}" font-size="11" font-weight="700" `+
      `fill="var(--red)">${mbMoney(lastFull.per)}</text>`;
 
-  /* revenue per round: dues against the average guest green fee */
-  const ys=Object.keys(PR).filter(y=>parseInt(y,10)>=MB_REV_FROM).sort();
-  const W2=svgW(1), H2=190, PL2=40, PR2=52, PB2=24, TOP2=16;
-  const vals=ys.reduce((a,y)=>a.concat([PR[y].per,PR[y].gf]),[]);
-  const lo=Math.min.apply(null,vals)*0.86, hi=Math.max.apply(null,vals)*1.06;
-  const xs=i=>PL2+i*((W2-PL2-PR2)/(ys.length-1));
-  const yv=v=>TOP2+(H2-PB2-TOP2)*(1-(v-lo)/(hi-lo));
-  const mem=ys.map((y,i)=>[xs(i),yv(PR[y].per)]), gst=ys.map((y,i)=>[xs(i),yv(PR[y].gf)]);
-  let s2=`<path d="${mem.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")} `+
-    `${gst.slice().reverse().map(p=>"L"+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")} Z" fill="#eef2f7"></path>`;
-  [gst,mem].forEach((set,k)=>{
-    s2+=`<path d="${set.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" `+
-      `fill="none" stroke="${k?"var(--navy)":"var(--red)"}" stroke-width="2.5"></path>`;
-    set.forEach(p=>{s2+=`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${k?"var(--navy)":"var(--red)"}"></circle>`;});
-  });
-  ys.forEach((y,i)=>{s2+=`<text x="${xs(i)}" y="${H2-6}" text-anchor="middle" font-size="10" fill="#7c8593">`+
-    `${y==="2026 YTD"?"26 YTD":y.slice(2)}</text>`;});
-  const L=ys.length-1;
-  s2+=`<text x="${xs(L)+8}" y="${gst[L][1]+4}" font-size="10.5" font-weight="700" fill="var(--red)">`+
-      `$${PR[ys[L]].gf.toFixed(0)}</text>`+
-      `<text x="${xs(L)+8}" y="${mem[L][1]+4}" font-size="10.5" font-weight="700" fill="var(--navy)">`+
-      `$${PR[ys[L]].per.toFixed(0)}</text>`;
-  const gapYs=ys.filter(y=>y.indexOf("YTD")<0);
-  const gapPk=gapYs.reduce((a,y)=>(PR[y].gf-PR[y].per)>(PR[a].gf-PR[a].per)?y:a,gapYs[0]);
   const peak=S.reduce((a,d)=>d.members>a.members?d:a,S[0]);
   return {t:"Memberships and Revenue per Membership", s:MB_REV_FROM+" to June 2026",
     cap:`Recorded membership revenue per membership has risen from <b>${mbMoney(rows[0].per)}</b> in `+
@@ -4368,53 +4335,7 @@ function mbRevView(){
       `<p class="mb-cap2">Total membership revenue was <b>${mbMoney(lastFull.rev)}</b> in ${lastFull.y}, `+
       `against ${mbMoney(rows[0].rev)} in ${rows[0].y}. Through June 2026 it is `+
       `<b>${mbMoney(ACT["2026 YTD"].total)}</b>, against ${mbMoney(ACT["2025 H1"].total)} in the same `+
-      `months of 2025.</p>`+
-      `<div class="mb-sect"><div class="mb-st">Revenue per Round</div>`+
-      mbDisplace()+
-      `<svg class="mb-svg" viewBox="0 0 ${W2} ${H2}">${s2}</svg>`+
-      `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Dues per Member Round</span>`+
-      `<span><i class="mb-key" style="background:var(--red)"></i>Average Guest Green Fee</span></div>`+
-      `<p class="mb-cap2">A member round returned <b>${mbMoney(PR["2025"].per)}</b> of membership revenue in 2025 against `+
-      `${mbMoney(PR["2025"].gf)} for the average guest round \u2014 a gap of `+
-      `${mbMoney(PR["2025"].gf-PR["2025"].per)}. The gap was widest in ${gapPk} at `+
-      `${mbMoney(PR[gapPk].gf-PR[gapPk].per)} and stands at `+
-      `${mbMoney(PR["2026 YTD"].gf-PR["2026 YTD"].per)} through June 2026.</p>`+
-      `<p class="mb-cap2">Both lines come off the P&amp;L. The member line is all membership `+
-      `revenue &mdash; dues and initiation &mdash; over member rounds; the guest line is green fee `+
-      `revenue over <i>every</i> guest round, wholesale and package included. Neither matches the `+
-      `displacement figures above, which are the like-for-like comparison.</p></div>` : ""};
-}
-
-/* The gap that matters is not member yield against a blended guest average --
-   it is what a member tee time forgoes if it were sold daily-fee instead.
-
-   Member side: dues plus cart and trail fees, over member rounds. Initiation
-   fees are excluded -- they are a one-time capital payment, not a round yield.
-   Cart and trail sit in Pro Shop, not Membership, and at $101,550 for the half
-   year they are member cart plans and trail fees; guest cart is bundled into
-   the green fee, which is why the daily-fee rate is cart-inclusive and the
-   member figure has to be too. Both are 2026 year to date. */
-const MB_DISP={ dues:1198848, cart:101550, rounds:12529 };
-function mbDisplace(){
-  const d=MB_DISP, yld=(d.dues+d.cart)/d.rounds, df=DGF.adr.rate.now, gap=df-yld;
-  const m=v=>"$"+v.toFixed(2);
-  return `<div class="mb-disp">`+
-    `<div><div class="mb-dn">${m(yld)}</div>`+
-      `<div class="mb-dl">A member round yields</div></div>`+
-    `<div><div class="mb-dn">${m(df)}</div>`+
-      `<div class="mb-dl">Sold daily-fee it brings</div></div>`+
-    `<div><div class="mb-dn">${m(gap)}</div>`+
-      `<div class="mb-dl">Forgone <b>every member round</b></div></div>`+
-  `</div>`+
-  `<p class="mb-cap2">Every member tee time carries a cost: what the same slot would have `+
-  `returned sold to a daily-fee guest. At ${m(gap)} a round across `+
-  `${d.rounds.toLocaleString()} member rounds through June, that is `+
-  `<b>${"$"+Math.round(gap*d.rounds).toLocaleString()}</b> of displaced green fee.</p>`+
-  `<p class="mb-cap2">The member figure is dues plus cart and trail fees. Initiation is left out `+
-  `&mdash; it is a joining payment, not a round yield. Cart is counted on both sides, since a `+
-  `daily-fee green fee already includes one. The chart below is a different measure again: total `+
-  `membership revenue against the blended guest rate, which takes in wholesale and package play `+
-  `and so runs lower.</p>`;
+      `months of 2025.</p>` : ""};
 }
 
 /* ---- market position ---- */
