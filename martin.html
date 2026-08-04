@@ -7265,7 +7265,6 @@ const PF={
 };
 
 const PF_COPY={
-  source:"King &amp; Bear Semi-Private Model, Troon pro forma sheet. The source workbook is marked draft.",
   lead:"A $10m investment to convert King &amp; Bear to a semi-private club, modelled over ten years.",
 
   planHead:"This is a sale play, not an operating one.",
@@ -7466,8 +7465,7 @@ function detailPf(i){
             :sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
   el("#detail").innerHTML=
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
-    `<div class="detail-body is-wide">${body}`+
-      `<p class="wx-foot">${PF_COPY.source}</p></div>`;
+    `<div class="detail-body is-wide">${body}</div>`;
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
