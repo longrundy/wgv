@@ -5843,16 +5843,21 @@ function eaChart(row,opt){
      values rather than inheriting the full-width chart's. */
   const o=Object.assign({w:1040,h:300,lo:45,hi:95,ticks:[50,60,70,80,90],
     pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true,
-    yrFont:11,yrDy:19,yrShort:false},opt||{});
+    yrFont:11,yrDy:19,yrShort:false,tkFont:10.5},opt||{});
   const Y7=EMP_ALL.years, iw=o.w-o.pad.l-o.pad.r, ih=o.h-o.pad.t-o.pad.b;
   const X=y=>o.pad.l+Y7.indexOf(y)*(iw/(Y7.length-1));
   const V=v=>o.pad.t+ih-((v-o.lo)/(o.hi-o.lo))*ih;
   const col={kb:"#17325a", ss:"#c8161d"};
   let s=`<svg viewBox="0 0 ${o.w} ${o.h}" role="img" aria-label="${esc(row.name)}, 2019 to 2026">`;
 
+  /* Gap and baseline are derived from the tick font so the axis stays in
+     proportion on the small department cards, which are drawn in a 250-unit
+     space and scaled up about twofold. */
+  const tkGap=o.tkFont*0.85, tkBase=o.tkFont*0.36;
   o.ticks.forEach(t=>{
     s+=`<line x1="${o.pad.l}" y1="${V(t)}" x2="${o.w-o.pad.r}" y2="${V(t)}" stroke="#f0eee8"/>`+
-       `<text x="${o.pad.l-9}" y="${V(t)+4}" text-anchor="end" font-size="10.5" fill="#b4b2a9">${t}</text>`;
+       `<text x="${(o.pad.l-tkGap).toFixed(1)}" y="${(V(t)+tkBase).toFixed(1)}" text-anchor="end" `+
+       `font-size="${o.tkFont}" fill="#b4b2a9">${t}</text>`;
   });
 
   Y7.forEach(y=>{
@@ -5927,8 +5932,8 @@ function empSummaryAll(){
      figures all appear in the full table further down the page. */
   const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>
     `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
-      eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,
-        pad:{t:10,r:16,b:18,l:16},yrFont:5.6,yrDy:11,yrShort:true})+
+      eaChart(r,{w:250,h:104,ticks:[50,60,70,80,90],labels:false,gapText:false,
+        pad:{t:10,r:16,b:18,l:22},yrFont:5.6,yrDy:11,yrShort:true,tkFont:5.6})+
     `</div>`).join("");
 
   return `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
