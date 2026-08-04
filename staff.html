@@ -5364,8 +5364,13 @@ function empSummary22(){
 /* ------------------------------------------- consolidated: all years view */
 /* Hand-built SVG: no chart library in this file, and none wanted. */
 function eaChart(row,opt){
+  /* yrFont / yrDy / yrShort exist because this SVG is scaled to fit its
+     container: the small department cards blow a 250-unit chart up to about
+     490px, so an 11-unit label renders at 21px. The cards pass their own
+     values rather than inheriting the full-width chart's. */
   const o=Object.assign({w:1040,h:300,lo:45,hi:95,ticks:[50,60,70,80,90],
-    pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true},opt||{});
+    pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true,
+    yrFont:11,yrDy:19,yrShort:false},opt||{});
   const Y7=EMP_ALL.years, iw=o.w-o.pad.l-o.pad.r, ih=o.h-o.pad.t-o.pad.b;
   const X=y=>o.pad.l+Y7.indexOf(y)*(iw/(Y7.length-1));
   const V=v=>o.pad.t+ih-((v-o.lo)/(o.hi-o.lo))*ih;
@@ -5384,9 +5389,10 @@ function eaChart(row,opt){
         s+=`<text x="${X(y)}" y="${o.pad.t+ih/2}" text-anchor="middle" font-size="10" fill="#b4b2a9"
               transform="rotate(-90 ${X(y)} ${o.pad.t+ih/2})">no survey</text>`;
     }
-    s+=`<text x="${X(y)}" y="${o.h-o.pad.b+19}" text-anchor="middle" font-size="11"
+    const yLbl = o.yrShort ? "\u2019"+String(y).slice(2) : y;
+    s+=`<text x="${X(y)}" y="${o.h-o.pad.b+o.yrDy}" text-anchor="middle" font-size="${o.yrFont}"
           fill="${y===EMP_ALL.newScale?"#17325a":"#8a8a84"}"
-          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${y}</text>`;
+          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${yLbl}</text>`;
   });
 
   ["kb","ss"].forEach(k=>{
@@ -5453,7 +5459,8 @@ function empSummaryAll(){
     const nowV=eaBoth(r,yrs[yrs.length-1]), prevV=eaBoth(r,yrs[yrs.length-2]);
     const del=nowV-prevV, lows=yrs.map(y=>eaBoth(r,y));
     return `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
-      eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,pad:{t:10,r:10,b:18,l:10}})+
+      eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,
+        pad:{t:10,r:16,b:18,l:16},yrFont:5.6,yrDy:11,yrShort:true})+
       `<p class="ea-cnow">${nowV.toFixed(1)}<small>2026</small></p>`+
       `<p class="ea-cdel ${del>=0?"up":"dn"}">${del>0?"+":""}${del.toFixed(1)} since 2023</p>`+
       `<p class="ea-cmeta">${eaBoth(r,yrs[0]).toFixed(1)} in ${yrs[0]} &middot; low of ${Math.min(...lows).toFixed(1)}</p>`+
