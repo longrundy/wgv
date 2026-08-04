@@ -11,7 +11,7 @@
   --navy:#17325a; --navy-2:#22406c; --navy-3:#0f2544; --navy-line:#3a5a8a;
   --red:#c8161d; --red-dark:#a32d2d; --red-tint:#fbeceb; --red-wash:#fbf6f6;
   --ink:#17325a; --muted:#8a8a84; --line:#e5e2da; --line-soft:#f0eee8;
-  --amber:#ba7517; --green:#639922; --gold:#9c7c3c;
+  --amber:#ba7517; --green:#639922;
   --dry:#a8571f; --wet:#1f6fa8; --cold:#2a9d9b; --hot:#c8161d;
   --rail-w:280px;
 }
@@ -379,7 +379,7 @@ a{color:inherit}
 .ga-band>div{padding-right:26px;border-right:1px solid rgba(255,255,255,.16)}
 .ga-band>div:last-child{border-right:0;padding-right:0}
 .ga-band h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;
- color:var(--gold);font-weight:700}
+ color:#8fa6c4;font-weight:700}
 .ga-band b{display:block;font-size:15px;color:#fff;font-weight:700;line-height:1.3;margin-bottom:5px}
 .ga-band p{margin:0;font-size:12px;color:#b9c8de;line-height:1.55}
 .ga-marks{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px}
@@ -389,7 +389,7 @@ a{color:inherit}
 .ga-logo img{width:100%;max-width:275px;height:auto;display:block}
 .ga-cap{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
  color:var(--muted);font-weight:700;margin-top:5px}
-.ga-cap.is-new{color:var(--gold)}
+.ga-cap.is-new{color:var(--red)}
 .ga-txt{font-size:12.5px;line-height:1.6;margin:0;color:#4a4a46}
 .ga-txt b{color:var(--navy)}
 .ga-team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px}
@@ -399,7 +399,7 @@ a{color:inherit}
 .ga-cb{padding:12px 14px 14px}
 .ga-cb h4{margin:0 0 2px;font-size:14.5px;font-weight:700;color:var(--navy)}
 .ga-role{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
- color:var(--gold);font-weight:700;margin-bottom:7px}
+ color:var(--red);font-weight:700;margin-bottom:7px}
 .ga-cb p{margin:0;font-size:11.5px;color:#5f5e5a;line-height:1.5}
 .ga-hd{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
  font-weight:700;margin:22px 0 0}
@@ -4132,7 +4132,7 @@ function finTrend(seg,metric,dept,perRound){
     s+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" `+
        `fill="${nt?"var(--ink)":"#8a8a84"}" font-weight="${nt?700:400}" `+
        `font-style="${fc&&i===vals.length-1?"italic":"normal"}">${ys[i].slice(2)}`+
-       `${nt?'<tspan fill="var(--gold)" font-size="11">*</tspan>':""}</text>`;
+       `${nt?'<tspan fill="var(--red)" font-size="11">*</tspan>':""}</text>`;
   });
   [lo,(lo+hi)/2,hi].forEach(v=>{
     const lbl = FIN_COUNT[metric] ? finNum(v)
