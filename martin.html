@@ -4374,23 +4374,29 @@ function mbRevView(){
       `<svg class="mb-svg" viewBox="0 0 ${W2} ${H2}">${s2}</svg>`+
       `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Dues per Member Round</span>`+
       `<span><i class="mb-key" style="background:var(--red)"></i>Average Guest Green Fee</span></div>`+
-      `<p class="mb-cap2">A member round yielded <b>${mbMoney(PR["2025"].per)}</b> in dues in 2025 against `+
+      `<p class="mb-cap2">A member round returned <b>${mbMoney(PR["2025"].per)}</b> of membership revenue in 2025 against `+
       `${mbMoney(PR["2025"].gf)} for the average guest round \u2014 a gap of `+
       `${mbMoney(PR["2025"].gf-PR["2025"].per)}. The gap was widest in ${gapPk} at `+
       `${mbMoney(PR[gapPk].gf-PR[gapPk].per)} and stands at `+
       `${mbMoney(PR["2026 YTD"].gf-PR["2026 YTD"].per)} through June 2026.</p>`+
-      `<p class="mb-cap2">Both lines come off the P&amp;L. Dues per member round is membership `+
-      `revenue over member rounds; the guest figure is green fee revenue over <i>every</i> guest `+
-      `round, wholesale and package included. Golf Fees quotes a higher $130.10 because it counts `+
-      `daily-fee rounds only &mdash; 19,002 of the 30,826 guest rounds this year.</p></div>` : ""};
+      `<p class="mb-cap2">Both lines come off the P&amp;L. The member line is all membership `+
+      `revenue &mdash; dues and initiation &mdash; over member rounds; the guest line is green fee `+
+      `revenue over <i>every</i> guest round, wholesale and package included. Neither matches the `+
+      `displacement figures above, which are the like-for-like comparison.</p></div>` : ""};
 }
 
 /* The gap that matters is not member yield against a blended guest average --
-   it is what a member tee time forgoes if it were sold daily-fee instead. Both
-   figures are 2026 year to date: dues per member round off the P&L, the
-   daily-fee rate off the rate tracker on the Golf Fees page. */
+   it is what a member tee time forgoes if it were sold daily-fee instead.
+
+   Member side: dues plus cart and trail fees, over member rounds. Initiation
+   fees are excluded -- they are a one-time capital payment, not a round yield.
+   Cart and trail sit in Pro Shop, not Membership, and at $101,550 for the half
+   year they are member cart plans and trail fees; guest cart is bundled into
+   the green fee, which is why the daily-fee rate is cart-inclusive and the
+   member figure has to be too. Both are 2026 year to date. */
+const MB_DISP={ dues:1198848, cart:101550, rounds:12529 };
 function mbDisplace(){
-  const yld=MB_DATA.pr["2026 YTD"].per, df=DGF.adr.rate.now, gap=df-yld;
+  const d=MB_DISP, yld=(d.dues+d.cart)/d.rounds, df=DGF.adr.rate.now, gap=df-yld;
   const m=v=>"$"+v.toFixed(2);
   return `<div class="mb-disp">`+
     `<div><div class="mb-dn">${m(yld)}</div>`+
@@ -4402,10 +4408,13 @@ function mbDisplace(){
   `</div>`+
   `<p class="mb-cap2">Every member tee time carries a cost: what the same slot would have `+
   `returned sold to a daily-fee guest. At ${m(gap)} a round across `+
-  `${MB_DATA.series[MB_DATA.series.length-1].mem.toLocaleString()} member rounds this year, that `+
-  `is <b>${"$"+Math.round(gap*MB_DATA.series[MB_DATA.series.length-1].mem).toLocaleString()}</b> `+
-  `of displaced green fee. The chart below uses the blended guest rate instead, which includes `+
-  `wholesale and package play and so runs lower.</p>`;
+  `${d.rounds.toLocaleString()} member rounds through June, that is `+
+  `<b>${"$"+Math.round(gap*d.rounds).toLocaleString()}</b> of displaced green fee.</p>`+
+  `<p class="mb-cap2">The member figure is dues plus cart and trail fees. Initiation is left out `+
+  `&mdash; it is a joining payment, not a round yield. Cart is counted on both sides, since a `+
+  `daily-fee green fee already includes one. The chart below is a different measure again: total `+
+  `membership revenue against the blended guest rate, which takes in wholesale and package play `+
+  `and so runs lower.</p>`;
 }
 
 /* ---- market position ---- */
