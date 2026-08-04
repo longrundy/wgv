@@ -5942,38 +5942,12 @@ function empSummaryAll(){
 
   return `<p class="emp-meta">Consolidated satisfaction sheet &middot; ${first} to ${last} `+
       `&middot; ${measured} years measured</p>`+
-    `<div class="emp-panel emp-three">`+
-      `<div class="emp-col"><p class="emp-klbl">Where we are now</p>`+
-        `<p class="emp-kbig">${now.toFixed(1)}<em>2026, both courses</em></p>`+
-        `<p class="emp-ksub">The highest reading of the eight years \u2014 on a different survey from everything before it.</p></div>`+
-      `<div class="emp-col"><p class="emp-klbl">Since ${first}</p>`+
-        `<p class="emp-kbig" style="color:var(--green)">+${(now-was).toFixed(1)}<em>points</em></p>`+
-        `<p class="emp-ksub">From ${was.toFixed(1)} in ${first}. King &amp; Bear has climbed ${kbMove.toFixed(1)} points; Slammer &amp; Squire ${ssMove.toFixed(1)}.</p></div>`+
-      `<div class="emp-col"><p class="emp-klbl">Years measured</p>`+
-        `<p class="emp-kbig stack">${measured}<em>of the eight years since ${first}. ${EMP_SKIPPED.map(x=>x[0]).sort().join(", ")} were not surveyed.</em></p></div>`+
-    `</div>`+
     `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
     `<div class="emp-panel">${eaKey()}${eaChart(prop,{lo:65,hi:90,ticks:[70,75,80,85]})}</div>`+
-    `<p class="emp-note"><b>${first} to 2023</b> are UniFocus STAR surveys scored out of 100. <b>2026</b> is a `+
-      `different survey company scoring out of 10; the sheet multiplies those by ten so they sit on the same `+
-      `axis, so 8.4 becomes 84.0. The axis lines up but the questions do not, so read the last step as a change `+
-      `of instrument as much as a change in mood. That is why the 2026 points are open and the line into them is faded.</p>`+
-    `<div class="emp-call warn"><h5>THE TWO COURSES HAVE SWAPPED PLACES</h5>`+
-      `<p>Slammer &amp; Squire led on every reading from ${first} through 2022. King &amp; Bear passed it by 2026 `+
-      `and has gained ${kbMove.toFixed(1)} points since ${first} against Slammer's ${ssMove.toFixed(1)}. The 2022 dip `+
-      `belongs to King &amp; Bear alone \u2014 it fell ${(prop.kb[2021]-prop.kb[2022]).toFixed(1)} points that year while Slammer barely moved.</p></div>`+
     `<p class="emp-slbl">EACH DEPARTMENT, BOTH COURSES COMBINED</p>`+
     `<div class="ea-cards">${cards}</div>`+
-    `<p class="emp-note">All three on the same axis so the shapes compare. Each figure is the average of the two courses.</p>`+
-    `<div class="emp-call act"><h5>FOOD AND BEVERAGE IS THE VOLATILE ONE</h5>`+
-      `<p>It fell ${(eaBoth(eaRow("Food and beverage"),2021)-eaBoth(eaRow("Food and beverage"),2022)).toFixed(1)} points `+
-      `between 2021 and 2022 to ${eaBoth(eaRow("Food and beverage"),2022).toFixed(1)}, the lowest figure anywhere on this sheet, `+
-      `stayed low through 2023, and now posts the highest department reading of 2026. Nothing else moves like that. `+
-      `Some of that last jump is the survey changing; not all of it.</p></div>`+
     `<p class="emp-slbl">EVERY FIGURE ON THE SHEET</p>`+
-    `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`+
-    `<p class="emp-note">Green marks each course's best year, red its worst. `+
-      `Pick a year above to open it.</p>`;
+    `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`;
 }
 
 /* ------------------------------------------------- 2023 survey (UniFocus) */
