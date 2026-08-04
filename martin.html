@@ -7163,10 +7163,7 @@ function detailDgf(i){
     /* Section pills in the header; the sub-line went with them, since the
        courses and span are stated on the pages themselves. */
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
-    `<div class="detail-body is-wide">${body}`+
-      `<p class="wx-foot">Rounds and revenue from the Access worksheet and the golf `+
-      `system's rate reporting. Competitor fees and value points from the mid-year review.</p>`+
-    `</div>`;
+    `<div class="detail-body is-wide">${body}</div>`;
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
