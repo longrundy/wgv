@@ -360,6 +360,19 @@ a{color:inherit}
 .cw-cmp.is-now{background:#f2f6fb;margin:0 -8px;padding-left:8px;padding-right:8px;
  border-radius:6px;border-bottom:0}
 .cw-cmp.is-now .cw-cn{font-weight:700}
+/* side-by-side bid comparison */
+.cw-vs{display:grid;grid-template-columns:minmax(0,1.25fr) 118px 118px 108px;gap:0 12px;
+ align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.cw-vs:last-child{border-bottom:0}
+.cw-vhead{padding-bottom:6px;border-bottom:1px solid var(--line);font-size:10.5px;
+ letter-spacing:.05em;color:#b4b2a9;text-transform:uppercase}
+.cw-vhead span:not(:first-child){text-align:right}
+.cw-vs.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
+.cw-vs.is-tot .cw-ov{font-size:17px;color:var(--navy)}
+.cw-vd{font-weight:700;font-variant-numeric:tabular-nums}
+.cw-vd.is-ez{color:var(--green)}
+.cw-vd.is-cc{color:var(--red)}
+.cw-nq{color:#b4b2a9;font-size:12px}
 .cw-opt{display:grid;grid-template-columns:minmax(0,1fr) 78px 96px 104px;gap:0 12px;
  align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
 .cw-opt:last-child{border-bottom:0}
@@ -2657,6 +2670,103 @@ function ezFmPane(){
     `is $39 a car against Pace 10EX at $42.86.</p></div>`;
 }
 
+/* Side-by-side. Both makers quote new lithium at both courses, so the leases
+   compare cleanly at matched terms. The buy tables do not: Club Car offers no
+   new car at Slammer & Squire, and E-Z-GO offers nothing but. */
+const CW_VS={
+  lease:[ ["King &amp; Bear","48-month term",123.77,116.52,48],
+          ["Slammer &amp; Squire","24-month term",199.61,136.71,24] ],
+  buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,7339.72],
+        ["Slammer &amp; Squire \u2014 new lithium","74 cars",null,7339.72],
+        ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,null],
+        ["Slammer &amp; Squire \u2014 refurbished","74 cars",4950,null] ],
+  fm:[ ["Full screen, car control and tracking","Visage V3 / Onyx",39,54.77],
+       ["Screen with yardages","V4 screen / Pace 7EX",24,37.71],
+       ["Mid screen","V4 full / Pace 10EX",50,42.86] ],
+  terms:[ ["End of term","Today: a balloon and 148 cars to sell",
+           "FMV and $1-out options quoted","FMV \u2014 E-Z-GO takes the cars back"],
+          ["Current fleet","Today: sale to arrange ourselves",
+           "No offer made","Free backhaul to our $2,500 buyer"],
+          ["Offer window","","Expires August 30","$200 a car on Q3/Q4 orders"],
+          ["Delivery","","December 2026","December 2026"] ]
+};
+function cwCmpPane(){
+  const n=CART.now, q=74;
+  const money=v=>v==null?`<span class="cw-nq">not quoted</span>`:cwMoney(v);
+  const gap=(a,b)=>{
+    if(a==null||b==null) return `<span class="cw-nq">&mdash;</span>`;
+    const d=b-a;
+    return `<span class="cw-vd ${d<0?"is-ez":"is-cc"}">${d<0?"\u2212":"+"}$${Math.abs(d).toFixed(2)}</span>`;
+  };
+  const totKB=(116.52-123.77)*q*48, totSS=(136.71-199.61)*q*24;
+  const head=(a,b,c,d)=>`<div class="cw-vs cw-vhead"><span>${a}</span><span>${b}</span>`+
+    `<span>${c}</span><span>${d}</span></div>`;
+
+  return `<p class="cw-flag">Both makers quote a new lithium car at both courses, so the `+
+    `leases compare directly. <b>E-Z-GO is lower at each course</b> &mdash; `+
+    `${cwMoney(Math.abs(totKB+totSS))} less across the two terms.</p>`+
+
+    `<div class="cw-tiles">`+
+      `<div class="cw-tile"><div class="cw-tn">$${n.perCar.toFixed(2)}</div>`+
+        `<div class="cw-tl">Per cart today</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn" style="color:var(--green)">&minus;$7.25</div>`+
+        `<div class="cw-tl">King &amp; Bear, 48 mo</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn" style="color:var(--green)">&minus;$62.90</div>`+
+        `<div class="cw-tl">Slammer, 24 mo</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">${cwMoney(Math.abs(totKB+totSS))}</div>`+
+        `<div class="cw-tl">E-Z-GO advantage</div></div>`+
+    `</div>`+
+
+    `<div class="wx-card"><h3 class="wx-h">Lease &mdash; new lithium, matched terms, per car per month</h3><div>`+
+      head("Course","Club Car","E-Z-GO","Difference")+
+      CW_VS.lease.map(r=>`<div class="cw-vs"><span class="cw-on">${r[0]}`+
+        `<span class="cw-sub">${r[1]}</span></span>`+
+        `<span class="cw-od">$${r[2].toFixed(2)}</span>`+
+        `<span class="cw-od">$${r[3].toFixed(2)}</span>`+
+        `<span class="cw-ov">${gap(r[2],r[3])}</span></div>`).join("")+
+      `<div class="cw-vs is-tot"><span class="cw-on">Across both terms</span>`+
+        `<span class="cw-od"></span><span class="cw-od"></span>`+
+        `<span class="cw-ov">&minus;${cwMoney(Math.abs(totKB+totSS))}</span></div>`+
+    `</div><p class="cw-foot">King &amp; Bear over 48 months, ${cwMoney(Math.abs(totKB))}. `+
+    `Slammer &amp; Squire over 24, ${cwMoney(Math.abs(totSS))}. Both sit above our `+
+    `$${n.perCar.toFixed(2)} anchor &mdash; E-Z-GO by $17.64 a car at King &amp; Bear, `+
+    `Club Car by $24.89.</p></div>`+
+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">Buy &mdash; per cart</h3><div>`+
+        head("Fleet","Club Car","E-Z-GO","")+
+        CW_VS.buy.map(r=>`<div class="cw-vs"><span class="cw-on">${r[0]}`+
+          `<span class="cw-sub">${r[1]}</span></span>`+
+          `<span class="cw-od">${r[2]==null?`<span class="cw-nq">&mdash;</span>`:"$"+r[2].toLocaleString()}</span>`+
+          `<span class="cw-od">${r[3]==null?`<span class="cw-nq">&mdash;</span>`:"$"+r[3].toFixed(2)}</span>`+
+          `<span class="cw-ov"></span></div>`).join("")+
+      `</div><p class="cw-foot">Only King &amp; Bear compares. Club Car quotes no new car at `+
+      `Slammer &amp; Squire and E-Z-GO quotes nothing else, so those rows are different `+
+      `fleets, not competing prices.</p></div>`+
+
+      `<div class="wx-card"><h3 class="wx-h">Screens &mdash; per car per month</h3><div>`+
+        head("Level","Club Car","E-Z-GO","")+
+        CW_VS.fm.map(r=>`<div class="cw-vs"><span class="cw-on">${r[0]}`+
+          `<span class="cw-sub">${r[1]}</span></span>`+
+          `<span class="cw-od">$${r[2].toFixed(2)}</span>`+
+          `<span class="cw-od">$${r[3].toFixed(2)}</span>`+
+          `<span class="cw-ov"></span></div>`).join("")+
+      `</div><p class="cw-foot">Neither line maps exactly onto the other. E-Z-GO&rsquo;s `+
+      `Slammer screens are certified used units priced to match the new ones at King &amp; `+
+      `Bear.</p></div>`+
+    `</div>`+
+
+    `<div class="wx-card"><h3 class="wx-h">Terms and structure</h3><div>`+
+      head("","Club Car","E-Z-GO","")+
+      CW_VS.terms.map(r=>`<div class="cw-vs"><span class="cw-on">${r[0]}`+
+        (r[1]?`<span class="cw-sub">${r[1]}</span>`:"")+`</span>`+
+        `<span class="cw-od">${r[2]}</span><span class="cw-od">${r[3]}</span>`+
+        `<span class="cw-ov"></span></div>`).join("")+
+    `</div><p class="cw-foot">The end-of-term line is the one that does not show up in a `+
+    `monthly rate. Today it means a ${cwMoney(CART.now.balloon)} balloon and 148 cars to sell; `+
+    `on an E-Z-GO FMV term it means neither.</p></div>`;
+}
+
 function cwEzPane(){
   const c=CART.ez, sub=cwSub();
   const subs=[["all","All options"],["buy","Buy"],["lease","Lease"],["fm","Screens &amp; tracking"]];
@@ -2672,8 +2782,9 @@ function cwEzPane(){
 
 function detailCarts(i){
   const tab=cwTab();
-  const tabs=[["now","Current Fleet"],["cc","Club Car Bid"],["ez","E-Z-GO Bid"]];
-  const body = tab==="cc" ? cwCcPane() : tab==="ez" ? cwEzPane() : cwNowPane();
+  const tabs=[["now","Current Fleet"],["cc","Club Car Bid"],["ez","E-Z-GO Bid"],["cmp","Compare"]];
+  const body = tab==="cc" ? cwCcPane() : tab==="ez" ? cwEzPane()
+             : tab==="cmp" ? cwCmpPane() : cwNowPane();
   el("#detail").innerHTML =
     `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
     `<div class="detail-body is-wide">`+
