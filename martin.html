@@ -2288,8 +2288,8 @@ const CART = {
      account discount is stated as 5% but computes to 5% of $7,480 rather than the
      $7,470.29 quoted, and the Slammer & Squire sheet still carries "King & Bear"
      in its header. */
-  ez:{ received:"August 3, 2026", rep:"Kevin Blanton", delivery:"December 2026 delivery",
-       expires:"Pricing effective January 1, 2026",
+  ez:{ received:"August 3, 2026", rep:"Ken Petter", delivery:"December 2026 delivery",
+       expires:"Includes $200 a car Q3/Q4 Troon offer",
        list:7470.29, unit:7339.72, perCourse:543139.28, fleet:1086278.56,
        kbLease:[ ["RXV Elite","48 mo",8622.48] ],
        ssLease:[ ["RXV Elite","24 mo",10116.54] ],
@@ -2607,9 +2607,12 @@ function ezBuyPane(){
         `<span class="cw-v cw-neg">&minus;${cwMoney(42476)}</span></div>`+
       `<div class="cw-row is-tot"><span class="cw-n">Net, 74 cars</span>`+
         `<span class="cw-v">${cwMoney(c.perCourse)}</span></div>`+
-    `</div><p class="cw-foot">The strategic account discount is stated as 5% but works out `+
-    `to $374.00 a car, which is 5% of $7,480 rather than the $${c.list.toFixed(2)} quoted `+
-    `&mdash; a $35.93 difference per course, queried with E-Z-GO.</p></div>`;
+    `</div><p class="cw-foot">Includes a $200 a car offer E-Z-GO is running on Troon business `+
+    `booked in the third and fourth quarters. The strategic account discount is stated as 5% but `+
+    `works out to $374.00 a car, which is 5% of $7,480 rather than the $${c.list.toFixed(2)} `+
+    `quoted &mdash; a $35.93 difference per course, queried with E-Z-GO.</p>`+
+    `<p class="cw-foot">On the current fleet, E-Z-GO recommends we stay with our $2,500 a cart `+
+    `buyer rather than trade in, and will backhaul the cars to that buyer at no cost.</p></div>`;
 }
 
 function ezLeasePane(){
@@ -2625,12 +2628,14 @@ function ezLeasePane(){
     `<div class="cw-2">`+
       `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.kbLease,EZ_KB)}</div>`+
-        `<p class="cw-foot">Above our $${n.perCar.toFixed(2)} anchor, but $7.25 a car below `+
-        `Club Car&rsquo;s 48-month rate &mdash; $536.50 a month, $25,752 across the term.</p></div>`+
+        `<p class="cw-foot">A standard 48-month FMV lease. Above our $${n.perCar.toFixed(2)} `+
+        `anchor, but $7.25 a car below Club Car&rsquo;s 48-month rate &mdash; $536.50 a month, `+
+        `$25,752 across the term.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,EZ_SS)}</div>`+
-        `<p class="cw-foot">Only a 24-month term is quoted here. Payments are estimated and `+
-        `subject to change.</p></div>`+
+        `<p class="cw-foot">Only a 24-month term is quoted here. At the end of an FMV term `+
+        `there is no balloon and no fleet to dispose of &mdash; E-Z-GO takes the cars back. `+
+        `Payments are estimated and subject to change.</p></div>`+
     `</div>`;
 }
 
@@ -2646,8 +2651,10 @@ function ezFmPane(){
         `<span class="cw-od"></span><span class="cw-od">$${f[2].toFixed(2)}</span>`+
         `<span class="cw-ov">${cwMoney(f[3])}</span></div>`).join("")+
     `</div><p class="cw-foot">Across both courses, Pace 10EX is $6,343 a month &mdash; `+
-    `$76,119 a year on top of the carts. Club Car&rsquo;s nearest screen, Visage V3, is `+
-    `$39 a car against Pace 10EX at $42.86.</p></div>`;
+    `$76,119 a year on top of the carts. The Slammer &amp; Squire units are certified used `+
+    `10EX screens on the two-year term, priced to match the new 48-month units at King &amp; `+
+    `Bear, with the same warranty and functions. Club Car&rsquo;s nearest screen, Visage V3, `+
+    `is $39 a car against Pace 10EX at $42.86.</p></div>`;
 }
 
 function cwEzPane(){
