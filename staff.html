@@ -5111,13 +5111,13 @@ const EMP_ALL={
     {name:"World Golf Village", prop:true,
       kb:{2019:70.6,2021:77.3,2022:72.9,2023:79.3,2026:85.0},
       ss:{2019:79.6,2021:79.1,2022:78.5,2023:80.6,2026:83.0}},
-    {name:"Golf course maintenance",
+    {name:"Golf Course Maintenance",
       kb:{2019:84.5,2021:87.3,2022:80.7,2023:92.7,2026:85.0},
       ss:{2019:86.3,2021:87.5,2022:83.6,2023:85.4,2026:83.0}},
-    {name:"Golf operations",
+    {name:"Golf Operations",
       kb:{2019:59.3,2021:69.2,2022:77.0,2023:82.3,2026:85.5},
       ss:{2019:71.8,2021:77.1,2022:80.5,2023:82.4,2026:83.5}},
-    {name:"Food and beverage",
+    {name:"Food and Beverage",
       kb:{2019:67.9,2021:75.5,2022:56.6,2023:65.1,2026:90.5},
       ss:{2019:80.7,2021:72.7,2022:48.6,2023:61.9,2026:88.5}}
   ]
@@ -5134,9 +5134,9 @@ const EMP_YEARS=[
   ["2019","2019"]
 ];
 const EMP_SKIPPED=[
-  ["2025","Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff took a beating all season, and a survey run in that mood would not have told us how we normally run."],
-  ["2024","King & Bear was closed eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
-  ["2020","COVID."]
+  ["2025","Slammer & Squire was closed for a full greens rebuild. Staff worked through an extended disruption, and a survey taken that season would not have reflected normal operations."],
+  ["2024","King & Bear was closed for eight months during the course renovation and thirty positions were eliminated. Conditions were too far from normal to produce a meaningful result."],
+  ["2020","Operations were disrupted by the COVID-19 pandemic."]
 ];
 const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear)?state.empYear:"consolidated";
 
@@ -5422,7 +5422,6 @@ function eaKey(){
     `<span><i class="ea-l" style="border-color:#17325a"></i><b style="background:#17325a"></b>King &amp; Bear</span>`+
     `<span><i class="ea-l" style="border-color:#c8161d"></i><b style="background:#c8161d"></b>Slammer &amp; Squire</span>`+
     `<span><i class="ea-l ea-dash"></i>spans a year with no survey</span>`+
-    `<span><b class="ea-open"></b>different survey \u2014 see the note</span>`+
   `</div>`;
 }
 
@@ -5449,27 +5448,17 @@ function eaTable(){
 
 function empSummaryAll(){
   const Y7=EMP_ALL.years, prop=EMP_ALL.rows.find(r=>r.prop);
-  const measured=Y7.filter(y=>prop.kb[y]!==undefined).length;
   const first=Y7.find(y=>prop.kb[y]!==undefined), last=EMP_ALL.newScale;
-  const now=eaBoth(prop,last), was=eaBoth(prop,first);
-  const kbMove=prop.kb[last]-prop.kb[first], ssMove=prop.ss[last]-prop.ss[first];
 
-  const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>{
-    const yrs=Y7.filter(y=>eaBoth(r,y)!==undefined);
-    const nowV=eaBoth(r,yrs[yrs.length-1]), prevV=eaBoth(r,yrs[yrs.length-2]);
-    const del=nowV-prevV, lows=yrs.map(y=>eaBoth(r,y));
-    return `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
+  /* Each department card is its title and its shape, nothing more. The
+     figures all appear in the full table further down the page. */
+  const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>
+    `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
       eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,
         pad:{t:10,r:16,b:18,l:16},yrFont:5.6,yrDy:11,yrShort:true})+
-      `<p class="ea-cnow">${nowV.toFixed(1)}<small>2026</small></p>`+
-      `<p class="ea-cdel ${del>=0?"up":"dn"}">${del>0?"+":""}${del.toFixed(1)} since 2023</p>`+
-      `<p class="ea-cmeta">${eaBoth(r,yrs[0]).toFixed(1)} in ${yrs[0]} &middot; low of ${Math.min(...lows).toFixed(1)}</p>`+
-    `</div>`;
-  }).join("");
+    `</div>`).join("");
 
-  return `<p class="emp-meta">Consolidated satisfaction sheet &middot; ${first} to ${last} `+
-      `&middot; ${measured} years measured</p>`+
-    `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
+  return `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
     `<div class="emp-panel">${eaKey()}${eaChart(prop,{lo:65,hi:90,ticks:[70,75,80,85]})}</div>`+
     `<p class="emp-slbl">EACH DEPARTMENT, BOTH COURSES COMBINED</p>`+
     `<div class="ea-cards">${cards}</div>`+
