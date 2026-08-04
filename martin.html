@@ -2282,6 +2282,24 @@ const CART = {
      recommendation; the year-end cash straddle underneath it is ours. */
   tax:{ priorGain:530000, priorWhen:"January 2026", deferTo:"January 2027",
         priorSource:"Peninsula and Craft Farms", asOf:"August 3" },
+  /* E-Z-GO -- quote dated 3 August 2026, Kevin Blanton, December 2026 delivery.
+     Two sheets, one per course, both pricing 74 RXV Elite at the same net figure;
+     only the lease term differs. Two things queried with E-Z-GO: the strategic
+     account discount is stated as 5% but computes to 5% of $7,480 rather than the
+     $7,470.29 quoted, and the Slammer & Squire sheet still carries "King & Bear"
+     in its header. */
+  ez:{ received:"August 3, 2026", rep:"Kevin Blanton", delivery:"December 2026 delivery",
+       expires:"Pricing effective January 1, 2026",
+       list:7470.29, unit:7339.72, perCourse:543139.28, fleet:1086278.56,
+       kbLease:[ ["RXV Elite","48 mo",8622.48] ],
+       ssLease:[ ["RXV Elite","24 mo",10116.54] ],
+       buy:[ ["King &amp; Bear \u2014 RXV Elite","74 cars",7339.72,543139.28],
+             ["Slammer &amp; Squire \u2014 RXV Elite","74 cars",7339.72,543139.28] ],
+       buyPick:1086278.56,
+       fm:[ ["Pace 7EX screen","48-month term",37.71,2790.54],
+            ["Pace 10EX screen","48-month term",42.86,3171.64],
+            ["Onyx screen","48-month term",54.77,4052.98],
+            ["Pace 10EX refurbished","24-month term, Slammer &amp; Squire",42.86,3171.64] ] },
   cc:{ received:"July 31, 2026", rep:"Russ Lord", delivery:"December 2026 delivery",
        expires:"Expires August 30",
        kbLease:[ ["2027 Tempo Lithium-Ion","48 mo",9158.98],
@@ -2517,12 +2535,132 @@ function cwCcPane(){
       `aria-pressed="${k===sub}">${l}</button>`).join("")+`</div>`+ body;
 }
 
-/* No bid yet. Says so plainly rather than showing filler. */
+const EZ_KB=[116.52], EZ_SS=[136.71];
+const EZ_FM=[[0,"None"],[37.71,"Pace 7EX \u00b7 $37.71"],[42.86,"Pace 10EX \u00b7 $42.86"],
+             [54.77,"Onyx \u00b7 $54.77"]];
+
+function ezAllPane(){
+  const c=CART.ez, n=CART.now, add=state.cwFm||0;
+  const perCourse = add*74, base = n.monthly/2;
+  const head = `<div class="cw-cmp cw-chead"><span>Vehicle</span><span>Term</span>`+
+    `<span>Monthly</span><span>Annual</span></div>`;
+  const table = rows => head + cwNowRow(base,"2023 lithium") +
+    rows.map(r => cwRow(r[0], r[1], r[2]+perCourse, base)).join("");
+  return `<p class="cw-flag">Today we pay <b>${cwMoney(n.monthly)}</b> a month `+
+    `&mdash; <b>${cwMoney(n.monthly*12)}</b> a year &mdash; for ${n.cars} carts. `+
+    `E-Z-GO quotes new RXV Elite at both courses.</p>`+
+    `<div class="cw-addon"><span class="cw-addl">Add screens &amp; tracking</span>`+
+      `<div class="cw-yrs" style="margin:0" role="group" aria-label="Screens and tracking">`+
+      EZ_FM.map(([v,l])=>`<button type="button" data-cwfm="${v}" `+
+        `aria-pressed="${v===add}">${l}</button>`).join("")+`</div></div>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
+        `<div>${table(c.kbLease)}</div></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
+        `<div>${table(c.ssLease)}</div></div>`+
+    `</div>`+
+    `<div class="wx-card"><h3 class="wx-h">Buy &mdash; one-time cost</h3><div>`+
+      `<div class="cw-opt cw-ohead"><span>Fleet</span><span></span><span>Per cart</span>`+
+        `<span>Total</span></div>`+
+      c.buy.map(b=>`<div class="cw-opt"><span class="cw-on">${b[0]}`+
+        `<span class="cw-sub">${b[1]}</span></span><span class="cw-od"></span>`+
+        `<span class="cw-od">$${b[2].toFixed(2)}</span>`+
+        `<span class="cw-ov">${cwMoney(b[3])}</span></div>`).join("")+
+      `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite at both courses</span>`+
+        `<span class="cw-od"></span><span class="cw-od"></span>`+
+        `<span class="cw-ov">${cwMoney(c.buyPick)}</span></div>`+
+    `</div></div>`;
+}
+
+function ezBuyPane(){
+  const c=CART.ez;
+  return `<p class="cw-flag">One fleet, one price &mdash; new RXV Elite at both courses, `+
+    `${cwMoney(c.perCourse)} a course and <b>${cwMoney(c.fleet)}</b> for all 148.</p>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear</h3><div>`+
+        `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
+          `<span>Per cart</span><span>Total</span></div>`+
+        `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite</span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$${c.unit.toFixed(2)}</span>`+
+          `<span class="cw-ov">${cwMoney(c.perCourse)}</span></div>`+
+      `</div><p class="cw-foot">Premium body colour, grey seats, black top, fold-down `+
+      `windshield, wheel covers, sand bucket, cooler, bag cover, USB, logos and decals `+
+      `included.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
+        `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
+          `<span>Per cart</span><span>Total</span></div>`+
+        `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite</span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$${c.unit.toFixed(2)}</span>`+
+          `<span class="cw-ov">${cwMoney(c.perCourse)}</span></div>`+
+      `</div><p class="cw-foot">E-Z-GO quotes new cars here, where Club Car quoted lead `+
+      `acid or refurbished lithium. The two Slammer figures are not the same fleet.</p></div>`+
+    `</div>`+
+    `<div class="wx-card"><h3 class="wx-h">How the price is built &middot; per course</h3><div>`+
+      `<div class="cw-row"><span class="cw-n">RXV Elite, list<span class="cw-sub">`+
+        `74 at $${c.list.toFixed(2)}</span></span><span class="cw-v">${cwMoney(552801.46)}</span></div>`+
+      `<div class="cw-row"><span class="cw-n">Options and parts package<span class="cw-sub">`+
+        `Premium colour, E-coat frame</span></span><span class="cw-v">${cwMoney(7505.82)}</span></div>`+
+      `<div class="cw-row"><span class="cw-n">Freight and surcharge</span>`+
+        `<span class="cw-v">${cwMoney(25308)}</span></div>`+
+      `<div class="cw-row"><span class="cw-n">Troon discounts<span class="cw-sub">`+
+        `Strategic account and partner</span></span>`+
+        `<span class="cw-v cw-neg">&minus;${cwMoney(42476)}</span></div>`+
+      `<div class="cw-row is-tot"><span class="cw-n">Net, 74 cars</span>`+
+        `<span class="cw-v">${cwMoney(c.perCourse)}</span></div>`+
+    `</div><p class="cw-foot">The strategic account discount is stated as 5% but works out `+
+    `to $374.00 a car, which is 5% of $7,480 rather than the $${c.list.toFixed(2)} quoted `+
+    `&mdash; a $35.93 difference per course, queried with E-Z-GO.</p></div>`;
+}
+
+function ezLeasePane(){
+  const c=CART.ez, n=CART.now;
+  const head = `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Term</span>`+
+    `<span>Per cart</span><span>Monthly</span></div>`;
+  const rows = (list,per) => list.map((r,k)=>
+    `<div class="cw-opt is-pick"><span class="cw-on">${r[0]}</span>`+
+    `<span class="cw-od">${r[1]}</span><span class="cw-od">$${per[k].toFixed(2)}</span>`+
+    `<span class="cw-ov">${cwMoney(r[2])}</span></div>`).join("");
+  return `<p class="cw-flag">Terms differ by course &mdash; King &amp; Bear at 48 months, `+
+    `Slammer &amp; Squire at 24, for the same car at the same purchase price.</p>`+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">King &amp; Bear &middot; 74 cars</h3>`+
+        `<div>${head}${rows(c.kbLease,EZ_KB)}</div>`+
+        `<p class="cw-foot">Above our $${n.perCar.toFixed(2)} anchor, but $7.25 a car below `+
+        `Club Car&rsquo;s 48-month rate &mdash; $536.50 a month, $25,752 across the term.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
+        `<div>${head}${rows(c.ssLease,EZ_SS)}</div>`+
+        `<p class="cw-foot">Only a 24-month term is quoted here. Payments are estimated and `+
+        `subject to change.</p></div>`+
+    `</div>`;
+}
+
+function ezFmPane(){
+  const c=CART.ez;
+  return `<p class="cw-flag">Screens are priced separately, per car per month, and are not `+
+    `included in any of the vehicle figures.</p>`+
+    `<div class="wx-card"><h3 class="wx-h">Per course &middot; 74 cars</h3><div>`+
+      `<div class="cw-opt cw-ohead"><span>Module</span><span></span><span>Per cart</span>`+
+        `<span>Monthly</span></div>`+
+      c.fm.map(f=>`<div class="cw-opt"><span class="cw-on">${f[0]}`+
+        (f[1]?`<span class="cw-sub">${f[1]}</span>`:"")+`</span>`+
+        `<span class="cw-od"></span><span class="cw-od">$${f[2].toFixed(2)}</span>`+
+        `<span class="cw-ov">${cwMoney(f[3])}</span></div>`).join("")+
+    `</div><p class="cw-foot">Across both courses, Pace 10EX is $6,343 a month &mdash; `+
+    `$76,119 a year on top of the carts. Club Car&rsquo;s nearest screen, Visage V3, is `+
+    `$39 a car against Pace 10EX at $42.86.</p></div>`;
+}
+
 function cwEzPane(){
-  return `<div class="cw-empty"><h4>No proposal received yet</h4>`+
-    `<p>E-Z-GO pricing is expected within the next few days. This page will fill in the `+
-    `same shape as Club Car &mdash; buy, lease, and screens &mdash; so the two read side `+
-    `by side.</p></div>`;
+  const c=CART.ez, sub=cwSub();
+  const subs=[["all","All options"],["buy","Buy"],["lease","Lease"],["fm","Screens &amp; tracking"]];
+  const body = sub==="buy" ? ezBuyPane() : sub==="lease" ? ezLeasePane()
+             : sub==="fm" ? ezFmPane() : ezAllPane();
+  return `<div class="cw-anchor"><b>E-Z-GO</b>`+
+      `<span>Received ${c.received} &middot; ${c.rep} &middot; ${c.delivery}</span>`+
+      `<em>${c.expires}</em></div>`+
+    `<div class="cw-yrs" role="group" aria-label="Structure">`+
+    subs.map(([k,l])=>`<button type="button" data-cwsub="${k}" `+
+      `aria-pressed="${k===sub}">${l}</button>`).join("")+`</div>`+ body;
 }
 
 function detailCarts(i){
