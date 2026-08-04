@@ -2277,9 +2277,9 @@ function detailUsopen(i){
        74. Now $540,200, matching the arithmetic figure used here all along.
      - Slammer & Squire 24-month lead acid was $9,603 against $128.04 per
        car. Now $9,474.96, so their total and their per-car rate agree.
-   Twelve-month Slammer & Squire pricing is quoted alongside the 24-month
-   terms and both are shown: lead acid $236.95 a car ($17,534.30), lithium
-   $374.07 ($27,681.18), refurbished lithium $423.89 ($31,367.86).
+   Twelve-month Slammer & Squire pricing is also quoted -- lead acid $236.95 a
+   car, lithium $374.07, refurbished lithium $423.89 -- but is not shown, since
+   only the 24-month terms are under consideration.
    ===================================================== */
 const CART = {
   now:{ cars:148, monthly:14634, perCar:98.88, subPayments:48,
@@ -2320,10 +2320,7 @@ const CART = {
                  ["2027 Tempo Lithium-Ion","54 mo",8163.68] ],
        ssLease:[ ["Tempo Lead Acid \u00b7 FMV","24 mo",9474.96],
                  ["Tempo Lithium \u00b7 FMV","24 mo",14771.14],
-                 ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72],
-                 ["Tempo Lead Acid \u00b7 FMV","12 mo",17534.30],
-                 ["Tempo Lithium \u00b7 FMV","12 mo",27681.18],
-                 ["Refurbished Lithium \u00b7 $1 out","12 mo",31367.86] ],
+                 ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72] ],
        buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,540200],
              ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,379028],
              ["Slammer &amp; Squire \u2014 refurbished lithium","74 cars",4950,366300] ],
@@ -2514,12 +2511,11 @@ function cwLeasePane(){
         `term closes most of the gap.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,PC_SS)}</div>`+
-        `<p class="cw-foot">Twelve-month terms run roughly double the 24-month rates for `+
-        `the same cars. Club Car corrected the lead acid monthly to $9,474.96 on review; `+
-        `every rate here now agrees with its total.</p></div>`+
+        `<p class="cw-foot">Club Car corrected the lead acid monthly to $9,474.96 on `+
+        `review; every rate here now agrees with its total.</p></div>`+
     `</div>`;
 }
-const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28,236.95,374.07,423.89];
+const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28];
 
 function cwFmPane(){
   const c=CART.cc;
