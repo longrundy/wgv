@@ -373,6 +373,7 @@ a{color:inherit}
 .cw-vd.is-ez{color:var(--green)}
 .cw-vd.is-cc{color:var(--red)}
 .cw-nq{color:#b4b2a9;font-size:12px}
+.cw-vsub{display:block;font-size:11px;color:#b4b2a9;margin-top:3px;font-weight:400}
 .cw-opt{display:grid;grid-template-columns:minmax(0,1fr) 78px 96px 104px;gap:0 12px;
  align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
 .cw-opt:last-child{border-bottom:0}
@@ -2674,8 +2675,8 @@ function ezFmPane(){
    compare cleanly at matched terms. The buy tables do not: Club Car offers no
    new car at Slammer & Squire, and E-Z-GO offers nothing but. */
 const CW_VS={
-  lease:[ ["King &amp; Bear","48-month term",123.77,116.52,48],
-          ["Slammer &amp; Squire","24-month term",199.61,136.71,24] ],
+  lease:[ ["King &amp; Bear","48-month term",123.77,116.52,48,7300,7339.72],
+          ["Slammer &amp; Squire","24-month term",199.61,136.71,24,7300,7339.72] ],
   buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,7339.72],
         ["Slammer &amp; Squire \u2014 new lithium","74 cars",null,7339.72],
         ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,null],
@@ -2719,18 +2720,28 @@ function cwCmpPane(){
 
     `<div class="wx-card"><h3 class="wx-h">Lease &mdash; new lithium, matched terms, per car per month</h3><div>`+
       head("Course","Club Car","E-Z-GO","Difference")+
-      CW_VS.lease.map(r=>`<div class="cw-vs"><span class="cw-on">${r[0]}`+
+      CW_VS.lease.map(r=>{
+        const rc=(pc,price)=>(pc*r[4]/price*100).toFixed(0);
+        return `<div class="cw-vs"><span class="cw-on">${r[0]}`+
         `<span class="cw-sub">${r[1]}</span></span>`+
-        `<span class="cw-od">$${r[2].toFixed(2)}</span>`+
-        `<span class="cw-od">$${r[3].toFixed(2)}</span>`+
-        `<span class="cw-ov">${gap(r[2],r[3])}</span></div>`).join("")+
+        `<span class="cw-od">$${r[2].toFixed(2)}`+
+          `<span class="cw-vsub">${rc(r[2],r[5])}% of the car</span></span>`+
+        `<span class="cw-od">$${r[3].toFixed(2)}`+
+          `<span class="cw-vsub">${rc(r[3],r[6])}% of the car</span></span>`+
+        `<span class="cw-ov">${gap(r[2],r[3])}</span></div>`;}).join("")+
       `<div class="cw-vs is-tot"><span class="cw-on">Across both terms</span>`+
         `<span class="cw-od"></span><span class="cw-od"></span>`+
         `<span class="cw-ov">&minus;${cwMoney(Math.abs(totKB+totSS))}</span></div>`+
     `</div><p class="cw-foot">King &amp; Bear over 48 months, ${cwMoney(Math.abs(totKB))}. `+
     `Slammer &amp; Squire over 24, ${cwMoney(Math.abs(totSS))}. Both sit above our `+
     `$${n.perCar.toFixed(2)} anchor &mdash; E-Z-GO by $17.64 a car at King &amp; Bear, `+
-    `Club Car by $24.89.</p></div>`+
+    `Club Car by $24.89.</p>`+
+    `<p class="cw-foot"><b>Why the dearer car leases cheaper.</b> A payment covers only the `+
+    `part of the car you use, not the whole price &mdash; the rest is the residual the lessor `+
+    `expects to recover when the cars come back. E-Z-GO charges for less of the car because it `+
+    `assumes a higher resale, which is the same reason it carries no balloon and takes the fleet `+
+    `back. The lower rate buys less equity, not a cheaper car. Club Car quotes no cash price for `+
+    `a new lithium car at Slammer &amp; Squire, so the King &amp; Bear price is used there.</p></div>`+
 
     `<div class="cw-2">`+
       `<div class="wx-card"><h3 class="wx-h">Buy &mdash; per cart</h3><div>`+
