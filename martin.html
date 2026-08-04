@@ -546,6 +546,40 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
   .oc-tag{margin:2px 0 0 47px}
 }
 /* ---- Pro Forma ---- */
+/* owner's live semi-private model */
+.rls-presets{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.rls-presets button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;
+ border:1px solid #dfe3e9;background:#fff;color:var(--ink);cursor:pointer}
+.rls-presets button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.rls-presets button.is-reset{margin-left:auto;color:var(--muted)}
+.rls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px}
+.rls-f{display:flex;flex-direction:column;gap:4px}
+.rls-f span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+ font-weight:700}
+.rls-f input{font:inherit;font-size:15px;font-weight:700;color:var(--navy);padding:7px 9px;
+ border:1px solid #dfe3e9;border-radius:8px;background:#fcfcfd;width:100%}
+.rls-f input:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
+.rls-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px;margin:16px 0;
+ padding:16px 22px;background:var(--navy);border-radius:13px}
+.rls-out>div{padding-right:24px;border-right:1px solid rgba(255,255,255,.16)}
+.rls-out>div:last-child{border-right:0;padding-right:0}
+.rls-on{font-size:24px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.rls-on.is-dn{color:#ff9d9d}
+.rls-on.is-up{color:#a8e06a}
+.rls-ol{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
+ font-weight:700;margin-top:4px}
+.rls-r{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:0 12px;
+ align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.rls-r .rls-v,.rls-r .rls-b{text-align:right;font-variant-numeric:tabular-nums}
+.rls-n{font-size:13px;font-weight:600;color:var(--ink)}
+.rls-v{font-size:13.5px;font-weight:700;color:var(--ink)}
+.rls-b{font-size:12.5px;color:#8a8a84}
+.rls-head{border-bottom:1px solid var(--line);padding-bottom:5px}
+.rls-head .rls-v,.rls-head .rls-b{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+ color:#b4b2a9;font-weight:700}
+.rls-r.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
+.rls-r.is-tot .rls-v{font-size:15px;color:var(--navy)}
+.rls-r.is-ocf .rls-v{font-size:17px}
 .pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
   background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
 .pf-flag b{color:var(--red-dark)}
@@ -7301,8 +7335,9 @@ const PF_COPY={
 
 /* Profit and loss sits first and is where the page lands: it is the sheet
    Lon opens to, and the other views read as commentary on it. */
-const PF_SECS=[["pl","Profit and loss"],["plan","The proposal"],["cash","Ten-year cash"],
-               ["today","Against today"],["ass","Assumptions"],["add","Add-ons"]];
+const PF_SECS=[["pl","Profit and loss"],["rls","Owner's model"],["plan","The proposal"],
+               ["cash","Ten-year cash"],["today","Against today"],["ass","Assumptions"],
+               ["add","Add-ons"]];
 const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"pl";
 
 const pfM=n=>(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
@@ -7456,13 +7491,140 @@ function pfAdd(){
 }
 
 /* ------------------------------------------------------------------- shell */
+/* ============================ OWNER'S SEMI-PRIVATE MODEL ============================
+   The Semi-Private (RLS) tab of the source workbook, rebuilt so the numbers can be
+   changed live. Eight inputs drive every line; the rates below are the ones the
+   sheet derives from 2025 actual and holds fixed across scenarios.
+   Verified against all four of the owner's columns to the cent. */
+const RLS = {
+  base:{ y:"2025", members:303, rpm:79, dues:544.42, init:7500, guests:51641,
+         gfee:105, fb:23, merch:11,
+         rev:11061211, cogs:1074857, lab:4188866, opx:3590215, other:139210+109874+59212,
+         ocf:1898977 },
+  /* fixed rates, straight off the sheet */
+  otherPerRound:603317/(23979+51641),   /* $7.98, 2025 other golf revenue per round */
+  newMemberRate:0.08,                   /* new members each year, as a share of roster */
+  cogsRate:0.40,                        /* of food, beverage and merchandise */
+  labRate:0.43, opxRate:0.30,           /* of total revenue */
+  adValorem:100000, mgmtFee:150000,
+  scenarios:[
+    ["A", {members:150, rpm:80, dues:900, init:15000, guests:20000, gfee:125, fb:20, merch:15}],
+    ["B", {members:150, rpm:80, dues:900, init:25000, guests:25000, gfee:100, fb:20, merch:15}],
+    ["C", {members:200, rpm:80, dues:700, init:10000, guests:20000, gfee:125, fb:20, merch:15}],
+    ["D", {members:200, rpm:80, dues:700, init:15000, guests:25000, gfee:100, fb:20, merch:15}]
+  ],
+  fields:[
+    ["members","Total members",1],["rpm","Rounds per member",1],
+    ["dues","Monthly dues",1],["init","Initiation fee",1],
+    ["guests","Guest & outing rounds",1],["gfee","Average guest fee",1],
+    ["fb","F&B per round",1],["merch","Merchandise per round",1]
+  ]
+};
+
+function rlsRun(v){
+  const R=RLS;
+  const memberRounds = v.members*v.rpm;
+  const rounds = memberRounds + v.guests;
+  const green = v.guests*v.gfee;
+  const dues = v.members*v.dues*12;
+  const fb = rounds*v.fb;
+  const merch = rounds*v.merch;
+  const other = rounds*R.otherPerRound;
+  const initiation = v.init*(v.members*R.newMemberRate);
+  const rev = green+dues+fb+merch+other+initiation;
+  const cogs = (fb+merch)*R.cogsRate;
+  const lab = rev*R.labRate, opx = rev*R.opxRate;
+  const exp = cogs+lab+opx+R.adValorem+R.mgmtFee;
+  const ocf = rev-exp;
+  return {memberRounds, rounds, green, dues, fb, merch, other, initiation,
+          rev, cogs, lab, opx, exp, ocf, margin:rev?ocf/rev:0};
+}
+
+const rlsVals=()=>Object.assign({}, RLS.scenarios[0][1], state.rls||{});
+
+function pfRls(){
+  const R=RLS, b=R.base, v=rlsVals(), o=rlsRun(v);
+  const m=n=>pfM(n), n0=n=>Math.round(n).toLocaleString();
+  const pick=RLS.scenarios.findIndex(([k,s])=>
+    Object.keys(s).every(f=>Number(s[f])===Number(v[f])));
+  const vs=o.ocf-b.ocf, pc=b.ocf?(o.ocf/b.ocf-1)*100:0;
+
+  const inputs=R.fields.map(([k,l])=>
+    `<label class="rls-f"><span>${l}</span>`+
+    `<input type="number" data-rls="${k}" value="${v[k]}" step="any"></label>`).join("");
+
+  const presets=R.scenarios.map(([k,s],i)=>
+    `<button type="button" data-rlsp="${i}" aria-pressed="${i===pick}">Scenario ${k}</button>`).join("");
+
+  const line=(n,now,then,cls)=>`<div class="rls-r${cls||""}"><span class="rls-n">${n}</span>`+
+    `<span class="rls-v">${now}</span><span class="rls-b">${then}</span></div>`;
+
+  return `<div class="pf-flag"><b>The owner&rsquo;s model.</b> Eight inputs, everything else `+
+    `follows. Change any figure and the whole column moves; ${b.y} sits alongside for `+
+    `comparison.</div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Inputs</h3>`+
+      `<p class="wx-sub">Type over any of these, or start from one of the owner&rsquo;s four scenarios</p>`+
+      `<div class="rls-presets">${presets}`+
+        `<button type="button" data-rlsp="r" class="is-reset">Reset</button></div>`+
+      `<div class="rls-grid">${inputs}</div></div>`+
+
+    `<div class="rls-out">`+
+      `<div><div class="rls-on">${m(o.ocf)}</div><div class="rls-ol">Operating cash flow</div></div>`+
+      `<div><div class="rls-on">${(o.margin*100).toFixed(1)}%</div><div class="rls-ol">Margin</div></div>`+
+      `<div><div class="rls-on ${vs<0?"is-dn":"is-up"}">${vs<0?"\u2212":"+"}${m(Math.abs(vs))}</div>`+
+        `<div class="rls-ol">Against ${b.y} &middot; ${pc>=0?"+":"\u2212"}${Math.abs(pc).toFixed(0)}%</div></div>`+
+      `<div><div class="rls-on">${n0(o.rounds)}</div><div class="rls-ol">Total rounds</div></div>`+
+    `</div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">What it produces</h3>`+
+      `<div class="rls-r rls-head"><span class="rls-n"></span><span class="rls-v">Model</span>`+
+        `<span class="rls-b">${b.y} actual</span></div>`+
+      line("Member rounds",n0(o.memberRounds),n0(b.members*b.rpm))+
+      line("Total rounds",n0(o.rounds),n0(b.members*b.rpm+b.guests))+
+      line("Green fees",m(o.green),m(b.guests*b.gfee))+
+      line("Member dues",m(o.dues),m(b.members*b.dues*12))+
+      line("Food and beverage",m(o.fb),m(1749926))+
+      line("Merchandise",m(o.merch),m(863006))+
+      line("Other golf",m(o.other),m(603317))+
+      line("Initiation fees",m(o.initiation),m(287109))+
+      line("Total revenue",m(o.rev),m(b.rev)," is-tot")+
+      line("Cost of sales",m(-o.cogs),m(-b.cogs))+
+      line("Labor and benefits",m(-o.lab),m(-b.lab))+
+      line("Operating expenses",m(-o.opx),m(-b.opx))+
+      line("Ad valorem and management fee",m(-(R.adValorem+R.mgmtFee)),m(-b.other))+
+      line("Total expenses",m(-o.exp),m(-(b.cogs+b.lab+b.opx+b.other))," is-tot")+
+      line("Operating cash flow",m(o.ocf),m(b.ocf)," is-tot is-ocf")+
+      `<p class="ec-body last pf-note">Cost of sales runs at `+
+      `${(R.cogsRate*100).toFixed(0)}% of food and merchandise; labor at `+
+      `${(R.labRate*100).toFixed(0)}% and operating expenses at `+
+      `${(R.opxRate*100).toFixed(0)}% of revenue &mdash; the owner&rsquo;s rates, taken off ${b.y}. `+
+      `Other golf revenue runs at $${R.otherPerRound.toFixed(2)} a round. New members each year `+
+      `are ${(R.newMemberRate*100).toFixed(0)}% of the roster.</p></div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">The owner&rsquo;s four scenarios</h3>`+
+      `<p class="wx-sub">Every configuration lands within $21,000 of the others, and all four sit `+
+      `below half of ${b.y}</p>`+
+      `<div class="rls-r rls-head"><span class="rls-n"></span>`+
+      R.scenarios.map(([k])=>`<span class="rls-v">${k}</span>`).join("")+`</div>`+
+      [["Members","members",0],["Monthly dues","dues",1],["Initiation","init",1],
+       ["Guest rounds","guests",0],["Guest fee","gfee",1]].map(([l,f,mo])=>
+        `<div class="rls-r"><span class="rls-n">${l}</span>`+
+        R.scenarios.map(([,s])=>`<span class="rls-v">${mo?m(s[f]):n0(s[f])}</span>`).join("")+`</div>`).join("")+
+      `<div class="rls-r is-tot"><span class="rls-n">Operating cash flow</span>`+
+      R.scenarios.map(([,s])=>`<span class="rls-v">${m(rlsRun(s).ocf)}</span>`).join("")+`</div>`+
+      `<div class="rls-r"><span class="rls-n">Margin</span>`+
+      R.scenarios.map(([,s])=>`<span class="rls-v">${(rlsRun(s).margin*100).toFixed(1)}%</span>`).join("")+
+      `</div></div>`;
+}
+
 function detailPf(i){
   const sec=pfSec();
   const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
     PF_SECS.map(([k,l])=>`<button type="button" data-pf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
   const body=sec==="plan"?pfPlan():sec==="cash"?pfCash():sec==="today"?pfToday()
-            :sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
+            :sec==="rls"?pfRls():sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
   el("#detail").innerHTML=
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
     `<div class="detail-body is-wide">${body}</div>`;
@@ -7473,6 +7635,29 @@ function detailPf(i){
   };
   el("#detail").querySelectorAll("[data-pf]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.pfSec=b.dataset.pf; })));
+
+  /* The model recalculates on every keystroke. Redrawing the pane would blow
+     away focus and caret, so the field being typed in is restored afterwards. */
+  const redraw=()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    const act=document.activeElement, id=act&&act.dataset?act.dataset.rls:null;
+    const pos=id?act.selectionStart:null;
+    detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+    if(id){
+      const back=el("#detail").querySelector('[data-rls="'+id+'"]');
+      if(back){ back.focus(); try{ back.setSelectionRange(pos,pos); }catch(e){} }
+    }
+  };
+  el("#detail").querySelectorAll("[data-rls]").forEach(inp=>inp.addEventListener("input",()=>{
+    const v=parseFloat(inp.value);
+    state.rls=Object.assign({}, rlsVals(), {[inp.dataset.rls]: isNaN(v)?0:v});
+    redraw();
+  }));
+  el("#detail").querySelectorAll("[data-rlsp]").forEach(b=>b.addEventListener("click",hold(()=>{
+    state.rls = b.dataset.rlsp==="r" ? null
+              : Object.assign({}, RLS.scenarios[+b.dataset.rlsp][1]);
+  })));
 }
 
 function detailSurveyPending(i){
