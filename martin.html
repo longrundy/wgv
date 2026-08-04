@@ -7330,13 +7330,12 @@ const PF_COPY={
   addSub:"Each is a separate investment on top of the $10m, with its own return",
   addNote:"Neither add-on covers its own cost of capital in this model. Taken together with the base case, the combined $16m returns \u22123% and a negative $6.8m present value.",
 
-  draft:"The source workbook is marked draft, and two other membership models sit beside this one. Only the semi-private model ties out to the Troon pro forma, so only it is shown here."
 };
 
 /* Profit and loss sits first and is where the page lands: it is the sheet
    Lon opens to, and the other views read as commentary on it. */
-const PF_SECS=[["pl","Profit and loss"],["rls","Owner's model"],["plan","The proposal"],
-               ["cash","Ten-year cash"],["today","Against today"],["ass","Assumptions"],
+const PF_SECS=[["pl","Profit and Loss"],["rls","Owner's Model"],
+               ["cash","Ten-Year Cash"],["today","Against Today"],["ass","Assumptions"],
                ["add","Add-ons"]];
 const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"pl";
 
@@ -7346,29 +7345,6 @@ const pfN=n=>Math.round(n).toLocaleString();
 const pfPc=(a,b)=>((a/b-1)*100);
 
 /* ------------------------------------------------------------ the proposal */
-function pfPlan(){
-  const L=PF.cols.length-1, A=1;   /* Yr10 index, 2025 index */
-  return ecKpis([
-      ecKpi(pfMm(PF.invest),"Investment","deployed in year one"),
-      ecKpi(pfMm(PF.noExit.cash),"Cash after 10 years","before any sale"),
-      ecKpi("12\u201314%","IRR if we sell","at 8\u00d7 to 10\u00d7 year ten"),
-      ecKpi(String(PF.holes[L]),"Holes from year two",PF.holes[A]+" today")])+
-    `<div class="pf-flag"><b>${PF_COPY.planHead}</b> ${PF_COPY.planSay}</div>`+
-    `<div class="wx-card ec-card"><h3 class="wx-h">Without a sale, and with one</h3>`+
-      `<p class="wx-sub">Ten-year return on the $10m</p>`+
-      `<div class="pf-erow pf-ehead"><span>SCENARIO</span><span>IRR</span>`+
-        `<span>NPV AT 10%</span><span>CASH POSITION</span></div>`+
-      `<div class="pf-erow"><span>Operations only, no sale</span>`+
-        `<span class="bad">${PF.noExit.irr}%</span>`+
-        `<span class="bad">${pfMm(PF.noExit.npv)}</span>`+
-        `<span class="bad">${pfMm(PF.noExit.cash)}</span></div>`+
-      PF.exits.map(e=>`<div class="pf-erow"><span>Sell at ${e.mult}\u00d7 year-ten earnings</span>`+
-        `<span class="good">+${e.irr}%</span><span class="good">+${pfMm(e.npv)}</span>`+
-        `<span>+${pfMm(e.surplus)} over the $10m</span></div>`).join("")+
-      `<p class="ec-body last pf-note">Year-ten earnings of ${pfM(PF.noExit.stabilised)} `+
-      `are what the multiple is applied to.</p></div>`+
-    ecBand(PF_COPY.planBand);
-}
 
 /* ------------------------------------------------------------ ten-year cash */
 function pfCash(){
@@ -7461,9 +7437,7 @@ function pfAss(){
     `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.assHead)}</h3>`+
       `<p class="wx-sub">${esc(PF_COPY.assSub)}</p>`+
       pfGrid(rows.concat([["Total rounds",PF.rounds,pfN,true]]))+
-      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`+
-    `<div class="wx-card ec-card"><h3 class="wx-h">Where this came from</h3>`+
-      `<p class="ec-body last">${PF_COPY.draft}</p></div>`;
+      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`;
 }
 
 /* ----------------------------------------------------------------- add-ons */
@@ -7623,7 +7597,7 @@ function detailPf(i){
   const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
     PF_SECS.map(([k,l])=>`<button type="button" data-pf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
-  const body=sec==="plan"?pfPlan():sec==="cash"?pfCash():sec==="today"?pfToday()
+  const body=sec==="cash"?pfCash():sec==="today"?pfToday()
             :sec==="rls"?pfRls():sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
   el("#detail").innerHTML=
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
