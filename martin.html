@@ -2540,7 +2540,7 @@ function cwBuyPane(){
         `<div class="cw-opt is-pick"><span class="cw-on">2027 Tempo Lithium-Ion</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$7,300</span>`+
           `<span class="cw-ov">$540,200</span></div>`+
-      `</div><p class="cw-foot">Premium body and seat colour, auto park brake, cooler, `+
+      `</div><p class="cw-foot">Premium body and seat color, auto park brake, cooler, `+
       `sand bucket, hinged windshield, decals and freight all included.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
         `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
@@ -2551,7 +2551,7 @@ function cwBuyPane(){
         `<div class="cw-opt"><span class="cw-on">Refurbished Tempo Lithium</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$4,950</span>`+
           `<span class="cw-ov">$366,300</span></div>`+
-      `</div><p class="cw-foot">Standard colours. Refurbished cars are model year 2021 `+
+      `</div><p class="cw-foot">Standard colors. Refurbished cars are model year 2021 `+
       `with new seats, wheels, tires, windshield and body panels.</p></div>`+
     `</div>`;
 }
@@ -2658,7 +2658,7 @@ function ezBuyPane(){
         `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$${c.unit.toFixed(2)}</span>`+
           `<span class="cw-ov">${cwMoney(c.perCourse)}</span></div>`+
-      `</div><p class="cw-foot">Premium body colour, grey seats, black top, fold-down `+
+      `</div><p class="cw-foot">Premium body color, grey seats, black top, fold-down `+
       `windshield, wheel covers, sand bucket, cooler, bag cover, USB, logos and decals `+
       `included.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
@@ -2674,7 +2674,7 @@ function ezBuyPane(){
       `<div class="cw-row"><span class="cw-n">RXV Elite, list<span class="cw-sub">`+
         `74 at $${c.list.toFixed(2)}</span></span><span class="cw-v">${cwMoney(552801.46)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Options and parts package<span class="cw-sub">`+
-        `Premium colour, E-coat frame</span></span><span class="cw-v">${cwMoney(7505.82)}</span></div>`+
+        `Premium color, E-coat frame</span></span><span class="cw-v">${cwMoney(7505.82)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Freight and surcharge</span>`+
         `<span class="cw-v">${cwMoney(25308)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Troon discounts<span class="cw-sub">`+
@@ -3248,7 +3248,7 @@ function gaPane(){
       `<div><h4>The company</h4><b>Academy Assets dissolves</b>`+
       `<p>A 50/50 venture with TPC Golf Schools since 2001. Honours takes the cash, the receivables `+
       `and the buildings, and assumes every liability. TPC is released.</p></div>`+
-      `<div><h4>The name</h4><b>The licence is cancelled</b>`+
+      `<div><h4>The name</h4><b>The license is cancelled</b>`+
       `<p>The PGA TOUR marks revert and all use stops. Todd rebrands to The Tour Academy in `+
       `September, with a new mark and website.</p></div>`+
       `<div><h4>What does not change</h4><b>Operator, building, rent</b>`+
@@ -4017,8 +4017,8 @@ const FIN_INSIDE = {};
 const FIN_NOTE = {
   "Membership":"allocated evenly between the two courses",
   "Marketing":"allocated evenly between the two courses",
-  "Golf Course Maintenance":"a cost centre \u2014 no revenue of its own",
-  "General & Administrative":"a cost centre \u2014 no revenue of its own",
+  "Golf Course Maintenance":"a cost center \u2014 no revenue of its own",
+  "General & Administrative":"a cost center \u2014 no revenue of its own",
   "Golf Academy":"Slammer & Squire only",
   "Merchandise":"revenue and cost of sales only \u2014 its labor and operating costs stay with Pro Shop",
 };
@@ -4145,7 +4145,7 @@ function finTrend(seg,metric,dept,perRound){
   const vals=finFullYears().map(y=>finVal(y,metric,dept,seg,perRound)).concat(fc?[fc.v]:[]);
   const nAct=vals.length-(fc?1:0);
   const W=svgW(1), H=210, PL=46, PR=20, PB=28;
-  /* Headroom has to be added, not multiplied: for a cost centre every value is
+  /* Headroom has to be added, not multiplied: for a cost center every value is
      negative, so max*1.1 lands BELOW the maximum and the line overflows the box. */
   const rawLo=Math.min.apply(null,vals), rawHi=Math.max.apply(null,vals);
   const span=(rawHi-rawLo)||Math.abs(rawHi)||1;
@@ -6496,9 +6496,9 @@ function empSummary23(){
       card(kb)+card(ss)+
     `</div>`+
     `<div class="emp-call act"><h5>KING &amp; BEAR MOVED, AND MOVED A LONG WAY</h5>`+
-      `<p>Every one of the nine dimensions rose at King &amp; Bear. Management support went from 67.2 to 78.4 and organisational climate from 72.8 to 80.9. After a 2022 in which not one goal was met, this is the year something changed.</p></div>`+
+      `<p>Every one of the nine dimensions rose at King &amp; Bear. Management support went from 67.2 to 78.4 and organizational climate from 72.8 to 80.9. After a 2022 in which not one goal was met, this is the year something changed.</p></div>`+
     `<div class="emp-call warn"><h5>SLAMMER &amp; SQUIRE SLIPPED ON LOYALTY</h5>`+
-      `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organisational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
+      `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organizational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
     `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
     e23Dims()+
     `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
@@ -6569,7 +6569,7 @@ function empSummary19(){
     `</div>`+
     `<div class="emp-call warn"><h5>KING &amp; BEAR WAS THE WEAKER COURSE ON EVERY ONE OF THE NINE</h5>`+
       `<p>King &amp; Bear scored below Slammer &amp; Squire on all nine dimensions, by about eleven points on average. `+
-      `The widest gaps were management support, 62.1 against 77.5, and organisational climate, 69.7 against 81.1. `+
+      `The widest gaps were management support, 62.1 against 77.5, and organizational climate, 69.7 against 81.1. `+
       `Golf operations carried it: seventeen of the twenty-nine King &amp; Bear responses, rating manager follow-through 31.4 `+
       `and satisfaction with leadership 36.3 \u2014 the two lowest numbers anywhere in this survey.</p></div>`+
     `<div class="emp-call act"><h5>COMMUNICATION WAS THE FLOOR AT BOTH COURSES</h5>`+
@@ -7240,7 +7240,7 @@ const PF={
   short:["2024","2025","2026B","1","2","3","4","5","6","7","8","9","10"],
   actual:2,          /* index of the last column that is not the model */
   invest:10000000,
-  phase:{3:"Renovation, 36 holes",4:"Stabilise, 18 holes",12:"Mature"},
+  phase:{3:"Renovation, 36 holes",4:"Stabilize, 18 holes",12:"Mature"},
 
     holes    :[36,36,36,36,18,18,18,18,18,18,18,18,18],
     rounds   :[70169,79507,80000,67000,45000,45000,45000,45000,45000,45000,45000,45000,45000],
@@ -7282,7 +7282,7 @@ const PF={
     {mult:9,  ev:15560174, surplus:5560174,  irr:13, npv:1681415},
     {mult:10, ev:17289083, surplus:7289083,  irr:14, npv:2347984}
   ],
-  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilised:1728908},
+  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilized:1728908},
 
   /* Each add-on is a separate investment with its own return. Both are
      negative on their own terms; the page says so rather than folding them
@@ -7314,7 +7314,7 @@ const PF_COPY={
   cashNote:"Selling at year ten adds $13.8m to $17.3m depending on the multiple, which is what turns the whole thing positive.",
 
   todayHead:"What the club looks like after",
-  todaySub:"2025 actual against the model's stabilised year ten",
+  todaySub:"2025 actual against the model's stabilized year ten",
   todayNote:"Ten years out, the model earns less than the property earns today. The case rests on what one restored eighteen-hole club is worth to a buyer, not on what it earns.",
 
   plHead:"The ten-year profit and loss",
@@ -7416,7 +7416,7 @@ function pfPL(){
     ["Members",PF.members,pfN,false],
     ["Revenue",PF.rev,m,true],
     ["Cost of sales",PF.cos.map(v=>-v),m,false],
-    ["Labour",PF.lab.map(v=>-v),m,false],
+    ["Labor",PF.lab.map(v=>-v),m,false],
     ["Operating expense",PF.opx.map(v=>-v),m,false],
     ["Operating income",PF.ebitda,m,true],
     ["Margin",PF.margin,v=>(v*100).toFixed(0)+"%",false]
