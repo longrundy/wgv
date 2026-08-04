@@ -373,6 +373,22 @@ a{color:inherit}
 .cw-vd.is-ez{color:var(--green)}
 .cw-vd.is-cc{color:var(--red)}
 .cw-nq{color:#b4b2a9;font-size:12px}
+/* golf academy */
+.ga-txt{font-size:12.5px;line-height:1.62;margin:0 0 9px;color:#4a4a46}
+.ga-txt:last-child{margin-bottom:0}
+.ga-txt b{color:var(--navy)}
+.ga-brand{display:grid;grid-template-columns:300px minmax(0,1fr);gap:0 26px;align-items:center}
+.ga-logo{border:1px solid var(--line);border-radius:10px;background:#f4f4f2;padding:16px}
+.ga-logo img{width:100%;height:auto;display:block}
+.ga-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px;margin-top:20px;
+ padding-top:16px;border-top:1px solid var(--line)}
+.ga-notes h4{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+ color:var(--navy);font-weight:700}
+.ga-notes p{margin:0;font-size:12px;color:#5f5e5a;line-height:1.55}
+.ga-notes b{color:var(--navy)}
+.ga-warn{margin:14px 0 0;padding:3px 0 3px 13px;border-left:3px solid var(--navy);
+ font-size:12px;color:#5f5e5a;line-height:1.55}
+.ga-warn b{color:var(--navy)}
 .cw-vsub{display:block;font-size:11px;color:#b4b2a9;margin-top:3px;font-weight:400}
 .cw-opt{display:grid;grid-template-columns:minmax(0,1fr) 78px 96px 104px;gap:0 12px;
  align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
@@ -2144,7 +2160,7 @@ const PAGES = {
   financials: () => financialsItem(),
   membership: () => membershipsItem(),
   golffees:   () => dgfItem(),
-  academy:    () => pendingItem("Golf Academy"),
+  academy:    () => academyItem(),
   balance:    () => balanceItem(),
   carts:      () => cartsItem(),
   usopen:     () => usopenItem(),
@@ -3126,6 +3142,135 @@ function detailBalance(i){
     `<div class="detail-body is-wide">${bsPane()}</div>`;
 }
 
+/* ================= GOLF ACADEMY =================
+   Sources: Assignment and Amendment Agreement, 25 April 2025 (Golf Experiences
+   to Todd Jones Performance Golf, with Exhibit A arrears); Academy Assets, LLC
+   balance sheet at 15 June 2026; Memorandum of Understanding on voluntary
+   dissolution, 15 June 2026; Todd Jones, 18 March 2026, on the mix of the
+   business. The Academy Assets figure carried in our own receivables does not
+   agree with the $133,816 on the LLC's books, so no combined figure is shown
+   here until that is reconciled. ============================================= */
+const GA_LOGO="data:image/png;base64,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AAAgRAEAAAAhCgAAgBAFAABAiAIAACBEAQAAEKIAAACAEAUAAECIAgAAIEQBAAAQogAAAAhRAAAAQIgCAAAgRAEAABCiAAAANRSLXQB3LEVRwv9NURR2CAAgRKGGx144+SiKurXkUxRFlmWKohiGYRiGoihZliVJkiSJoiiavsXmGVmWw/9dqhcp/KGK+ytN0yV/zcJbclPF7cYiW1XCdy/81rf5ykUedstfNwBCFOB/z6oajYZlWRIqwWBQFMXSnlglSdJoNDqdTqVSOZ1Ou90uSZJOp7NYLAaDQaVSeTwe8vql3Ty9Xk/O9YqiBAKBkn8otVqtVquj5ihN0+QDKori8/kkSWIYpiRbQjajJAkqiqIgCDG2iqZpSZL8fv9N94ksy3q9nqZpco0SCoWifkFkR5FXVhTF6/VGvrKiKAzDcBwnSRLZD4IghEIh5CggRAFuhSRJPM/v27dv+fLlPM9LkvTGG280bNgwEAiUMPBIZWMyma5fv75x48b9+/f/97//dblckiRptdpatWq1atWqb9++Xbt2ValUXq+3JHEVfmWtVvv666//8ssviqK0bt369ddfDwQCNz3jy7LMcdypU6dmzpwZNUc1Go3Vam3UqFG7du3uu+8+g8Hgdrtj1GRkS954442jR4/q9frYJSlN036//6WXXurcubPP5wvvRrJVR44cmTdvHsdxgUBg4sSJXbt2dbvdMfaJJEkmkyk9Pf29997jOC4YDM6YMaNly5bh9CUv+9tvv02bNo1cxPj9/qeeeurJJ590uVyFX1lRFJZl3W73+PHjc3NztVqt0+ns1KnTlClTCm8nAEIUoKRomhZFcdGiRfv27bNYLA6Ho379+gsXLvT7/SXMOZqmdTrdhx9+uGjRonPnzjEMo9PpWJYlJemVK1cyMzPXrFnTrVu32bNn33vvvUXO7LHLrx9//HHp0qXkXw4cONCnT5/777//pmd8khaXL1/+7LPPeJ4nBVzhpyiKIoqioih6vT4lJeW555578skng8GgIAgxXnn//v3fffcdecFwLRuJYRiHw/GPf/yjW7duhfObbNX58+d3795tNps9Hk92dvbXX39ttVpDoVDU9yUBef78+bFjx16+fJnjOJfLNWLEiNTU1PAr0zQdCATuuecenuc3bdpksVj8fv/Ro0ebNWvWokWLIimu0+lefvnlDz74wGQy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";
+const GA={ rent:40000, rentMo:3333.33, termEnd:"31 December 2028",
+  assumed:170537.73, upfront:70537.73, instalment:25000,
+  vacations:110218.33, school:16986.03, backRent:43333.37,
+  cash:17101, ar:75000, fixed:203014, assets:295115,
+  owed:133816, taxes:1927, equity:159372, recovered:100000, short:33816,
+  contrib:264430, distrib:82500, loss:119916, memberEq:62014,
+  windUp:"31 December 2026", fitting:35 };
+
+function academyItem(){
+  return {t:"Golf Academy", m:"", s:"", c:"f-flat", a:"", acad:true};
+}
+
+function gaPane(){
+  const g=GA, m=v=>"$"+Math.round(v).toLocaleString(),
+        m2=v=>"$"+v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  const row=(n,sub,v)=>`<div class="cw-row"><span class="cw-n">${n}`+
+    (sub?`<span class="cw-sub">${sub}</span>`:"")+`</span><span class="cw-v">${v}</span></div>`;
+  const tot=(n,v)=>`<div class="cw-row is-tot"><span class="cw-n">${n}</span>`+
+    `<span class="cw-v">${v}</span></div>`;
+
+  return `<p class="cw-flag">Academy Assets, LLC winds up by ${g.windUp} &mdash; and the PGA TOUR `+
+    `name goes with it. The operator, the building and the rent all stay.</p>`+
+
+    `<div class="cw-tiles">`+
+      `<div class="cw-tile"><div class="cw-tn">${m(g.rent)}</div>`+
+        `<div class="cw-tl">Rent a year</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">${m(g.ar)}</div>`+
+        `<div class="cw-tl">Still to collect</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">${g.fitting}%</div>`+
+        `<div class="cw-tl">Of their business is fitting</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">31 Dec 2026</div>`+
+        `<div class="cw-tl">Wind-up complete</div></div>`+
+    `</div>`+
+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">How it has been structured</h3>`+
+        `<p class="ga-txt">Academy Assets, LLC has been a <b>50/50 venture</b> between Honours Golf `+
+        `WGV and TPC Golf Schools since 2001. The company owns the academy buildings and `+
+        `improvements and holds them on a ground lease from Honours. It also held the limited PGA `+
+        `TOUR licence that gave the academy its name.</p>`+
+        `<p class="ga-txt">Each member contributed ${m(g.contrib)} and has taken ${m(g.distrib)} `+
+        `back out. Both carry an accumulated loss of ${m(g.loss)}, leaving ${m(g.memberEq)} of `+
+        `equity apiece.</p>`+
+        `<p class="ga-txt">The academy itself has always been run by an outside operator under an `+
+        `agreement dating from September 2016 &mdash; the company owns the property, not the `+
+        `business.</p></div>`+
+
+      `<div class="wx-card"><h3 class="wx-h">The operator changed in April 2025</h3>`+
+        `<p class="ga-txt">Golf Experiences, LLC assigned out and <b>Todd Jones Performance Golf</b> `+
+        `assigned in, with the term extended to <b>${g.termEnd}</b> and three one-year extensions `+
+        `after that. Either side can leave on twelve months&rsquo; notice.</p>`+
+        `<p class="ga-txt">Rent was set at <b>${m(g.rent)} a year</b>, paid monthly at `+
+        `${m2(g.rentMo)}.</p>`+
+        `<p class="ga-txt">Todd also took on <b>${m2(g.assumed)}</b> of the previous `+
+        `operator&rsquo;s arrears &mdash; ${m2(g.vacations)} on the vacations account, `+
+        `${m2(g.school)} on the golf school account and ${m2(g.backRent)} of back rent &mdash; `+
+        `paying ${m2(g.upfront)} on signing and ${m(g.instalment)} each December through 2028.</p>`+
+      `</div>`+
+    `</div>`+
+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">Academy Assets, LLC &middot; 15 June 2026</h3><div>`+
+        row("Cash","",m(g.cash))+
+        row("Accounts receivable","Three "+m(g.instalment)+" instalments, 2026 to 2028",m(g.ar))+
+        row("Buildings and improvements","$581,281 less $378,267 depreciation",m(g.fixed))+
+        tot("Total assets",m(g.assets))+
+      `</div><div style="margin-top:12px">`+
+        row("Owed to Honours Golf &ndash; WGV","",m(g.owed))+
+        row("Accrued property taxes","",m(g.taxes))+
+        tot("Members&rsquo; equity",m(g.equity))+
+      `</div><p class="cw-foot">The ${m(g.owed)} built up when the previous operator was going out `+
+      `of business and stopped paying. ${m(g.recovered)} of it comes back through Todd&rsquo;s `+
+      `remaining instalments, leaving us roughly <b>${m(g.short)}</b> short on the whole `+
+      `episode.</p></div>`+
+
+      `<div class="wx-card"><h3 class="wx-h">What the dissolution does</h3><div>`+
+        row("Cash and receivables","","To Honours")+
+        row("Buildings and equipment","","To Honours")+
+        row("All liabilities","","To Honours")+
+        row("TPC Golf Schools","","Released")+
+        row("Ground lease","","Terminated")+
+        row("PGA TOUR licence","","Terminated")+
+      `</div><p class="cw-foot">Rather than sell the assets to an outside party, the two members `+
+      `agreed Honours takes everything and assumes every obligation. TPC walks away clean. A final `+
+      `audit has been waived by mutual agreement to keep the cost down.</p>`+
+      `<p class="ga-warn">Because Honours ends up on both sides, the intercompany balance washes `+
+      `out &mdash; which also clears the <b>Academy assets</b> line sitting in our own `+
+      `receivables.</p></div>`+
+    `</div>`+
+
+    `<div class="wx-card"><h3 class="wx-h">The name changes with the licence</h3>`+
+      `<div class="ga-brand">`+
+        `<div class="ga-logo"><img src="${GA_LOGO}" alt="The Tour Academy logo"></div>`+
+        `<div><p class="ga-txt">Terminating the licence means the PGA TOUR marks revert and all use `+
+        `of the name has to stop. Todd is rebranding to <b>The Tour Academy</b> &mdash; he already `+
+        `owns the domains, and hired Golf Space Collective last year partly to build the transition `+
+        `into his website and marketing from the start.</p>`+
+        `<p class="ga-txt">This is a change of name, not of operator, premises or terms. The `+
+        `agreement runs to 2028 either way.</p></div>`+
+      `</div></div>`+
+
+    `<div class="ga-notes">`+
+      `<div><h4>Club fitting</h4><p>Todd puts fitting at <b>at least ${g.fitting}%</b> of the `+
+      `business, ahead of the last four years on both fittings and equipment sales. Fitting days `+
+      `run with Titleist, Ping and PXG, with Callaway and TaylorMade in progress.</p></div>`+
+      `<div><h4>Instruction</h4><p>The balance of the business. He has added another full-time `+
+      `instructor and is looking to add more, and has launched a new website and marketing `+
+      `programme this spring.</p></div>`+
+      `<div><h4>What members get</h4><p><b>20% off</b> the fitting fee and <b>10% off</b> any `+
+      `equipment purchased. Featured promotions go out to the membership through our own `+
+      `channels.</p></div>`+
+    `</div>`;
+}
+
+function detailAcademy(i){
+  el("#detail").innerHTML =
+    `<div class="detail-head"><div class="detail-title">${esc(i.t)}</div></div>`+
+    `<div class="detail-body is-wide">${gaPane()}</div>`;
+}
+
 function pendingItem(title){
   return {t:title, m:"", s:"", c:"f-flat", a:"", pending:true};
 }
@@ -3645,6 +3790,7 @@ function detail(i){
   if(i.uso){ detailUsopen(i); return; }
   if(i.carts){ detailCarts(i); return; }
   if(i.bal){ detailBalance(i); return; }
+  if(i.acad){ detailAcademy(i); return; }
   if(i.org){ detailOrg(i); return; }
   if(i.pending){ detailPending(i); return; }
   if(i.dgf){ detailDgf(i); return; }
