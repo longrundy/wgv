@@ -5607,7 +5607,7 @@ const EMP_YEARS=[
   ["2019","2019"]
 ];
 const EMP_SKIPPED=[
-  ["2025","Slammer & Squire was closed for a full greens rebuild. Staff worked through an extended disruption, and a survey taken that season would not have reflected normal operations."],
+  ["2025","The greens at Slammer & Squire failed and had to be regrassed. The front nine was closed for the work, leaving nine holes in play for much of the season. Guest satisfaction suffered, and staff absorbed that dissatisfaction daily while working a half-open golf course. A survey taken under those conditions would have measured the circumstances rather than how the operation normally runs."],
   ["2024","King & Bear was closed for eight months during the course renovation and thirty positions were eliminated. Conditions were too far from normal to produce a meaningful result."],
   ["2020","Operations were disrupted by the COVID-19 pandemic."]
 ];
@@ -5730,8 +5730,7 @@ function empSummary(){
     `<p class="emp-slbl">${esc(C.teamsLbl).toUpperCase()}</p>`+
     `<div class="emp-panel">`+
     empTeamHead()+rows+`</div>`+
-    (sel?empLeaderCard(sel):"")+
-    `<p class="emp-note">${C.recFoot}</p>`;
+    (sel?empLeaderCard(sel):"");
 }
 
 /* ------------------------------------------------- 2022 survey (UniFocus) */
@@ -6244,9 +6243,6 @@ function detailEmployee(i){
       `<p class="emp-meta">${EMP.survey} &middot; ${EMP.period} &middot; `+
       `${EMP.courses.reduce((a,c)=>a+c.n,0)} responses</p>`+
       pills+body+
-      `<p class="emp-src2">Headline figures from the heatmap export. Rating spreads and the `+
-      `by-course team scores are from the 2026 Q2 location reports, which counted two more `+
-      `responses at Slammer &amp; Squire.</p>`+
     `</div>`;
   svAudWire(i);
   const hold=fn=>()=>{
