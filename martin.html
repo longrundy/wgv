@@ -4327,7 +4327,7 @@ function mbRevView(){
      `fill="var(--red)">${mbMoney(lastFull.per)}</text>`;
 
   const peak=S.reduce((a,d)=>d.members>a.members?d:a,S[0]);
-  return {t:"Memberships, Revenue and Member Play", s:MB_REV_FROM+" to June 2026",
+  return {cards:[{t:"Memberships and Revenue per Membership", s:MB_REV_FROM+" to June 2026",
     cap:`Recorded membership revenue per membership has risen from <b>${mbMoney(rows[0].per)}</b> in `+
       `${rows[0].y} to <b>${mbMoney(lastFull.per)}</b> in ${lastFull.y}, while the roster sits `+
       `${peak.members-mbT(2026).all} below its ${peak.y} peak.`,
@@ -4337,9 +4337,8 @@ function mbRevView(){
       `<p class="mb-cap2">Total membership revenue was <b>${mbMoney(lastFull.rev)}</b> in ${lastFull.y}, `+
       `against ${mbMoney(rows[0].rev)} in ${rows[0].y}. Through June 2026 it is `+
       `<b>${mbMoney(ACT["2026 YTD"].total)}</b>, against ${mbMoney(ACT["2025 H1"].total)} in the same `+
-      `months of 2025.</p>`+
-      `<div class="mb-sect"><div class="mb-st">Member Share of Rounds</div>`+
-      SH.body+`</div>` : ""};
+      `months of 2025.</p>` : ""},
+    {t:SH.t, s:SH.s, cap:SH.cap, body:SH.body}]};
 }
 
 /* ---- market position ---- */
@@ -4477,8 +4476,8 @@ function detailMemberships(i){
         `<button type="button" data-mbtab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("")+`</div>`+
     `</div>`+
     `<div class="detail-body is-wide">`+
-      `<div class="mb-view"><div class="mb-vt"><h4>${V.t}</h4><span>${V.s}</span></div>`+
-      `<p class="mb-cap">${V.cap}</p>${V.body}</div>`+
+      (V.cards||[V]).map(c=>`<div class="mb-view"><div class="mb-vt"><h4>${c.t}</h4>`+
+      `<span>${c.s}</span></div><p class="mb-cap">${c.cap}</p>${c.body}</div>`).join("")+
     `</div>`;
   el("#detail").querySelectorAll("[data-mbtab]").forEach(b=>b.addEventListener("click",()=>{
     state.mbTab=b.dataset.mbtab; detail(i);
