@@ -1442,6 +1442,15 @@ button.emp-srow:hover{background:#fafbfd}
 .mb-vt span{font-size:11.5px;color:#9aa3ae}
 .mb-cap{font-size:12.5px;color:#5f5f58;margin:0 0 12px;line-height:1.5}
 .mb-cap b{color:var(--ink);font-weight:600}
+/* displacement: what a member tee time forgoes, against what it yields */
+.mb-disp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 20px;margin:0 0 14px;
+ padding:15px 20px;background:var(--navy);border-radius:12px}
+.mb-disp>div{padding-right:20px;border-right:1px solid rgba(255,255,255,.16)}
+.mb-disp>div:last-child{border-right:0;padding-right:0}
+.mb-dn{font-size:23px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.mb-dl{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
+ font-weight:700;margin-top:4px}
+.mb-dl b{color:#fff;font-weight:700}
 .mb-cap2{font-size:12.5px;color:#5f5f58;margin:9px 0 0;line-height:1.55}
 .mb-cap2 b{color:var(--ink);font-weight:600}
 .mb-svg{width:100%;height:auto;display:block;overflow:visible}
@@ -4361,6 +4370,7 @@ function mbRevView(){
       `<b>${mbMoney(ACT["2026 YTD"].total)}</b>, against ${mbMoney(ACT["2025 H1"].total)} in the same `+
       `months of 2025.</p>`+
       `<div class="mb-sect"><div class="mb-st">Revenue per Round</div>`+
+      mbDisplace()+
       `<svg class="mb-svg" viewBox="0 0 ${W2} ${H2}">${s2}</svg>`+
       `<div class="mb-legend"><span><i class="mb-key" style="background:var(--navy)"></i>Dues per Member Round</span>`+
       `<span><i class="mb-key" style="background:var(--red)"></i>Average Guest Green Fee</span></div>`+
@@ -4373,6 +4383,29 @@ function mbRevView(){
       `revenue over member rounds; the guest figure is green fee revenue over <i>every</i> guest `+
       `round, wholesale and package included. Golf Fees quotes a higher $130.10 because it counts `+
       `daily-fee rounds only &mdash; 19,002 of the 30,826 guest rounds this year.</p></div>` : ""};
+}
+
+/* The gap that matters is not member yield against a blended guest average --
+   it is what a member tee time forgoes if it were sold daily-fee instead. Both
+   figures are 2026 year to date: dues per member round off the P&L, the
+   daily-fee rate off the rate tracker on the Golf Fees page. */
+function mbDisplace(){
+  const yld=MB_DATA.pr["2026 YTD"].per, df=DGF.adr.rate.now, gap=df-yld;
+  const m=v=>"$"+v.toFixed(2);
+  return `<div class="mb-disp">`+
+    `<div><div class="mb-dn">${m(yld)}</div>`+
+      `<div class="mb-dl">A member round yields</div></div>`+
+    `<div><div class="mb-dn">${m(df)}</div>`+
+      `<div class="mb-dl">Sold daily-fee it brings</div></div>`+
+    `<div><div class="mb-dn">${m(gap)}</div>`+
+      `<div class="mb-dl">Forgone <b>every member round</b></div></div>`+
+  `</div>`+
+  `<p class="mb-cap2">Every member tee time carries a cost: what the same slot would have `+
+  `returned sold to a daily-fee guest. At ${m(gap)} a round across `+
+  `${MB_DATA.series[MB_DATA.series.length-1].mem.toLocaleString()} member rounds this year, that `+
+  `is <b>${"$"+Math.round(gap*MB_DATA.series[MB_DATA.series.length-1].mem).toLocaleString()}</b> `+
+  `of displaced green fee. The chart below uses the blended guest rate instead, which includes `+
+  `wholesale and package play and so runs lower.</p>`;
 }
 
 /* ---- market position ---- */
