@@ -12,6 +12,7 @@
   --red:#c8161d; --red-dark:#a32d2d; --red-tint:#fbeceb; --red-wash:#fbf6f6;
   --ink:#17325a; --muted:#8a8a84; --line:#e5e2da; --line-soft:#f0eee8;
   --amber:#ba7517; --green:#639922;
+  --navy-lift:#1d3c6b; --navy-deep:#122a4c; --wash:#f7f9fc;
   --dry:#a8571f; --wet:#1f6fa8; --cold:#2a9d9b; --hot:#c8161d;
   --rail-w:280px;
 }
@@ -568,40 +569,128 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
   .oc-tag{margin:2px 0 0 47px}
 }
 /* ---- Pro Forma ---- */
-/* owner's live semi-private model */
-.rls-presets{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
-.rls-presets button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;
- border:1px solid #dfe3e9;background:#fff;color:var(--ink);cursor:pointer}
-.rls-presets button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
-.rls-presets button.is-reset{margin-left:auto;color:var(--muted)}
-.rls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px}
-.rls-f{display:flex;flex-direction:column;gap:4px}
-.rls-f span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
- font-weight:700}
-.rls-f input{font:inherit;font-size:15px;font-weight:700;color:var(--navy);padding:7px 9px;
- border:1px solid #dfe3e9;border-radius:8px;background:#fcfcfd;width:100%}
-.rls-f input:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
-.rls-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px;margin:16px 0;
- padding:16px 22px;background:var(--navy);border-radius:13px}
-.rls-out>div{padding-right:24px;border-right:1px solid rgba(255,255,255,.16)}
-.rls-out>div:last-child{border-right:0;padding-right:0}
-.rls-on{font-size:24px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
-.rls-on.is-dn{color:#ff9d9d}
-.rls-on.is-up{color:#a8e06a}
-.rls-ol{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
- font-weight:700;margin-top:4px}
-.rls-r{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:0 12px;
- align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
-.rls-r .rls-v,.rls-r .rls-b{text-align:right;font-variant-numeric:tabular-nums}
-.rls-n{font-size:13px;font-weight:600;color:var(--ink)}
-.rls-v{font-size:13.5px;font-weight:700;color:var(--ink)}
-.rls-b{font-size:12.5px;color:#8a8a84}
-.rls-head{border-bottom:1px solid var(--line);padding-bottom:5px}
-.rls-head .rls-v,.rls-head .rls-b{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
- color:#b4b2a9;font-weight:700}
-.rls-r.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
-.rls-r.is-tot .rls-v{font-size:15px;color:var(--navy)}
-.rls-r.is-ocf .rls-v{font-size:17px}
+/* ---- Pro Forma: profit and loss ---- */
+.pl-wrap{max-width:1180px;margin:0 auto}
+/* ---------- 1. the finding, stated once, at the top ---------- */
+.ph{background:linear-gradient(135deg,var(--navy-lift),var(--navy-deep));border-radius:18px;
+  padding:24px 28px;box-shadow:0 18px 40px -26px rgba(18,42,76,.9)}
+.ph-lead{margin:0 0 20px;font-size:19px;font-weight:600;color:#fff;line-height:1.45;
+  letter-spacing:.005em;max-width:760px}
+.ph-lead b{color:#ffd9db;font-weight:700}
+.ph-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 26px}
+.ph-row>div{padding-right:26px;border-right:1px solid rgba(255,255,255,.16)}
+.ph-row>div:last-child{border-right:0;padding-right:0}
+.ph-n{font-size:29px;font-weight:700;color:#fff;line-height:1.05;font-variant-numeric:tabular-nums}
+.ph-n.is-dn{color:#ff9d9d}
+.ph-l{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:#8fa6c4;
+  font-weight:700;margin-top:7px}
+.ph-s{font-size:12px;color:#b9c8de;margin-top:3px;line-height:1.5}
+
+/* ---------- 2. the shape ---------- */
+.pc{border:1px solid var(--line);border-radius:16px;background:#fff;padding:20px 22px 16px;
+  margin-top:18px;box-shadow:0 1px 2px rgba(23,50,90,.04)}
+.pc-h{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.085em;color:var(--muted);
+  font-weight:700}
+.pc-sub{margin:5px 0 16px;font-size:12.5px;color:#5f6b7d;line-height:1.5}
+.pc-svg{width:100%;height:auto;display:block;overflow:visible}
+.pc-key{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;font-size:11.5px;color:#5f6b7d}
+.pc-key span{display:inline-flex;align-items:center;gap:6px}
+.pc-key i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.pc-key i.dash{background:repeating-linear-gradient(90deg,#8a8a84 0 4px,transparent 4px 7px);
+  height:2px}
+
+/* ---------- 3. today against year ten ---------- */
+.pq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+.pq-row{display:grid;grid-template-columns:minmax(0,1.1fr) 88px 22px 88px;gap:0 10px;
+  align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.pq-row:last-child{border-bottom:0}
+.pq-head{padding-bottom:6px;border-bottom:1px solid var(--line);font-size:10px;
+  letter-spacing:.06em;text-transform:uppercase;color:#b4b2a9;font-weight:700}
+.pq-head span:nth-child(n+2){text-align:right}
+.pq-head span:nth-child(3){text-align:center}
+.pq-n{font-size:13px;font-weight:600;color:var(--ink)}
+.pq-a,.pq-b{text-align:right;font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.pq-a{color:#8a8a84}
+.pq-b{color:var(--ink)}
+.pq-ar{text-align:center;color:#c3cedd;font-size:12px}
+.pq-d{display:block;font-size:11px;font-weight:600;margin-top:2px}
+.pq-d.dn{color:var(--red)} .pq-d.up{color:var(--green)}
+.ph-n.is-up{color:#a8e06a}
+.pc-note{margin:20px 0 -4px;font-size:12px;color:var(--muted);line-height:1.5}
+.pn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 24px}
+.pn{padding-right:24px;border-right:1px solid var(--line-soft)}
+.pn:last-child{border-right:0;padding-right:0}
+.pn-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  font-weight:700;margin-bottom:9px}
+.pn-row{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.pn-a{font-size:17px;font-weight:700;color:#b4b2a9;font-variant-numeric:tabular-nums}
+.pn-ar{color:#c3cedd;font-size:12px}
+.pn-b{font-size:25px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
+.pn-d{font-size:12.5px;font-weight:700;color:var(--green)}
+.pn-s{font-size:11.5px;color:#5f6b7d;line-height:1.5;margin-top:6px}
+.sm-key{display:flex;gap:16px;font-size:11.5px;color:#5f6b7d;margin:0 0 12px}
+.sm-key span{display:inline-flex;align-items:center;gap:6px}
+.sm-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sm-row{display:grid;grid-template-columns:minmax(0,150px) 1fr minmax(0,150px);
+  gap:0 14px;align-items:center;padding:7px 0}
+.sm-l{font-size:12.5px;color:var(--ink);font-weight:600}
+.sm-bar{display:flex;height:22px;border-radius:5px;overflow:hidden}
+.sm-m{background:var(--navy)} .sm-g{background:#8fb4d8}
+.sm-v{text-align:right;font-size:12.5px;color:#5f6b7d;font-variant-numeric:tabular-nums}
+.sm-v em{font-style:normal;font-weight:700;color:var(--ink);margin-left:5px}
+@media (max-width:900px){.sm-row{grid-template-columns:minmax(0,110px) 1fr}
+  .sm-v{grid-column:2;text-align:left}}
+@media (max-width:900px){.pn-grid{grid-template-columns:1fr;gap:16px 0}
+  .pn{border-right:0;padding-right:0;padding-bottom:14px;border-bottom:1px solid var(--line-soft)}
+  .pn:last-child{padding-bottom:0;border-bottom:0}}
+
+/* ---------- 4. the bridge ---------- */
+.pb-row{display:grid;grid-template-columns:minmax(0,190px) 1fr 92px;gap:0 14px;
+  align-items:center;padding:7px 0}
+.pb-n{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.pb-track{position:relative;height:20px}
+.pb-zero{position:absolute;top:-4px;bottom:-4px;width:1px;background:#dfe3e9}
+.pb-bar{position:absolute;top:3px;height:14px;border-radius:3px}
+.pb-bar.pos{background:var(--navy)}
+.pb-bar.neg{background:var(--red)}
+.pb-bar.tot{background:var(--green)}
+.pb-v{text-align:right;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;
+  color:var(--ink)}
+.pb-row.is-tot{border-top:2px solid var(--navy);margin-top:8px;padding-top:11px}
+.pb-row.is-tot .pb-n,.pb-row.is-tot .pb-v{font-weight:700;font-size:14px}
+
+/* ---------- 5. the detail, on request ---------- */
+.pd-tog{display:flex;align-items:center;gap:9px;width:100%;margin-top:18px;padding:13px 18px;
+  border:1px solid var(--line);border-radius:12px;background:var(--wash);
+  font-size:12.5px;font-weight:600;color:#33507a}
+.pd-tog:hover{background:#eef3fa}
+.pd-tog i{margin-left:auto;font-style:normal;font-size:9px;color:#8fa6c4;
+  transition:transform .22s}
+.pd-tog[aria-expanded="true"] i{transform:rotate(180deg)}
+.pd-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s ease}
+.pd-panel.is-open{grid-template-rows:1fr}
+.pd-panel>div{overflow:hidden}
+.pd-scroll{overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{padding:6px 9px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#fff}
+thead th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#b4b2a9;
+  border-bottom:1px solid var(--line)}
+tbody tr.sep td{border-top:1px solid var(--line-soft)}
+td.neg{color:var(--red)}
+tr.tot td{font-weight:700;border-top:2px solid var(--navy);color:var(--navy)}
+
+@media (max-width:900px){
+  .ph-row{grid-template-columns:1fr;gap:16px 0}
+  .ph-row>div{border-right:0;padding-right:0;padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.16)}
+  .ph-row>div:last-child{padding-bottom:0;border-bottom:0}
+  .pq{grid-template-columns:1fr}
+  .pb-row{grid-template-columns:minmax(0,140px) 1fr 82px}
+}
+
 .pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
   background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
 .pf-flag b{color:var(--red-dark)}
@@ -775,6 +864,40 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
 .embed-card.is-wx iframe{height:70vh;min-height:520px}
 .embed-card.is-mini{max-width:430px}
 .embed-card.is-mini iframe{height:560px}
+/* owner's live semi-private model */
+.rls-presets{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.rls-presets button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;
+ border:1px solid #dfe3e9;background:#fff;color:var(--ink);cursor:pointer}
+.rls-presets button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.rls-presets button.is-reset{margin-left:auto;color:var(--muted)}
+.rls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px}
+.rls-f{display:flex;flex-direction:column;gap:4px}
+.rls-f span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+ font-weight:700}
+.rls-f input{font:inherit;font-size:15px;font-weight:700;color:var(--navy);padding:7px 9px;
+ border:1px solid #dfe3e9;border-radius:8px;background:#fcfcfd;width:100%}
+.rls-f input:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
+.rls-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px;margin:16px 0;
+ padding:16px 22px;background:var(--navy);border-radius:13px}
+.rls-out>div{padding-right:24px;border-right:1px solid rgba(255,255,255,.16)}
+.rls-out>div:last-child{border-right:0;padding-right:0}
+.rls-on{font-size:24px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.rls-on.is-dn{color:#ff9d9d}
+.rls-on.is-up{color:#a8e06a}
+.rls-ol{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
+ font-weight:700;margin-top:4px}
+.rls-r{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:0 12px;
+ align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.rls-r .rls-v,.rls-r .rls-b{text-align:right;font-variant-numeric:tabular-nums}
+.rls-n{font-size:13px;font-weight:600;color:var(--ink)}
+.rls-v{font-size:13.5px;font-weight:700;color:var(--ink)}
+.rls-b{font-size:12.5px;color:#8a8a84}
+.rls-head{border-bottom:1px solid var(--line);padding-bottom:5px}
+.rls-head .rls-v,.rls-head .rls-b{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+ color:#b4b2a9;font-weight:700}
+.rls-r.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
+.rls-r.is-tot .rls-v{font-size:15px;color:var(--navy)}
+.rls-r.is-ocf .rls-v{font-size:17px}
 /* ---- Financials ---- */
 /* ---- Year Detail report ---- */
 /* ---- Memberships ---- */
@@ -7362,7 +7485,7 @@ const PF={
   short:["2024","2025","2026B","1","2","3","4","5","6","7","8","9","10"],
   actual:2,          /* index of the last column that is not the model */
   invest:10000000,
-  phase:{3:"Renovation, 36 holes",4:"Stabilise, 18 holes",12:"Mature"},
+  phase:{3:"Renovation, 36 holes",4:"Stabilize, 18 holes",12:"Mature"},
 
     holes    :[36,36,36,36,18,18,18,18,18,18,18,18,18],
     rounds   :[70169,79507,80000,67000,45000,45000,45000,45000,45000,45000,45000,45000,45000],
@@ -7404,7 +7527,7 @@ const PF={
     {mult:9,  ev:15560174, surplus:5560174,  irr:13, npv:1681415},
     {mult:10, ev:17289083, surplus:7289083,  irr:14, npv:2347984}
   ],
-  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilised:1728908},
+  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilized:1728908},
 
   /* Each add-on is a separate investment with its own return. Both are
      negative on their own terms; the page says so rather than folding them
@@ -7421,7 +7544,6 @@ const PF={
 };
 
 const PF_COPY={
-  source:"King &amp; Bear Semi-Private Model, Troon pro forma sheet. The source workbook is marked draft.",
   lead:"A $10m investment to convert King &amp; Bear to a semi-private club, modelled over ten years.",
 
   planHead:"This is a sale play, not an operating one.",
@@ -7436,9 +7558,6 @@ const PF_COPY={
   cashSub:"The $10m goes out in year one and never fully comes back from operations",
   cashNote:"Selling at year ten adds $13.8m to $17.3m depending on the multiple, which is what turns the whole thing positive.",
 
-  todayHead:"What the club looks like after",
-  todaySub:"2025 actual against the model's stabilised year ten",
-  todayNote:"Ten years out, the model earns less than the property earns today. The case rests on what one restored eighteen-hole club is worth to a buyer, not on what it earns.",
 
   plHead:"The ten-year profit and loss",
   plSub:"Actual and budget years first, then the model. Year 1 covers the renovation.",
@@ -7446,21 +7565,15 @@ const PF_COPY={
   depSub:"Department operating income. The eight lines sum to EBITDA.",
 
   assHead:"What the model assumes",
-  assSub:"Change any of these and the outputs move",
   assNote:"Rounds per member holds at 90 and members at 200 from year two, so member rounds are fixed at 18,000 for nine straight years. Daily-fee rate carries the growth.",
 
-  addHead:"The two add-ons",
-  addSub:"Each is a separate investment on top of the $10m, with its own return",
-  addNote:"Neither add-on covers its own cost of capital in this model. Taken together with the base case, the combined $16m returns \u22123% and a negative $6.8m present value.",
 
-  draft:"The source workbook is marked draft, and two other membership models sit beside this one. Only the semi-private model ties out to the Troon pro forma, so only it is shown here."
 };
 
 /* Profit and loss sits first and is where the page lands: it is the sheet
    Lon opens to, and the other views read as commentary on it. */
-const PF_SECS=[["pl","Profit and loss"],["rls","Owner's model"],["plan","The proposal"],
-               ["cash","Ten-year cash"],["today","Against today"],["ass","Assumptions"],
-               ["add","Add-ons"]];
+const PF_SECS=[["pl","Profit and Loss"],["rls","Owner's Model"],["ass","Assumptions"],
+               ["cash","Ten-Year Cash"]];
 const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"pl";
 
 const pfM=n=>(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
@@ -7469,29 +7582,6 @@ const pfN=n=>Math.round(n).toLocaleString();
 const pfPc=(a,b)=>((a/b-1)*100);
 
 /* ------------------------------------------------------------ the proposal */
-function pfPlan(){
-  const L=PF.cols.length-1, A=1;   /* Yr10 index, 2025 index */
-  return ecKpis([
-      ecKpi(pfMm(PF.invest),"Investment","deployed in year one"),
-      ecKpi(pfMm(PF.noExit.cash),"Cash after 10 years","before any sale"),
-      ecKpi("12\u201314%","IRR if we sell","at 8\u00d7 to 10\u00d7 year ten"),
-      ecKpi(String(PF.holes[L]),"Holes from year two",PF.holes[A]+" today")])+
-    `<div class="pf-flag"><b>${PF_COPY.planHead}</b> ${PF_COPY.planSay}</div>`+
-    `<div class="wx-card ec-card"><h3 class="wx-h">Without a sale, and with one</h3>`+
-      `<p class="wx-sub">Ten-year return on the $10m</p>`+
-      `<div class="pf-erow pf-ehead"><span>SCENARIO</span><span>IRR</span>`+
-        `<span>NPV AT 10%</span><span>CASH POSITION</span></div>`+
-      `<div class="pf-erow"><span>Operations only, no sale</span>`+
-        `<span class="bad">${PF.noExit.irr}%</span>`+
-        `<span class="bad">${pfMm(PF.noExit.npv)}</span>`+
-        `<span class="bad">${pfMm(PF.noExit.cash)}</span></div>`+
-      PF.exits.map(e=>`<div class="pf-erow"><span>Sell at ${e.mult}\u00d7 year-ten earnings</span>`+
-        `<span class="good">+${e.irr}%</span><span class="good">+${pfMm(e.npv)}</span>`+
-        `<span>+${pfMm(e.surplus)} over the $10m</span></div>`).join("")+
-      `<p class="ec-body last pf-note">Year-ten earnings of ${pfM(PF.noExit.stabilised)} `+
-      `are what the multiple is applied to.</p></div>`+
-    ecBand(PF_COPY.planBand);
-}
 
 /* ------------------------------------------------------------ ten-year cash */
 function pfCash(){
@@ -7518,30 +7608,6 @@ function pfCash(){
 }
 
 /* ----------------------------------------------------------- against today */
-function pfToday(){
-  const A=1, L=PF.cols.length-1;
-  const rows=[
-    ["Holes in play",PF.holes[A],PF.holes[L],false],
-    ["Rounds",pfN(PF.rounds[A]),pfN(PF.rounds[L]),pfPc(PF.rounds[L],PF.rounds[A])],
-    ["Members",pfN(PF.members[A]),pfN(PF.members[L]),pfPc(PF.members[L],PF.members[A])],
-    ["Revenue",pfMm(PF.rev[A]),pfMm(PF.rev[L]),pfPc(PF.rev[L],PF.rev[A])],
-    ["Operating income",pfMm(PF.ebitda[A]),pfMm(PF.ebitda[L]),pfPc(PF.ebitda[L],PF.ebitda[A])]
-  ].map(([n,a,b,pc],k)=>`<div class="pf-trow${k===4?" is-tot":""}">`+
-    `<span>${esc(n)}</span><span class="pf-tv">${a}</span><span class="pf-tv now">${b}</span>`+
-    `<span class="pf-tv ${pc===false?"":(pc<0?"bad":"good")}">`+
-      `${pc===false?"\u221218":(pc>0?"+":"\u2212")+Math.abs(pc).toFixed(0)+"%"}</span></div>`).join("");
-  return ecKpis([
-      ecKpi(pfMm(PF.ebitda[A]),"Operating income 2025","36 holes"),
-      ecKpi(pfMm(PF.ebitda[L]),"Model year ten","18 holes"),
-      ecKpi(Math.abs(pfPc(PF.ebitda[L],PF.ebitda[A])).toFixed(0)+"%","Below today","ten years out"),
-      ecKpi((PF.margin[L]*100).toFixed(0)+"%","Year-ten margin",(PF.margin[A]*100).toFixed(0)+"% in 2025")])+
-    ecSay("The model earns less in year ten than the property earns today.")+
-    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.todayHead)}</h3>`+
-      `<p class="wx-sub">${esc(PF_COPY.todaySub)}</p>`+
-      `<div class="pf-trow pf-thead"><span></span><span class="pf-tv">2025 ACTUAL</span>`+
-        `<span class="pf-tv">YEAR 10</span><span class="pf-tv">CHANGE</span></div>${rows}`+
-      `<p class="ec-body last pf-note">${esc(PF_COPY.todayNote)}</p></div>`;
-}
 
 /* --------------------------------------------------------- profit and loss */
 function pfGrid(rows,cls){
@@ -7552,29 +7618,252 @@ function pfGrid(rows,cls){
     vals.map((v,k)=>`<span class="${k<=PF.actual?"act":""}${v<0?" neg":""}">`+
       `${v===null?"\u2014":fmt(v)}</span>`).join("")+`</div>`).join("")+`</div>`;
 }
-function pfPL(){
-  /* These are millions. Showing them as thousands ($9,665k) reads as though the
-     property turns over nine million-ish only if you do the division in your
-     head, and in an owner meeting nobody does. Two decimals keeps the same
-     precision the k figure carried. */
-  const m=v=>"$"+(v/1e6).toFixed(2)+"m";
+const PL_A=1, PL_B=2, PL_T=PF.cols.length-1;          /* 2025 actual, 2026 budget, Year 10 */
+const plM0 = v => (v<0?"\u2212":"")+"$"+Math.abs(Math.round(v)).toLocaleString();
+const plMm = v => (v<0?"\u2212":"")+"$"+(Math.abs(v)/1e6).toFixed(2)+"m";
+const plN0 = v => Math.round(v).toLocaleString();
+const plPct = (a,b) => ((a/b-1)*100);
+/* The membership and pricing series live in the assumptions block, so they are
+   read from there rather than duplicated here. */
+const plAss = n => (PF.ass.find(a=>a.n===n)||{d:[]}).d;
+
+/* ---------------- 1. the finding ---------------- */
+function plHero(){
+  const half = PF.ebitda[PL_A]/2;
+  const y10  = PF.ebitda[PL_T];
+  const beat = PF.ebitda.slice(3).filter(v=>v>half).length;
+  return `<div class="ph">`+
+    `<p class="ph-lead">Going from two courses to one, the fair test is half of what the `+
+    `property earns today. Year 10 clears that by <b>${plMm(y10-half)}</b> &mdash; `+
+    `<b>${((y10/half-1)*100).toFixed(0)}% more</b> from the same eighteen holes.</p>`+
+    `<div class="ph-row">`+
+      `<div><div class="ph-n">${plMm(half)}</div>`+
+        `<div class="ph-l">Half of today</div>`+
+        `<div class="ph-s">One course's share of 2025 operating income</div></div>`+
+      `<div><div class="ph-n is-up">${plMm(y10)}</div>`+
+        `<div class="ph-l">Year 10, one course</div>`+
+        `<div class="ph-s">${((y10/half-1)*100).toFixed(0)}% above the half-share</div></div>`+
+      `<div><div class="ph-n is-up">${beat} of 10</div>`+
+        `<div class="ph-l">Years that clear the bar</div>`+
+        `<div class="ph-s">Only Year 2 falls short, by `+
+        `${plM0(half-Math.min(...PF.ebitda.slice(3)))}, while the course stabilizes</div></div>`+
+    `</div></div>`;
+}
+
+/* ---------------- 2. the shape ---------------- */
+function plChart(){
+  const W=1040, H=300, L=54, R=18, Tp=16, Bt=42;
+  const iw=W-L-R, n=PF.cols.length;
+  const X=i=>L+i*(iw/(n-1));
+  const hi=13e6;
+  const upper=170, lower=H-Bt;                        /* revenue band */
+  const Y=v=>Tp+ (upper-Tp) - (v/hi)*(upper-Tp);
+  const oiHi=2.6e6, oiTop=upper+34;
+  const OY=v=>oiTop + (lower-oiTop) - (v/oiHi)*(lower-oiTop);
+
+  let s=`<svg class="pc-svg" viewBox="0 0 ${W} ${H}" role="img" `+
+        `aria-label="Revenue and operating income, 2024 to Year 10">`;
+
+  /* the model years sit on a different footing: mark where they begin */
+  const split=(X(PL_B)+X(PL_B+1))/2;
+  s+=`<rect x="${split}" y="${Tp-4}" width="${W-R-split}" height="${lower-Tp+8}" `+
+     `fill="#f7f9fc"></rect>`;
+  s+=`<line x1="${split}" y1="${Tp-4}" x2="${split}" y2="${lower+4}" stroke="#c9d3e0" `+
+     `stroke-width="1.5" stroke-dasharray="4 4"></line>`;
+  s+=`<text x="${split-8}" y="${Tp+7}" text-anchor="end" font-size="10" fill="#8a8a84" `+
+     `letter-spacing=".06em">ACTUAL &amp; BUDGET</text>`;
+  s+=`<text x="${split+8}" y="${Tp+7}" font-size="10" fill="#8a8a84" `+
+     `letter-spacing=".06em">THE MODEL</text>`;
+
+  /* revenue area */
+  let a=`M${X(0)},${Y(PF.rev[0])}`;
+  PF.rev.forEach((v,i)=>{ if(i) a+=` L${X(i)},${Y(v)}`; });
+  s+=`<path d="${a} L${X(n-1)},${upper} L${X(0)},${upper} Z" fill="#e8eef7"></path>`;
+  s+=`<path d="${a}" fill="none" stroke="${"#3a5f95"}" stroke-width="2.5"></path>`;
+  s+=`<text x="${L}" y="${Tp+7}" font-size="10.5" fill="#5f6b7d" font-weight="700">REVENUE</text>`;
+
+  /* operating income, with today held up as the line to beat */
+  const ref=OY(PF.ebitda[PL_A]/2);
+  s+=`<line x1="${L}" y1="${ref}" x2="${W-R}" y2="${ref}" stroke="#8a8a84" `+
+     `stroke-width="1.5" stroke-dasharray="5 4"></line>`;
+  /* anchored left: the right-hand end is where the Year 10 figure sits */
+  s+=`<text x="${L+3}" y="${ref-7}" font-size="10.5" fill="#5f6b7d" `+
+     `font-weight="700">Half of 2025 &mdash; ${plMm(PF.ebitda[PL_A]/2)}</text>`;
+  let o=`M${X(0)},${OY(PF.ebitda[0])}`;
+  PF.ebitda.forEach((v,i)=>{ if(i) o+=` L${X(i)},${OY(v)}`; });
+  s+=`<path d="${o}" fill="none" stroke="#c8161d" stroke-width="2.5"></path>`;
+  PF.ebitda.forEach((v,i)=>{
+    const last=i===n-1;
+    s+=`<circle cx="${X(i)}" cy="${OY(v)}" r="${last?5:3.2}" fill="${last?"#fff":"#c8161d"}" `+
+       `stroke="#c8161d" stroke-width="${last?2.5:0}"></circle>`;
+  });
+  s+=`<text x="${X(n-1)}" y="${OY(PF.ebitda[PL_T])+20}" text-anchor="end" font-size="11.5" `+
+     `fill="#c8161d" font-weight="700">${plMm(PF.ebitda[PL_T])}</text>`;
+  s+=`<text x="${L}" y="${oiTop+2}" font-size="10.5" fill="#5f6b7d" `+
+     `font-weight="700">OPERATING INCOME</text>`;
+
+  /* x labels, and the hole count underneath */
+  PF.short.forEach((lbl,i)=>{
+    const model=i>PL_B;
+    s+=`<text x="${X(i)}" y="${lower+17}" text-anchor="middle" font-size="10.5" `+
+       `fill="${i===n-1?"#17325a":"#8a8a84"}" ${i===n-1?'font-weight="700"':''}>${lbl}</text>`;
+    if(!model||i===PL_B+1||i===n-1||i===PL_B)
+      s+=`<text x="${X(i)}" y="${lower+31}" text-anchor="middle" font-size="9.5" `+
+         `fill="#b4b2a9">${PF.holes[i]} holes</text>`;
+  });
+  return `<div class="pc"><p class="pc-h">The shape of the model</p>`+
+    `<p class="pc-sub">Revenue above, operating income below. The dashed line is one `+
+    `course's share of today &mdash; the model sits above it from Year 1.</p>${s}</svg>`+
+    `<div class="pc-key">`+
+      `<span><i style="background:#3a5f95"></i>Revenue</span>`+
+      `<span><i style="background:#c8161d"></i>Operating income</span>`+
+      `<span><i class="dash"></i>Half of 2025, one course's share</span>`+
+    `</div></div>`;
+}
+
+/* ---------------- 3. today against year ten ---------------- */
+function plCompare(){
+  const h=v=>v/2;
   const rows=[
-    ["Total rounds",PF.rounds,pfN,false],
-    ["Members",PF.members,pfN,false],
-    ["Revenue",PF.rev,m,true],
-    ["Cost of sales",PF.cos.map(v=>-v),m,false],
-    ["Labour",PF.lab.map(v=>-v),m,false],
-    ["Operating expense",PF.opx.map(v=>-v),m,false],
-    ["Operating income",PF.ebitda,m,true],
-    ["Margin",PF.margin,v=>(v*100).toFixed(0)+"%",false]
+    ["Rounds",           h(PF.rounds[PL_A]),  PF.rounds[PL_T],  plN0],
+    ["Holes open",       18,               PF.holes[PL_T],   v=>v],
+    ["Revenue",          h(PF.rev[PL_A]),     PF.rev[PL_T],     plMm],
+    ["Cost of sales",    h(PF.cos[PL_A]),     PF.cos[PL_T],     plMm],
+    ["Labor",           h(PF.lab[PL_A]),     PF.lab[PL_T],     plMm],
+    ["Operating expense",h(PF.opx[PL_A]),     PF.opx[PL_T],     plMm],
+    ["Operating income", h(PF.ebitda[PL_A]),  PF.ebitda[PL_T],  plMm]
   ];
-  return ecSay("Actual years, the 2026 budget, then the ten model years. Year one is the renovation.")+
-    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.plHead)}</h3>`+
-      `<p class="wx-sub">${esc(PF_COPY.plSub)}</p>${pfGrid(rows)}</div>`+
-    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.depHead)}</h3>`+
-      `<p class="wx-sub">${esc(PF_COPY.depSub)}</p>`+
-      pfGrid(PF.deps.map(d=>[d.n,d.d,m,false]).concat([["Total operating income",PF.ebitda,m,true]]))+
-    `</div>`;
+  const half=Math.ceil(rows.length/2);
+  const col=list=>`<div class="pc">`+
+    `<div class="pq-row pq-head"><span>&nbsp;</span><span>Half of 2025</span>`+
+      `<span></span><span>Year 10</span></div>`+
+    list.map(([lbl,a,b,f])=>{
+      const d=a?((b/a-1)*100):0, up=b>=a;
+      return `<div class="pq-row"><span class="pq-n">${lbl}</span>`+
+        `<span class="pq-a">${f(a)}</span>`+
+        `<span class="pq-ar">&rarr;</span>`+
+        `<span class="pq-b">${f(b)}`+
+          (a&&Math.abs(d)>0.5?`<em class="pq-d ${up?"up":"dn"}">${d>0?"+":""}${d.toFixed(0)}%</em>`:"")+
+        `</span></div>`;
+    }).join("")+`</div>`;
+  return `<p class="pc-note">Half of 2025 is the two-course result split evenly &mdash; `+
+      `the share one eighteen-hole course carried.</p>`+
+    `<div class="pq">${col(rows.slice(0,half))}${col(rows.slice(half))}</div>`+
+    plBetter();
+}
+
+/* The second half of the case: the one course is not just carrying its share,
+   it is working harder than either course ever has. */
+function plBetter(){
+  const perHole = [PF.ebitda[PL_A]/36, PF.ebitda[PL_T]/18];
+  const perRound= [PF.rev[PL_A]/PF.rounds[PL_A], PF.rev[PL_T]/PF.rounds[PL_T]];
+  const rdHole  = [PF.rounds[PL_A]/36, PF.rounds[PL_T]/18];
+  const card=(lbl,a,b,f,sub)=>`<div class="pn">`+
+    `<div class="pn-l">${lbl}</div>`+
+    `<div class="pn-row"><span class="pn-a">${f(a)}</span>`+
+      `<span class="pn-ar">&rarr;</span>`+
+      `<span class="pn-b">${f(b)}</span>`+
+      `<span class="pn-d">+${((b/a-1)*100).toFixed(0)}%</span></div>`+
+    `<div class="pn-s">${sub}</div></div>`;
+  return `<div class="pc" style="margin-top:18px">`+
+    `<p class="pc-h">Better than either course has ever been</p>`+
+    `<p class="pc-sub">Same measures, put on a per-hole and per-round footing so the `+
+    `two sizes can be compared directly.</p><div class="pn-grid">`+
+    card("Operating income per hole", perHole[0], perHole[1], plM0,
+         "2025 across 36 holes, against Year 10 across 18")+
+    card("Revenue per round", perRound[0], perRound[1], v=>"$"+v.toFixed(0),
+         "What each round is worth at one property rather than two")+
+    card("Rounds per hole", rdHole[0], rdHole[1], v=>Math.round(v).toLocaleString(),
+         "Eighteen holes working harder than thirty-six did")+
+    `</div></div>`+ plSemi();
+}
+
+/* The point the headline figures alone would not make: this stays a
+   semi-private course. Fewer memberships, priced higher, with public play
+   still the larger share of the tee sheet. */
+function plSemi(){
+  const mix=i=>{
+    const mr=PF.members[i]*plAss("Rounds per member")[i];
+    return {mr, gr:PF.rounds[i]-mr, tot:PF.rounds[i]};
+  };
+  const a=mix(PL_A), b=mix(PL_T);
+  const bar=(x,lbl)=>{
+    const mp=x.mr/x.tot*100;
+    return `<div class="sm-row"><span class="sm-l">${lbl}</span>`+
+      `<span class="sm-bar"><i class="sm-m" style="width:${mp}%"></i>`+
+      `<i class="sm-g" style="width:${100-mp}%"></i></span>`+
+      `<span class="sm-v">${Math.round(x.gr).toLocaleString()} public `+
+      `<em>${(100-mp).toFixed(0)}%</em></span></div>`;
+  };
+  const stat=(lbl,a2,b2,f)=>`<div class="pn"><div class="pn-l">${lbl}</div>`+
+    `<div class="pn-row"><span class="pn-a">${f(a2)}</span>`+
+      `<span class="pn-ar">&rarr;</span><span class="pn-b">${f(b2)}</span>`+
+      `<span class="pn-d">${b2>a2?"+":""}${((b2/a2-1)*100).toFixed(0)}%</span></div></div>`;
+  return `<div class="pc" style="margin-top:18px">`+
+    `<p class="pc-h">It stays a semi-private course</p>`+
+    `<p class="pc-sub">The membership is scaled to eighteen holes rather than removed, `+
+    `and public play remains the larger share of the tee sheet.</p>`+
+    `<div class="sm-key"><span><i class="sm-m"></i>Member rounds</span>`+
+      `<span><i class="sm-g"></i>Public rounds</span></div>`+
+    bar(a,"2025 &middot; 36 holes")+bar(b,"Year 10 &middot; 18 holes")+
+    `<div class="pn-grid" style="margin-top:20px">`+
+      stat("Memberships", PF.members[PL_A], PF.members[PL_T], v=>Math.round(v))+
+      stat("Annual dues", plAss("Annual dues per member")[PL_A],
+                          plAss("Annual dues per member")[PL_T],
+           v=>"$"+Math.round(v).toLocaleString())+
+      stat("Daily fee", plAss("Daily fee rate")[PL_A], plAss("Daily fee rate")[PL_T],
+           v=>"$"+v.toFixed(0))+
+    `</div></div>`;
+}
+
+/* ---------------- 4. the plBridge ---------------- */
+function plBridge(){
+  const vals=PF.deps.map(d=>({n:d.n, v:d.d[PL_T]}));
+  const tot=vals.reduce((s,x)=>s+x.v,0);
+  const max=Math.max(...vals.map(x=>Math.abs(x.v)), Math.abs(tot));
+  const zero=42;                       /* % of the track where zero sits */
+  const bar=v=>{
+    const w=Math.abs(v)/max*(v<0?zero:100-zero);
+    return v>=0 ? `left:${zero}%;width:${w}%` : `left:${zero-w}%;width:${w}%`;
+  };
+  return `<div class="pc"><p class="pc-h">Where Year 10 earnings come from</p>`+
+    `<p class="pc-sub">Each department's operating income in the final model year. `+
+    `Blue earns, red costs; the eight sum to the total.</p>`+
+    vals.map(x=>`<div class="pb-row"><span class="pb-n">${x.n}</span>`+
+      `<span class="pb-track"><i class="pb-zero" style="left:${zero}%"></i>`+
+      `<i class="pb-bar ${x.v>=0?"pos":"neg"}" style="${bar(x.v)}"></i></span>`+
+      `<span class="pb-v">${plMm(x.v)}</span></div>`).join("")+
+    `<div class="pb-row is-tot"><span class="pb-n">Operating income</span>`+
+      `<span class="pb-track"><i class="pb-zero" style="left:${zero}%"></i>`+
+      `<i class="pb-bar tot" style="${bar(tot)}"></i></span>`+
+      `<span class="pb-v">${plMm(tot)}</span></div></div>`;
+}
+
+/* ---------------- 5. the detail, on request ---------------- */
+function plTable(){
+  const head=`<tr><th>&nbsp;</th>`+PF.cols.map((c,i)=>
+    `<th>${PF.short[i]}</th>`).join("")+`</tr>`;
+  const line=(lbl,arr,f,cls="")=>`<tr class="${cls}"><td>${lbl}</td>`+
+    arr.map(v=>`<td class="${v<0?"neg":""}">${v==null?"&mdash;":f(v)}</td>`).join("")+`</tr>`;
+  return `<button type="button" class="pd-tog" id="plTog" aria-expanded="false">`+
+      `Every figure on the sheet<i>\u25be</i></button>`+
+    `<div class="pd-panel" id="plPan"><div><div class="pd-scroll"><table>`+
+      `<thead>${head}</thead><tbody>`+
+      line("Total rounds",PF.rounds,plN0)+
+      line("Memberships",PF.members,plN0,"sep")+
+      line("Revenue",PF.rev,plMm,"sep")+
+      line("Cost of sales",PF.cos.map(v=>-v),plMm)+
+      line("Labor",PF.lab.map(v=>-v),plMm)+
+      line("Operating expense",PF.opx.map(v=>-v),plMm)+
+      line("Operating income",PF.ebitda,plMm,"tot")+
+    `</tbody></table></div></div></div>`;
+}
+
+function pfPL(){
+  /* The wide detail pane stretches a 1040-unit chart well past its design
+     size, so this page keeps the width the layout was drawn for. */
+  return `<div class="pl-wrap">`+
+    plHero()+plChart()+plCompare()+plBridge()+plTable()+`</div>`;
 }
 
 /* ------------------------------------------------------------- assumptions */
@@ -7582,36 +7871,11 @@ function pfAss(){
   const rows=PF.ass.map(a=>[a.n,a.d,v=>a.f+(a.f?v.toFixed(2):v.toFixed(0)),false]);
   return ecSay("Every output on the other pages follows from these.")+
     `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.assHead)}</h3>`+
-      `<p class="wx-sub">${esc(PF_COPY.assSub)}</p>`+
       pfGrid(rows.concat([["Total rounds",PF.rounds,pfN,true]]))+
-      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`+
-    `<div class="wx-card ec-card"><h3 class="wx-h">Where this came from</h3>`+
-      `<p class="ec-body last">${PF_COPY.draft}</p></div>`;
+      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`;
 }
 
 /* ----------------------------------------------------------------- add-ons */
-function pfAdd(){
-  const cards=PF.addons.map(a=>
-    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(a.n)}</h3>`+
-      `<p class="wx-sub">${esc(a.note)}</p>`+
-      `<div class="pf-arow"><span>Investment</span><span class="pf-tv">${pfMm(a.invest)}</span></div>`+
-      `<div class="pf-arow"><span>Revenue once running</span><span class="pf-tv">${pfM(a.rev)}</span></div>`+
-      `<div class="pf-arow"><span>Operating income</span><span class="pf-tv">${pfM(a.noi)} `+
-        `<em>${a.margin}% margin</em></span></div>`+
-      `<div class="pf-arow"><span>Ten-year IRR</span>`+
-        `<span class="pf-tv ${a.irr<10?"bad":"good"}">${a.irr>0?"+":""}${a.irr}%</span></div>`+
-      `<div class="pf-arow is-tot"><span>Present value at 10%</span>`+
-        `<span class="pf-tv ${a.npv<0?"bad":"good"}">${pfMm(a.npv)}</span></div>`+
-    `</div>`).join("");
-  return ecKpis([
-      ecKpi(pfMm(PF.addons[0].invest),"Golf academy",PF.addons[0].irr+"% return"),
-      ecKpi(pfMm(PF.addons[1].invest),"Lodging",PF.addons[1].irr+"% return"),
-      ecKpi(pfMm(PF.combined.invest),"All three together",PF.combined.irr+"% return"),
-      ecKpi(pfMm(PF.combined.npv),"Combined present value","at a 10% discount rate")])+
-    ecSay("Neither add-on covers its own cost of capital in this model.")+
-    `<div class="ec-g2">${cards}</div>`+
-    `<p class="ec-note">${esc(PF_COPY.addNote)}</p>`;
-}
 
 /* ------------------------------------------------------------------- shell */
 /* ============================ OWNER'S SEMI-PRIVATE MODEL ============================
@@ -7746,12 +8010,10 @@ function detailPf(i){
   const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
     PF_SECS.map(([k,l])=>`<button type="button" data-pf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
-  const body=sec==="plan"?pfPlan():sec==="cash"?pfCash():sec==="today"?pfToday()
-            :sec==="rls"?pfRls():sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
+  const body=sec==="cash"?pfCash():sec==="ass"?pfAss():sec==="rls"?pfRls():pfPL();
   el("#detail").innerHTML=
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
-    `<div class="detail-body is-wide">${body}`+
-      `<p class="wx-foot">${PF_COPY.source}</p></div>`;
+    `<div class="detail-body is-wide">${body}</div>`;
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
@@ -7760,9 +8022,8 @@ function detailPf(i){
   el("#detail").querySelectorAll("[data-pf]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.pfSec=b.dataset.pf; })));
 
-  /* The model recalculates on every keystroke. Redrawing the pane would blow
-     away focus and caret, so only the figures are rewritten and the field the
-     owner is typing in is left alone. */
+  /* The owner's model recalculates on every keystroke. Redrawing the pane would
+     blow away focus and caret, so the active field is restored afterwards. */
   const redraw=()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     const act=document.activeElement, id=act&&act.dataset?act.dataset.rls:null;
@@ -7783,6 +8044,15 @@ function detailPf(i){
     state.rls = b.dataset.rlsp==="r" ? null
               : Object.assign({}, RLS.scenarios[+b.dataset.rlsp][1]);
   })));
+
+  /* the full sheet, opened on request rather than led with */
+  const tog=el("#detail").querySelector("#plTog"), pan=el("#detail").querySelector("#plPan");
+  if(tog&&pan) tog.addEventListener("click",()=>{
+    const open=!pan.classList.contains("is-open");
+    pan.classList.toggle("is-open",open);
+    tog.setAttribute("aria-expanded",String(open));
+  });
+
 }
 
 function detailSurveyPending(i){
