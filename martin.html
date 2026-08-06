@@ -2351,9 +2351,9 @@ function detailUsopen(i){
        74. Now $540,200, matching the arithmetic figure used here all along.
      - Slammer & Squire 24-month lead acid was $9,603 against $128.04 per
        car. Now $9,474.96, so their total and their per-car rate agree.
-   Twelve-month Slammer & Squire pricing is also quoted -- lead acid $236.95 a
-   car, lithium $374.07, refurbished lithium $423.89 -- but is not shown, since
-   only the 24-month terms are under consideration.
+   Lead acid is quoted at both $5,122 a car to buy and $128.04 a car to lease,
+   but is not shown -- it is not under consideration. Twelve-month Slammer &
+   Squire terms are quoted and likewise not shown.
    ===================================================== */
 const CART = {
   now:{ cars:148, monthly:14634, perCar:98.88, subPayments:48,
@@ -2397,11 +2397,9 @@ const CART = {
        expires:"Expires August 30",
        kbLease:[ ["2027 Tempo Lithium-Ion","48 mo",9158.98],
                  ["2027 Tempo Lithium-Ion","54 mo",8163.68] ],
-       ssLease:[ ["Tempo Lead Acid \u00b7 FMV","24 mo",9474.96],
-                 ["Tempo Lithium \u00b7 FMV","24 mo",14771.14],
+       ssLease:[ ["Tempo Lithium \u00b7 FMV","24 mo",14771.14],
                  ["Refurbished Lithium \u00b7 $1 out","24 mo",16152.72] ],
        buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,540200],
-             ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,379028],
              ["Slammer &amp; Squire \u2014 refurbished lithium","74 cars",4950,366300] ],
        buyPick:906500,
        fm:[ ["Visage V3 screen","Car control, GPS yardages, tracking",39,2886],
@@ -2546,7 +2544,7 @@ function cwAllPane(){
 function cwBuyPane(){
   const c=CART.cc;
   return `<p class="cw-flag">Club Car proposes two different fleets &mdash; new lithium at `+
-    `King &amp; Bear, and either lead acid or refurbished lithium at Slammer &amp; Squire.</p>`+
+    `King &amp; Bear, and refurbished lithium at Slammer &amp; Squire.</p>`+
     `<div class="cw-2">`+
       `<div class="wx-card"><h3 class="wx-h">King &amp; Bear</h3><div>`+
         `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
@@ -2559,10 +2557,7 @@ function cwBuyPane(){
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
         `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
           `<span>Per cart</span><span>Total</span></div>`+
-        `<div class="cw-opt"><span class="cw-on">2027 Tempo Flooded Lead Acid</span>`+
-          `<span class="cw-od">74</span><span class="cw-od">$5,122</span>`+
-          `<span class="cw-ov">$379,028</span></div>`+
-        `<div class="cw-opt"><span class="cw-on">Refurbished Tempo Lithium</span>`+
+        `<div class="cw-opt is-pick"><span class="cw-on">Refurbished Tempo Lithium</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$4,950</span>`+
           `<span class="cw-ov">$366,300</span></div>`+
       `</div><p class="cw-foot">Standard colours. Refurbished cars are model year 2021 `+
@@ -2590,11 +2585,11 @@ function cwLeasePane(){
         `term closes most of the gap.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,PC_SS)}</div>`+
-        `<p class="cw-foot">Club Car corrected the lead acid monthly to $9,474.96 on `+
-        `review; every rate here now agrees with its total.</p></div>`+
+        `<p class="cw-foot">Every rate here agrees with its stated total after the `+
+        `corrections Club Car made on review.</p></div>`+
     `</div>`;
 }
-const PC_KB=[123.77,110.32], PC_SS=[128.04,199.61,218.28];
+const PC_KB=[123.77,110.32], PC_SS=[199.61,218.28];
 
 function cwFmPane(){
   const c=CART.cc;
@@ -2748,9 +2743,8 @@ function ezLeasePane(){
         `${Math.round(EZ_SS[0]*24/c.unit*100)}% of the new one.</p>`+
         `<p class="cw-foot">At the end of an FMV term there is no balloon and no fleet to dispose `+
         `of &mdash; E-Z-GO takes the cars back. Against Club Car here: their refurbished lithium is `+
-        `$218.28 a cart, but on a $1-out lease that pays 106% of the car and leaves us owning it; `+
-        `their lead acid is $128.04, within $2.19 a cart of this, for a lead acid battery rather `+
-        `than lithium.</p></div>`+
+        `$218.28 a cart, but on a $1-out lease that pays 106% of the car `+
+        `and leaves us owning it.</p></div>`+
     `</div>`;
 }
 
@@ -2780,7 +2774,6 @@ const CW_VS={
           ["Slammer &amp; Squire","24-month term",199.61,136.71,24,7300,7339.72] ],
   buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,7339.72],
         ["Slammer &amp; Squire \u2014 new lithium","74 cars",null,7339.72],
-        ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,null],
         ["Slammer &amp; Squire \u2014 used lithium","74 cars",4950,4395] ],
   fm:[ ["Full screen, car control and tracking","Visage V3 / Onyx",39,54.77],
        ["Screen with yardages","V4 screen / Pace 7EX",24,37.71],
