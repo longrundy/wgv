@@ -401,6 +401,19 @@ a{color:inherit}
 .ga-cap.is-new{color:var(--red)}
 .ga-txt{font-size:12.5px;line-height:1.6;margin:0;color:#4a4a46}
 .ga-txt b{color:var(--navy)}
+.ga-split{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:2px 0 12px}
+.ga-split span{display:flex;align-items:center;justify-content:center;font-size:12px;
+ font-weight:700;color:#fff}
+.ga-split .is-i{background:var(--navy);flex:70}
+.ga-split .is-f{background:var(--red);flex:30}
+.ga-mk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 16px}
+.ga-mk>div{border-left:2px solid var(--line);padding-left:11px}
+.ga-mkn{font-size:19px;font-weight:700;color:var(--navy);line-height:1.1;
+ font-variant-numeric:tabular-nums}
+.ga-mkl{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+ font-weight:700;margin-top:3px}
+.ga-sub2{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+ font-weight:700;margin:14px 0 8px}
 .ga-team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px}
 .ga-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
  display:flex;flex-direction:column}
@@ -3255,11 +3268,18 @@ const GA={ rent:40000, rentMo:3333.33, termEnd:"31 December 2028",
   cash:17101, ar:75000, fixed:203014, assets:295115,
   owed:133816, taxes:1927, equity:159372, recovered:100000, short:33816,
   contrib:264430, distrib:82500, loss:119916, memberEq:62014,
-  windUp:"31 December 2026", fitting:35 };
+  windUp:"31 December 2026",
+  /* Business summary from Todd Jones, 2026. The 70/30 split supersedes the
+     "at least 35%" he gave in March -- this is the formal figure. */
+  instruction:70, fitting:30, rebrandBy:"September 30",
+  mk:{ campaigns:44, recipients:195798, delivered:99.1, opened:36,
+       channels:4, posts:137, impressions:133886 } };
 
 function academyItem(){
   return {t:"Golf Academy", m:"", s:"", c:"f-flat", a:"", acad:true};
 }
+
+const gaStat=(v,l)=>`<div><div class="ga-mkn">${v}</div><div class="ga-mkl">${l}</div></div>`;
 
 function gaPane(){
   const g=GA, m=v=>"$"+Math.round(v).toLocaleString();
@@ -3275,8 +3295,8 @@ function gaPane(){
         `<div class="cw-tl">Rent a year</div></div>`+
       `<div class="cw-tile"><div class="cw-tn">${m(g.ar)}</div>`+
         `<div class="cw-tl">Still to collect</div></div>`+
-      `<div class="cw-tile"><div class="cw-tn">${g.fitting}%</div>`+
-        `<div class="cw-tl">Of the business is fitting</div></div>`+
+      `<div class="cw-tile"><div class="cw-tn">${g.instruction} / ${g.fitting}</div>`+
+        `<div class="cw-tl">Instruction / fitting</div></div>`+
       `<div class="cw-tile"><div class="cw-tn">2028</div>`+
         `<div class="cw-tl">Agreement runs to</div></div>`+
     `</div>`+
@@ -3286,8 +3306,8 @@ function gaPane(){
       `<p>A 50/50 venture with TPC Golf Schools since 2001. Honours takes the cash, the receivables `+
       `and the buildings, and assumes every liability. TPC is released.</p></div>`+
       `<div><h4>The name</h4><b>The licence is cancelled</b>`+
-      `<p>The PGA TOUR marks revert and all use stops. Todd rebrands to The Tour Academy in `+
-      `September, with a new mark and website.</p></div>`+
+      `<p>The PGA TOUR marks revert and all use stops. Todd rebrands to The Tour Academy, `+
+      `targeting a complete transition by ${g.rebrandBy}.</p></div>`+
       `<div><h4>What does not change</h4><b>Operator, building, rent</b>`+
       `<p>Todd Jones Performance Golf runs it through 2028 with three one-year extensions. `+
       `${m(g.rent)} a year, same premises, same team.</p></div>`+
@@ -3311,11 +3331,42 @@ function gaPane(){
           `<div><div class="ga-logo is-old"><img src="${GA_PGA}" alt="PGA TOUR Golf Academy"></div>`+
             `<span class="ga-cap">Expires December 31, 2026</span></div>`+
           `<div><div class="ga-logo"><img src="${GA_LOGO}" alt="The Tour Academy"></div>`+
-            `<span class="ga-cap is-new">Activates September 2026</span></div>`+
+            `<span class="ga-cap is-new">Complete by ${g.rebrandBy}, 2026</span></div>`+
         `</div>`+
         `<p class="ga-txt">Todd hired Golf Space Collective last year partly to build this `+
         `transition into the site and marketing from the start. <b>A change of name, not of `+
         `operator, premises or terms.</b></p></div>`+
+    `</div>`+
+
+    `<div class="cw-2">`+
+      `<div class="wx-card"><h3 class="wx-h">What they sell</h3>`+
+        `<div class="ga-split"><span class="is-i">${g.instruction}% instruction</span>`+
+          `<span class="is-f">${g.fitting}% fitting</span></div>`+
+        `<p class="ga-txt">Private lessons, destination golf schools and group clinics make up `+
+        `seven tenths of the business. The rest is club fitting and equipment &mdash; the side `+
+        `Todd has been building hardest, with a full-time master fitter and fitting days run with `+
+        `Titleist, Ping and PXG, and Callaway and TaylorMade in progress.</p>`+
+        `<p class="ga-txt" style="margin-top:9px">Members get <b>20% off</b> the fitting fee and `+
+        `<b>10% off</b> any equipment purchased.</p></div>`+
+      `<div class="wx-card"><h3 class="wx-h">Marketing</h3>`+
+        `<p class="ga-txt">Run by Golf Space Collective, hired last year and carrying the `+
+        `rebrand.</p>`+
+        `<div class="ga-sub2">Email &middot; year to date</div><div class="ga-mk">`+
+          gaStat(g.mk.campaigns.toLocaleString(),"Campaigns")+
+          gaStat(g.mk.recipients.toLocaleString(),"Recipients")+
+          gaStat(g.mk.delivered+"%","Delivered")+
+          gaStat(g.mk.opened+"%","Opened")+
+        `</div>`+
+        `<div class="ga-sub2">Social</div><div class="ga-mk">`+
+          gaStat(g.mk.channels,"Channels")+
+          gaStat(g.mk.posts.toLocaleString(),"Posts")+
+          gaStat(g.mk.impressions.toLocaleString(),"Impressions")+
+          gaStat(Math.round(g.mk.impressions/g.mk.posts).toLocaleString(),"Per post")+
+        `</div>`+
+        `<p class="cw-foot">Instagram, Facebook, YouTube and LinkedIn. A ${g.mk.opened}% open `+
+        `rate runs well above the 20&ndash;25% typical of golf and hospitality email &mdash; `+
+        `about ${Math.round(g.mk.recipients*g.mk.delivered/100*g.mk.opened/100).toLocaleString()} `+
+        `opens across the year so far.</p></div>`+
     `</div>`+
 
     `<h3 class="ga-hd">Who runs it</h3>`+
