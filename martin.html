@@ -2383,8 +2383,9 @@ const CART = {
        ssLease:[ ["RXV Elite","24 mo",10116.54],
                  ["RXV Elite certified pre-owned","24 mo",9312.90] ],
        buy:[ ["King &amp; Bear \u2014 RXV Elite","74 cars",7339.72,543139.28],
-             ["Slammer &amp; Squire \u2014 RXV Elite","74 cars",7339.72,543139.28] ],
-       buyPick:1086278.56,
+             ["Slammer &amp; Squire \u2014 RXV Elite","74 cars",7339.72,543139.28],
+             ["Slammer &amp; Squire \u2014 RXV Elite certified pre-owned","74 cars, 2021",4395,325230] ],
+       buyPick:1086278.56, buyMixed:868369.28,
        /* Certified pre-owned quote, 5 August 2026. Slammer & Squire only.
           2021 RXV Elite, factory refurbished at Augusta, Samsung SDI lithium. */
        cpo:{ year:2021, unit:4395, total:325230, pcpm:125.85, monthly:9312.90, term:24 },
@@ -2636,7 +2637,7 @@ function ezAllPane(){
     rows.map(r => cwRow(r[0], r[1], r[2]+perCourse, base)).join("");
   return `<p class="cw-flag">Today we pay <b>${cwMoney(n.monthly)}</b> a month `+
     `&mdash; <b>${cwMoney(n.monthly*12)}</b> a year &mdash; for ${n.cars} carts. `+
-    `E-Z-GO quotes new RXV Elite at both courses.</p>`+
+    `E-Z-GO quotes new RXV Elite at both courses, or certified pre-owned at Slammer &amp; `+`Squire.</p>`+
     `<div class="cw-addon"><span class="cw-addl">Add screens &amp; tracking</span>`+
       `<div class="cw-yrs" style="margin:0" role="group" aria-label="Screens and tracking">`+
       EZ_FM.map(([v,l])=>`<button type="button" data-cwfm="${v}" `+
@@ -2654,9 +2655,13 @@ function ezAllPane(){
         `<span class="cw-sub">${b[1]}</span></span><span class="cw-od"></span>`+
         `<span class="cw-od">$${b[2].toFixed(2)}</span>`+
         `<span class="cw-ov">${cwMoney(b[3])}</span></div>`).join("")+
-      `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite at both courses</span>`+
+      `<div class="cw-opt is-pick"><span class="cw-on">New at both courses</span>`+
         `<span class="cw-od"></span><span class="cw-od"></span>`+
         `<span class="cw-ov">${cwMoney(c.buyPick)}</span></div>`+
+      `<div class="cw-opt is-pick"><span class="cw-on">New at King &amp; Bear, pre-owned at `+
+        `Slammer &amp; Squire<span class="cw-sub">${cwMoney(c.buyPick-c.buyMixed)} less</span></span>`+
+        `<span class="cw-od"></span><span class="cw-od"></span>`+
+        `<span class="cw-ov">${cwMoney(c.buyMixed)}</span></div>`+
     `</div></div>`;
 }
 
