@@ -12,7 +12,6 @@
   --red:#c8161d; --red-dark:#a32d2d; --red-tint:#fbeceb; --red-wash:#fbf6f6;
   --ink:#17325a; --muted:#8a8a84; --line:#e5e2da; --line-soft:#f0eee8;
   --amber:#ba7517; --green:#639922;
-  --navy-lift:#1d3c6b; --navy-deep:#122a4c; --wash:#f7f9fc;
   --dry:#a8571f; --wet:#1f6fa8; --cold:#2a9d9b; --hot:#c8161d;
   --rail-w:280px;
 }
@@ -337,6 +336,15 @@ a{color:inherit}
  font-size:12px;color:#5f5e5a;line-height:1.55}
 .cw-tax .cw-warn b{color:var(--navy)}
 /* current fleet, reduced to a single strip so the tab holds one screen */
+/* certified pre-owned: what the refurbishment actually covers */
+.cw-cpo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 22px;margin-top:16px;
+ padding:18px 22px;background:var(--navy);border-radius:13px}
+.cw-cpo>div{padding-right:22px;border-right:1px solid rgba(255,255,255,.16)}
+.cw-cpo>div:last-child{border-right:0;padding-right:0}
+.cw-cpo h4{margin:0 0 5px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+ color:#8fa6c4;font-weight:700}
+.cw-cpo b{display:block;font-size:15px;color:#fff;font-weight:700;margin-bottom:4px}
+.cw-cpo p{margin:0;font-size:11.5px;color:#b9c8de;line-height:1.5}
 .cw-slim{display:flex;align-items:baseline;gap:0 22px;flex-wrap:wrap;
  padding:13px 22px;margin-top:14px}
 .cw-sl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#8fa6c4;font-weight:700}
@@ -547,128 +555,40 @@ button.oc-card[aria-expanded="true"] .oc-cv{transform:rotate(180deg)}
   .oc-tag{margin:2px 0 0 47px}
 }
 /* ---- Pro Forma ---- */
-/* ---- Pro Forma: profit and loss ---- */
-.pl-wrap{max-width:1180px;margin:0 auto}
-/* ---------- 1. the finding, stated once, at the top ---------- */
-.ph{background:linear-gradient(135deg,var(--navy-lift),var(--navy-deep));border-radius:18px;
-  padding:24px 28px;box-shadow:0 18px 40px -26px rgba(18,42,76,.9)}
-.ph-lead{margin:0 0 20px;font-size:19px;font-weight:600;color:#fff;line-height:1.45;
-  letter-spacing:.005em;max-width:760px}
-.ph-lead b{color:#ffd9db;font-weight:700}
-.ph-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 26px}
-.ph-row>div{padding-right:26px;border-right:1px solid rgba(255,255,255,.16)}
-.ph-row>div:last-child{border-right:0;padding-right:0}
-.ph-n{font-size:29px;font-weight:700;color:#fff;line-height:1.05;font-variant-numeric:tabular-nums}
-.ph-n.is-dn{color:#ff9d9d}
-.ph-l{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:#8fa6c4;
-  font-weight:700;margin-top:7px}
-.ph-s{font-size:12px;color:#b9c8de;margin-top:3px;line-height:1.5}
-
-/* ---------- 2. the shape ---------- */
-.pc{border:1px solid var(--line);border-radius:16px;background:#fff;padding:20px 22px 16px;
-  margin-top:18px;box-shadow:0 1px 2px rgba(23,50,90,.04)}
-.pc-h{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.085em;color:var(--muted);
-  font-weight:700}
-.pc-sub{margin:5px 0 16px;font-size:12.5px;color:#5f6b7d;line-height:1.5}
-.pc-svg{width:100%;height:auto;display:block;overflow:visible}
-.pc-key{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;font-size:11.5px;color:#5f6b7d}
-.pc-key span{display:inline-flex;align-items:center;gap:6px}
-.pc-key i{width:14px;height:3px;border-radius:2px;display:inline-block}
-.pc-key i.dash{background:repeating-linear-gradient(90deg,#8a8a84 0 4px,transparent 4px 7px);
-  height:2px}
-
-/* ---------- 3. today against year ten ---------- */
-.pq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
-.pq-row{display:grid;grid-template-columns:minmax(0,1.1fr) 88px 22px 88px;gap:0 10px;
-  align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft)}
-.pq-row:last-child{border-bottom:0}
-.pq-head{padding-bottom:6px;border-bottom:1px solid var(--line);font-size:10px;
-  letter-spacing:.06em;text-transform:uppercase;color:#b4b2a9;font-weight:700}
-.pq-head span:nth-child(n+2){text-align:right}
-.pq-head span:nth-child(3){text-align:center}
-.pq-n{font-size:13px;font-weight:600;color:var(--ink)}
-.pq-a,.pq-b{text-align:right;font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums}
-.pq-a{color:#8a8a84}
-.pq-b{color:var(--ink)}
-.pq-ar{text-align:center;color:#c3cedd;font-size:12px}
-.pq-d{display:block;font-size:11px;font-weight:600;margin-top:2px}
-.pq-d.dn{color:var(--red)} .pq-d.up{color:var(--green)}
-.ph-n.is-up{color:#a8e06a}
-.pc-note{margin:20px 0 -4px;font-size:12px;color:var(--muted);line-height:1.5}
-.pn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 24px}
-.pn{padding-right:24px;border-right:1px solid var(--line-soft)}
-.pn:last-child{border-right:0;padding-right:0}
-.pn-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
-  font-weight:700;margin-bottom:9px}
-.pn-row{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
-.pn-a{font-size:17px;font-weight:700;color:#b4b2a9;font-variant-numeric:tabular-nums}
-.pn-ar{color:#c3cedd;font-size:12px}
-.pn-b{font-size:25px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
-.pn-d{font-size:12.5px;font-weight:700;color:var(--green)}
-.pn-s{font-size:11.5px;color:#5f6b7d;line-height:1.5;margin-top:6px}
-.sm-key{display:flex;gap:16px;font-size:11.5px;color:#5f6b7d;margin:0 0 12px}
-.sm-key span{display:inline-flex;align-items:center;gap:6px}
-.sm-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
-.sm-row{display:grid;grid-template-columns:minmax(0,150px) 1fr minmax(0,150px);
-  gap:0 14px;align-items:center;padding:7px 0}
-.sm-l{font-size:12.5px;color:var(--ink);font-weight:600}
-.sm-bar{display:flex;height:22px;border-radius:5px;overflow:hidden}
-.sm-m{background:var(--navy)} .sm-g{background:#8fb4d8}
-.sm-v{text-align:right;font-size:12.5px;color:#5f6b7d;font-variant-numeric:tabular-nums}
-.sm-v em{font-style:normal;font-weight:700;color:var(--ink);margin-left:5px}
-@media (max-width:900px){.sm-row{grid-template-columns:minmax(0,110px) 1fr}
-  .sm-v{grid-column:2;text-align:left}}
-@media (max-width:900px){.pn-grid{grid-template-columns:1fr;gap:16px 0}
-  .pn{border-right:0;padding-right:0;padding-bottom:14px;border-bottom:1px solid var(--line-soft)}
-  .pn:last-child{padding-bottom:0;border-bottom:0}}
-
-/* ---------- 4. the bridge ---------- */
-.pb-row{display:grid;grid-template-columns:minmax(0,190px) 1fr 92px;gap:0 14px;
-  align-items:center;padding:7px 0}
-.pb-n{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis}
-.pb-track{position:relative;height:20px}
-.pb-zero{position:absolute;top:-4px;bottom:-4px;width:1px;background:#dfe3e9}
-.pb-bar{position:absolute;top:3px;height:14px;border-radius:3px}
-.pb-bar.pos{background:var(--navy)}
-.pb-bar.neg{background:var(--red)}
-.pb-bar.tot{background:var(--green)}
-.pb-v{text-align:right;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;
-  color:var(--ink)}
-.pb-row.is-tot{border-top:2px solid var(--navy);margin-top:8px;padding-top:11px}
-.pb-row.is-tot .pb-n,.pb-row.is-tot .pb-v{font-weight:700;font-size:14px}
-
-/* ---------- 5. the detail, on request ---------- */
-.pd-tog{display:flex;align-items:center;gap:9px;width:100%;margin-top:18px;padding:13px 18px;
-  border:1px solid var(--line);border-radius:12px;background:var(--wash);
-  font-size:12.5px;font-weight:600;color:#33507a}
-.pd-tog:hover{background:#eef3fa}
-.pd-tog i{margin-left:auto;font-style:normal;font-size:9px;color:#8fa6c4;
-  transition:transform .22s}
-.pd-tog[aria-expanded="true"] i{transform:rotate(180deg)}
-.pd-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s ease}
-.pd-panel.is-open{grid-template-rows:1fr}
-.pd-panel>div{overflow:hidden}
-.pd-scroll{overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:12px;
-  padding:14px 16px}
-table{border-collapse:collapse;width:100%;font-size:12px}
-th,td{padding:6px 9px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#fff}
-thead th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#b4b2a9;
-  border-bottom:1px solid var(--line)}
-tbody tr.sep td{border-top:1px solid var(--line-soft)}
-td.neg{color:var(--red)}
-tr.tot td{font-weight:700;border-top:2px solid var(--navy);color:var(--navy)}
-
-@media (max-width:900px){
-  .ph-row{grid-template-columns:1fr;gap:16px 0}
-  .ph-row>div{border-right:0;padding-right:0;padding-bottom:14px;
-    border-bottom:1px solid rgba(255,255,255,.16)}
-  .ph-row>div:last-child{padding-bottom:0;border-bottom:0}
-  .pq{grid-template-columns:1fr}
-  .pb-row{grid-template-columns:minmax(0,140px) 1fr 82px}
-}
-
+/* owner's live semi-private model */
+.rls-presets{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.rls-presets button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;
+ border:1px solid #dfe3e9;background:#fff;color:var(--ink);cursor:pointer}
+.rls-presets button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.rls-presets button.is-reset{margin-left:auto;color:var(--muted)}
+.rls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px}
+.rls-f{display:flex;flex-direction:column;gap:4px}
+.rls-f span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+ font-weight:700}
+.rls-f input{font:inherit;font-size:15px;font-weight:700;color:var(--navy);padding:7px 9px;
+ border:1px solid #dfe3e9;border-radius:8px;background:#fcfcfd;width:100%}
+.rls-f input:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
+.rls-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px;margin:16px 0;
+ padding:16px 22px;background:var(--navy);border-radius:13px}
+.rls-out>div{padding-right:24px;border-right:1px solid rgba(255,255,255,.16)}
+.rls-out>div:last-child{border-right:0;padding-right:0}
+.rls-on{font-size:24px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.rls-on.is-dn{color:#ff9d9d}
+.rls-on.is-up{color:#a8e06a}
+.rls-ol{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8fa6c4;
+ font-weight:700;margin-top:4px}
+.rls-r{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:0 12px;
+ align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.rls-r .rls-v,.rls-r .rls-b{text-align:right;font-variant-numeric:tabular-nums}
+.rls-n{font-size:13px;font-weight:600;color:var(--ink)}
+.rls-v{font-size:13.5px;font-weight:700;color:var(--ink)}
+.rls-b{font-size:12.5px;color:#8a8a84}
+.rls-head{border-bottom:1px solid var(--line);padding-bottom:5px}
+.rls-head .rls-v,.rls-head .rls-b{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+ color:#b4b2a9;font-weight:700}
+.rls-r.is-tot{border-top:2px solid var(--navy);border-bottom:0;margin-top:2px}
+.rls-r.is-tot .rls-v{font-size:15px;color:var(--navy)}
+.rls-r.is-ocf .rls-v{font-size:17px}
 .pf-flag{margin:0 0 14px;padding:13px 16px;border-left:4px solid var(--red);
   background:#fdf3f3;font-size:13.5px;color:#3d3d3a;line-height:1.6}
 .pf-flag b{color:var(--red-dark)}
@@ -2460,10 +2380,14 @@ const CART = {
        expires:"Includes $200 a car Q3/Q4 Troon offer",
        list:7470.29, unit:7339.72, perCourse:543139.28, fleet:1086278.56,
        kbLease:[ ["RXV Elite","48 mo",8622.48] ],
-       ssLease:[ ["RXV Elite","24 mo",10116.54] ],
+       ssLease:[ ["RXV Elite","24 mo",10116.54],
+                 ["RXV Elite certified pre-owned","24 mo",9312.90] ],
        buy:[ ["King &amp; Bear \u2014 RXV Elite","74 cars",7339.72,543139.28],
              ["Slammer &amp; Squire \u2014 RXV Elite","74 cars",7339.72,543139.28] ],
        buyPick:1086278.56,
+       /* Certified pre-owned quote, 5 August 2026. Slammer & Squire only.
+          2021 RXV Elite, factory refurbished at Augusta, Samsung SDI lithium. */
+       cpo:{ year:2021, unit:4395, total:325230, pcpm:125.85, monthly:9312.90, term:24 },
        fm:[ ["Pace 7EX screen","48-month term",37.71,2790.54],
             ["Pace 10EX screen","48-month term",42.86,3171.64],
             ["Onyx screen","48-month term",54.77,4052.98],
@@ -2629,7 +2553,7 @@ function cwBuyPane(){
         `<div class="cw-opt is-pick"><span class="cw-on">2027 Tempo Lithium-Ion</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$7,300</span>`+
           `<span class="cw-ov">$540,200</span></div>`+
-      `</div><p class="cw-foot">Premium body and seat color, auto park brake, cooler, `+
+      `</div><p class="cw-foot">Premium body and seat colour, auto park brake, cooler, `+
       `sand bucket, hinged windshield, decals and freight all included.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
         `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
@@ -2640,7 +2564,7 @@ function cwBuyPane(){
         `<div class="cw-opt"><span class="cw-on">Refurbished Tempo Lithium</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$4,950</span>`+
           `<span class="cw-ov">$366,300</span></div>`+
-      `</div><p class="cw-foot">Standard colors. Refurbished cars are model year 2021 `+
+      `</div><p class="cw-foot">Standard colours. Refurbished cars are model year 2021 `+
       `with new seats, wheels, tires, windshield and body panels.</p></div>`+
     `</div>`;
 }
@@ -2699,7 +2623,7 @@ function cwCcPane(){
       `aria-pressed="${k===sub}">${l}</button>`).join("")+`</div>`+ body;
 }
 
-const EZ_KB=[116.52], EZ_SS=[136.71];
+const EZ_KB=[116.52], EZ_SS=[136.71,125.85];
 const EZ_FM=[[0,"None"],[37.71,"Pace 7EX \u00b7 $37.71"],[42.86,"Pace 10EX \u00b7 $42.86"],
              [54.77,"Onyx \u00b7 $54.77"]];
 
@@ -2747,23 +2671,38 @@ function ezBuyPane(){
         `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite</span>`+
           `<span class="cw-od">74</span><span class="cw-od">$${c.unit.toFixed(2)}</span>`+
           `<span class="cw-ov">${cwMoney(c.perCourse)}</span></div>`+
-      `</div><p class="cw-foot">Premium body color, grey seats, black top, fold-down `+
+      `</div><p class="cw-foot">Premium body colour, grey seats, black top, fold-down `+
       `windshield, wheel covers, sand bucket, cooler, bag cover, USB, logos and decals `+
       `included.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire</h3><div>`+
         `<div class="cw-opt cw-ohead"><span>Vehicle</span><span>Qty</span>`+
           `<span>Per cart</span><span>Total</span></div>`+
-        `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite</span>`+
+        `<div class="cw-opt"><span class="cw-on">RXV Elite<span class="cw-sub">New, 2027</span></span>`+
           `<span class="cw-od">74</span><span class="cw-od">$${c.unit.toFixed(2)}</span>`+
           `<span class="cw-ov">${cwMoney(c.perCourse)}</span></div>`+
-      `</div><p class="cw-foot">E-Z-GO quotes new cars here, where Club Car quoted lead `+
-      `acid or refurbished lithium. The two Slammer figures are not the same fleet.</p></div>`+
+        `<div class="cw-opt is-pick"><span class="cw-on">RXV Elite certified pre-owned`+
+          `<span class="cw-sub">${c.cpo.year} model, factory refurbished</span></span>`+
+          `<span class="cw-od">74</span><span class="cw-od">$${c.cpo.unit.toFixed(2)}</span>`+
+          `<span class="cw-ov">${cwMoney(c.cpo.total)}</span></div>`+
+      `</div><p class="cw-foot">The pre-owned car is <b>${cwMoney(c.unit-c.cpo.unit)} a cart</b> `+
+      `less &mdash; ${cwMoney((c.unit-c.cpo.unit)*74)} across the 74. Club Car&rsquo;s refurbished `+
+      `lithium is $4,950 a cart, so E-Z-GO comes in $555 under it.</p></div>`+
+    `</div>`+
+    `<div class="cw-cpo">`+
+      `<div><h4>What it is</h4><b>${c.cpo.year} RXV Elite</b><p>Stripped and rebuilt at the E-Z-GO `+
+        `factory in Augusta, with new seats, tires, body panels, top, windshield and trim.</p></div>`+
+      `<div><h4>Battery</h4><b>Samsung SDI lithium</b><p>Zero maintenance, and the battery warranty `+
+        `runs the full lease term rather than expiring part way through.</p></div>`+
+      `<div><h4>Warranty</h4><b>One year, parts</b><p>Parts and accessories for twelve months, `+
+        `extended cover available. Every car test driven and inspected across eighteen areas.</p></div>`+
+      `<div><h4>Age at hand-back</h4><b>Seven years</b><p>Built ${c.cpo.year}, delivered December `+
+        `2026, returned at the end of a ${c.cpo.term}-month term in late 2028.</p></div>`+
     `</div>`+
     `<div class="wx-card"><h3 class="wx-h">How the price is built &middot; per course</h3><div>`+
       `<div class="cw-row"><span class="cw-n">RXV Elite, list<span class="cw-sub">`+
         `74 at $${c.list.toFixed(2)}</span></span><span class="cw-v">${cwMoney(552801.46)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Options and parts package<span class="cw-sub">`+
-        `Premium color, E-coat frame</span></span><span class="cw-v">${cwMoney(7505.82)}</span></div>`+
+        `Premium colour, E-coat frame</span></span><span class="cw-v">${cwMoney(7505.82)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Freight and surcharge</span>`+
         `<span class="cw-v">${cwMoney(25308)}</span></div>`+
       `<div class="cw-row"><span class="cw-n">Troon discounts<span class="cw-sub">`+
@@ -2797,9 +2736,16 @@ function ezLeasePane(){
         `$25,752 across the term.</p></div>`+
       `<div class="wx-card"><h3 class="wx-h">Slammer &amp; Squire &middot; 74 cars</h3>`+
         `<div>${head}${rows(c.ssLease,EZ_SS)}</div>`+
-        `<p class="cw-foot">Only a 24-month term is quoted here. At the end of an FMV term `+
-        `there is no balloon and no fleet to dispose of &mdash; E-Z-GO takes the cars back. `+
-        `Payments are estimated and subject to change.</p></div>`+
+        `<p class="cw-foot">Buying pre-owned saves 40%; leasing it saves <b>8%</b>. The monthly `+
+        `is only $${(EZ_SS[0]-EZ_SS[1]).toFixed(2)} a cart below the new car because the residual `+
+        `on a ${c.cpo.year} machine after two more years is far thinner &mdash; the payment covers `+
+        `${Math.round(EZ_SS[1]*c.cpo.term/c.cpo.unit*100)}% of the pre-owned car against `+
+        `${Math.round(EZ_SS[0]*24/c.unit*100)}% of the new one.</p>`+
+        `<p class="cw-foot">At the end of an FMV term there is no balloon and no fleet to dispose `+
+        `of &mdash; E-Z-GO takes the cars back. Against Club Car here: their refurbished lithium is `+
+        `$218.28 a cart, but on a $1-out lease that pays 106% of the car and leaves us owning it; `+
+        `their lead acid is $128.04, within $2.19 a cart of this, for a lead acid battery rather `+
+        `than lithium.</p></div>`+
     `</div>`;
 }
 
@@ -2830,7 +2776,7 @@ const CW_VS={
   buy:[ ["King &amp; Bear \u2014 new lithium","74 cars",7300,7339.72],
         ["Slammer &amp; Squire \u2014 new lithium","74 cars",null,7339.72],
         ["Slammer &amp; Squire \u2014 lead acid","74 cars",5122,null],
-        ["Slammer &amp; Squire \u2014 refurbished","74 cars",4950,null] ],
+        ["Slammer &amp; Squire \u2014 used lithium","74 cars",4950,4395] ],
   fm:[ ["Full screen, car control and tracking","Visage V3 / Onyx",39,54.77],
        ["Screen with yardages","V4 screen / Pace 7EX",24,37.71],
        ["Mid screen","V4 full / Pace 10EX",50,42.86] ],
@@ -2901,9 +2847,13 @@ function cwCmpPane(){
           `<span class="cw-od">${r[2]==null?`<span class="cw-nq">&mdash;</span>`:"$"+r[2].toLocaleString()}</span>`+
           `<span class="cw-od">${r[3]==null?`<span class="cw-nq">&mdash;</span>`:"$"+r[3].toFixed(2)}</span>`+
           `<span class="cw-ov"></span></div>`).join("")+
-      `</div><p class="cw-foot">Only King &amp; Bear compares. Club Car quotes no new car at `+
-      `Slammer &amp; Squire and E-Z-GO quotes nothing else, so those rows are different `+
-      `fleets, not competing prices.</p></div>`+
+      `</div><p class="cw-foot">Two rows compare directly: the new car at King &amp; Bear, and `+
+      `used lithium at Slammer &amp; Squire, where E-Z-GO&rsquo;s certified pre-owned comes in `+
+      `$555 a cart under Club Car&rsquo;s refurbished &mdash; $41,070 across the 74. The other two `+
+      `rows are quoted by one maker only.</p>`+
+      `<p class="cw-foot">On a lease those two used fleets are not the same product. E-Z-GO is `+
+      `$125.85 a cart on fair market value and takes the cars back; Club Car is $218.28 on a `+
+      `$1-out structure that pays 106% of the car and leaves us owning it.</p></div>`+
 
       `<div class="wx-card"><h3 class="wx-h">Screens &mdash; per car per month</h3><div>`+
         head("Level","Club Car","E-Z-GO","")+
@@ -3337,7 +3287,7 @@ function gaPane(){
       `<div><h4>The company</h4><b>Academy Assets dissolves</b>`+
       `<p>A 50/50 venture with TPC Golf Schools since 2001. Honours takes the cash, the receivables `+
       `and the buildings, and assumes every liability. TPC is released.</p></div>`+
-      `<div><h4>The name</h4><b>The license is cancelled</b>`+
+      `<div><h4>The name</h4><b>The licence is cancelled</b>`+
       `<p>The PGA TOUR marks revert and all use stops. Todd rebrands to The Tour Academy in `+
       `September, with a new mark and website.</p></div>`+
       `<div><h4>What does not change</h4><b>Operator, building, rent</b>`+
@@ -3834,7 +3784,7 @@ mgrres:{title:"Manager resources", sub:"Management only", items:[
 /* ---- render ---- */
 const el=s=>document.querySelector(s);
 const openGroups={};
-const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev",cwTab:"now",cwSub:"all",cwFm:0,ocOpen:null};
+const state={view:"feedback",tab:"open",idx:0,mgrOk:false,turf:true,lang:"en",wx:0,park:0,course:"kb",svView:"scores",svAud:"guest",gYear:"2026",pvKind:"golf",pvSrc:null,pvYear:null,empSec:"overview",empDept:null,empYear:"consolidated",mgKind:"golf",mgEv:null,mgYear:"",mgCm:14,cmType:"all",rls:null,cmNps:"all",cmQ:"",cmShown:25,wxView:"rain",wxCourse:"kb",finSeg:"all",finYear:"",finMetric:"noi",finDept:"__all__",finPer:"total",finTab:"year",finMode:"amt",finOpen:"",mbTab:"rev",cwTab:"now",cwSub:"all",cwFm:0,ocOpen:null};
 const isMobile=()=>window.matchMedia("(max-width:820px)").matches;
 
 function buildNav(){
@@ -4106,8 +4056,8 @@ const FIN_INSIDE = {};
 const FIN_NOTE = {
   "Membership":"allocated evenly between the two courses",
   "Marketing":"allocated evenly between the two courses",
-  "Golf Course Maintenance":"a cost center \u2014 no revenue of its own",
-  "General & Administrative":"a cost center \u2014 no revenue of its own",
+  "Golf Course Maintenance":"a cost centre \u2014 no revenue of its own",
+  "General & Administrative":"a cost centre \u2014 no revenue of its own",
   "Golf Academy":"Slammer & Squire only",
   "Merchandise":"revenue and cost of sales only \u2014 its labor and operating costs stay with Pro Shop",
 };
@@ -4234,7 +4184,7 @@ function finTrend(seg,metric,dept,perRound){
   const vals=finFullYears().map(y=>finVal(y,metric,dept,seg,perRound)).concat(fc?[fc.v]:[]);
   const nAct=vals.length-(fc?1:0);
   const W=svgW(1), H=210, PL=46, PR=20, PB=28;
-  /* Headroom has to be added, not multiplied: for a cost center every value is
+  /* Headroom has to be added, not multiplied: for a cost centre every value is
      negative, so max*1.1 lands BELOW the maximum and the line overflows the box. */
   const rawLo=Math.min.apply(null,vals), rawHi=Math.max.apply(null,vals);
   const span=(rawHi-rawLo)||Math.abs(rawHi)||1;
@@ -6179,13 +6129,13 @@ const EMP_ALL={
     {name:"World Golf Village", prop:true,
       kb:{2019:70.6,2021:77.3,2022:72.9,2023:79.3,2026:85.0},
       ss:{2019:79.6,2021:79.1,2022:78.5,2023:80.6,2026:83.0}},
-    {name:"Golf Course Maintenance",
+    {name:"Golf course maintenance",
       kb:{2019:84.5,2021:87.3,2022:80.7,2023:92.7,2026:85.0},
       ss:{2019:86.3,2021:87.5,2022:83.6,2023:85.4,2026:83.0}},
-    {name:"Golf Operations",
+    {name:"Golf operations",
       kb:{2019:59.3,2021:69.2,2022:77.0,2023:82.3,2026:85.5},
       ss:{2019:71.8,2021:77.1,2022:80.5,2023:82.4,2026:83.5}},
-    {name:"Food and Beverage",
+    {name:"Food and beverage",
       kb:{2019:67.9,2021:75.5,2022:56.6,2023:65.1,2026:90.5},
       ss:{2019:80.7,2021:72.7,2022:48.6,2023:61.9,2026:88.5}}
   ]
@@ -6202,9 +6152,9 @@ const EMP_YEARS=[
   ["2019","2019"]
 ];
 const EMP_SKIPPED=[
-  ["2025","The greens at Slammer & Squire failed and had to be regrassed. The front nine was closed for the work, leaving nine holes in play for much of the season. Guest satisfaction suffered, and staff absorbed that dissatisfaction daily while working a half-open golf course. A survey taken under those conditions would have measured the circumstances rather than how the operation normally runs."],
-  ["2024","King & Bear was closed for eight months during the course renovation and thirty positions were eliminated. Conditions were too far from normal to produce a meaningful result."],
-  ["2020","Operations were disrupted by the COVID-19 pandemic."]
+  ["2025","Slammer & Squire's greens were dead and the course was shut down to rebuild them. Staff took a beating all season, and a survey run in that mood would not have told us how we normally run."],
+  ["2024","King & Bear was closed eight months for the course renovation and thirty people were laid off. The year was too far from normal to be worth measuring."],
+  ["2020","COVID."]
 ];
 const empYear=()=>EMP_YEARS.some(y=>y[0]===state.empYear)?state.empYear:"consolidated";
 
@@ -6325,7 +6275,8 @@ function empSummary(){
     `<p class="emp-slbl">${esc(C.teamsLbl).toUpperCase()}</p>`+
     `<div class="emp-panel">`+
     empTeamHead()+rows+`</div>`+
-    (sel?empLeaderCard(sel):"");
+    (sel?empLeaderCard(sel):"")+
+    `<p class="emp-note">${C.recFoot}</p>`;
 }
 
 /* ------------------------------------------------- 2022 survey (UniFocus) */
@@ -6432,22 +6383,16 @@ function empSummary22(){
 /* Hand-built SVG: no chart library in this file, and none wanted. */
 function eaChart(row,opt){
   const o=Object.assign({w:1040,h:300,lo:45,hi:95,ticks:[50,60,70,80,90],
-    pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true,
-    yrFont:11,yrDy:19,yrShort:false,tkFont:10.5},opt||{});
+    pad:{t:20,r:26,b:32,l:44},labels:true,gapText:true,short:false},opt||{});
   const Y7=EMP_ALL.years, iw=o.w-o.pad.l-o.pad.r, ih=o.h-o.pad.t-o.pad.b;
   const X=y=>o.pad.l+Y7.indexOf(y)*(iw/(Y7.length-1));
   const V=v=>o.pad.t+ih-((v-o.lo)/(o.hi-o.lo))*ih;
   const col={kb:"#17325a", ss:"#c8161d"};
   let s=`<svg viewBox="0 0 ${o.w} ${o.h}" role="img" aria-label="${esc(row.name)}, 2019 to 2026">`;
 
-  /* Gap and baseline are derived from the tick font so the axis stays in
-     proportion on the small department cards, which are drawn in a 250-unit
-     space and scaled up about twofold. */
-  const tkGap=o.tkFont*0.85, tkBase=o.tkFont*0.36;
   o.ticks.forEach(t=>{
     s+=`<line x1="${o.pad.l}" y1="${V(t)}" x2="${o.w-o.pad.r}" y2="${V(t)}" stroke="#f0eee8"/>`+
-       `<text x="${(o.pad.l-tkGap).toFixed(1)}" y="${(V(t)+tkBase).toFixed(1)}" text-anchor="end" `+
-       `font-size="${o.tkFont}" fill="#b4b2a9">${t}</text>`;
+       `<text x="${o.pad.l-9}" y="${V(t)+4}" text-anchor="end" font-size="10.5" fill="#b4b2a9">${t}</text>`;
   });
 
   Y7.forEach(y=>{
@@ -6457,12 +6402,9 @@ function eaChart(row,opt){
         s+=`<text x="${X(y)}" y="${o.pad.t+ih/2}" text-anchor="middle" font-size="10" fill="#b4b2a9"
               transform="rotate(-90 ${X(y)} ${o.pad.t+ih/2})">no survey</text>`;
     }
-    /* String(y) first: EMP_ALL.years holds numbers, and calling .slice on a
-       number throws and takes the whole Employee tab down with it. */
-    const yLbl = o.yrShort ? "\u2019"+String(y).slice(2) : y;
-    s+=`<text x="${X(y)}" y="${o.h-o.pad.b+o.yrDy}" text-anchor="middle" font-size="${o.yrFont}"
+    s+=`<text x="${X(y)}" y="${o.h-o.pad.b+19}" text-anchor="middle" font-size="11"
           fill="${y===EMP_ALL.newScale?"#17325a":"#8a8a84"}"
-          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${yLbl}</text>`;
+          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${o.short?"\u2019"+y.slice(2):y}</text>`;
   });
 
   ["kb","ss"].forEach(k=>{
@@ -6492,6 +6434,7 @@ function eaKey(){
     `<span><i class="ea-l" style="border-color:#17325a"></i><b style="background:#17325a"></b>King &amp; Bear</span>`+
     `<span><i class="ea-l" style="border-color:#c8161d"></i><b style="background:#c8161d"></b>Slammer &amp; Squire</span>`+
     `<span><i class="ea-l ea-dash"></i>spans a year with no survey</span>`+
+    `<span><b class="ea-open"></b>different survey \u2014 see the note</span>`+
   `</div>`;
 }
 
@@ -6518,22 +6461,57 @@ function eaTable(){
 
 function empSummaryAll(){
   const Y7=EMP_ALL.years, prop=EMP_ALL.rows.find(r=>r.prop);
+  const measured=Y7.filter(y=>prop.kb[y]!==undefined).length;
   const first=Y7.find(y=>prop.kb[y]!==undefined), last=EMP_ALL.newScale;
+  const now=eaBoth(prop,last), was=eaBoth(prop,first);
+  const kbMove=prop.kb[last]-prop.kb[first], ssMove=prop.ss[last]-prop.ss[first];
 
-  /* Each department card is its title and its shape, nothing more. The
-     figures all appear in the full table further down the page. */
-  const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>
-    `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
-      eaChart(r,{w:250,h:104,ticks:[50,60,70,80,90],labels:false,gapText:false,
-        pad:{t:10,r:16,b:18,l:22},yrFont:5.6,yrDy:11,yrShort:true,tkFont:5.6})+
-    `</div>`).join("");
+  const cards=EMP_ALL.rows.filter(r=>!r.prop).map(r=>{
+    const yrs=Y7.filter(y=>eaBoth(r,y)!==undefined);
+    const nowV=eaBoth(r,yrs[yrs.length-1]), prevV=eaBoth(r,yrs[yrs.length-2]);
+    const del=nowV-prevV, lows=yrs.map(y=>eaBoth(r,y));
+    return `<div class="ea-card"><p class="ea-cn">${esc(r.name)}</p>`+
+      eaChart(r,{w:250,h:104,ticks:[],labels:false,gapText:false,short:true,pad:{t:10,r:10,b:18,l:10}})+
+      `<p class="ea-cnow">${nowV.toFixed(1)}<small>2026</small></p>`+
+      `<p class="ea-cdel ${del>=0?"up":"dn"}">${del>0?"+":""}${del.toFixed(1)} since 2023</p>`+
+      `<p class="ea-cmeta">${eaBoth(r,yrs[0]).toFixed(1)} in ${yrs[0]} &middot; low of ${Math.min(...lows).toFixed(1)}</p>`+
+    `</div>`;
+  }).join("");
 
-  return `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
+  return `<p class="emp-meta">Consolidated satisfaction sheet &middot; ${first} to ${last} `+
+      `&middot; ${measured} years measured</p>`+
+    `<div class="emp-panel emp-three">`+
+      `<div class="emp-col"><p class="emp-klbl">Where we are now</p>`+
+        `<p class="emp-kbig">${now.toFixed(1)}<em>2026, both courses</em></p>`+
+        `<p class="emp-ksub">The highest reading of the eight years \u2014 on a different survey from everything before it.</p></div>`+
+      `<div class="emp-col"><p class="emp-klbl">Since ${first}</p>`+
+        `<p class="emp-kbig" style="color:var(--green)">+${(now-was).toFixed(1)}<em>points</em></p>`+
+        `<p class="emp-ksub">From ${was.toFixed(1)} in ${first}. King &amp; Bear has climbed ${kbMove.toFixed(1)} points; Slammer &amp; Squire ${ssMove.toFixed(1)}.</p></div>`+
+      `<div class="emp-col"><p class="emp-klbl">Years measured</p>`+
+        `<p class="emp-kbig stack">${measured}<em>of the eight years since ${first}. ${EMP_SKIPPED.map(x=>x[0]).sort().join(", ")} were not surveyed.</em></p></div>`+
+    `</div>`+
+    `<p class="emp-slbl">HOW STAFF RATE WORKING HERE, ${first} TO ${last}</p>`+
     `<div class="emp-panel">${eaKey()}${eaChart(prop,{lo:65,hi:90,ticks:[70,75,80,85]})}</div>`+
+    `<p class="emp-note"><b>${first} to 2023</b> are UniFocus STAR surveys scored out of 100. <b>2026</b> is a `+
+      `different survey company scoring out of 10; the sheet multiplies those by ten so they sit on the same `+
+      `axis, so 8.4 becomes 84.0. The axis lines up but the questions do not, so read the last step as a change `+
+      `of instrument as much as a change in mood. That is why the 2026 points are open and the line into them is faded.</p>`+
+    `<div class="emp-call warn"><h5>THE TWO COURSES HAVE SWAPPED PLACES</h5>`+
+      `<p>Slammer &amp; Squire led on every reading from ${first} through 2022. King &amp; Bear passed it by 2026 `+
+      `and has gained ${kbMove.toFixed(1)} points since ${first} against Slammer's ${ssMove.toFixed(1)}. The 2022 dip `+
+      `belongs to King &amp; Bear alone \u2014 it fell ${(prop.kb[2021]-prop.kb[2022]).toFixed(1)} points that year while Slammer barely moved.</p></div>`+
     `<p class="emp-slbl">EACH DEPARTMENT, BOTH COURSES COMBINED</p>`+
     `<div class="ea-cards">${cards}</div>`+
+    `<p class="emp-note">All three on the same axis so the shapes compare. Each figure is the average of the two courses.</p>`+
+    `<div class="emp-call act"><h5>FOOD AND BEVERAGE IS THE VOLATILE ONE</h5>`+
+      `<p>It fell ${(eaBoth(eaRow("Food and beverage"),2021)-eaBoth(eaRow("Food and beverage"),2022)).toFixed(1)} points `+
+      `between 2021 and 2022 to ${eaBoth(eaRow("Food and beverage"),2022).toFixed(1)}, the lowest figure anywhere on this sheet, `+
+      `stayed low through 2023, and now posts the highest department reading of 2026. Nothing else moves like that. `+
+      `Some of that last jump is the survey changing; not all of it.</p></div>`+
     `<p class="emp-slbl">EVERY FIGURE ON THE SHEET</p>`+
-    `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`;
+    `<div class="emp-panel" style="padding:14px 12px 6px">${eaTable()}</div>`+
+    `<p class="emp-note">Green marks each course's best year, red its worst. `+
+      `Pick a year above to open it.</p>`;
 }
 
 /* ------------------------------------------------- 2023 survey (UniFocus) */
@@ -6585,9 +6563,9 @@ function empSummary23(){
       card(kb)+card(ss)+
     `</div>`+
     `<div class="emp-call act"><h5>KING &amp; BEAR MOVED, AND MOVED A LONG WAY</h5>`+
-      `<p>Every one of the nine dimensions rose at King &amp; Bear. Management support went from 67.2 to 78.4 and organizational climate from 72.8 to 80.9. After a 2022 in which not one goal was met, this is the year something changed.</p></div>`+
+      `<p>Every one of the nine dimensions rose at King &amp; Bear. Management support went from 67.2 to 78.4 and organisational climate from 72.8 to 80.9. After a 2022 in which not one goal was met, this is the year something changed.</p></div>`+
     `<div class="emp-call warn"><h5>SLAMMER &amp; SQUIRE SLIPPED ON LOYALTY</h5>`+
-      `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organizational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
+      `<p>Slammer &amp; Squire rose on seven dimensions but fell on two: loyalty from 87.5 to 84.9, and organisational climate from 82.0 to 80.7. Loyalty had been its strongest dimension in 2022.</p></div>`+
     `<p class="emp-slbl">THE NINE DIMENSIONS, BOTH COURSES</p>`+
     e23Dims()+
     `<p class="emp-slbl">EACH DEPARTMENT, AND WHAT IT WAS TOLD</p>`+
@@ -6658,7 +6636,7 @@ function empSummary19(){
     `</div>`+
     `<div class="emp-call warn"><h5>KING &amp; BEAR WAS THE WEAKER COURSE ON EVERY ONE OF THE NINE</h5>`+
       `<p>King &amp; Bear scored below Slammer &amp; Squire on all nine dimensions, by about eleven points on average. `+
-      `The widest gaps were management support, 62.1 against 77.5, and organizational climate, 69.7 against 81.1. `+
+      `The widest gaps were management support, 62.1 against 77.5, and organisational climate, 69.7 against 81.1. `+
       `Golf operations carried it: seventeen of the twenty-nine King &amp; Bear responses, rating manager follow-through 31.4 `+
       `and satisfaction with leadership 36.3 \u2014 the two lowest numbers anywhere in this survey.</p></div>`+
     `<div class="emp-call act"><h5>COMMUNICATION WAS THE FLOOR AT BOTH COURSES</h5>`+
@@ -6836,6 +6814,9 @@ function detailEmployee(i){
       `<p class="emp-meta">${EMP.survey} &middot; ${EMP.period} &middot; `+
       `${EMP.courses.reduce((a,c)=>a+c.n,0)} responses</p>`+
       pills+body+
+      `<p class="emp-src2">Headline figures from the heatmap export. Rating spreads and the `+
+      `by-course team scores are from the 2026 Q2 location reports, which counted two more `+
+      `responses at Slammer &amp; Squire.</p>`+
     `</div>`;
   svAudWire(i);
   const hold=fn=>()=>{
@@ -7052,8 +7033,8 @@ const DGF_COPY={
   compNote:"Green fees as quoted in the July mid-year review. Competitor rates move; recheck before quoting these."
 };
 
-const DGF_SECS=[["chan","Booking Channels"],["rate","Rate and Demand"],
-                ["web","Our Website"],["comp","The Competition"],["value","Our Value"]];
+const DGF_SECS=[["chan","Booking channels"],["rate","Rate and demand"],
+                ["web","Our website"],["comp","The competition"],["value","Our value"]];
 const dgfSec=()=>DGF_SECS.some(x=>x[0]===state.dgfSec)?state.dgfSec:"chan";
 function dgfItem(){ return {t:"Golf Fees & E-commerce", m:"", s:"", c:"f-flat", a:"", dgf:true}; }
 
@@ -7286,7 +7267,10 @@ function detailDgf(i){
     /* Section pills in the header; the sub-line went with them, since the
        courses and span are stated on the pages themselves. */
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
-    `<div class="detail-body is-wide">${body}</div>`;
+    `<div class="detail-body is-wide">${body}`+
+      `<p class="wx-foot">Rounds and revenue from the Access worksheet and the golf `+
+      `system's rate reporting. Competitor fees and value points from the mid-year review.</p>`+
+    `</div>`;
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
@@ -7329,7 +7313,7 @@ const PF={
   short:["2024","2025","2026B","1","2","3","4","5","6","7","8","9","10"],
   actual:2,          /* index of the last column that is not the model */
   invest:10000000,
-  phase:{3:"Renovation, 36 holes",4:"Stabilize, 18 holes",12:"Mature"},
+  phase:{3:"Renovation, 36 holes",4:"Stabilise, 18 holes",12:"Mature"},
 
     holes    :[36,36,36,36,18,18,18,18,18,18,18,18,18],
     rounds   :[70169,79507,80000,67000,45000,45000,45000,45000,45000,45000,45000,45000,45000],
@@ -7371,7 +7355,7 @@ const PF={
     {mult:9,  ev:15560174, surplus:5560174,  irr:13, npv:1681415},
     {mult:10, ev:17289083, surplus:7289083,  irr:14, npv:2347984}
   ],
-  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilized:1728908},
+  noExit:{cash:-1734606, irr:-4, npv:-4317706, stabilised:1728908},
 
   /* Each add-on is a separate investment with its own return. Both are
      negative on their own terms; the page says so rather than folding them
@@ -7388,6 +7372,7 @@ const PF={
 };
 
 const PF_COPY={
+  source:"King &amp; Bear Semi-Private Model, Troon pro forma sheet. The source workbook is marked draft.",
   lead:"A $10m investment to convert King &amp; Bear to a semi-private club, modelled over ten years.",
 
   planHead:"This is a sale play, not an operating one.",
@@ -7402,6 +7387,9 @@ const PF_COPY={
   cashSub:"The $10m goes out in year one and never fully comes back from operations",
   cashNote:"Selling at year ten adds $13.8m to $17.3m depending on the multiple, which is what turns the whole thing positive.",
 
+  todayHead:"What the club looks like after",
+  todaySub:"2025 actual against the model's stabilised year ten",
+  todayNote:"Ten years out, the model earns less than the property earns today. The case rests on what one restored eighteen-hole club is worth to a buyer, not on what it earns.",
 
   plHead:"The ten-year profit and loss",
   plSub:"Actual and budget years first, then the model. Year 1 covers the renovation.",
@@ -7409,15 +7397,21 @@ const PF_COPY={
   depSub:"Department operating income. The eight lines sum to EBITDA.",
 
   assHead:"What the model assumes",
+  assSub:"Change any of these and the outputs move",
   assNote:"Rounds per member holds at 90 and members at 200 from year two, so member rounds are fixed at 18,000 for nine straight years. Daily-fee rate carries the growth.",
 
+  addHead:"The two add-ons",
+  addSub:"Each is a separate investment on top of the $10m, with its own return",
+  addNote:"Neither add-on covers its own cost of capital in this model. Taken together with the base case, the combined $16m returns \u22123% and a negative $6.8m present value.",
 
+  draft:"The source workbook is marked draft, and two other membership models sit beside this one. Only the semi-private model ties out to the Troon pro forma, so only it is shown here."
 };
 
 /* Profit and loss sits first and is where the page lands: it is the sheet
    Lon opens to, and the other views read as commentary on it. */
-const PF_SECS=[["pl","Profit and Loss"],["ass","Assumptions"],
-               ["cash","Ten-Year Cash"]];
+const PF_SECS=[["pl","Profit and loss"],["rls","Owner's model"],["plan","The proposal"],
+               ["cash","Ten-year cash"],["today","Against today"],["ass","Assumptions"],
+               ["add","Add-ons"]];
 const pfSec=()=>PF_SECS.some(x=>x[0]===state.pfSec)?state.pfSec:"pl";
 
 const pfM=n=>(n<0?"\u2212":"")+"$"+Math.abs(Math.round(n)).toLocaleString();
@@ -7426,6 +7420,29 @@ const pfN=n=>Math.round(n).toLocaleString();
 const pfPc=(a,b)=>((a/b-1)*100);
 
 /* ------------------------------------------------------------ the proposal */
+function pfPlan(){
+  const L=PF.cols.length-1, A=1;   /* Yr10 index, 2025 index */
+  return ecKpis([
+      ecKpi(pfMm(PF.invest),"Investment","deployed in year one"),
+      ecKpi(pfMm(PF.noExit.cash),"Cash after 10 years","before any sale"),
+      ecKpi("12\u201314%","IRR if we sell","at 8\u00d7 to 10\u00d7 year ten"),
+      ecKpi(String(PF.holes[L]),"Holes from year two",PF.holes[A]+" today")])+
+    `<div class="pf-flag"><b>${PF_COPY.planHead}</b> ${PF_COPY.planSay}</div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Without a sale, and with one</h3>`+
+      `<p class="wx-sub">Ten-year return on the $10m</p>`+
+      `<div class="pf-erow pf-ehead"><span>SCENARIO</span><span>IRR</span>`+
+        `<span>NPV AT 10%</span><span>CASH POSITION</span></div>`+
+      `<div class="pf-erow"><span>Operations only, no sale</span>`+
+        `<span class="bad">${PF.noExit.irr}%</span>`+
+        `<span class="bad">${pfMm(PF.noExit.npv)}</span>`+
+        `<span class="bad">${pfMm(PF.noExit.cash)}</span></div>`+
+      PF.exits.map(e=>`<div class="pf-erow"><span>Sell at ${e.mult}\u00d7 year-ten earnings</span>`+
+        `<span class="good">+${e.irr}%</span><span class="good">+${pfMm(e.npv)}</span>`+
+        `<span>+${pfMm(e.surplus)} over the $10m</span></div>`).join("")+
+      `<p class="ec-body last pf-note">Year-ten earnings of ${pfM(PF.noExit.stabilised)} `+
+      `are what the multiple is applied to.</p></div>`+
+    ecBand(PF_COPY.planBand);
+}
 
 /* ------------------------------------------------------------ ten-year cash */
 function pfCash(){
@@ -7452,6 +7469,30 @@ function pfCash(){
 }
 
 /* ----------------------------------------------------------- against today */
+function pfToday(){
+  const A=1, L=PF.cols.length-1;
+  const rows=[
+    ["Holes in play",PF.holes[A],PF.holes[L],false],
+    ["Rounds",pfN(PF.rounds[A]),pfN(PF.rounds[L]),pfPc(PF.rounds[L],PF.rounds[A])],
+    ["Members",pfN(PF.members[A]),pfN(PF.members[L]),pfPc(PF.members[L],PF.members[A])],
+    ["Revenue",pfMm(PF.rev[A]),pfMm(PF.rev[L]),pfPc(PF.rev[L],PF.rev[A])],
+    ["Operating income",pfMm(PF.ebitda[A]),pfMm(PF.ebitda[L]),pfPc(PF.ebitda[L],PF.ebitda[A])]
+  ].map(([n,a,b,pc],k)=>`<div class="pf-trow${k===4?" is-tot":""}">`+
+    `<span>${esc(n)}</span><span class="pf-tv">${a}</span><span class="pf-tv now">${b}</span>`+
+    `<span class="pf-tv ${pc===false?"":(pc<0?"bad":"good")}">`+
+      `${pc===false?"\u221218":(pc>0?"+":"\u2212")+Math.abs(pc).toFixed(0)+"%"}</span></div>`).join("");
+  return ecKpis([
+      ecKpi(pfMm(PF.ebitda[A]),"Operating income 2025","36 holes"),
+      ecKpi(pfMm(PF.ebitda[L]),"Model year ten","18 holes"),
+      ecKpi(Math.abs(pfPc(PF.ebitda[L],PF.ebitda[A])).toFixed(0)+"%","Below today","ten years out"),
+      ecKpi((PF.margin[L]*100).toFixed(0)+"%","Year-ten margin",(PF.margin[A]*100).toFixed(0)+"% in 2025")])+
+    ecSay("The model earns less in year ten than the property earns today.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.todayHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.todaySub)}</p>`+
+      `<div class="pf-trow pf-thead"><span></span><span class="pf-tv">2025 ACTUAL</span>`+
+        `<span class="pf-tv">YEAR 10</span><span class="pf-tv">CHANGE</span></div>${rows}`+
+      `<p class="ec-body last pf-note">${esc(PF_COPY.todayNote)}</p></div>`;
+}
 
 /* --------------------------------------------------------- profit and loss */
 function pfGrid(rows,cls){
@@ -7462,252 +7503,29 @@ function pfGrid(rows,cls){
     vals.map((v,k)=>`<span class="${k<=PF.actual?"act":""}${v<0?" neg":""}">`+
       `${v===null?"\u2014":fmt(v)}</span>`).join("")+`</div>`).join("")+`</div>`;
 }
-const PL_A=1, PL_B=2, PL_T=PF.cols.length-1;          /* 2025 actual, 2026 budget, Year 10 */
-const plM0 = v => (v<0?"\u2212":"")+"$"+Math.abs(Math.round(v)).toLocaleString();
-const plMm = v => (v<0?"\u2212":"")+"$"+(Math.abs(v)/1e6).toFixed(2)+"m";
-const plN0 = v => Math.round(v).toLocaleString();
-const plPct = (a,b) => ((a/b-1)*100);
-/* The membership and pricing series live in the assumptions block, so they are
-   read from there rather than duplicated here. */
-const plAss = n => (PF.ass.find(a=>a.n===n)||{d:[]}).d;
-
-/* ---------------- 1. the finding ---------------- */
-function plHero(){
-  const half = PF.ebitda[PL_A]/2;
-  const y10  = PF.ebitda[PL_T];
-  const beat = PF.ebitda.slice(3).filter(v=>v>half).length;
-  return `<div class="ph">`+
-    `<p class="ph-lead">Going from two courses to one, the fair test is half of what the `+
-    `property earns today. Year 10 clears that by <b>${plMm(y10-half)}</b> &mdash; `+
-    `<b>${((y10/half-1)*100).toFixed(0)}% more</b> from the same eighteen holes.</p>`+
-    `<div class="ph-row">`+
-      `<div><div class="ph-n">${plMm(half)}</div>`+
-        `<div class="ph-l">Half of today</div>`+
-        `<div class="ph-s">One course's share of 2025 operating income</div></div>`+
-      `<div><div class="ph-n is-up">${plMm(y10)}</div>`+
-        `<div class="ph-l">Year 10, one course</div>`+
-        `<div class="ph-s">${((y10/half-1)*100).toFixed(0)}% above the half-share</div></div>`+
-      `<div><div class="ph-n is-up">${beat} of 10</div>`+
-        `<div class="ph-l">Years that clear the bar</div>`+
-        `<div class="ph-s">Only Year 2 falls short, by `+
-        `${plM0(half-Math.min(...PF.ebitda.slice(3)))}, while the course stabilizes</div></div>`+
-    `</div></div>`;
-}
-
-/* ---------------- 2. the shape ---------------- */
-function plChart(){
-  const W=1040, H=300, L=54, R=18, Tp=16, Bt=42;
-  const iw=W-L-R, n=PF.cols.length;
-  const X=i=>L+i*(iw/(n-1));
-  const hi=13e6;
-  const upper=170, lower=H-Bt;                        /* revenue band */
-  const Y=v=>Tp+ (upper-Tp) - (v/hi)*(upper-Tp);
-  const oiHi=2.6e6, oiTop=upper+34;
-  const OY=v=>oiTop + (lower-oiTop) - (v/oiHi)*(lower-oiTop);
-
-  let s=`<svg class="pc-svg" viewBox="0 0 ${W} ${H}" role="img" `+
-        `aria-label="Revenue and operating income, 2024 to Year 10">`;
-
-  /* the model years sit on a different footing: mark where they begin */
-  const split=(X(PL_B)+X(PL_B+1))/2;
-  s+=`<rect x="${split}" y="${Tp-4}" width="${W-R-split}" height="${lower-Tp+8}" `+
-     `fill="#f7f9fc"></rect>`;
-  s+=`<line x1="${split}" y1="${Tp-4}" x2="${split}" y2="${lower+4}" stroke="#c9d3e0" `+
-     `stroke-width="1.5" stroke-dasharray="4 4"></line>`;
-  s+=`<text x="${split-8}" y="${Tp+7}" text-anchor="end" font-size="10" fill="#8a8a84" `+
-     `letter-spacing=".06em">ACTUAL &amp; BUDGET</text>`;
-  s+=`<text x="${split+8}" y="${Tp+7}" font-size="10" fill="#8a8a84" `+
-     `letter-spacing=".06em">THE MODEL</text>`;
-
-  /* revenue area */
-  let a=`M${X(0)},${Y(PF.rev[0])}`;
-  PF.rev.forEach((v,i)=>{ if(i) a+=` L${X(i)},${Y(v)}`; });
-  s+=`<path d="${a} L${X(n-1)},${upper} L${X(0)},${upper} Z" fill="#e8eef7"></path>`;
-  s+=`<path d="${a}" fill="none" stroke="${"#3a5f95"}" stroke-width="2.5"></path>`;
-  s+=`<text x="${L}" y="${Tp+7}" font-size="10.5" fill="#5f6b7d" font-weight="700">REVENUE</text>`;
-
-  /* operating income, with today held up as the line to beat */
-  const ref=OY(PF.ebitda[PL_A]/2);
-  s+=`<line x1="${L}" y1="${ref}" x2="${W-R}" y2="${ref}" stroke="#8a8a84" `+
-     `stroke-width="1.5" stroke-dasharray="5 4"></line>`;
-  /* anchored left: the right-hand end is where the Year 10 figure sits */
-  s+=`<text x="${L+3}" y="${ref-7}" font-size="10.5" fill="#5f6b7d" `+
-     `font-weight="700">Half of 2025 &mdash; ${plMm(PF.ebitda[PL_A]/2)}</text>`;
-  let o=`M${X(0)},${OY(PF.ebitda[0])}`;
-  PF.ebitda.forEach((v,i)=>{ if(i) o+=` L${X(i)},${OY(v)}`; });
-  s+=`<path d="${o}" fill="none" stroke="#c8161d" stroke-width="2.5"></path>`;
-  PF.ebitda.forEach((v,i)=>{
-    const last=i===n-1;
-    s+=`<circle cx="${X(i)}" cy="${OY(v)}" r="${last?5:3.2}" fill="${last?"#fff":"#c8161d"}" `+
-       `stroke="#c8161d" stroke-width="${last?2.5:0}"></circle>`;
-  });
-  s+=`<text x="${X(n-1)}" y="${OY(PF.ebitda[PL_T])+20}" text-anchor="end" font-size="11.5" `+
-     `fill="#c8161d" font-weight="700">${plMm(PF.ebitda[PL_T])}</text>`;
-  s+=`<text x="${L}" y="${oiTop+2}" font-size="10.5" fill="#5f6b7d" `+
-     `font-weight="700">OPERATING INCOME</text>`;
-
-  /* x labels, and the hole count underneath */
-  PF.short.forEach((lbl,i)=>{
-    const model=i>PL_B;
-    s+=`<text x="${X(i)}" y="${lower+17}" text-anchor="middle" font-size="10.5" `+
-       `fill="${i===n-1?"#17325a":"#8a8a84"}" ${i===n-1?'font-weight="700"':''}>${lbl}</text>`;
-    if(!model||i===PL_B+1||i===n-1||i===PL_B)
-      s+=`<text x="${X(i)}" y="${lower+31}" text-anchor="middle" font-size="9.5" `+
-         `fill="#b4b2a9">${PF.holes[i]} holes</text>`;
-  });
-  return `<div class="pc"><p class="pc-h">The shape of the model</p>`+
-    `<p class="pc-sub">Revenue above, operating income below. The dashed line is one `+
-    `course's share of today &mdash; the model sits above it from Year 1.</p>${s}</svg>`+
-    `<div class="pc-key">`+
-      `<span><i style="background:#3a5f95"></i>Revenue</span>`+
-      `<span><i style="background:#c8161d"></i>Operating income</span>`+
-      `<span><i class="dash"></i>Half of 2025, one course's share</span>`+
-    `</div></div>`;
-}
-
-/* ---------------- 3. today against year ten ---------------- */
-function plCompare(){
-  const h=v=>v/2;
-  const rows=[
-    ["Rounds",           h(PF.rounds[PL_A]),  PF.rounds[PL_T],  plN0],
-    ["Holes open",       18,               PF.holes[PL_T],   v=>v],
-    ["Revenue",          h(PF.rev[PL_A]),     PF.rev[PL_T],     plMm],
-    ["Cost of sales",    h(PF.cos[PL_A]),     PF.cos[PL_T],     plMm],
-    ["Labor",           h(PF.lab[PL_A]),     PF.lab[PL_T],     plMm],
-    ["Operating expense",h(PF.opx[PL_A]),     PF.opx[PL_T],     plMm],
-    ["Operating income", h(PF.ebitda[PL_A]),  PF.ebitda[PL_T],  plMm]
-  ];
-  const half=Math.ceil(rows.length/2);
-  const col=list=>`<div class="pc">`+
-    `<div class="pq-row pq-head"><span>&nbsp;</span><span>Half of 2025</span>`+
-      `<span></span><span>Year 10</span></div>`+
-    list.map(([lbl,a,b,f])=>{
-      const d=a?((b/a-1)*100):0, up=b>=a;
-      return `<div class="pq-row"><span class="pq-n">${lbl}</span>`+
-        `<span class="pq-a">${f(a)}</span>`+
-        `<span class="pq-ar">&rarr;</span>`+
-        `<span class="pq-b">${f(b)}`+
-          (a&&Math.abs(d)>0.5?`<em class="pq-d ${up?"up":"dn"}">${d>0?"+":""}${d.toFixed(0)}%</em>`:"")+
-        `</span></div>`;
-    }).join("")+`</div>`;
-  return `<p class="pc-note">Half of 2025 is the two-course result split evenly &mdash; `+
-      `the share one eighteen-hole course carried.</p>`+
-    `<div class="pq">${col(rows.slice(0,half))}${col(rows.slice(half))}</div>`+
-    plBetter();
-}
-
-/* The second half of the case: the one course is not just carrying its share,
-   it is working harder than either course ever has. */
-function plBetter(){
-  const perHole = [PF.ebitda[PL_A]/36, PF.ebitda[PL_T]/18];
-  const perRound= [PF.rev[PL_A]/PF.rounds[PL_A], PF.rev[PL_T]/PF.rounds[PL_T]];
-  const rdHole  = [PF.rounds[PL_A]/36, PF.rounds[PL_T]/18];
-  const card=(lbl,a,b,f,sub)=>`<div class="pn">`+
-    `<div class="pn-l">${lbl}</div>`+
-    `<div class="pn-row"><span class="pn-a">${f(a)}</span>`+
-      `<span class="pn-ar">&rarr;</span>`+
-      `<span class="pn-b">${f(b)}</span>`+
-      `<span class="pn-d">+${((b/a-1)*100).toFixed(0)}%</span></div>`+
-    `<div class="pn-s">${sub}</div></div>`;
-  return `<div class="pc" style="margin-top:18px">`+
-    `<p class="pc-h">Better than either course has ever been</p>`+
-    `<p class="pc-sub">Same measures, put on a per-hole and per-round footing so the `+
-    `two sizes can be compared directly.</p><div class="pn-grid">`+
-    card("Operating income per hole", perHole[0], perHole[1], plM0,
-         "2025 across 36 holes, against Year 10 across 18")+
-    card("Revenue per round", perRound[0], perRound[1], v=>"$"+v.toFixed(0),
-         "What each round is worth at one property rather than two")+
-    card("Rounds per hole", rdHole[0], rdHole[1], v=>Math.round(v).toLocaleString(),
-         "Eighteen holes working harder than thirty-six did")+
-    `</div></div>`+ plSemi();
-}
-
-/* The point the headline figures alone would not make: this stays a
-   semi-private course. Fewer memberships, priced higher, with public play
-   still the larger share of the tee sheet. */
-function plSemi(){
-  const mix=i=>{
-    const mr=PF.members[i]*plAss("Rounds per member")[i];
-    return {mr, gr:PF.rounds[i]-mr, tot:PF.rounds[i]};
-  };
-  const a=mix(PL_A), b=mix(PL_T);
-  const bar=(x,lbl)=>{
-    const mp=x.mr/x.tot*100;
-    return `<div class="sm-row"><span class="sm-l">${lbl}</span>`+
-      `<span class="sm-bar"><i class="sm-m" style="width:${mp}%"></i>`+
-      `<i class="sm-g" style="width:${100-mp}%"></i></span>`+
-      `<span class="sm-v">${Math.round(x.gr).toLocaleString()} public `+
-      `<em>${(100-mp).toFixed(0)}%</em></span></div>`;
-  };
-  const stat=(lbl,a2,b2,f)=>`<div class="pn"><div class="pn-l">${lbl}</div>`+
-    `<div class="pn-row"><span class="pn-a">${f(a2)}</span>`+
-      `<span class="pn-ar">&rarr;</span><span class="pn-b">${f(b2)}</span>`+
-      `<span class="pn-d">${b2>a2?"+":""}${((b2/a2-1)*100).toFixed(0)}%</span></div></div>`;
-  return `<div class="pc" style="margin-top:18px">`+
-    `<p class="pc-h">It stays a semi-private course</p>`+
-    `<p class="pc-sub">The membership is scaled to eighteen holes rather than removed, `+
-    `and public play remains the larger share of the tee sheet.</p>`+
-    `<div class="sm-key"><span><i class="sm-m"></i>Member rounds</span>`+
-      `<span><i class="sm-g"></i>Public rounds</span></div>`+
-    bar(a,"2025 &middot; 36 holes")+bar(b,"Year 10 &middot; 18 holes")+
-    `<div class="pn-grid" style="margin-top:20px">`+
-      stat("Memberships", PF.members[PL_A], PF.members[PL_T], v=>Math.round(v))+
-      stat("Annual dues", plAss("Annual dues per member")[PL_A],
-                          plAss("Annual dues per member")[PL_T],
-           v=>"$"+Math.round(v).toLocaleString())+
-      stat("Daily fee", plAss("Daily fee rate")[PL_A], plAss("Daily fee rate")[PL_T],
-           v=>"$"+v.toFixed(0))+
-    `</div></div>`;
-}
-
-/* ---------------- 4. the plBridge ---------------- */
-function plBridge(){
-  const vals=PF.deps.map(d=>({n:d.n, v:d.d[PL_T]}));
-  const tot=vals.reduce((s,x)=>s+x.v,0);
-  const max=Math.max(...vals.map(x=>Math.abs(x.v)), Math.abs(tot));
-  const zero=42;                       /* % of the track where zero sits */
-  const bar=v=>{
-    const w=Math.abs(v)/max*(v<0?zero:100-zero);
-    return v>=0 ? `left:${zero}%;width:${w}%` : `left:${zero-w}%;width:${w}%`;
-  };
-  return `<div class="pc"><p class="pc-h">Where Year 10 earnings come from</p>`+
-    `<p class="pc-sub">Each department's operating income in the final model year. `+
-    `Blue earns, red costs; the eight sum to the total.</p>`+
-    vals.map(x=>`<div class="pb-row"><span class="pb-n">${x.n}</span>`+
-      `<span class="pb-track"><i class="pb-zero" style="left:${zero}%"></i>`+
-      `<i class="pb-bar ${x.v>=0?"pos":"neg"}" style="${bar(x.v)}"></i></span>`+
-      `<span class="pb-v">${plMm(x.v)}</span></div>`).join("")+
-    `<div class="pb-row is-tot"><span class="pb-n">Operating income</span>`+
-      `<span class="pb-track"><i class="pb-zero" style="left:${zero}%"></i>`+
-      `<i class="pb-bar tot" style="${bar(tot)}"></i></span>`+
-      `<span class="pb-v">${plMm(tot)}</span></div></div>`;
-}
-
-/* ---------------- 5. the detail, on request ---------------- */
-function plTable(){
-  const head=`<tr><th>&nbsp;</th>`+PF.cols.map((c,i)=>
-    `<th>${PF.short[i]}</th>`).join("")+`</tr>`;
-  const line=(lbl,arr,f,cls="")=>`<tr class="${cls}"><td>${lbl}</td>`+
-    arr.map(v=>`<td class="${v<0?"neg":""}">${v==null?"&mdash;":f(v)}</td>`).join("")+`</tr>`;
-  return `<button type="button" class="pd-tog" id="plTog" aria-expanded="false">`+
-      `Every figure on the sheet<i>\u25be</i></button>`+
-    `<div class="pd-panel" id="plPan"><div><div class="pd-scroll"><table>`+
-      `<thead>${head}</thead><tbody>`+
-      line("Total rounds",PF.rounds,plN0)+
-      line("Memberships",PF.members,plN0,"sep")+
-      line("Revenue",PF.rev,plMm,"sep")+
-      line("Cost of sales",PF.cos.map(v=>-v),plMm)+
-      line("Labor",PF.lab.map(v=>-v),plMm)+
-      line("Operating expense",PF.opx.map(v=>-v),plMm)+
-      line("Operating income",PF.ebitda,plMm,"tot")+
-    `</tbody></table></div></div></div>`;
-}
-
 function pfPL(){
-  /* The wide detail pane stretches a 1040-unit chart well past its design
-     size, so this page keeps the width the layout was drawn for. */
-  return `<div class="pl-wrap">`+
-    plHero()+plChart()+plCompare()+plBridge()+plTable()+`</div>`;
+  /* These are millions. Showing them as thousands ($9,665k) reads as though the
+     property turns over nine million-ish only if you do the division in your
+     head, and in an owner meeting nobody does. Two decimals keeps the same
+     precision the k figure carried. */
+  const m=v=>"$"+(v/1e6).toFixed(2)+"m";
+  const rows=[
+    ["Total rounds",PF.rounds,pfN,false],
+    ["Members",PF.members,pfN,false],
+    ["Revenue",PF.rev,m,true],
+    ["Cost of sales",PF.cos.map(v=>-v),m,false],
+    ["Labour",PF.lab.map(v=>-v),m,false],
+    ["Operating expense",PF.opx.map(v=>-v),m,false],
+    ["Operating income",PF.ebitda,m,true],
+    ["Margin",PF.margin,v=>(v*100).toFixed(0)+"%",false]
+  ];
+  return ecSay("Actual years, the 2026 budget, then the ten model years. Year one is the renovation.")+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.plHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.plSub)}</p>${pfGrid(rows)}</div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.depHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.depSub)}</p>`+
+      pfGrid(PF.deps.map(d=>[d.n,d.d,m,false]).concat([["Total operating income",PF.ebitda,m,true]]))+
+    `</div>`;
 }
 
 /* ------------------------------------------------------------- assumptions */
@@ -7715,22 +7533,176 @@ function pfAss(){
   const rows=PF.ass.map(a=>[a.n,a.d,v=>a.f+(a.f?v.toFixed(2):v.toFixed(0)),false]);
   return ecSay("Every output on the other pages follows from these.")+
     `<div class="wx-card ec-card"><h3 class="wx-h">${esc(PF_COPY.assHead)}</h3>`+
+      `<p class="wx-sub">${esc(PF_COPY.assSub)}</p>`+
       pfGrid(rows.concat([["Total rounds",PF.rounds,pfN,true]]))+
-      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`;
+      `<p class="ec-body last pf-note">${esc(PF_COPY.assNote)}</p></div>`+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Where this came from</h3>`+
+      `<p class="ec-body last">${PF_COPY.draft}</p></div>`;
 }
 
 /* ----------------------------------------------------------------- add-ons */
+function pfAdd(){
+  const cards=PF.addons.map(a=>
+    `<div class="wx-card ec-card"><h3 class="wx-h">${esc(a.n)}</h3>`+
+      `<p class="wx-sub">${esc(a.note)}</p>`+
+      `<div class="pf-arow"><span>Investment</span><span class="pf-tv">${pfMm(a.invest)}</span></div>`+
+      `<div class="pf-arow"><span>Revenue once running</span><span class="pf-tv">${pfM(a.rev)}</span></div>`+
+      `<div class="pf-arow"><span>Operating income</span><span class="pf-tv">${pfM(a.noi)} `+
+        `<em>${a.margin}% margin</em></span></div>`+
+      `<div class="pf-arow"><span>Ten-year IRR</span>`+
+        `<span class="pf-tv ${a.irr<10?"bad":"good"}">${a.irr>0?"+":""}${a.irr}%</span></div>`+
+      `<div class="pf-arow is-tot"><span>Present value at 10%</span>`+
+        `<span class="pf-tv ${a.npv<0?"bad":"good"}">${pfMm(a.npv)}</span></div>`+
+    `</div>`).join("");
+  return ecKpis([
+      ecKpi(pfMm(PF.addons[0].invest),"Golf academy",PF.addons[0].irr+"% return"),
+      ecKpi(pfMm(PF.addons[1].invest),"Lodging",PF.addons[1].irr+"% return"),
+      ecKpi(pfMm(PF.combined.invest),"All three together",PF.combined.irr+"% return"),
+      ecKpi(pfMm(PF.combined.npv),"Combined present value","at a 10% discount rate")])+
+    ecSay("Neither add-on covers its own cost of capital in this model.")+
+    `<div class="ec-g2">${cards}</div>`+
+    `<p class="ec-note">${esc(PF_COPY.addNote)}</p>`;
+}
 
 /* ------------------------------------------------------------------- shell */
+/* ============================ OWNER'S SEMI-PRIVATE MODEL ============================
+   The Semi-Private (RLS) tab of the source workbook, rebuilt so the numbers can be
+   changed live. Eight inputs drive every line; the rates below are the ones the
+   sheet derives from 2025 actual and holds fixed across scenarios.
+   Verified against all four of the owner's columns to the cent. */
+const RLS = {
+  base:{ y:"2025", members:303, rpm:79, dues:544.42, init:7500, guests:51641,
+         gfee:105, fb:23, merch:11,
+         rev:11061211, cogs:1074857, lab:4188866, opx:3590215, other:139210+109874+59212,
+         ocf:1898977 },
+  /* fixed rates, straight off the sheet */
+  otherPerRound:603317/(23979+51641),   /* $7.98, 2025 other golf revenue per round */
+  newMemberRate:0.08,                   /* new members each year, as a share of roster */
+  cogsRate:0.40,                        /* of food, beverage and merchandise */
+  labRate:0.43, opxRate:0.30,           /* of total revenue */
+  adValorem:100000, mgmtFee:150000,
+  scenarios:[
+    ["A", {members:150, rpm:80, dues:900, init:15000, guests:20000, gfee:125, fb:20, merch:15}],
+    ["B", {members:150, rpm:80, dues:900, init:25000, guests:25000, gfee:100, fb:20, merch:15}],
+    ["C", {members:200, rpm:80, dues:700, init:10000, guests:20000, gfee:125, fb:20, merch:15}],
+    ["D", {members:200, rpm:80, dues:700, init:15000, guests:25000, gfee:100, fb:20, merch:15}]
+  ],
+  fields:[
+    ["members","Total members",1],["rpm","Rounds per member",1],
+    ["dues","Monthly dues",1],["init","Initiation fee",1],
+    ["guests","Guest & outing rounds",1],["gfee","Average guest fee",1],
+    ["fb","F&B per round",1],["merch","Merchandise per round",1]
+  ]
+};
+
+function rlsRun(v){
+  const R=RLS;
+  const memberRounds = v.members*v.rpm;
+  const rounds = memberRounds + v.guests;
+  const green = v.guests*v.gfee;
+  const dues = v.members*v.dues*12;
+  const fb = rounds*v.fb;
+  const merch = rounds*v.merch;
+  const other = rounds*R.otherPerRound;
+  const initiation = v.init*(v.members*R.newMemberRate);
+  const rev = green+dues+fb+merch+other+initiation;
+  const cogs = (fb+merch)*R.cogsRate;
+  const lab = rev*R.labRate, opx = rev*R.opxRate;
+  const exp = cogs+lab+opx+R.adValorem+R.mgmtFee;
+  const ocf = rev-exp;
+  return {memberRounds, rounds, green, dues, fb, merch, other, initiation,
+          rev, cogs, lab, opx, exp, ocf, margin:rev?ocf/rev:0};
+}
+
+const rlsVals=()=>Object.assign({}, RLS.scenarios[0][1], state.rls||{});
+
+function pfRls(){
+  const R=RLS, b=R.base, v=rlsVals(), o=rlsRun(v);
+  const m=n=>pfM(n), n0=n=>Math.round(n).toLocaleString();
+  const pick=RLS.scenarios.findIndex(([k,s])=>
+    Object.keys(s).every(f=>Number(s[f])===Number(v[f])));
+  const vs=o.ocf-b.ocf, pc=b.ocf?(o.ocf/b.ocf-1)*100:0;
+
+  const inputs=R.fields.map(([k,l])=>
+    `<label class="rls-f"><span>${l}</span>`+
+    `<input type="number" data-rls="${k}" value="${v[k]}" step="any"></label>`).join("");
+
+  const presets=R.scenarios.map(([k,s],i)=>
+    `<button type="button" data-rlsp="${i}" aria-pressed="${i===pick}">Scenario ${k}</button>`).join("");
+
+  const line=(n,now,then,cls)=>`<div class="rls-r${cls||""}"><span class="rls-n">${n}</span>`+
+    `<span class="rls-v">${now}</span><span class="rls-b">${then}</span></div>`;
+
+  return `<div class="pf-flag"><b>The owner&rsquo;s model.</b> Eight inputs, everything else `+
+    `follows. Change any figure and the whole column moves; ${b.y} sits alongside for `+
+    `comparison.</div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">Inputs</h3>`+
+      `<p class="wx-sub">Type over any of these, or start from one of the owner&rsquo;s four scenarios</p>`+
+      `<div class="rls-presets">${presets}`+
+        `<button type="button" data-rlsp="r" class="is-reset">Reset</button></div>`+
+      `<div class="rls-grid">${inputs}</div></div>`+
+
+    `<div class="rls-out">`+
+      `<div><div class="rls-on">${m(o.ocf)}</div><div class="rls-ol">Operating cash flow</div></div>`+
+      `<div><div class="rls-on">${(o.margin*100).toFixed(1)}%</div><div class="rls-ol">Margin</div></div>`+
+      `<div><div class="rls-on ${vs<0?"is-dn":"is-up"}">${vs<0?"\u2212":"+"}${m(Math.abs(vs))}</div>`+
+        `<div class="rls-ol">Against ${b.y} &middot; ${pc>=0?"+":"\u2212"}${Math.abs(pc).toFixed(0)}%</div></div>`+
+      `<div><div class="rls-on">${n0(o.rounds)}</div><div class="rls-ol">Total rounds</div></div>`+
+    `</div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">What it produces</h3>`+
+      `<div class="rls-r rls-head"><span class="rls-n"></span><span class="rls-v">Model</span>`+
+        `<span class="rls-b">${b.y} actual</span></div>`+
+      line("Member rounds",n0(o.memberRounds),n0(b.members*b.rpm))+
+      line("Total rounds",n0(o.rounds),n0(b.members*b.rpm+b.guests))+
+      line("Green fees",m(o.green),m(b.guests*b.gfee))+
+      line("Member dues",m(o.dues),m(b.members*b.dues*12))+
+      line("Food and beverage",m(o.fb),m(1749926))+
+      line("Merchandise",m(o.merch),m(863006))+
+      line("Other golf",m(o.other),m(603317))+
+      line("Initiation fees",m(o.initiation),m(287109))+
+      line("Total revenue",m(o.rev),m(b.rev)," is-tot")+
+      line("Cost of sales",m(-o.cogs),m(-b.cogs))+
+      line("Labor and benefits",m(-o.lab),m(-b.lab))+
+      line("Operating expenses",m(-o.opx),m(-b.opx))+
+      line("Ad valorem and management fee",m(-(R.adValorem+R.mgmtFee)),m(-b.other))+
+      line("Total expenses",m(-o.exp),m(-(b.cogs+b.lab+b.opx+b.other))," is-tot")+
+      line("Operating cash flow",m(o.ocf),m(b.ocf)," is-tot is-ocf")+
+      `<p class="ec-body last pf-note">Cost of sales runs at `+
+      `${(R.cogsRate*100).toFixed(0)}% of food and merchandise; labor at `+
+      `${(R.labRate*100).toFixed(0)}% and operating expenses at `+
+      `${(R.opxRate*100).toFixed(0)}% of revenue &mdash; the owner&rsquo;s rates, taken off ${b.y}. `+
+      `Other golf revenue runs at $${R.otherPerRound.toFixed(2)} a round. New members each year `+
+      `are ${(R.newMemberRate*100).toFixed(0)}% of the roster.</p></div>`+
+
+    `<div class="wx-card ec-card"><h3 class="wx-h">The owner&rsquo;s four scenarios</h3>`+
+      `<p class="wx-sub">Every configuration lands within $21,000 of the others, and all four sit `+
+      `below half of ${b.y}</p>`+
+      `<div class="rls-r rls-head"><span class="rls-n"></span>`+
+      R.scenarios.map(([k])=>`<span class="rls-v">${k}</span>`).join("")+`</div>`+
+      [["Members","members",0],["Monthly dues","dues",1],["Initiation","init",1],
+       ["Guest rounds","guests",0],["Guest fee","gfee",1]].map(([l,f,mo])=>
+        `<div class="rls-r"><span class="rls-n">${l}</span>`+
+        R.scenarios.map(([,s])=>`<span class="rls-v">${mo?m(s[f]):n0(s[f])}</span>`).join("")+`</div>`).join("")+
+      `<div class="rls-r is-tot"><span class="rls-n">Operating cash flow</span>`+
+      R.scenarios.map(([,s])=>`<span class="rls-v">${m(rlsRun(s).ocf)}</span>`).join("")+`</div>`+
+      `<div class="rls-r"><span class="rls-n">Margin</span>`+
+      R.scenarios.map(([,s])=>`<span class="rls-v">${(rlsRun(s).margin*100).toFixed(1)}%</span>`).join("")+
+      `</div></div>`;
+}
+
 function detailPf(i){
   const sec=pfSec();
   const pills=`<div class="mg-yrs ec-secs" role="group" aria-label="Section">`+
     PF_SECS.map(([k,l])=>`<button type="button" data-pf="${k}" aria-pressed="${k===sec}">${l}</button>`).join("")+
     `</div>`;
-  const body=sec==="cash"?pfCash():sec==="ass"?pfAss():pfPL();
+  const body=sec==="plan"?pfPlan():sec==="cash"?pfCash():sec==="today"?pfToday()
+            :sec==="rls"?pfRls():sec==="pl"?pfPL():sec==="ass"?pfAss():pfAdd();
   el("#detail").innerHTML=
     `<div class="detail-head hd-ctl"><div class="detail-title">${i.t}</div>${pills}</div>`+
-    `<div class="detail-body is-wide">${body}</div>`;
+    `<div class="detail-body is-wide">${body}`+
+      `<p class="wx-foot">${PF_COPY.source}</p></div>`;
   const hold=fn=>()=>{
     const pane=el("#detail"), keep=pane?pane.scrollTop:0;
     fn(); detail(i);
@@ -7739,14 +7711,29 @@ function detailPf(i){
   el("#detail").querySelectorAll("[data-pf]").forEach(b=>b.addEventListener("click",
     hold(()=>{ state.pfSec=b.dataset.pf; })));
 
-  /* the full sheet, opened on request rather than led with */
-  const tog=el("#detail").querySelector("#plTog"), pan=el("#detail").querySelector("#plPan");
-  if(tog&&pan) tog.addEventListener("click",()=>{
-    const open=!pan.classList.contains("is-open");
-    pan.classList.toggle("is-open",open);
-    tog.setAttribute("aria-expanded",String(open));
-  });
-
+  /* The model recalculates on every keystroke. Redrawing the pane would blow
+     away focus and caret, so only the figures are rewritten and the field the
+     owner is typing in is left alone. */
+  const redraw=()=>{
+    const pane=el("#detail"), keep=pane?pane.scrollTop:0;
+    const act=document.activeElement, id=act&&act.dataset?act.dataset.rls:null;
+    const pos=id?act.selectionStart:null;
+    detail(i);
+    const after=el("#detail"); if(after) after.scrollTop=keep;
+    if(id){
+      const back=el("#detail").querySelector('[data-rls="'+id+'"]');
+      if(back){ back.focus(); try{ back.setSelectionRange(pos,pos); }catch(e){} }
+    }
+  };
+  el("#detail").querySelectorAll("[data-rls]").forEach(inp=>inp.addEventListener("input",()=>{
+    const v=parseFloat(inp.value);
+    state.rls=Object.assign({}, rlsVals(), {[inp.dataset.rls]: isNaN(v)?0:v});
+    redraw();
+  }));
+  el("#detail").querySelectorAll("[data-rlsp]").forEach(b=>b.addEventListener("click",hold(()=>{
+    state.rls = b.dataset.rlsp==="r" ? null
+              : Object.assign({}, RLS.scenarios[+b.dataset.rlsp][1]);
+  })));
 }
 
 function detailSurveyPending(i){
