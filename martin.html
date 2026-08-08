@@ -6576,7 +6576,7 @@ function eaChart(row,opt){
     }
     s+=`<text x="${X(y)}" y="${o.h-o.pad.b+19}" text-anchor="middle" font-size="11"
           fill="${y===EMP_ALL.newScale?"#17325a":"#8a8a84"}"
-          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${o.short?"\u2019"+y.slice(2):y}</text>`;
+          ${y===EMP_ALL.newScale?'font-weight="700"':''}>${o.short?"\u2019"+String(y).slice(2):y}</text>`;
   });
 
   ["kb","ss"].forEach(k=>{
